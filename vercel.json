@@ -1,0 +1,30 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "eq": "mikrokvalifikatsioonid.ee"
+          }
+        }
+      ],
+      "destination": "https://mikrokvalifikatsioon.ee/kataloog/",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": {
+            "eq": "www.mikrokvalifikatsioonid.ee"
+          }
+        }
+      ],
+      "destination": "https://mikrokvalifikatsioon.ee/kataloog/",
+      "permanent": true
+    }
+  ]
+}
