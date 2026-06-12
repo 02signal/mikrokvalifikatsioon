@@ -2,21 +2,109 @@
 const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? "";
 ---
 
-<link rel="alternate" type="text/plain" href="/llms.txt" title="Digiteekaart.ee LLM summary" />
-<link rel="alternate" type="application/json" href="/site-profile.json" title="Digiteekaart.ee machine-readable profile" />
+<link rel="alternate" type="text/plain" href="/llms.txt" title="Mikrokvalifikatsioon.ee LLM summary" />
+<link rel="alternate" type="application/json" href="/site-profile.json" title="Mikrokvalifikatsioon.ee machine-readable profile" />
 
 {gaMeasurementId ? (
-  <>
-    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}></script>
-    <script is:inline define:vars={{ gaMeasurementId }}>
+  <script is:inline define:vars={{ gaMeasurementId }}>
+    // Consent Mode v2, "basic": gtag.js laetakse ALLES pärast nõusolekut.
+    // Ilma nõusolekuta ei seata ühtegi analüütikaküpsist ega saadeta pinge.
+    (() => {
+      const consentKey = "mkval:consent";
       window.dataLayer = window.dataLayer || [];
       function gtag(){window.dataLayer.push(arguments);}
       window.gtag = gtag;
-      gtag("js", new Date());
-      gtag("config", gaMeasurementId);
-    </script>
-  </>
+      gtag("consent", "default", {
+        analytics_storage: "denied",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied"
+      });
+
+      let gaLoaded = false;
+      const loadGa = () => {
+        if (gaLoaded) return;
+        gaLoaded = true;
+        gtag("consent", "update", { analytics_storage: "granted" });
+        gtag("js", new Date());
+        gtag("config", gaMeasurementId);
+        const script = document.createElement("script");
+        script.async = true;
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`;
+        document.head.appendChild(script);
+      };
+
+      const readChoice = () => {
+        try { return localStorage.getItem(consentKey); } catch { return null; }
+      };
+      const storeChoice = (value) => {
+        try { localStorage.setItem(consentKey, value); } catch { /* private mode: banner naaseb järgmisel külastusel */ }
+      };
+
+      const banner = () => {
+        const el = document.querySelector("[data-cookie-banner]");
+        if (!(el instanceof HTMLElement)) return;
+        const show = () => { el.hidden = false; };
+        const hide = () => { el.hidden = true; };
+        el.querySelector("[data-cookie-accept]")?.addEventListener("click", () => { storeChoice("granted"); loadGa(); hide(); });
+        el.querySelector("[data-cookie-decline]")?.addEventListener("click", () => { storeChoice("denied"); hide(); });
+        document.querySelectorAll("[data-cookie-settings]").forEach((link) => {
+          link.addEventListener("click", (event) => { event.preventDefault(); show(); });
+        });
+        const choice = readChoice();
+        if (choice === "granted") loadGa();
+        else if (choice !== "denied") show();
+      };
+
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", banner);
+      else banner();
+    })();
+  </script>
 ) : null}
+
+<div class="cookie-banner" data-cookie-banner hidden>
+  <div>
+    <strong>Küpsised</strong>
+    <p>
+      Kasutame analüütikaküpsiseid (Google Analytics) ainult sinu nõusolekul, et aru saada,
+      mis lehel aitab ja mis mitte. Vajalikud asjad töötavad ilma nõusolekuta.
+      <a href="/privaatsus/">Loe lähemalt</a>
+    </p>
+  </div>
+  <div class="cookie-banner-actions">
+    <button type="button" class="btn btn-primary" data-cookie-accept>Nõustun analüütikaga</button>
+    <button type="button" class="btn btn-secondary" data-cookie-decline>Ainult vajalikud</button>
+  </div>
+</div>
+
+<style is:global>
+  .cookie-banner {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    z-index: 60;
+    max-width: 680px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: center;
+    padding: 16px 18px;
+    border: 1px solid #d9e3ea;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 18px 46px rgba(16, 35, 63, 0.18);
+  }
+  .cookie-banner[hidden] { display: none; }
+  .cookie-banner p { margin: 4px 0 0; font-size: 0.92rem; color: #44546a; }
+  .cookie-banner-actions { display: grid; gap: 8px; }
+  .cookie-banner .btn { width: auto; padding: 10px 16px; font-size: 0.92rem; }
+  @media (max-width: 640px) {
+    .cookie-banner { grid-template-columns: 1fr; }
+    .cookie-banner-actions { grid-template-columns: 1fr 1fr; }
+  }
+</style>
 
 <script is:inline>
   (() => {

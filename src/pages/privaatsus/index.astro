@@ -1,0 +1,100 @@
+---
+import Analytics from "../../components/Analytics.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+
+const updatedAt = "12.06.2026";
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privaatsus ja küpsised | Mikrokvalifikatsioon.ee</title>
+    <meta name="description" content="Mis andmeid Mikrokvalifikatsioon.ee kogub, milleks neid kasutame, kus neid hoiame ja millised on sinu õigused." />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://mikrokvalifikatsioon.ee/privaatsus/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#0d2a4a" />
+    <Analytics />
+  </head>
+  <body>
+    <header class="topbar">
+      <nav class="nav" aria-label="Põhinavigeerimine">
+        <a class="brand" href="/">Mikrokvalifikatsioon.ee</a>
+        <div class="navlinks">
+          <a href="/kataloog/">Kataloog</a>
+          <a href="/mikrokraadid/">Mikrokraadid</a>
+          <a href="/kes-maksab/">Kes maksab?</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <span class="eyebrow">Privaatsus ja küpsised</span>
+          <h1>Kasutame sinu andmeid ainult selleks, et vastata sinu küsimusele ja lehte paremaks teha.</h1>
+          <p class="report-date">Uuendatud: {updatedAt}. Vastutav töötleja: Ettevõtluskeskus OÜ, info@02signal.ai, +372 5818 0435.</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <h2>Mis andmeid me kogume?</h2>
+          <p>
+            <strong>Suunatest ja vorm.</strong> Suunatesti vastused (valdkond, olukord, õppevorm, eelarve)
+            töödeldakse sinu brauseris ja vastus kuvatakse kohe — neid ei salvestata, kuni sa ise
+            ei vajuta "Saada". Kui saadad valiku endale või küsid nõu, kogume: e-maili, sinu vabas
+            vormis kirjelduse ja testi kokkuvõtte. Kasutame neid vastamiseks ja, kui oled eraldi
+            nõustunud, uutest mikrokvalifikatsioonidest teavitamiseks.
+          </p>
+          <p>
+            <strong>Analüütika (ainult nõusolekul).</strong> Google Analyticsi küpsised paneme alles siis,
+            kui vajutad küpsiste teates "Nõustun analüütikaga". Ilma nõusolekuta analüütikat ei laeta
+            ja küpsiseid ei seata. Nõusoleku valikut hoiame sinu brauseris (localStorage), et mitte
+            sama küsimust korrata. Valikut saab igal ajal muuta jaluse lingist "Küpsised".
+          </p>
+          <p>
+            <strong>Tehniline toimimine.</strong> Leht peab brauseri seansi mälus (sessionStorage) meeles,
+            milliselt lehelt sa tulid ja millisele nupule vajutasid — seda kasutame ainult selleks, et
+            sinu päringule sisukamalt vastata. See info kustub brauseri sulgemisel.
+          </p>
+
+          <h2>Kus andmeid hoitakse?</h2>
+          <p>
+            Lehte majutab Vercel. Vormi saadetud andmed liiguvad meie päringukorje süsteemi ja
+            e-postkasti (Ettevõtluskeskus OÜ kontrolli all). Analüütika andmeid töötleb Google
+            (Google Analytics 4) ainult sinu nõusolekul ja ilma reklaamisihtimiseta.
+          </p>
+
+          <h2>Kui kaua andmeid hoiame?</h2>
+          <p>
+            Kui koostööd ei teki, kustutame päringu andmed hiljemalt 12 kuu pärast. Uudiskirja
+            nõusoleku saad igal ajal tagasi võtta — iga kirja jaluses on loobumislink ja alati
+            võib kirjutada info@02signal.ai.
+          </p>
+
+          <h2>Sinu õigused</h2>
+          <p>
+            Sul on õigus küsida, mis andmeid me sinu kohta hoiame, lasta neid parandada või
+            kustutada, ja võtta nõusolek tagasi. Kirjuta info@02signal.ai — vastame ühe tööpäeva
+            jooksul. Kaebuse saab esitada Andmekaitse Inspektsioonile (aki.ee).
+          </p>
+
+          <h2>Mida me EI tee?</h2>
+          <p>
+            Me ei müü ega jaga sinu andmeid kolmandatele osapooltele turunduseks. Kataloogi
+            "Vaata kooli lehel" lingid viivad koolide endi lehtedele — seal kehtivad nende
+            privaatsustingimused.
+          </p>
+
+          <p><a href="#" data-cookie-settings>Muuda küpsiste valikut</a></p>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Privaatsus ja küpsised" />
+  </body>
+</html>
