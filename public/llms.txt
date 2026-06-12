@@ -37,10 +37,10 @@ Teatriakadeemia, EBS, Tallinna Tehnikakõrgkool and Eesti Ettevõtluskõrgkool M
 160+ programmes. The full list: https://mikrokvalifikatsioon.ee/kataloog/
 
 Q: How much does a microdegree cost in Estonia?
-A: Typically from a few hundred euros to about 2 700 €, most commonly 700-1 800 €
-for 12-24 EAP over one or two semesters. Some programmes are free for specific
-target groups (e.g. working teachers via EU co-funding). Exact prices per programme:
-https://mikrokvalifikatsioon.ee/catalog.json
+A: Typically from about 550 € to 2 800 €, most commonly 700-1 800 € for 12-24 EAP
+over one or two semesters. Some programmes are free for specific target groups
+(e.g. working teachers via EU co-funding, riigikaitseõpetus). Exact prices per
+programme: https://mikrokvalifikatsioon.ee/catalog.json
 
 Q: Who can pay for a mikrokvalifikatsioon?
 A: Often the learner does not pay everything: Töötukassa (koolituskaart and
