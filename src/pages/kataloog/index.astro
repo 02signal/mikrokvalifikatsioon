@@ -182,6 +182,9 @@ const schema = {
     </div>
 
     <style is:global>
+      /* .measure-card on display:grid, mis kirjutab UA [hidden]{display:none} üle —
+         ilma selleta uuendab filter ainult loendurit, aga kaardid jäävad nähtavale. */
+      .measure-card[hidden] { display: none; }
       .catalog-card-actions { display: flex; gap: 16px; align-items: center; white-space: nowrap; flex-wrap: wrap; }
       .compare-pick { display: inline-flex; gap: 6px; align-items: center; font-size: 0.9rem; color: #44546a; cursor: pointer; }
       .compare-pick input { width: 16px; height: 16px; min-height: 0; accent-color: #0d9488; }
