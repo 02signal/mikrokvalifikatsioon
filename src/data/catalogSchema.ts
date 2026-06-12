@@ -27,5 +27,11 @@ export type CatalogEntry = {
   intakeText: string | null;
   /** one plain-Estonian sentence: what skill, for whom */
   summary: string;
+  /** programme goal, 1 compressed sentence from the provider page; null until collected */
+  goalText?: string | null;
+  /** learning outcomes, short compressed bullets from the provider page; null until collected */
+  outcomes?: string[] | null;
+  /** assessment method(s) as stated by the provider; null until collected */
+  assessmentText?: string | null;
   sourceCheckedAt: string;
 };

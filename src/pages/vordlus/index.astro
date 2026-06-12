@@ -1,0 +1,171 @@
+---
+import Analytics from "../../components/Analytics.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Programmide võrdlus | Mikrokvalifikatsioon.ee</title>
+    <meta name="description" content="Võrdle Eesti mikrokvalifikatsioone ja mikrokraade kõrvuti: hind, maht, kestus, õppevorm, eesmärk ja õpiväljundid ühes tabelis." />
+    <meta name="robots" content="noindex,follow" />
+    <link rel="canonical" href="https://mikrokvalifikatsioon.ee/vordlus/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#0d2a4a" />
+    <Analytics />
+    <style is:global>
+      .compare-wrap { overflow-x: auto; }
+      .compare-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border: 1px solid #d9e3ea;
+        border-radius: 8px;
+        min-width: 640px;
+      }
+      .compare-table th, .compare-table td {
+        border: 1px solid #e4ecf2;
+        padding: 12px 14px;
+        text-align: left;
+        vertical-align: top;
+        font-size: 0.95rem;
+        min-width: 200px;
+        max-width: 320px;
+      }
+      .compare-table th:first-child, .compare-table td:first-child {
+        min-width: 120px;
+        max-width: 140px;
+        font-weight: 800;
+        color: #0d2a4a;
+        background: #f4f8fb;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+      }
+      .compare-table thead th { background: #0d2a4a; color: #fff; font-size: 1rem; }
+      .compare-table ul { margin: 0; padding-left: 18px; }
+      .compare-table ul li { margin-bottom: 4px; }
+      .compare-empty { padding: 28px 0; }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <nav class="nav" aria-label="Põhinavigeerimine">
+        <a class="brand" href="/">Mikrokvalifikatsioon.ee</a>
+        <div class="navlinks">
+          <a href="/kataloog/">Kataloog</a>
+          <a href="/mikrokraadid/">Mikrokraadid</a>
+          <a href="/kes-maksab/">Kes maksab?</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <span class="eyebrow">Võrdlus</span>
+          <h1>Vali kataloogist kuni 3 programmi ja vaata neid kõrvuti.</h1>
+          <p data-compare-intro>Hind, maht, kestus, õppevorm — ja kui kool on avaldanud, ka eesmärk, õpiväljundid ja hindamine.</p>
+        </div>
+      </section>
+
+      <section class="white" data-tool-section="vordlus">
+        <div class="section-inner">
+          <div class="compare-empty" data-compare-empty>
+            <p>Võrdlusesse pole veel midagi valitud. <a href="/kataloog/">Ava kataloog</a> ja märgi programmide juures "Võrdle".</p>
+          </div>
+          <div class="compare-wrap" data-compare-wrap hidden>
+            <table class="compare-table" data-compare-table></table>
+          </div>
+          <p class="notice">
+            Andmed pärinevad koolide avalikelt lehtedelt (kuupäev iga kirje juures kataloogis).
+            Lõplik ja ametlik info on alati kooli enda lehel.
+          </p>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Kahtled valikus? Tee suunatest või küsi nõu.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="vordlus_suunatest">Tee suunatest</a>
+              <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="vordlus_kataloog">Tagasi kataloogi</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="vordlus_email">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="vordlus_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Programmide võrdlus" />
+
+    <script>
+      type Program = {
+        name: string; provider: string; url: string; field: string;
+        ects: number | null; priceText: string | null; durationText: string | null;
+        format: string | null; language: string | null; intakeText: string | null;
+        summary: string; goalText?: string | null; outcomes?: string[] | null; assessmentText?: string | null;
+      };
+
+      const escapeHtml = (value: string): string =>
+        value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+      const render = async (): Promise<void> => {
+        const params = new URLSearchParams(window.location.search);
+        const urls = (params.get("p") || "").split("|").map(decodeURIComponent).filter(Boolean).slice(0, 3);
+        const empty = document.querySelector("[data-compare-empty]") as HTMLElement | null;
+        const wrap = document.querySelector("[data-compare-wrap]") as HTMLElement | null;
+        const table = document.querySelector("[data-compare-table]");
+        if (!urls.length || !table || !wrap || !empty) return;
+
+        let programs: Program[] = [];
+        try {
+          const response = await fetch("/catalog.json");
+          programs = (await response.json()).programs || [];
+        } catch { return; }
+        const chosen = urls.map((u) => programs.find((p) => p.url === u)).filter(Boolean) as Program[];
+        if (!chosen.length) return;
+
+        empty.hidden = true;
+        wrap.hidden = false;
+
+        const rows: Array<[string, (p: Program) => string]> = [
+          ["Kool", (p) => escapeHtml(p.provider)],
+          ["Valdkond", (p) => escapeHtml(p.field)],
+          ["Hind", (p) => escapeHtml(p.priceText || "kooli lehel")],
+          ["Maht", (p) => p.ects ? `${p.ects} EAP` : "—"],
+          ["Kestus", (p) => escapeHtml(p.durationText || "—")],
+          ["Õppevorm", (p) => escapeHtml(p.format || "—")],
+          ["Keel", (p) => p.language === "en" ? "inglise" : p.language === "et" ? "eesti" : "—"],
+          ["Vastuvõtt", (p) => escapeHtml(p.intakeText || "—")],
+          ["Kellele", (p) => escapeHtml(p.summary)]
+        ];
+        if (chosen.some((p) => p.goalText)) rows.push(["Eesmärk", (p) => escapeHtml(p.goalText || "—")]);
+        if (chosen.some((p) => p.outcomes?.length)) rows.push(["Õpiväljundid", (p) => p.outcomes?.length ? `<ul>${p.outcomes.map((o) => `<li>${escapeHtml(o)}</li>`).join("")}</ul>` : "—"]);
+        if (chosen.some((p) => p.assessmentText)) rows.push(["Hindamine", (p) => escapeHtml(p.assessmentText || "—")]);
+        rows.push(["", (p) => `<a href="${escapeHtml(p.url)}" target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label="vordlus_${escapeHtml(p.provider)}">Vaata kooli lehel</a>`]);
+
+        table.innerHTML =
+          `<thead><tr><th></th>${chosen.map((p) => `<th>${escapeHtml(p.name)}</th>`).join("")}</tr></thead>` +
+          `<tbody>${rows.map(([label, cell]) => `<tr><td>${label}</td>${chosen.map((p) => `<td>${cell(p)}</td>`).join("")}</tr>`).join("")}</tbody>`;
+
+        (window as any).digiteekaartTrack?.("tool_completed", {
+          tool_name: "vordlus",
+          result_tier: String(chosen.length),
+          result_route: chosen.map((p) => p.provider).join(",")
+        });
+      };
+
+      void render();
+    </script>
+  </body>
+</html>
