@@ -1,0 +1,162 @@
+---
+import Analytics from "../../components/Analytics.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { catalog, catalogCheckedAt } from "../../data/catalog";
+
+const universityEntries = catalog.filter((entry) => entry.providerType !== "erakool");
+const byProvider = [...new Set(universityEntries.map((entry) => entry.provider))].map((provider) => ({
+  provider,
+  entries: universityEntries.filter((entry) => entry.provider === provider)
+}));
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mikrokvalifikatsioon.ee/#organization",
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: "https://mikrokvalifikatsioon.ee/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
+        { "@type": "ListItem", position: 2, name: "Mikrokraadid", item: "https://mikrokvalifikatsioon.ee/mikrokraadid/" }
+      ]
+    },
+    {
+      "@type": "Article",
+      headline: "Mikrokraadid Eestis: mis need on ja kust neid leida",
+      description: "Mikrokraad on ülikooli pakutav mikrokvalifikatsioon. Ülevaade Eesti ülikoolide mikrokraadidest koolide kaupa.",
+      inLanguage: "et",
+      dateModified: catalogCheckedAt,
+      author: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      mainEntityOfPage: "https://mikrokvalifikatsioon.ee/mikrokraadid/"
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mikrokraadid Eestis | Kõikide ülikoolide mikrokraadid ühes kohas</title>
+    <meta
+      name="description"
+      content={`Mikrokraad on ülikooli mikrokvalifikatsioon: lühike õpe, ametlik tunnistus. Vaata ${universityEntries.length} mikrokraadi kõikidest Eesti ülikoolidest ühest kohast.`}
+    />
+    <link rel="canonical" href="https://mikrokvalifikatsioon.ee/mikrokraadid/" />
+    <meta property="og:title" content="Mikrokraadid Eestis — kõik ülikoolid ühes kohas" />
+    <meta property="og:description" content="Mis on mikrokraad, kuidas see erineb mikrokvalifikatsioonist ja millised programmid on praegu olemas." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://mikrokvalifikatsioon.ee/mikrokraadid/" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <Analytics />
+  </head>
+  <body>
+    <header class="topbar">
+      <nav class="nav" aria-label="Põhinavigeerimine">
+        <a class="brand" href="/">Mikrokvalifikatsioon.ee</a>
+        <div class="navlinks">
+          <a href="/kataloog/">Kataloog</a>
+          <a href="/mikrokraadid/">Mikrokraadid</a>
+          <a href="/#kes-maksab">Kes maksab?</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <span class="eyebrow">Mikrokraadid</span>
+          <h1>Mikrokraad on ülikooli mikrokvalifikatsioon.</h1>
+          <p>
+            Lühike ülikooliõpe — tavaliselt mõni kuu kuni kaks semestrit töö kõrvalt — mille
+            lõpus saad ametliku tunnistuse ühe konkreetse oskuse kohta. Eesti ülikoolid
+            pakuvad neid juba sadu, aga igaüks näitab ainult enda omi. Siin on nad koos.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="mikrokraadid_hero_kataloog">Ava filtreeritav kataloog</a>
+          </div>
+          <p class="report-date">Andmed kontrollitud koolide lehtedelt: {checkedAtText}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Koolide kaupa</span>
+            <h2>Mikrokraadid Eesti kõrgkoolides.</h2>
+          </div>
+          {byProvider.map(({ provider, entries }) => (
+            <div class="provider-block">
+              <h3>{provider} — {entries.length} mikrokraadi</h3>
+              <ul class="check">
+                {entries.slice(0, 8).map((entry) => (
+                  <li>
+                    <a href={entry.url} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`mikrokraadid_${provider}`}>{entry.name}</a>
+                    {entry.ects ? ` — ${entry.ects} EAP` : ""}{entry.priceText ? `, ${entry.priceText}` : ""}
+                  </li>
+                ))}
+              </ul>
+              {entries.length > 8 && <p><a href="/kataloog/">Vaata kõiki {provider} programme kataloogist →</a></p>}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Mis vahe on?</span>
+            <h2>Mikrokraad, mikrokvalifikatsioon, kutsetunnistus — lihtne vahe.</h2>
+          </div>
+          <div class="simple-cards">
+            <article>
+              <strong>1</strong>
+              <h3>Mikrokvalifikatsioon</h3>
+              <p>Katusmõiste: lühike tunnustatud õpe ühe oskuse kohta. Pakkuja võib olla ülikool või koolitusettevõte.</p>
+            </article>
+            <article>
+              <strong>2</strong>
+              <h3>Mikrokraad</h3>
+              <p>Ülikooli pakutav mikrokvalifikatsioon. Tihti annab EAP-sid, mida saab hiljem kraadiõppes arvestada.</p>
+            </article>
+            <article>
+              <strong>3</strong>
+              <h3>Kutsetunnistus</h3>
+              <p>Kinnitab olemasolevat oskust eksamiga, õpet ei pruugi sisaldada. Mikrokvalifikatsioon sisaldab alati õpet.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Filtreeri kataloogist valdkond, hind ja kool — leia oma programm.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="mikrokraadid_bottom_kataloog">Ava kataloog</a>
+              <a class="btn btn-secondary" href="mailto:info@02signal.ai?subject=Mikrokraadi%20valik" data-track-event="email_click" data-track-label="mikrokraadid_bottom_email">Küsi nõu e-mailiga</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="mikrokraadid_email">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="mikrokraadid_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Mikrokraadide ülevaade" />
+  </body>
+</html>

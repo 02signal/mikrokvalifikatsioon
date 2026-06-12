@@ -1,0 +1,249 @@
+---
+import Analytics from "../../components/Analytics.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { catalog, providers } from "../../data/catalog";
+
+const faqItems = [
+  {
+    question: "Mis on mikrokvalifikatsioon?",
+    answer: "Mikrokvalifikatsioon on lühike tunnustatud õpe, mille lõpus saad tunnistuse ühe konkreetse oskuse kohta — mitte terve eriala diplomi. Tüüpiline maht on mõni kuu kuni kaks semestrit töö kõrvalt."
+  },
+  {
+    question: "Mis vahe on mikrokvalifikatsioonil ja mikrokraadil?",
+    answer: "Mikrokvalifikatsioon on katusmõiste. Mikrokraad on ülikooli pakutav mikrokvalifikatsioon, mis annab tavaliselt EAP-sid (ainepunkte), mida saab hiljem kraadiõppes arvestada."
+  },
+  {
+    question: "Kui palju mikrokraad maksab?",
+    answer: "Meie kataloogi andmetel enamasti 700–1 800 € (12–24 EAP). Odavamad algavad umbes 650 eurost, kallimad ulatuvad 2 700 euroni. Osa programme on sihtrühmale tasuta, näiteks töötavatele õpetajatele EL-i kaasrahastusel."
+  },
+  {
+    question: "Kui kaua õpe kestab?",
+    answer: "Tavaliselt üks kuni kaks semestrit töö kõrvalt. Lühemad programmid kestavad paar kuud, pikemad kuni aasta."
+  },
+  {
+    question: "Kas mikrokvalifikatsiooni tunnustatakse ka välismaal?",
+    answer: "Tunnistust saab kasutada CV-s ja Europassis kogu Euroopas. Ülikooli mikrokraadi EAP-d on ECTS-ainepunktid, mis on Euroopa kõrgkoolides üheselt mõistetavad."
+  },
+  {
+    question: "Kas mikrokraadiks on vaja varasemat kõrgharidust?",
+    answer: "Sõltub programmist. Paljud nõuavad kõrgharidust, aga mitte kõik — näiteks programmeerimise või ettevõtluse baasprogrammid on sageli avatud kõigile. Nõue on kirjas iga programmi lehel."
+  },
+  {
+    question: "Kes maksab mikrokvalifikatsiooni eest?",
+    answer: "Kolm rada: tööandja koolituseelarve (kui oskus aitab praegust tööd), Töötukassa toetused (kui oled töötu või su oskused vajavad uuendamist) või ise makstes. Vaata lehte /kes-maksab/."
+  },
+  {
+    question: "Mis vahe on mikrokvalifikatsioonil ja kutsetunnistusel?",
+    answer: "Kutsetunnistus kinnitab olemasolevat oskust eksamiga ega pruugi sisaldada õpet. Mikrokvalifikatsioon sisaldab alati õpet — õpid uue oskuse ja saad selle kohta tunnistuse."
+  }
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mikrokvalifikatsioon.ee/#organization",
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: "https://mikrokvalifikatsioon.ee/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
+        { "@type": "ListItem", position: 2, name: "Mis on mikrokvalifikatsioon?", item: "https://mikrokvalifikatsioon.ee/mis-on-mikrokvalifikatsioon/" }
+      ]
+    },
+    {
+      "@type": "Article",
+      headline: "Mis on mikrokvalifikatsioon? Lihtne selgitus",
+      description: "Mikrokvalifikatsioon, mikrokraad, kutsetunnistus ja sertifikaat — mis vahe neil on ja millal millist valida.",
+      inLanguage: "et",
+      dateModified: "2026-06-12",
+      author: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      mainEntityOfPage: "https://mikrokvalifikatsioon.ee/mis-on-mikrokvalifikatsioon/"
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer }
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mis on mikrokvalifikatsioon? Lihtne selgitus ja võrdlus mikrokraadiga</title>
+    <meta
+      name="description"
+      content="Mikrokvalifikatsioon on lühike tunnustatud õpe ühe oskuse kohta. Mis vahe on mikrokraadil, kutsetunnistusel ja sertifikaadil — ja millal millist valida."
+    />
+    <link rel="canonical" href="https://mikrokvalifikatsioon.ee/mis-on-mikrokvalifikatsioon/" />
+    <meta property="og:title" content="Mis on mikrokvalifikatsioon? Lihtne selgitus" />
+    <meta property="og:description" content="Mikrokvalifikatsioon vs mikrokraad vs kutsetunnistus — lihtne võrdlus ja vastused korduvatele küsimustele." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://mikrokvalifikatsioon.ee/mis-on-mikrokvalifikatsioon/" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <Analytics />
+  </head>
+  <body>
+    <header class="topbar">
+      <nav class="nav" aria-label="Põhinavigeerimine">
+        <a class="brand" href="/">Mikrokvalifikatsioon.ee</a>
+        <div class="navlinks">
+          <a href="/kataloog/">Kataloog</a>
+          <a href="/mikrokraadid/">Mikrokraadid</a>
+          <a href="/kes-maksab/">Kes maksab?</a>
+          <a href="/#suunatest">Suunatest</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <span class="eyebrow">Lihtne selgitus</span>
+          <h1>Mikrokvalifikatsioon on kitsas, tunnustatud oskus — ilma aastatepikkuse kraadiõppeta.</h1>
+          <p>
+            Sa ei õpi "kõike natuke", vaid ühte asja korralikult: andmeanalüüsi, personali
+            värbamist, hoonete energiatõhusust või muud, mida töö nõuab. Lõpus saad ametliku
+            tunnistuse, mida saab näidata tööandjale Eestis ja Euroopas.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="mison_hero_suunatest">Leia endale sobiv</a>
+            <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="mison_hero_kataloog">Vaata kõiki ({catalog.length})</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Neli mõistet, üks loogika</span>
+            <h2>Mikrokvalifikatsioon, mikrokraad, kutsetunnistus, sertifikaat — mis vahe on?</h2>
+          </div>
+          <div class="measure-list">
+            <article class="measure-card">
+              <div>
+                <span class="status-tag status-green">Katusmõiste</span>
+                <h3>Mikrokvalifikatsioon</h3>
+                <p>Lühike tunnustatud õpe ühe konkreetse oskuse kohta. Pakkuja võib olla ülikool, rakenduskõrgkool või koolitusettevõte. Sisaldab alati õpet ja lõpeb tunnistusega.</p>
+              </div>
+            </article>
+            <article class="measure-card">
+              <div>
+                <span class="status-tag status-blue">Ülikooli versioon</span>
+                <h3>Mikrokraad</h3>
+                <p>Ülikooli pakutav mikrokvalifikatsioon. Annab tavaliselt EAP-sid (Euroopa ainepunkte), mida saab hiljem kraadiõppes arvestada. Eestis on neid juba sadu — vaata <a href="/mikrokraadid/">mikrokraadide ülevaadet</a>.</p>
+              </div>
+            </article>
+            <article class="measure-card">
+              <div>
+                <span class="status-tag status-amber">Eksam, mitte õpe</span>
+                <h3>Kutsetunnistus</h3>
+                <p>Kinnitab olemasolevat oskust eksamiga — õpet ei pruugi sisaldada. Sobib siis, kui oskus on juba käes ja vaja on ametlikku kinnitust.</p>
+              </div>
+            </article>
+            <article class="measure-card">
+              <div>
+                <span class="status-tag status-amber">Kõige kergem kaal</span>
+                <h3>Kursuse sertifikaat</h3>
+                <p>Lühikursuse või veebikursuse läbimise tõend. Kasulik, aga ilma ühtse kvaliteedikontrollita — tööandja jaoks nõrgem signaal kui mikrokvalifikatsioon.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Numbrites</span>
+            <h2>Mida Eesti turg praegu pakub.</h2>
+          </div>
+          <div class="grid-3">
+            <article class="card">
+              <span class="stat">{catalog.length}</span>
+              <h3>programmi</h3>
+              <p>meie kataloogis {providers.length} koolist — IT-st ja juhtimisest ehituse ja terviseni.</p>
+            </article>
+            <article class="card">
+              <span class="stat">700–1 800 €</span>
+              <h3>tüüpiline hind</h3>
+              <p>12–24 EAP mahus programm. Osa on sihtrühmale tasuta. Sageli maksab tööandja või toetab Töötukassa.</p>
+            </article>
+            <article class="card">
+              <span class="stat">1–2 semestrit</span>
+              <h3>tüüpiline kestus</h3>
+              <p>töö kõrvalt, sageli veebis või hübriidõppes. Kuud, mitte aastad.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Korduvad küsimused</span>
+            <h2>Lühikesed vastused.</h2>
+          </div>
+          {faqItems.map((item, index) => (
+            <details class="faq-item" open={index < 3}>
+              <summary><strong>{item.question}</strong></summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Kahe minutiga selgeks, milline programm sinu olukorraga sobib.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="mison_bottom_suunatest">Tee suunatest</a>
+              <a class="btn btn-secondary" href="/kes-maksab/" data-track-event="cta_click" data-track-label="mison_bottom_kesmaksab">Kes maksab?</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="mison_email">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="mison_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Mis on mikrokvalifikatsioon?" />
+
+    <style>
+      .faq-item {
+        border: 1px solid #dbe4ee;
+        border-radius: 12px;
+        padding: 14px 18px;
+        margin-bottom: 10px;
+        background: #fff;
+      }
+      .faq-item summary {
+        cursor: pointer;
+        font-size: 1.02rem;
+      }
+      .faq-item p {
+        margin: 10px 0 4px;
+        color: #44546a;
+      }
+    </style>
+  </body>
+</html>

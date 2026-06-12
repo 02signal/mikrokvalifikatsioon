@@ -1,0 +1,202 @@
+---
+import Analytics from "../../components/Analytics.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { catalog, providers, fields, catalogCheckedAt } from "../../data/catalog";
+
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mikrokvalifikatsioon.ee/#organization",
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: "https://mikrokvalifikatsioon.ee/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
+        { "@type": "ListItem", position: 2, name: "Kataloog", item: "https://mikrokvalifikatsioon.ee/kataloog/" }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      name: "Eesti mikrokvalifikatsioonide ja mikrokraadide kataloog",
+      numberOfItems: catalog.length,
+      itemListElement: catalog.map((entry, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "Course",
+          name: entry.name,
+          url: entry.url,
+          description: entry.summary,
+          provider: { "@type": "Organization", name: entry.provider },
+          educationalCredentialAwarded: {
+            "@type": "EducationalOccupationalCredential",
+            name: entry.name,
+            credentialCategory: "mikrokvalifikatsioon"
+          }
+        }
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kataloog | Kõik Eesti mikrokvalifikatsioonid ja mikrokraadid ühes kohas</title>
+    <meta
+      name="description"
+      content={`${catalog.length} mikrokvalifikatsiooni ja mikrokraadi ${providers.length} koolist: valdkond, maht, hind, õppevorm. Filtreeri ja leia oskus, mis sulle sobib.`}
+    />
+    <link rel="canonical" href="https://mikrokvalifikatsioon.ee/kataloog/" />
+    <meta property="og:title" content="Eesti mikrokvalifikatsioonide ja mikrokraadide kataloog" />
+    <meta property="og:description" content="Kõik programmid ühes kohas: valdkond, maht, hind ja link kooli lehele." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://mikrokvalifikatsioon.ee/kataloog/" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <Analytics />
+  </head>
+  <body>
+    <header class="topbar">
+      <nav class="nav" aria-label="Põhinavigeerimine">
+        <a class="brand" href="/">Mikrokvalifikatsioon.ee</a>
+        <div class="navlinks">
+          <a href="/kataloog/">Kataloog</a>
+          <a href="/mikrokraadid/">Mikrokraadid</a>
+          <a href="/#kes-maksab">Kes maksab?</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <span class="eyebrow">Register</span>
+          <h1>Kataloog: {catalog.length} programmi {providers.length} koolist.</h1>
+          <p>
+            Iga kirje juures on valdkond, maht, hind (kui kool on selle avaldanud) ja link
+            kooli enda lehele. Andmed pärinevad koolide avalikelt lehtedelt.
+          </p>
+          <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
+        </div>
+      </section>
+
+      <section class="white" data-tool-section="kataloogifilter">
+        <div class="section-inner">
+          <div class="form-grid catalog-filters">
+            <div class="field">
+              <label for="catalogSearch">Otsi nime järgi</label>
+              <input id="catalogSearch" data-catalog-search placeholder="Näiteks: andmeanalüüs" />
+            </div>
+            <div class="field">
+              <label for="catalogField">Valdkond</label>
+              <select id="catalogField" data-catalog-field>
+                <option value="">Kõik valdkonnad</option>
+                {fields.map((field) => <option value={field}>{field}</option>)}
+              </select>
+            </div>
+            <div class="field">
+              <label for="catalogProvider">Kool</label>
+              <select id="catalogProvider" data-catalog-provider>
+                <option value="">Kõik koolid</option>
+                {providers.map((provider) => <option value={provider}>{provider}</option>)}
+              </select>
+            </div>
+          </div>
+          <p class="field-help" data-catalog-count>{catalog.length} programmi</p>
+
+          <div class="measure-list" data-catalog-list>
+            {catalog.map((entry) => (
+              <article
+                class="measure-card"
+                data-catalog-entry
+                data-name={entry.name.toLowerCase()}
+                data-field={entry.field}
+                data-provider={entry.provider}
+              >
+                <div>
+                  <span class="status-tag status-blue">{entry.field}</span>
+                  <h3>{entry.name}</h3>
+                  <p>{entry.summary}</p>
+                </div>
+                <dl>
+                  <div><dt>Kool</dt><dd>{entry.provider}</dd></div>
+                  {entry.ects && <div><dt>Maht</dt><dd>{entry.ects} EAP</dd></div>}
+                  {entry.priceText && <div><dt>Hind</dt><dd>{entry.priceText}</dd></div>}
+                  {entry.durationText && <div><dt>Kestus</dt><dd>{entry.durationText}</dd></div>}
+                </dl>
+                {entry.intakeText && <p class="report-date">{entry.intakeText}</p>}
+                <a
+                  href={entry.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-track-event="partner_site_click"
+                  data-track-label={`catalog_${entry.provider}`}
+                >Vaata kooli lehel</a>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="plain-warning">
+            <h2>Märkasid viga või puuduvat programmi?</h2>
+            <p>
+              Register on koostatud koolide avalike lehtede põhjal ja hinnad/tähtajad muutuvad.
+              Kui näed aegunud infot või sinu kooli programm puudub, kirjuta
+              <a href="mailto:info@02signal.ai?subject=Kataloogi%20parandus" data-track-event="email_click" data-track-label="catalog_correction">info@02signal.ai</a>
+              — parandame allika põhjal.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Mikrokvalifikatsioonide kataloog" />
+
+    <script>
+      const search = document.querySelector("[data-catalog-search]") as HTMLInputElement | null;
+      const fieldSelect = document.querySelector("[data-catalog-field]") as HTMLSelectElement | null;
+      const providerSelect = document.querySelector("[data-catalog-provider]") as HTMLSelectElement | null;
+      const count = document.querySelector("[data-catalog-count]");
+      const entries = [...document.querySelectorAll<HTMLElement>("[data-catalog-entry]")];
+
+      const applyFilters = (): void => {
+        const term = (search?.value || "").trim().toLowerCase();
+        const field = fieldSelect?.value || "";
+        const provider = providerSelect?.value || "";
+        let visible = 0;
+        for (const entry of entries) {
+          const show =
+            (!term || (entry.dataset.name || "").includes(term)) &&
+            (!field || entry.dataset.field === field) &&
+            (!provider || entry.dataset.provider === provider);
+          entry.hidden = !show;
+          if (show) visible += 1;
+        }
+        if (count) count.textContent = `${visible} programmi`;
+        (window as any).digiteekaartTrack?.("tool_completed", {
+          tool_name: "kataloogifilter",
+          result_tier: visible > 0 ? "leitud" : "tühi",
+          field: field || "kõik",
+          provider: provider || "kõik"
+        });
+      };
+
+      search?.addEventListener("input", applyFilters);
+      fieldSelect?.addEventListener("change", applyFilters);
+      providerSelect?.addEventListener("change", applyFilters);
+    </script>
+  </body>
+</html>

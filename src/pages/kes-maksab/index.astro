@@ -1,0 +1,169 @@
+---
+import Analytics from "../../components/Analytics.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mikrokvalifikatsioon.ee/#organization",
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: "https://mikrokvalifikatsioon.ee/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
+        { "@type": "ListItem", position: 2, name: "Kes maksab?", item: "https://mikrokvalifikatsioon.ee/kes-maksab/" }
+      ]
+    },
+    {
+      "@type": "Article",
+      headline: "Kes maksab mikrokvalifikatsiooni eest? Töötukassa, tööandja või ise",
+      description: "Kolm rada mikrokvalifikatsiooni või mikrokraadi rahastamiseks: Töötukassa toetused, tööandja koolituseelarve ja ise makstes. Kuidas igaüht küsida.",
+      inLanguage: "et",
+      dateModified: "2026-06-12",
+      author: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      mainEntityOfPage: "https://mikrokvalifikatsioon.ee/kes-maksab/"
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kes maksab mikrokvalifikatsiooni eest? | Töötukassa, tööandja või ise</title>
+    <meta
+      name="description"
+      content="Sageli ei pea sa kogu õpet ise kinni maksma. Kolm rada: Töötukassa toetused, tööandja koolituseelarve, ise makstes — ja kuidas igaüht praktiliselt küsida."
+    />
+    <link rel="canonical" href="https://mikrokvalifikatsioon.ee/kes-maksab/" />
+    <meta property="og:title" content="Kes maksab mikrokvalifikatsiooni eest?" />
+    <meta property="og:description" content="Töötukassa, tööandja või ise — kolm rada uue oskuse rahastamiseks ja kuidas igaüht küsida." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://mikrokvalifikatsioon.ee/kes-maksab/" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <Analytics />
+  </head>
+  <body>
+    <header class="topbar">
+      <nav class="nav" aria-label="Põhinavigeerimine">
+        <a class="brand" href="/">Mikrokvalifikatsioon.ee</a>
+        <div class="navlinks">
+          <a href="/kataloog/">Kataloog</a>
+          <a href="/mikrokraadid/">Mikrokraadid</a>
+          <a href="/mis-on-mikrokvalifikatsioon/">Mis see on?</a>
+          <a href="/#suunatest">Suunatest</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <span class="eyebrow">Raha küsimus</span>
+          <h1>Kes maksab mikrokvalifikatsiooni eest?</h1>
+          <p>
+            Tüüpiline mikrokraad maksab 700–1 800 €. See on vähem kui üks kuupalk
+            — aga sageli ei pea sa sedagi täies mahus ise maksma. Kolm rada, kõige
+            kiiremast alustades.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="kesmaksab_hero_suunatest">Leia oma programm ja rahastus</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <div class="measure-list">
+            <article class="measure-card">
+              <div>
+                <span class="status-tag status-green">Rada 1 — kõige kiirem</span>
+                <h3>Tööandja koolituseelarve</h3>
+                <p>
+                  Kui uus oskus aitab praegust tööd paremini teha, on tööandjal otsene huvi
+                  see kinni maksta. Enamikus ettevõtetes on koolitusraha olemas — seda lihtsalt
+                  ei küsita.
+                </p>
+                <p>
+                  <strong>Kuidas küsida:</strong> näita tasuvust, mitte soovi. "See programm
+                  maksab 1 200 € ja kestab ühe semestri töö kõrvalt. Pärast seda saan X töö
+                  ise ära teha, mille eest praegu maksame teenusepakkujale." Konkreetne programm
+                  kataloogist + hind + mida ettevõte võidab = jah-sõna tõenäosus kasvab kordades.
+                </p>
+              </div>
+            </article>
+            <article class="measure-card">
+              <div>
+                <span class="status-tag status-blue">Rada 2 — kui oled töötu või töökoht on ohus</span>
+                <h3>Töötukassa</h3>
+                <p>
+                  Töötukassa toetab õppimist nii registreeritud töötutele (koolituskaart) kui
+                  teatud tingimustel ka töötavatele inimestele, kelle oskused vajavad
+                  uuendamist. Tingimused ja summad muutuvad ning sõltuvad sinu olukorrast —
+                  täpne vastus tuleb alati Töötukassast endalt.
+                </p>
+                <p>
+                  <strong>Kuidas küsida:</strong> vaata
+                  <a href="https://www.tootukassa.ee/et/teenused/oppimine" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="kesmaksab_tootukassa">Töötukassa õppimise teenuseid</a>
+                  või helista 669 6513 ja küsi: "Kas minu olukorras saab mikrokvalifikatsiooni
+                  õpet toetada?" Võta kataloogist konkreetse programmi nimi ja hind kaasa —
+                  konkreetse plaaniga inimene saab kiirema vastuse.
+                </p>
+              </div>
+            </article>
+            <article class="measure-card">
+              <div>
+                <span class="status-tag status-amber">Rada 3 — ise makstes</span>
+                <h3>Oma raha — koos tasuvusarvutusega</h3>
+                <p>
+                  Kui maksad ise, tee enne lihtne arvutus: programmi hind ÷ oodatav palgakasv
+                  kuus = tasuvusaeg kuudes. Näide: 1 200 € programm, mis aitab liikuda rolli,
+                  kus palk on 200 € kuus kõrgem, teenib end tagasi poole aastaga. Kui tasuvusaega
+                  ei oska hinnata, on see märk, et programm vajab veel kaalumist.
+                </p>
+                <p>
+                  <strong>Hea teada:</strong> osa programme on sihtrühmale tasuta (näiteks
+                  töötavatele õpetajatele EL-i kaasrahastusel) — kataloogis on need märgitud.
+                </p>
+              </div>
+            </article>
+          </div>
+          <p class="notice">
+            Me ei luba ühtegi toetust ette. Toetuste tingimused muutuvad ja lõpliku otsuse teeb
+            Töötukassa või tööandja. See leht aitab sul õigesti küsida.
+          </p>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Tee 2 minuti suunatest — saad kohe sobivad programmid ja rahastuse vihje.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="kesmaksab_bottom_suunatest">Tee suunatest</a>
+              <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="kesmaksab_bottom_kataloog">Ava kataloog</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="kesmaksab_email">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="kesmaksab_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Rahastuse teejuht" />
+  </body>
+</html>

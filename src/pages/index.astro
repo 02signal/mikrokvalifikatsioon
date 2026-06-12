@@ -1,0 +1,449 @@
+---
+import Analytics from "../components/Analytics.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+import { catalog, providers, catalogCheckedAt } from "../data/catalog";
+
+const emailHref = "mailto:info@02signal.ai?subject=Mikrokvalifikatsioonide%20uudised";
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mikrokvalifikatsioon.ee/#organization",
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: "https://mikrokvalifikatsioon.ee/",
+      email: "info@02signal.ai",
+      telephone: "+37258180435",
+      contactPoint: { "@type": "ContactPoint", areaServed: "EE", availableLanguage: ["et"] }
+    },
+    {
+      "@type": "WebSite",
+      url: "https://mikrokvalifikatsioon.ee/",
+      name: "Mikrokvalifikatsioon.ee",
+      inLanguage: "et",
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" }
+    },
+    {
+      "@type": "Dataset",
+      name: "Eesti mikrokvalifikatsioonide ja mikrokraadide register",
+      description: "Avalik register Eesti ülikoolide ja koolitajate mikrokvalifikatsioonidest ja mikrokraadidest: nimi, pakkuja, valdkond, maht, hind, õppevorm.",
+      url: "https://mikrokvalifikatsioon.ee/catalog.json",
+      inLanguage: "et",
+      dateModified: catalogCheckedAt,
+      creator: { "@id": "https://mikrokvalifikatsioon.ee/#organization" }
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mikrokvalifikatsioon.ee | Eesti mikrokvalifikatsioonide ja mikrokraadide register</title>
+    <meta
+      name="description"
+      content="Kõik Eesti mikrokvalifikatsioonid ja ülikoolide mikrokraadid ühes kataloogis: valdkond, maht, hind ja kes selle kinni maksab. Leia oskus, mis tasub ära."
+    />
+    <link rel="canonical" href="https://mikrokvalifikatsioon.ee/" />
+    <meta property="og:title" content="Eesti mikrokvalifikatsioonide ja mikrokraadide register" />
+    <meta property="og:description" content="Leia uus oskus, mida tunnustatakse: kõik mikrokvalifikatsioonid ja mikrokraadid ühest kohast, koos hinna ja rahastusvõimalustega." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://mikrokvalifikatsioon.ee/" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    <Analytics />
+  </head>
+  <body>
+    <header class="topbar">
+      <nav class="nav" aria-label="Põhinavigeerimine">
+        <a class="brand" href="/">Mikrokvalifikatsioon.ee</a>
+        <div class="navlinks">
+          <a href="/kataloog/">Kataloog</a>
+          <a href="/mikrokraadid/">Mikrokraadid</a>
+          <a href="/mis-on-mikrokvalifikatsioon/">Mis see on?</a>
+          <a href="/kes-maksab/">Kes maksab?</a>
+          <a href="#suunatest">Suunatest</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-inner">
+          <span class="eyebrow">Uus oskus ilma aastatepikkuse kraadiõppeta</span>
+          <h1>Leia oskus, mida tööandjad tunnustavad — ja keegi, kes selle kinni maksab.</h1>
+          <p>
+            Eestis on juba sadu mikrokvalifikatsioone ja mikrokraade, aga need on laiali
+            kümnete koolide lehtedel. Siin on nad ühes kohas: mida õpid, kui kaua kestab,
+            mis maksab ja millal saab alustada.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#suunatest" data-track-event="cta_click" data-track-label="home_hero_suunatest">Tee 2 minuti suunatest</a>
+            <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="home_hero_kataloog">Ava kataloog</a>
+          </div>
+          <div class="proof">
+            <div><strong>{catalog.length}</strong><span>programmi registris</span></div>
+            <div><strong>{providers.length}</strong><span>kooli ja koolitajat</span></div>
+            <div><strong>kuud, mitte aastad</strong><span>tüüpiline õppeaeg</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="mis-see-on" class="white">
+        <div class="section-inner">
+          <div class="section-head">
+            <span class="kicker">Lihtsas keeles</span>
+            <h2>Mikrokvalifikatsioon on kitsas, tunnustatud oskus. Mikrokraad on üks selle liik.</h2>
+            <p>
+              Mikrokvalifikatsioon tähendab lühikest õpet, mille lõpus saad tunnistuse ühe
+              konkreetse oskuse kohta — mitte terve eriala diplomi. Ülikoolide pakutavaid
+              mikrokvalifikatsioone kutsutakse mikrokraadideks. Mõlemad annavad tunnistuse,
+              mida saab näidata tööandjale Eestis ja Euroopas.
+            </p>
+          </div>
+          <div class="grid-3">
+            <article class="card">
+              <h3>Kiirem kui kraadiõpe</h3>
+              <p>Tüüpiline maht on mõni kuu kuni kaks semestrit töö kõrvalt, mitte 3-4 aastat loengusaalis.</p>
+            </article>
+            <article class="card">
+              <h3>Tunnistus, mis loeb</h3>
+              <p>Lõpetajale antakse ametlik tunnistus, mida saab kasutada CV-s, Europassis ja palgaläbirääkimistel.</p>
+            </article>
+            <article class="card">
+              <h3>Kohe rakendatav</h3>
+              <p>Õpid ühte asja, mida saad järgmisel nädalal tööl kasutada — mitte kõike natuke.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="kes-maksab" class="ice">
+        <div class="section-inner">
+          <div class="section-head">
+            <span class="kicker">Raha küsimus</span>
+            <h2>Sageli ei pea sa ise kogu õpet kinni maksma.</h2>
+          </div>
+          <div class="grid-3">
+            <article class="card">
+              <h3>Töötukassa</h3>
+              <p>Koolituskaart ja töötava inimese õpitoetused võivad katta suure osa hinnast, kui oskus on nõudlusega valdkonnas.</p>
+            </article>
+            <article class="card">
+              <h3>Tööandja</h3>
+              <p>Kui uus oskus aitab praegust tööd paremini teha, on tööandja koolituseelarve sageli kõige kiirem tee.</p>
+            </article>
+            <article class="card">
+              <h3>Ise makstes</h3>
+              <p>Hinnad algavad mõnesajast eurost. Kataloogis on hind kohe näha, et saaksid tasuvust ise hinnata.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="suunatest" class="white">
+        <div class="section-inner lead-section">
+          <div class="lead-promise">
+            <span class="kicker">Tasuta suunatest</span>
+            <h2>Vasta neljale küsimusele — saad kohe 3 sobivat programmi ja rahastuse vihje.</h2>
+            <p>
+              Vastus tekib siinsamas lehel. E-maili küsime alles siis, kui soovid
+              valiku endale saata või personaalset nõu.
+            </p>
+            <div class="promise-card">
+              <strong>Mida sa kohe teada saad?</strong>
+              <ul class="check">
+                <li>millised programmid sinu valdkonna ja eelarvega sobivad</li>
+                <li>kes võiks õppe kinni maksta sinu olukorras</li>
+                <li>mis on järgmine konkreetne samm</li>
+              </ul>
+            </div>
+          </div>
+
+          <form class="lead-form" data-suunatest-form data-site-lead-form data-webhook-url={import.meta.env.PUBLIC_SITE_LEAD_WEBHOOK_URL || ""} data-source-site="mikrokvalifikatsioon.ee">
+            <div data-tool-section="suunatest">
+              <div class="form-step">
+                <span>1</span>
+                <div>
+                  <h3>Sinu olukord</h3>
+                  <p>Kui mõnda vastust ei tea, jäta vahele — test töötab ka osaliste vastustega.</p>
+                </div>
+              </div>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="stField">Mis valdkond sind tõmbab?</label>
+                  <select id="stField" name="field" data-suunatest-input>
+                    <option value="">Pole kindel / ükskõik</option>
+                    <option>IT ja andmed</option>
+                    <option>majandus ja juhtimine</option>
+                    <option>haridus</option>
+                    <option>tehnika ja tootmine</option>
+                    <option>ehitus</option>
+                    <option>energeetika</option>
+                    <option>terviseteadus</option>
+                    <option>disain ja loovus</option>
+                    <option>õigus</option>
+                    <option>muu</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="stStatus">Mis on su praegune olukord?</label>
+                  <select id="stStatus" name="status" data-suunatest-input>
+                    <option value="tootan">Töötan, tahan uut või tugevamat oskust</option>
+                    <option value="tootu">Olen töötu või töökoht on ohus</option>
+                    <option value="ettevotja">Olen ettevõtja</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="stFormat">Kuidas saad õppida?</label>
+                  <select id="stFormat" name="format" data-suunatest-input>
+                    <option value="">Ükskõik</option>
+                    <option value="veebis">Ainult veebis, töö kõrvalt</option>
+                    <option value="kohapeal">Saan käia ka kohapeal</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="stBudget">Kui palju saad ise panustada?</label>
+                  <select id="stBudget" name="budget" data-suunatest-input>
+                    <option value="">Pole veel selge</option>
+                    <option value="1000">kuni 1 000 €</option>
+                    <option value="2000">kuni 2 000 €</option>
+                    <option value="99999">üle 2 000 €</option>
+                    <option value="0">Loodan toetusele või tööandjale</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn btn-primary assessment-button" type="button" data-suunatest-button>Näita sobivaid programme</button>
+
+              <div class="assessment-result" data-suunatest-result hidden>
+                <div>
+                  <span class="status-tag status-green" data-suunatest-status>Esialgne valik</span>
+                  <h3 data-suunatest-title></h3>
+                </div>
+                <div class="measure-list" data-suunatest-matches></div>
+                <div class="assessment-money">
+                  <strong>Kes võiks maksta?</strong>
+                  <span data-suunatest-funding></span>
+                  <small>Täpsem rahastuse teejuht: <a href="/kes-maksab/">kes maksab?</a></small>
+                </div>
+              </div>
+            </div>
+
+            <div data-lead-contact-section data-suunatest-contact hidden>
+              <div class="form-step">
+                <span>2</span>
+                <div>
+                  <h3>Saada valik endale ja küsi nõu</h3>
+                  <p>Saadame su valiku e-mailiga ja vastame ühe tööpäeva jooksul, kui küsid nõu.</p>
+                </div>
+              </div>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="stEmail">E-mail *</label>
+                  <input id="stEmail" name="email" type="email" required autocomplete="email" />
+                </div>
+                <div class="field full">
+                  <label for="stMessage">Soovi korral: kirjelda paari lausega oma tausta ja eesmärki</label>
+                  <textarea id="stMessage" name="message" placeholder="Näiteks: töötan klienditeeninduses, tahan liikuda andmete poole."></textarea>
+                </div>
+              </div>
+              <label class="checkbox">
+                <input type="checkbox" name="consentContact" required />
+                <span>Nõustun, et Ettevõtluskeskus OÜ kasutab minu andmeid vastamiseks ja ühenduse võtmiseks.</span>
+              </label>
+              <label class="checkbox">
+                <input type="checkbox" name="consentNews" />
+                <span>Soovin teada saada, kui Eestis lisandub uusi mikrokvalifikatsioone ja avaneb uusi vastuvõtte.</span>
+              </label>
+              <input type="hidden" name="suunatestSummary" data-suunatest-summary-field />
+              <button class="btn btn-primary" type="submit">Saada valik ja küsi nõu</button>
+              <p class="form-note" data-suunatest-note>Vastame üldjuhul ühe tööpäeva jooksul. Kui süsteem ei saada, avaneb e-kirja varuvariant.</p>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Vaata kataloogi või küsi, milline suund sinu taustaga sobib.</h2>
+            <p>
+              Kui tahad teada, millal lisandub uusi mikrokvalifikatsioone ja avaneb uusi
+              vastuvõtte, anna oma e-mail — saadame ainult sisulisi uudiseid.
+            </p>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="home_bottom_kataloog">Ava kataloog</a>
+              <a class="btn btn-secondary" href={emailHref} data-track-event="email_click" data-track-label="home_bottom_email">Telli uudised e-mailiga</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href={emailHref} data-track-event="email_click" data-track-label="contact_card_email">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="contact_card_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+
+    <script>
+      type Program = {
+        name: string;
+        provider: string;
+        url: string;
+        field: string;
+        ects: number | null;
+        priceText: string | null;
+        durationText: string | null;
+        format: string | null;
+        language: string | null;
+        intakeText: string | null;
+        summary: string;
+      };
+
+      const form = document.querySelector("[data-suunatest-form]") as HTMLFormElement | null;
+      const button = document.querySelector("[data-suunatest-button]");
+      const result = document.querySelector("[data-suunatest-result]") as HTMLElement | null;
+      const matchesBox = document.querySelector("[data-suunatest-matches]");
+      const titleEl = document.querySelector("[data-suunatest-title]");
+      const fundingEl = document.querySelector("[data-suunatest-funding]");
+      const contactBox = document.querySelector("[data-suunatest-contact]") as HTMLElement | null;
+      const summaryField = document.querySelector("[data-suunatest-summary-field]") as HTMLInputElement | null;
+      const noteEl = document.querySelector("[data-suunatest-note]");
+      const track = (name: string, params: Record<string, unknown>) => (window as any).digiteekaartTrack?.(name, params);
+
+      let programs: Program[] = [];
+      const loadPrograms = async (): Promise<Program[]> => {
+        if (programs.length) return programs;
+        try {
+          const response = await fetch("/catalog.json");
+          const data = await response.json();
+          programs = data.programs || [];
+        } catch {
+          programs = [];
+        }
+        return programs;
+      };
+      document.querySelectorAll("[data-suunatest-input]").forEach((input) => {
+        input.addEventListener("focus", () => { void loadPrograms(); }, { once: true });
+      });
+
+      const parsePrice = (text: string | null): number | null => {
+        if (!text) return null;
+        if (/tasuta/i.test(text)) return 0;
+        const digits = text.replace(/\s/g, "").match(/\d+/);
+        return digits ? Number(digits[0]) : null;
+      };
+
+      const FUNDING_HINTS: Record<string, string> = {
+        tootan: "Kõige kiirem rada on tööandja koolituseelarve: vii talle konkreetne programm, hind ja arvutus, mida ettevõte võidab. Küsi ka Töötukassast, kas sinu olukorras on töötava inimese toetusi.",
+        tootu: "Sinu esimene aadress on Töötukassa: koolituskaart ja õppimise toetused on mõeldud just registreeritud töötule. Võta nõustajale kaasa konkreetse programmi nimi ja hind.",
+        ettevotja: "Ettevõtjana saad õppe sageli ettevõtte koolituskuluna arvestada. Kui plaanid suuremat arengut, uuri ka ettevõtluse arendamise toetusi."
+      };
+
+      const runTest = async (): Promise<void> => {
+        if (!form || !result || !matchesBox || !titleEl || !fundingEl) return;
+        const data = new FormData(form);
+        const field = String(data.get("field") || "");
+        const status = String(data.get("status") || "tootan");
+        const format = String(data.get("format") || "");
+        const budget = Number(data.get("budget") || 0);
+        const all = await loadPrograms();
+
+        let pool = field ? all.filter((p) => p.field === field) : all;
+        if (!pool.length) pool = all;
+        const scored = pool.map((p) => {
+          let score = 0;
+          const price = parsePrice(p.priceText);
+          if (field && p.field === field) score += 3;
+          if (format === "veebis" && (p.format === "veebis" || p.format === "hübriid")) score += 2;
+          if (budget > 0 && price !== null && price <= budget) score += 2;
+          if (budget === 0 && price === 0) score += 2;
+          if (p.language === "et") score += 1;
+          if (price !== null) score += 1;
+          if (p.intakeText) score += 1;
+          return { p, score };
+        }).sort((a, b) => b.score - a.score);
+
+        const top = scored.slice(0, 3).map((s) => s.p);
+        result.hidden = false;
+        if (contactBox) contactBox.hidden = false;
+
+        if (!top.length) {
+          titleEl.textContent = "Kataloog ei laadinud või valikuga ei sobinud ükski programm.";
+          matchesBox.innerHTML = "";
+        } else {
+          titleEl.textContent = field
+            ? `Sinu valdkonnas (${field}) paistavad kõige loogilisemad need:`
+            : "Ilma valdkonda valimata pakume laia valiku tugevaimad:";
+          matchesBox.innerHTML = top.map((p) => `
+            <article class="measure-card">
+              <div>
+                <span class="status-tag status-blue">${p.field}</span>
+                <h3>${p.name}</h3>
+                <p>${p.summary}</p>
+              </div>
+              <dl>
+                <div><dt>Kool</dt><dd>${p.provider}</dd></div>
+                ${p.priceText ? `<div><dt>Hind</dt><dd>${p.priceText}</dd></div>` : ""}
+                ${p.ects ? `<div><dt>Maht</dt><dd>${p.ects} EAP</dd></div>` : ""}
+              </dl>
+              <a href="${p.url}" target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label="suunatest_${p.provider}">Vaata kooli lehel</a>
+            </article>
+          `).join("");
+        }
+        fundingEl.textContent = FUNDING_HINTS[status] || FUNDING_HINTS.tootan;
+
+        const summary = top.map((p) => `${p.name} (${p.provider}${p.priceText ? ", " + p.priceText : ""})`).join("; ");
+        if (summaryField) summaryField.value = `Olukord: ${status}; valdkond: ${field || "-"}; eelarve: ${budget || "-"}; valik: ${summary}`;
+
+        track("tool_completed", {
+          tool_name: "suunatest",
+          result_tier: top.length ? "leitud" : "tühi",
+          result_route: field || "valdkond_valimata",
+          status_segment: status
+        });
+        if (top.length && status === "tootu") {
+          track("result_high_intent", { tool_name: "suunatest", result_route: field || "valdkond_valimata" });
+        }
+      };
+
+      button?.addEventListener("click", () => { void runTest(); });
+
+      form?.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (!form.reportValidity()) return;
+        const webhookUrl = form.getAttribute("data-webhook-url") || "";
+        const payload = Object.fromEntries(new FormData(form).entries());
+        track("lead_form_submit_attempt", { form_name: "suunatest_vorm", source_site: "mikrokvalifikatsioon.ee" });
+        let sent = false;
+        if (webhookUrl) {
+          try {
+            const response = await fetch(webhookUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ form: "suunatest", site: "mikrokvalifikatsioon.ee", ...payload })
+            });
+            sent = response.ok;
+          } catch {
+            sent = false;
+          }
+        }
+        if (!sent) {
+          const body = encodeURIComponent(`Suunatesti vastus:\n${payload.suunatestSummary || ""}\n\nTaust: ${payload.message || "-"}\nE-mail: ${payload.email || "-"}`);
+          window.location.href = `mailto:info@02signal.ai?subject=${encodeURIComponent("Suunatest - mikrokvalifikatsioon.ee")}&body=${body}`;
+        }
+        track("lead_form_submit", { form_name: "suunatest_vorm", source_site: "mikrokvalifikatsioon.ee", delivery: sent ? "webhook" : "mailto" });
+        if (noteEl) noteEl.textContent = sent
+          ? "Aitäh! Saatsime valiku teele ja vastame ühe tööpäeva jooksul."
+          : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
+      });
+    </script>
+  </body>
+</html>
