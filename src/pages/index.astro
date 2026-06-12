@@ -53,8 +53,50 @@ const schema = {
     <meta property="og:description" content="Leia uus oskus, mida tunnustatakse: kõik mikrokvalifikatsioonid ja mikrokraadid ühest kohast, koos hinna ja rahastusvõimalustega." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://mikrokvalifikatsioon.ee/" />
+    <meta property="og:image" content="https://mikrokvalifikatsioon.ee/og-default.png" />
+    <meta name="twitter:card" content="summary_large_image" />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
-    <Analytics />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#0d2a4a" />
+    <style is:global>
+      /* Suunatesti tulemuskaardid elavad kitsas vormiveerus — kompaktne püstpaigutus.
+         is:global, sest kaardid genereeritakse JS-iga ja Astro skoop ei kataks neid. */
+      [data-suunatest-result] {
+        grid-template-columns: 1fr;
+      }
+      [data-suunatest-matches] {
+        gap: 12px;
+      }
+      [data-suunatest-matches] .measure-card dl div {
+        min-width: 0;
+      }
+      [data-suunatest-matches] .measure-card {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 16px 18px;
+      }
+      [data-suunatest-matches] .measure-card h3 {
+        font-size: 1.08rem;
+      }
+      [data-suunatest-matches] .measure-card p {
+        font-size: 0.95rem;
+      }
+      [data-suunatest-matches] .measure-card dl {
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+        gap: 8px;
+      }
+      [data-suunatest-matches] .measure-card > a {
+        white-space: normal;
+        justify-self: start;
+      }
+      .assessment-result {
+        min-width: 0;
+      }
+      .assessment-result > * {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+    </style>
   </head>
   <body>
     <header class="topbar">
