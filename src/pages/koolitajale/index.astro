@@ -1,0 +1,315 @@
+---
+import Seo from "../../components/Seo.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { catalog, providers } from "../../data/catalog";
+
+// Ametlik raamistik kontrollitud allikatest (HTM, HAKA, EHIS) — kuupäev nähtaval lehel.
+const officialCheckedAt = "13.06.2026";
+
+const faqItems = [
+  {
+    question: "Kui suur peab mikrokvalifikatsioon mahult olema?",
+    answer: "5–30 EAP (ainepunkti), kus 1 EAP = 26 tundi õppija tööd. Õppekava tugineb tasemeõppe moodulitele."
+  },
+  {
+    question: "Mis seadus mikrokvalifikatsiooni reguleerib?",
+    answer: "Täiskasvanute koolituse seadus. Mikrokvalifikatsioone ja mikrokraade puudutavad muudatused jõustusid 2025. aastal ja seavad nõuded mahule, pakkujale ja tunnistusele."
+  },
+  {
+    question: "Kes hindab kvaliteeti ja kus taotlus käib?",
+    answer: "Kvaliteedihindamise viib läbi HAKA (Eesti Hariduse Kvaliteediagentuur) õppekavarühma kaupa; taotlus esitatakse Eesti Hariduse Infosüsteemis (EHIS). Hinnatakse õppekava ja arendust, õppimist ja õpetamist, koolitajaid ning ressursse ja juhtimist."
+  },
+  {
+    question: "Mille poolest erineb mikrokraad mikrokvalifikatsioonist?",
+    answer: "Mikrokraad on kõrgkooli pakutav mikrokvalifikatsioon, mille õppekavast vähemalt 50% on kõrghariduse tasemel. Mõlemad on mikrokvalifikatsioonid."
+  },
+  {
+    question: "Kus mikrokvalifikatsioonid ametlikult kirjas on?",
+    answer: "Eesti Hariduse Infosüsteemis (EHIS): õppekava sisu, õpiväljundid, maht ja sihtrühm. Tunnistuse andmed kantakse samuti EHIS-esse."
+  }
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mikrokvalifikatsioon.ee/#organization",
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: "https://mikrokvalifikatsioon.ee/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
+        { "@type": "ListItem", position: 2, name: "Koolitajale", item: "https://mikrokvalifikatsioon.ee/koolitajale/" }
+      ]
+    },
+    {
+      "@type": "Article",
+      headline: "Kuidas saada mikrokvalifikatsiooni pakkujaks Eestis",
+      description: "Mikrokvalifikatsiooni ametlik raamistik (Täiskasvanute koolituse seadus), maht 5–30 EAP, HAKA kvaliteedihindamine ja registreerimine EHIS-es — sammud koolitajale.",
+      inLanguage: "et",
+      datePublished: "2026-06-13",
+      dateModified: "2026-06-13",
+      author: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      mainEntityOfPage: "https://mikrokvalifikatsioon.ee/koolitajale/"
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer }
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Koolitajale | Kuidas pakkuda mikrokvalifikatsiooni ja jõuda õppijani"
+      description="Mikrokvalifikatsiooni ametlik raamistik koolitajale: maht 5–30 EAP, Täiskasvanute koolituse seadus, HAKA kvaliteedihindamine ja registreerimine EHIS-es. Lisaks: lisa oma programm Eesti suurimasse registrisse."
+      canonicalPath="/koolitajale/"
+      ogType="article"
+      ogTitle="Koolitajale: kuidas pakkuda mikrokvalifikatsiooni"
+      ogDescription="Ametlik raamistik, sammud pakkujaks saamiseks ja võimalus lisada oma programm Eesti registrisse."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <header class="topbar">
+      <nav class="nav" aria-label="Põhinavigeerimine">
+        <a class="brand" href="/">Mikrokvalifikatsioon.ee</a>
+        <div class="navlinks">
+          <a href="/kataloog/">Kataloog</a>
+          <a href="/mikrokraadid/">Mikrokraadid</a>
+          <a href="/mis-on-mikrokvalifikatsioon/">Mis see on?</a>
+          <a href="/kes-maksab/">Kes maksab?</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <span class="eyebrow">Koolitajale ja õppeasutusele</span>
+          <h1>Kaalud mikrokvalifikatsiooni pakkumist? Siin on ametlik raamistik ja tee õppijani.</h1>
+          <p>
+            Mikrokvalifikatsioon on lühike, tõendatud ja tunnustatud oskuskogum, millel on
+            tööturul iseseisev väärtus. Sellel lehel on kokku võetud ametlik raamistik (kontrollitud
+            allikatest) ja võimalus lisada oma programm Eesti suurimasse avalikku registrisse.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#lisa-programm" data-track-event="cta_click" data-track-label="koolitaja_hero_lisa">Lisa oma programm registrisse</a>
+            <a class="btn btn-secondary" href="#raamistik" data-track-event="cta_click" data-track-label="koolitaja_hero_raamistik">Vaata ametlikku raamistikku</a>
+          </div>
+          <p class="report-date">Ametlik raamistik kontrollitud: {officialCheckedAt}</p>
+        </div>
+      </section>
+
+      <section id="raamistik" class="white">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Ametlik raamistik</span>
+            <h2>Mis on mikrokvalifikatsioon seaduse järgi?</h2>
+            <p>
+              Mikrokvalifikatsioon on <strong>täienduskoolitusel omandatud teadmiste ja oskuste kogum,
+              mis on tõendatud, tunnustatud ja vastab tööturu või ühiskonna vajadustele</strong>
+              (Täiskasvanute koolituse seadus). Raamistik jõustus 2025. aastal.
+            </p>
+          </div>
+          <div class="grid-3">
+            <article class="card">
+              <span class="stat">5–30 EAP</span>
+              <h3>Maht</h3>
+              <p>1 EAP = 26 tundi õppija tööd. Õppekava tugineb tasemeõppe moodulitele.</p>
+            </article>
+            <article class="card">
+              <span class="stat">EKR / EQF</span>
+              <h3>Tase</h3>
+              <p>Eesti kvalifikatsiooniraamistiku 8 taset on identsed Euroopa raamistikuga (EQF) — tunnistus on Euroopas mõistetav.</p>
+            </article>
+            <article class="card">
+              <span class="stat">EHIS</span>
+              <h3>Register</h3>
+              <p>Ametlikud õppekavad (sisu, väljundid, maht, sihtrühm) ja tunnistuste andmed on Eesti Hariduse Infosüsteemis.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Pakkujaks saamine</span>
+            <h2>Kolm sammu, et tohtida mikrokvalifikatsiooni pakkuda.</h2>
+            <p>Lühikokkuvõte. Täpsed nõuded, riigilõivud ja vormid kinnitab alati ametlik allikas — vaata viiteid all.</p>
+          </div>
+          <div class="measure-list">
+            <article class="measure-card">
+              <div>
+                <span class="status-tag status-green">Samm 1</span>
+                <h3>Õppekavarühma kvaliteedihindamine (HAKA)</h3>
+                <p>
+                  Täienduskoolitusasutus, kel pole vastavas õppekavarühmas õppe läbiviimise õigust,
+                  läbib HAKA kvaliteedihindamise. Taotlus esitatakse EHIS-es. Hinnatakse nelja
+                  valdkonda: õppekava ja arendus, õppimine ja õpetamine, koolitajad, ressursid ja juhtimine.
+                  Riigilõiv on suurusjärgus 1450 €, hindamine kehtib 5 aastat.
+                </p>
+              </div>
+            </article>
+            <article class="measure-card">
+              <div>
+                <span class="status-tag status-blue">Samm 2</span>
+                <h3>Tegevusluba õppekavale</h3>
+                <p>
+                  Positiivse hindamisotsuse järel taotled EHIS-e kaudu tegevusloa (riigilõiv suurusjärgus
+                  100 € õppekava kohta). Luba kehtib 5 aastat.
+                </p>
+              </div>
+            </article>
+            <article class="measure-card">
+              <div>
+                <span class="status-tag status-amber">Samm 3</span>
+                <h3>Õppekava registreerimine EHIS-es</h3>
+                <p>
+                  Iga konkreetne mikrokvalifikatsiooni õppekava registreeritakse EHIS-es eraldi.
+                  Kõrgkoolid ja kutseõppeasutused, kel on vastavas õppekavarühmas juba õppeõigus,
+                  saavad sageli läbi pelga registreerimisega.
+                </p>
+              </div>
+            </article>
+          </div>
+          <p class="notice">
+            Ametlikud allikad ja täpsed tingimused:
+            <a href="https://www.hm.ee/mikrokvalifikatsioonid" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="koolitaja_htm">Haridus- ja Teadusministeerium</a>,
+            <a href="https://haka.ee/mikrokvalifikatsioonioppe-labiviimine/" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="koolitaja_haka">HAKA kvaliteedihindamine</a>,
+            <a href="https://ehis.edu.ee/" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="koolitaja_ehis">EHIS</a> ja
+            <a href="https://kutsekoda.ee/eesti-kvalifikatsiooniraamistik/" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="koolitaja_kutsekoda">Kutsekoda (EKR)</a>.
+            Riigilõivud ja tähtajad muutuvad — kontrolli enne otsust ametlikust allikast.
+          </p>
+        </div>
+      </section>
+
+      <section id="lisa-programm" class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Jõua õppijani</span>
+            <h2>Lisa oma programm Eesti suurimasse avalikku registrisse.</h2>
+            <p>
+              Meie kataloogis on praegu {catalog.length} programmi {providers.length} koolist ja koolitajalt.
+              Register on koht, kust õppijad, ettevõtted ja nõustajad mikrokvalifikatsioone otsivad —
+              ja kust nad lähevad edasi kooli enda lehele. Lisamine on tasuta.
+            </p>
+          </div>
+
+          <form class="lead-form" data-provider-form data-site-lead-form data-webhook-url={import.meta.env.PUBLIC_SITE_LEAD_WEBHOOK_URL || ""} data-source-site="mikrokvalifikatsioon.ee">
+            <div class="form-grid">
+              <div class="field">
+                <label for="pgProgram">Programmi nimi *</label>
+                <input id="pgProgram" name="programmName" required placeholder="Näiteks: Andmeanalüüsi mikrokraad" />
+              </div>
+              <div class="field">
+                <label for="pgProvider">Kool / koolitaja *</label>
+                <input id="pgProvider" name="providerName" required placeholder="Asutuse nimi" />
+              </div>
+              <div class="field full">
+                <label for="pgUrl">Link programmi lehele *</label>
+                <input id="pgUrl" name="programUrl" type="url" required placeholder="https://..." />
+              </div>
+              <div class="field">
+                <label for="pgEmail">Sinu e-mail *</label>
+                <input id="pgEmail" name="email" type="email" required autocomplete="email" />
+              </div>
+              <div class="field">
+                <label for="pgField">Valdkond</label>
+                <input id="pgField" name="field" placeholder="Näiteks: IT ja andmed" />
+              </div>
+              <div class="field full">
+                <label for="pgNotes">Soovi korral: maht (EAP), hind, vastuvõtt, õppevorm</label>
+                <textarea id="pgNotes" name="notes" placeholder="Näiteks: 12 EAP, 1200 €, veebis, vastuvõtt kuni 21.08."></textarea>
+              </div>
+            </div>
+            <label class="checkbox">
+              <input type="checkbox" name="consentList" required />
+              <span>Kinnitan, et tegu on avaliku programmiga ja andmeid tohib registris avaldada. Lisame info pärast allika kontrolli.</span>
+            </label>
+            <button class="btn btn-primary" type="submit">Saada programm registrisse</button>
+            <p class="form-note" data-provider-note>Kontrollime info kooli avalikult lehelt ja lisame kirje koos kontrollkuupäevaga. Kui automaatne saatmine ei tööta, avaneb e-kirja varuvariant.</p>
+          </form>
+
+          <p class="field-help">
+            Märkasid oma programmi juures viga või aegunud infot? Kirjuta
+            <a href="mailto:info@02signal.ai?subject=Kataloogi%20parandus" data-track-event="email_click" data-track-label="koolitaja_parandus">info@02signal.ai</a> —
+            parandame allika põhjal. Vaata ka, <a href="/kuidas-koostame/">kuidas me registrit koostame</a>.
+          </p>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Vaata, kuidas register on üles ehitatud — või küsi nõu.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/andmed/" data-track-event="cta_click" data-track-label="koolitaja_bottom_andmed">Turg andmetes</a>
+              <a class="btn btn-secondary" href="/kuidas-koostame/" data-track-event="cta_click" data-track-label="koolitaja_bottom_metoodika">Kuidas koostame</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="koolitaja_email">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="koolitaja_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Koolitajale" />
+
+    <script>
+      const form = document.querySelector("[data-provider-form]") as HTMLFormElement | null;
+      const note = document.querySelector("[data-provider-note]");
+      const track = (name: string, params: Record<string, unknown>) => (window as any).digiteekaartTrack?.(name, params);
+
+      form?.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (!form.reportValidity()) return;
+        const webhookUrl = form.getAttribute("data-webhook-url") || "";
+        const payload = Object.fromEntries(new FormData(form).entries());
+        track("lead_form_submit_attempt", { form_name: "koolitaja_lisa_programm", source_site: "mikrokvalifikatsioon.ee" });
+        let sent = false;
+        if (webhookUrl) {
+          try {
+            const response = await fetch(webhookUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ form: "koolitaja_lisa_programm", site: "mikrokvalifikatsioon.ee", ...payload })
+            });
+            sent = response.ok;
+          } catch {
+            sent = false;
+          }
+        }
+        if (!sent) {
+          const body = encodeURIComponent(
+            `Programm: ${payload.programmName || ""}\nKool/koolitaja: ${payload.providerName || ""}\nLink: ${payload.programUrl || ""}\nValdkond: ${payload.field || "-"}\nMärkused: ${payload.notes || "-"}\nKontakt: ${payload.email || ""}`
+          );
+          window.location.href = `mailto:info@02signal.ai?subject=${encodeURIComponent("Lisa programm registrisse")}&body=${body}`;
+        }
+        track("lead_form_submit", { form_name: "koolitaja_lisa_programm", source_site: "mikrokvalifikatsioon.ee", delivery: sent ? "webhook" : "mailto" });
+        if (note) note.textContent = sent
+          ? "Aitäh! Saime programmi info kätte ja lisame selle pärast allika kontrolli."
+          : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
+      });
+    </script>
+  </body>
+</html>

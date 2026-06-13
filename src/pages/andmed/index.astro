@@ -1,0 +1,254 @@
+---
+import Seo from "../../components/Seo.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { catalog, providers, fields, catalogCheckedAt } from "../../data/catalog";
+import { parsePriceEur } from "../../data/courseSchema";
+
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+
+const byField = fields
+  .map((field) => ({ field, count: catalog.filter((entry) => entry.field === field).length }))
+  .sort((a, b) => b.count - a.count);
+const maxField = Math.max(...byField.map((f) => f.count));
+
+const providerTypes = [
+  { type: "ülikool", label: "Ülikoolid" },
+  { type: "rakenduskõrgkool", label: "Rakenduskõrgkoolid" },
+  { type: "erakool", label: "Erakoolitajad" }
+]
+  .map((t) => ({ ...t, count: catalog.filter((e) => e.providerType === t.type).length }))
+  .filter((t) => t.count > 0);
+
+const formats = [
+  { format: "veebis", label: "Veebis" },
+  { format: "hübriid", label: "Hübriid" },
+  { format: "kohapeal", label: "Kohapeal" }
+]
+  .map((f) => ({ ...f, count: catalog.filter((e) => e.format === f.format).length }))
+  .filter((f) => f.count > 0);
+
+const prices = catalog
+  .map((e) => parsePriceEur(e.priceText))
+  .filter((p): p is number => p != null && p > 0);
+const minPrice = prices.length ? Math.min(...prices) : null;
+const maxPrice = prices.length ? Math.max(...prices) : null;
+const freeCount = catalog.filter((e) => parsePriceEur(e.priceText) === 0).length;
+const withPrice = catalog.filter((e) => e.priceText).length;
+
+const ectsVals = catalog.map((e) => e.ects).filter((n): n is number => n != null);
+const minEcts = ectsVals.length ? Math.min(...ectsVals) : null;
+const maxEcts = ectsVals.length ? Math.max(...ectsVals) : null;
+
+const etCount = catalog.filter((e) => e.language === "et").length;
+const enCount = catalog.filter((e) => e.language === "en").length;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mikrokvalifikatsioon.ee/#organization",
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: "https://mikrokvalifikatsioon.ee/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
+        { "@type": "ListItem", position: 2, name: "Andmed", item: "https://mikrokvalifikatsioon.ee/andmed/" }
+      ]
+    },
+    {
+      "@type": "Dataset",
+      name: "Eesti mikrokvalifikatsioonide ja mikrokraadide register",
+      description: `Avaandmestik Eesti ${catalog.length} mikrokvalifikatsioonist ja mikrokraadist ${providers.length} koolist ja koolitajalt: nimi, pakkuja, valdkond, maht (EAP), hind, õppevorm, keel ja vastuvõtt. Andmed pärinevad pakkujate avalikelt lehtedelt.`,
+      url: "https://mikrokvalifikatsioon.ee/andmed/",
+      inLanguage: "et",
+      dateModified: catalogCheckedAt,
+      temporalCoverage: catalogCheckedAt,
+      creator: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      variableMeasured: ["programmi nimi", "pakkuja", "valdkond", "maht (EAP)", "hind", "õppevorm", "keel", "vastuvõtt"],
+      distribution: [
+        { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: "https://mikrokvalifikatsioon.ee/catalog.json" }
+      ]
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Andmed | Eesti mikrokvalifikatsioonide turg ja avaandmed"
+      description={`Eesti mikrokvalifikatsioonide turg andmetes: ${catalog.length} programmi ${providers.length} koolist, jaotus valdkonniti, hinna- ja mahuvahemik. Masinloetav avaandmestik (catalog.json) ametnikele ja uurijatele.`}
+      canonicalPath="/andmed/"
+      ogTitle="Eesti mikrokvalifikatsioonide turg andmetes"
+      ogDescription="Turukaart ja avaandmed: programmide arv, pakkujad, valdkonnad, hinnad ja mahud — masinloetavalt."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <header class="topbar">
+      <nav class="nav" aria-label="Põhinavigeerimine">
+        <a class="brand" href="/">Mikrokvalifikatsioon.ee</a>
+        <div class="navlinks">
+          <a href="/kataloog/">Kataloog</a>
+          <a href="/mikrokraadid/">Mikrokraadid</a>
+          <a href="/koolitajale/">Koolitajale</a>
+          <a href="/kuidas-koostame/">Kuidas koostame</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <span class="eyebrow">Avaandmed ja turukaart</span>
+          <h1>Eesti mikrokvalifikatsioonide turg andmetes.</h1>
+          <p>
+            Koondvaade Eesti mikrokvalifikatsioonidest ja mikrokraadidest ühest kohast: mitu programmi,
+            kelle käest, mis valdkonnas, mis mahus ja hinnaga. Andmed pärinevad pakkujate avalikelt
+            lehtedelt; masinloetav versioon on vabalt kasutatav.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="/catalog.json" data-track-event="cta_click" data-track-label="andmed_catalog_json">Ava avaandmed (JSON)</a>
+            <a class="btn btn-secondary" href="/kuidas-koostame/" data-track-event="cta_click" data-track-label="andmed_metoodika">Kuidas andmed kogume</a>
+          </div>
+          <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <div class="proof wide-proof">
+            <div><strong>{catalog.length}</strong><span>programmi registris</span></div>
+            <div><strong>{providers.length}</strong><span>kooli ja koolitajat</span></div>
+            <div><strong>{fields.length}</strong><span>valdkonda</span></div>
+            {minEcts != null && maxEcts != null && (
+              <div><strong>{minEcts}–{maxEcts}</strong><span>EAP vahemik</span></div>
+            )}
+            {minPrice != null && maxPrice != null && (
+              <div><strong>{minPrice}–{maxPrice} €</strong><span>hinnavahemik ({withPrice} avaldatud)</span></div>
+            )}
+            {freeCount > 0 && (
+              <div><strong>{freeCount}</strong><span>tasuta sihtrühmale</span></div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Valdkonniti</span>
+            <h2>Programmide jaotus valdkondade kaupa.</h2>
+          </div>
+          <div class="bars">
+            {byField.map((row) => (
+              <div class="bar-row">
+                <span class="bar-label">{row.field}</span>
+                <span class="bar-track"><span class="bar-fill" style={`width:${Math.round((row.count / maxField) * 100)}%`}></span></span>
+                <span class="bar-value">{row.count}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <div class="grid-3">
+            <article class="card">
+              <h3>Pakkuja tüüp</h3>
+              <ul class="data-list">
+                {providerTypes.map((row) => <li><span>{row.label}</span><strong>{row.count}</strong></li>)}
+              </ul>
+            </article>
+            <article class="card">
+              <h3>Õppevorm</h3>
+              <ul class="data-list">
+                {formats.map((row) => <li><span>{row.label}</span><strong>{row.count}</strong></li>)}
+                <li><span>Märkimata</span><strong>{catalog.length - formats.reduce((s, f) => s + f.count, 0)}</strong></li>
+              </ul>
+            </article>
+            <article class="card">
+              <h3>Õppekeel</h3>
+              <ul class="data-list">
+                <li><span>Eesti keel</span><strong>{etCount}</strong></li>
+                <li><span>Inglise keel</span><strong>{enCount}</strong></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Avaandmed</span>
+            <h2>Kasuta andmeid oma analüüsis.</h2>
+          </div>
+          <p>
+            Kogu register on masinloetav ja vabalt kasutatav. Iga kirje juures on pakkuja, valdkond,
+            maht, hind, õppevorm, keel, vastuvõtt ja kontrollkuupäev (<code>sourceCheckedAt</code>) ning
+            link pakkuja ametlikule lehele.
+          </p>
+          <ul class="check">
+            <li><a href="/catalog.json" data-track-event="cta_click" data-track-label="andmed_json">catalog.json</a> — täisregister JSON-formaadis</li>
+            <li><a href="/llms.txt" data-track-event="cta_click" data-track-label="andmed_llms">llms.txt</a> — kokkuvõte AI-assistentidele</li>
+          </ul>
+          <p class="field-help">
+            <strong>Kuidas viidata:</strong> „Mikrokvalifikatsioon.ee register, kontrollitud {checkedAtText},
+            https://mikrokvalifikatsioon.ee/andmed/". Vaata ka <a href="/kuidas-koostame/">metoodikat ja sõltumatust</a>.
+          </p>
+          <p class="notice">
+            See ei ole ametlik riiklik register. Ametlik info mikrokvalifikatsiooni õppekavade ja
+            tunnistuste kohta on Eesti Hariduse Infosüsteemis
+            (<a href="https://ehis.edu.ee/" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="andmed_ehis">EHIS</a>)
+            ja Haridus- ja Teadusministeeriumi lehel
+            (<a href="https://www.hm.ee/mikrokvalifikatsioonid" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="andmed_htm">hm.ee</a>).
+          </p>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Oled koolitaja?</span>
+            <h2>Lisa oma programm registrisse — täienda andmeid.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/koolitajale/" data-track-event="cta_click" data-track-label="andmed_koolitajale">Koolitajale</a>
+              <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="andmed_kataloog">Ava kataloog</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="andmed_email">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="andmed_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Turg andmetes" />
+
+    <style>
+      .wide-proof { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
+      .bars { display: grid; gap: 10px; }
+      .bar-row { display: grid; grid-template-columns: minmax(120px, 200px) 1fr auto; gap: 12px; align-items: center; }
+      .bar-label { font-size: 0.92rem; color: #44546a; }
+      .bar-track { background: #e4ecf2; border-radius: 999px; height: 14px; overflow: hidden; }
+      .bar-fill { display: block; height: 100%; background: #0d9488; border-radius: 999px; }
+      .bar-value { font-weight: 800; color: #0d2a4a; min-width: 28px; text-align: right; }
+      .data-list { list-style: none; padding: 0; margin: 0; }
+      .data-list li { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #eef3f7; }
+      .data-list li:last-child { border-bottom: 0; }
+      .data-list strong { color: #0d2a4a; }
+      @media (max-width: 560px) { .bar-row { grid-template-columns: 1fr auto; } .bar-track { grid-column: 1 / -1; order: 3; } }
+    </style>
+  </body>
+</html>

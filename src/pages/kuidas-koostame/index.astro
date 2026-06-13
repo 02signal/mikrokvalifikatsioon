@@ -1,0 +1,182 @@
+---
+import Seo from "../../components/Seo.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { catalog, providers, catalogCheckedAt } from "../../data/catalog";
+
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mikrokvalifikatsioon.ee/#organization",
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: "https://mikrokvalifikatsioon.ee/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
+        { "@type": "ListItem", position: 2, name: "Kuidas koostame", item: "https://mikrokvalifikatsioon.ee/kuidas-koostame/" }
+      ]
+    },
+    {
+      "@type": "Article",
+      headline: "Kuidas me mikrokvalifikatsioonide registrit koostame",
+      description: "Mikrokvalifikatsioon.ee metoodika ja sõltumatus: allikad, kontrollkuupäevad, neutraalsus (kõik programmid samade reeglite järgi, tasuta), paranduste protsess.",
+      inLanguage: "et",
+      datePublished: "2026-06-13",
+      dateModified: "2026-06-13",
+      author: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      mainEntityOfPage: "https://mikrokvalifikatsioon.ee/kuidas-koostame/"
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Kuidas me registrit koostame | Metoodika ja sõltumatus"
+      description="Mikrokvalifikatsioon.ee metoodika: andmed pärinevad pakkujate avalikelt lehtedelt, iga kirje kannab kontrollkuupäeva, tundmatut ei leiutata. Register on neutraalne ja sõltumatu — kõik programmid samade reeglite järgi."
+      canonicalPath="/kuidas-koostame/"
+      ogType="article"
+      ogTitle="Kuidas me registrit koostame — metoodika ja sõltumatus"
+      ogDescription="Allikad, kontrollkuupäevad, neutraalsus ja paranduste protsess. Sõltumatu aggregaator, mitte ametlik riiklik register."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <header class="topbar">
+      <nav class="nav" aria-label="Põhinavigeerimine">
+        <a class="brand" href="/">Mikrokvalifikatsioon.ee</a>
+        <div class="navlinks">
+          <a href="/kataloog/">Kataloog</a>
+          <a href="/koolitajale/">Koolitajale</a>
+          <a href="/andmed/">Andmed</a>
+          <a href="/mis-on-mikrokvalifikatsioon/">Mis see on?</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <span class="eyebrow">Metoodika ja sõltumatus</span>
+          <h1>Kuidas me registrit koostame — ja miks sellele võib tugineda.</h1>
+          <p>
+            Mikrokvalifikatsioon.ee on sõltumatu register ja teejuht. Kogume Eesti mikrokvalifikatsioonid
+            ja mikrokraadid ühte kohta, et õppija, ettevõte või nõustaja näeks korraga, mida õpid,
+            kui kaua kestab, mis maksab ja kes selle kinni maksab. Siin on lahti seletatud, kuidas
+            andmed sünnivad ja mille poolest oleme neutraalsed.
+          </p>
+          <p class="report-date">Andmed viimati kontrollitud: {checkedAtText}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <div class="measure-list">
+            <article class="measure-card">
+              <div>
+                <span class="status-tag status-green">Allikad</span>
+                <h3>Ainult pakkujate avalik info</h3>
+                <p>
+                  Iga kirje pärineb kooli või koolitaja enda avalikult lehelt. Salvestame nime, pakkuja,
+                  valdkonna, mahu (EAP), hinna, kestuse, õppevormi, keele ja vastuvõtu. Iga kirje juures
+                  on link pakkuja lehele — ametlik ja lõplik info on alati seal.
+                </p>
+              </div>
+            </article>
+            <article class="measure-card">
+              <div>
+                <span class="status-tag status-blue">Kontrollkuupäev</span>
+                <h3>Iga kirje kannab kuupäeva</h3>
+                <p>
+                  Hinnad, mahud ja vastuvõtud muutuvad. Seepärast kannab iga kirje kontrollkuupäeva
+                  (<code>sourceCheckedAt</code>) ja me värskendame andmeid korrapäraselt. Praegu on
+                  registris {catalog.length} programmi {providers.length} koolist ja koolitajalt.
+                </p>
+              </div>
+            </article>
+            <article class="measure-card">
+              <div>
+                <span class="status-tag status-amber">Aus tundmatuse suhtes</span>
+                <h3>Mida ei tea, seda ei leiuta</h3>
+                <p>
+                  Kui pakkuja pole hinda, mahtu või tähtaega avaldanud, jätame välja (tähistame „tundmatuks"),
+                  mitte ei paku oletust. Parem aus tühi väli kui vale number.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Neutraalsus</span>
+            <h2>Kõik programmid samade reeglite järgi.</h2>
+          </div>
+          <ul class="check">
+            <li><strong>Tasuta ja avatud.</strong> Registrisse lisamine ei maksa midagi ja ei sõltu sellest, kas pakkuja on meiega kuidagi seotud.</li>
+            <li><strong>Ühtne kohtlemine.</strong> Ükski programm ei osta endale paremat kohta ega esiletõstmist — järjestus ja filtrid tulenevad andmetest, mitte tasust.</li>
+            <li><strong>Sõltumatu aggregaator.</strong> Me ei ole riiklik register ega ametlik tunnustaja. Oleme kõrvalseisja, kes koondab avaliku info ühte kohta.</li>
+            <li><strong>Läbipaistev operaator.</strong> Registrit peab Ettevõtluskeskus OÜ / 02Signal — leiad meie nime ja kontaktid igalt lehelt.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Paranda andmeid</span>
+            <h2>Märkasid viga või puuduvat programmi?</h2>
+          </div>
+          <p>
+            Register paraneb tagasiside abil. Kui näed aegunud hinda, valet mahtu või puuduvat programmi,
+            anna teada — parandame allika põhjal ja uuendame kontrollkuupäeva. Vaikseid muudatusi ilma
+            allikata me ei tee.
+          </p>
+          <div class="inline-actions">
+            <a class="btn btn-primary" href="/koolitajale/#lisa-programm" data-track-event="cta_click" data-track-label="metoodika_lisa">Lisa või paranda programm</a>
+            <a class="btn btn-secondary" href="mailto:info@02signal.ai?subject=Kataloogi%20parandus" data-track-event="email_click" data-track-label="metoodika_email">Kirjuta meile</a>
+          </div>
+          <p class="notice">
+            Ametlik riiklik info mikrokvalifikatsiooni õppekavade ja tunnistuste kohta on Eesti Hariduse
+            Infosüsteemis (<a href="https://ehis.edu.ee/" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="metoodika_ehis">EHIS</a>)
+            ja Haridus- ja Teadusministeeriumi lehel
+            (<a href="https://www.hm.ee/mikrokvalifikatsioonid" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="metoodika_htm">hm.ee</a>).
+          </p>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Edasi</span>
+            <h2>Vaata registrit, andmeid või lisa oma programm.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="metoodika_kataloog">Ava kataloog</a>
+              <a class="btn btn-secondary" href="/andmed/" data-track-event="cta_click" data-track-label="metoodika_andmed">Turg andmetes</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="metoodika_email_card">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="metoodika_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Kuidas koostame" />
+  </body>
+</html>

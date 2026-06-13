@@ -42,6 +42,9 @@ Data checked: ${catalogCheckedAt}. ${catalog.length} programmes from ${providers
 - Microdegrees overview by university: https://mikrokvalifikatsioon.ee/mikrokraadid/
 - What is a mikrokvalifikatsioon (definitions + FAQ): https://mikrokvalifikatsioon.ee/mis-on-mikrokvalifikatsioon/
 - Who pays (Töötukassa, employer, self): https://mikrokvalifikatsioon.ee/kes-maksab/
+- For training providers (official framework + add your programme): https://mikrokvalifikatsioon.ee/koolitajale/
+- Market data + open dataset: https://mikrokvalifikatsioon.ee/andmed/
+- How the register is built (methodology, independence): https://mikrokvalifikatsioon.ee/kuidas-koostame/
 - Machine-readable register: https://mikrokvalifikatsioon.ee/catalog.json
 - Machine-readable site profile: https://mikrokvalifikatsioon.ee/site-profile.json
 
