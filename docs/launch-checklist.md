@@ -7,16 +7,23 @@ Owner steps to go fully live. Updated 2026-06-12. Decision: DNS moves to Cloudfl
 
 1. Cloudflare dashboard → **Add a domain** → `mikrokvalifikatsioon.ee` → Free plan.
    Repeat for `mikrokvalifikatsioonid.ee`.
-2. In each zone make sure these records exist (add if the scan missed them), both
-   **DNS only (grey cloud — NOT proxied)**:
-   - `A` | `@` | `76.76.21.21`
-   - `CNAME` | `www` | `cname.vercel-dns.com`
+2. **Authoritative values are in Vercel → project `mikrokvalifikatsioon` → Settings →
+   Domains.** Add BOTH domains there first; Vercel then shows the exact A + CNAME per
+   domain. The apex IP pair and the `www` CNAME hash are PROJECT-SPECIFIC — copy what
+   Vercel lists. In each Cloudflare zone add them, both **DNS only (grey cloud — NOT proxied)**:
+   - `A` | `@` | `216.198.79.1`  (+ second `A` | `@` | `64.29.17.1`)
+     — Vercel's current apex pair; some projects get the `.65` pair instead. Use what
+     the dashboard shows. (The old `76.76.21.21` is retired — verified 2026-06-13 against
+     the live family sites, which now resolve to `216.198.79.x` / `64.29.17.x`.)
+   - `CNAME` | `www` | `cname.vercel-dns.com`  (or the project-specific `<hash>.vercel-dns-017.com`)
 3. Cloudflare shows two nameservers per zone → at the registrar (Zone.ee panel,
    "Nimeserverid") replace the NS with Cloudflare's pair for each domain.
 4. Wait for Cloudflare "site is active" email; Vercel then verifies the domains
    automatically and issues SSL. The plural domain 301s to /kataloog/ (vercel.json).
 5. Grey-cloud rule: keep Vercel-pointing records unproxied. If the orange proxy is
    ever wanted, set SSL/TLS mode to Full (strict) first — otherwise redirect loops.
+6. Optional hardening (both domains send no email — block spoofing):
+   `TXT` | `@` | `v=spf1 -all` and `TXT` | `_dmarc` | `v=DMARC1; p=reject;`.
 
 ## 2. GA4
 
