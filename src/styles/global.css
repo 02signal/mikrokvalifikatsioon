@@ -174,9 +174,10 @@ h1 {
   border-color: var(--line);
 }
 
-/* Sekundaarne nupp heledal sektsioonil peab jääma loetavaks (mitte valge-valgel). */
+/* Sekundaarne nupp heledal taustal peab jääma loetavaks (mitte valge-valgel). */
 .white .btn-secondary,
-.ice .btn-secondary {
+.ice .btn-secondary,
+.cookie-banner .btn-secondary {
   background: var(--white);
   color: var(--ink);
   border-color: var(--line);
