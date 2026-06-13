@@ -43,6 +43,7 @@ Data checked: ${catalogCheckedAt}. ${catalog.length} programmes from ${providers
 - What is a mikrokvalifikatsioon (definitions + FAQ): https://mikrokvalifikatsioon.ee/mis-on-mikrokvalifikatsioon/
 - Who pays (Töötukassa, employer, self): https://mikrokvalifikatsioon.ee/kes-maksab/
 - For training providers (official framework + add your programme): https://mikrokvalifikatsioon.ee/koolitajale/
+- Quality assessment guide for providers (8 domains, common mistakes, prep): https://mikrokvalifikatsioon.ee/koolitajale/kvaliteedihindamine/
 - Market data + open dataset: https://mikrokvalifikatsioon.ee/andmed/
 - How the register is built (methodology, independence): https://mikrokvalifikatsioon.ee/kuidas-koostame/
 - Machine-readable register: https://mikrokvalifikatsioon.ee/catalog.json

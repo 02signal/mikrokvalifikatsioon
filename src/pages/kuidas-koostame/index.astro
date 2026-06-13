@@ -2,6 +2,7 @@
 import Seo from "../../components/Seo.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
+import Nav from "../../components/Nav.astro";
 import { catalog, providers, catalogCheckedAt } from "../../data/catalog";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
@@ -52,17 +53,7 @@ const schema = {
     />
   </head>
   <body>
-    <header class="topbar">
-      <nav class="nav" aria-label="Põhinavigeerimine">
-        <a class="brand" href="/">Mikrokvalifikatsioon.ee</a>
-        <div class="navlinks">
-          <a href="/kataloog/">Kataloog</a>
-          <a href="/koolitajale/">Koolitajale</a>
-          <a href="/andmed/">Andmed</a>
-          <a href="/mis-on-mikrokvalifikatsioon/">Mis see on?</a>
-        </div>
-      </nav>
-    </header>
+    <Nav />
 
     <main class="report-page simple-report">
       <section class="report-hero simple-report-hero">

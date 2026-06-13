@@ -2,6 +2,7 @@
 import Seo from "../components/Seo.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
+import Nav from "../components/Nav.astro";
 import { catalog, providers, catalogCheckedAt } from "../data/catalog";
 
 const emailHref = "mailto:info@02signal.ai?subject=Mikrokvalifikatsioonide%20uudised";
@@ -101,18 +102,7 @@ const schema = {
     </style>
   </head>
   <body>
-    <header class="topbar">
-      <nav class="nav" aria-label="Põhinavigeerimine">
-        <a class="brand" href="/">Mikrokvalifikatsioon.ee</a>
-        <div class="navlinks">
-          <a href="/kataloog/">Kataloog</a>
-          <a href="/mikrokraadid/">Mikrokraadid</a>
-          <a href="/mis-on-mikrokvalifikatsioon/">Mis see on?</a>
-          <a href="/kes-maksab/">Kes maksab?</a>
-          <a href="#suunatest">Suunatest</a>
-        </div>
-      </nav>
-    </header>
+    <Nav />
 
     <main>
       <section class="hero">

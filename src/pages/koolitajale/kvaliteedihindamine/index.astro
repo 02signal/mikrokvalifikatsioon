@@ -1,0 +1,321 @@
+---
+import Seo from "../../../components/Seo.astro";
+import Footer from "../../../components/Footer.astro";
+import "../../../styles/global.css";
+import Nav from "../../../components/Nav.astro";
+
+const officialCheckedAt = "13.06.2026";
+
+const domains = [
+  {
+    n: 1,
+    title: "Õppekavaarendus",
+    look: "Kas õppekava sünni ja muutumise põhimõtted on kirjas (mitte „peas“) ja kas neid päriselt järgitakse.",
+    prep: "Pane kirja, kuidas õppekava tekib ja uueneb. Tugine konkreetsetele Eesti allikatele (OSKA, kutsestandard, kompetentsiprofiil), mitte üldsõnale „parimad praktikad“. Näita, kuidas kaasad koolitajaid, eksperte, tööandjaid ja õppijate tagasisidet."
+  },
+  {
+    n: 2,
+    title: "Õppekava",
+    look: "Kas õppekava vastab seadusele ja standardile ning kas kõik osad räägivad sama lugu: nimi ↔ eesmärk ↔ sisu ↔ õpiväljundid ↔ hindamine.",
+    prep: "Kontrolli, et programmi nimi kajastuks ka eesmärgis, sisus, õpiväljundites JA hindamises. Õpiväljundid aktiivses tegusõnas ja mõõdetavad. Veebileht ja õppekava sama sõnastusega."
+  },
+  {
+    n: 3,
+    title: "Õppeprotsessi kavandamine",
+    look: "Kas õppija saab juba enne algust selgelt teada eesmärgi, õpiväljundid, meetodid ja hindamise; kas mitme koolitaja puhul on koostöö läbi mõeldud.",
+    prep: "Selgita eesmärk ja hindamine veebis + esimesel kohtumisel. Mitme koolitajaga: dokumenteeri koostöö (kes vastutab terviku eest, kui tihti kohtutakse). Kaardista õppijate algtase (nt eelküsimustik)."
+  },
+  {
+    n: 4,
+    title: "Õppeprotsessi läbiviimine",
+    look: "Kas meetodid sobivad sihtrühmale ja õpiväljunditele, kas õppija saab jooksvat edasiviivat tagasisidet ja kas materjalid on ajakohased.",
+    prep: "Kirjelda pedagoogiline mudel ja kuidas õppija saab tagasisidet. Hoia materjalid värsked ja ühes keeles järjepidevalt (väldi segakeelsust)."
+  },
+  {
+    n: 5,
+    title: "Hindamine ja lõpudokumendid",
+    look: "Kas lõpetamise ja tunnistuse tingimused on selged, iga õpiväljundi hindamine objektiivne, ja tunnistuse näidis vastab täielikult standardile.",
+    prep: "Tee tabel: iga õpiväljund × hindamismeetod × hindamiskriteerium. Kontrolli tunnistuse näidis standardi nõuete vastu — kõik kohustuslikud väljad olemas."
+  },
+  {
+    n: 6,
+    title: "Koolitajate kompetentsus ja areng",
+    look: "Kas igal koolitajal on tõendatud eriala- ja täiskasvanute koolitaja pädevus, kas info on avalik ühtses stiilis ja kas tulemuslikkust hinnatakse regulaarselt.",
+    prep: "Iga koolitaja kohta haridus + erialane kogemus + koolituskogemus (aastad, teemad), sama struktuuriga ka külalislektoritel. Dokumenteeri, kuidas koolitajate tööd hinnatakse ja arendatakse — koos näitega."
+  },
+  {
+    n: 7,
+    title: "Kvaliteedijuhtimine",
+    look: "Kas on toimiv, dokumenteeritud kvaliteedisüsteem mõõdetavate eesmärkidega — ja kas tagasiside ring on suletud (kogud → analüüsid → muudad → tõendad).",
+    prep: "Üks kvaliteedidokument, üks koht veebis, kuupäev nähtaval (vanad eemaldatud). Sõnasta mõõdetavad eesmärgid (nt soovitusindeks, õpiväljundite saavutamise %). Näita üks konkreetne muudatus, mille tagasiside tingis."
+  },
+  {
+    n: 8,
+    title: "Ressursid",
+    look: "Kas koolitajaid on piisavalt ja jätkusuutlikult, kas tugi ja administreerimine on tagatud ning kas õppekeskkond on turvaline ja ligipääsetav.",
+    prep: "Dokumenteeri varuplaan — kes asendab, kui keegi eemale jääb. Kirjelda ligipääsetavus teadlikult (mis on ja mis ei ole tagatud ning miks)."
+  }
+];
+
+const mistakes = [
+  "Mahuarvestus ei klapi — akadeemilised ja astronoomilised tunnid segamini, või kontaktõpe + iseseisev töö ei summeeru kogumahuks.",
+  "Dokumentidevaheline triiv — õpiväljundite arv, moodulite nimed või mahud erinevad õppekavas, veebis ja eneseanalüüsis.",
+  "Üldsõnaline, tõendita eneseanalüüs — „me peame seda oluliseks“ konkreetse tõendi asemel.",
+  "Kohustuslikud väljad õhukesed või täitmata (nt õppekeskkonna kirjeldus jääb juhendtekstiks).",
+  "Puuduvad kohustuslikud lisad — taotlust ei menetleta, ükskõik kui hea on sisu.",
+  "Tagasisidet kogutakse, aga ei analüüsita ega kasutata — mõju jääb tõendamata.",
+  "Koolitajate kompetentsus pole avalik või tõendatud.",
+  "Sama jutt korratud mitmes valdkonnas või tähemärgipiirang ületatud.",
+  "Terminoloogia kõigub — eesti- ja ingliskeelsed nimed segamini."
+];
+
+const wins = [
+  "Iga väide on tõenduspõhine: „X on tagatud, mille tõendiks on Y“.",
+  "Konkreetsus üldsõnalisuse asemel — numbrid, näited, viited päris dokumentidele.",
+  "Suletud tagasiside-silmus: kogud → analüüsid → muudad → tõendad muudatust.",
+  "Sisemine kooskõla: sama arv ja nimi igal pool, mahud klapivad mõlemas ühikus.",
+  "Ligipääsetavus ja võrdsus on nähtavalt käsitletud."
+];
+
+const faqItems = [
+  {
+    question: "Mitu hindamisvaldkonda ja kriteeriumi on?",
+    answer: "Kaheksa hindamisvaldkonda ja kokku 27 kriteeriumi. Positiivseks otsuseks peavad kõik kaheksa valdkonda vastama nõuetele; otsus kehtib 5 aastat."
+  },
+  {
+    question: "Mida tähendab „vastab osaliselt“?",
+    answer: "Praktikas: kui midagi on vaid osaliselt täidetud, loeb see riskiks. Mitu osalist hinnangut võib langetada terve valdkonna ja koos sellega otsuse. Sihi 0 osalist."
+  },
+  {
+    question: "Kuidas arvutada mahtu õigesti?",
+    answer: "1 EAP = 26 astronoomilist tundi. 1 akadeemiline tund (45 min) = 0,75 astronoomilist tundi. Kontaktõpe + iseseisev töö peavad summeeruma kogumahuks ja kõik ühikud peavad klappima igas dokumendis."
+  }
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mikrokvalifikatsioon.ee/#organization",
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: "https://mikrokvalifikatsioon.ee/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
+        { "@type": "ListItem", position: 2, name: "Koolitajale", item: "https://mikrokvalifikatsioon.ee/koolitajale/" },
+        { "@type": "ListItem", position: 3, name: "Kvaliteedihindamine", item: "https://mikrokvalifikatsioon.ee/koolitajale/kvaliteedihindamine/" }
+      ]
+    },
+    {
+      "@type": "Article",
+      headline: "Mikrokvalifikatsiooni kvaliteedihindamine: 8 valdkonda ja kuidas valmistuda",
+      description: "Praktiline kokkuvõte mikrokvalifikatsiooni õppekavarühma kvaliteedihindamise 8 valdkonnast ja 27 kriteeriumist: mida hindaja vaatab, tüüpvead ja kuidas valmistuda.",
+      inLanguage: "et",
+      datePublished: "2026-06-13",
+      dateModified: "2026-06-13",
+      author: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      mainEntityOfPage: "https://mikrokvalifikatsioon.ee/koolitajale/kvaliteedihindamine/"
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer }
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Kvaliteedihindamine koolitajale | 8 valdkonda ja kuidas valmistuda"
+      description="Mikrokvalifikatsiooni kvaliteedihindamise 8 valdkonda ja 27 kriteeriumi lihtsas keeles: mida hindaja vaatab, millised vead maksavad kvaliteedimärgi ja kuidas valmistuda. Praktiline koondjuhend koolitajale."
+      canonicalPath="/koolitajale/kvaliteedihindamine/"
+      ogType="article"
+      ogTitle="Kvaliteedihindamine: 8 valdkonda ja kuidas valmistuda"
+      ogDescription="Mida hindaja vaatab, tüüpvead ja praktiline ettevalmistus — mikrokvalifikatsiooni koolitajale."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <a href="/koolitajale/">Koolitajale</a> › <span>Kvaliteedihindamine</span>
+          </nav>
+          <span class="eyebrow">Koolitajale · praktiline juhend</span>
+          <h1>Kvaliteedihindamine: 8 valdkonda ja kuidas valmistuda.</h1>
+          <p>
+            Kvaliteedihindamine otsustab, kas tohid mikrokvalifikatsiooni pakkuda — ja positiivne
+            otsus kehtib viis aastat. Seepärast tasub valmistuda teadlikult. Siia oleme koondanud
+            lihtsas keeles, mida hindamisel vaadatakse, millised vead kõige sagedamini kvaliteedimärgi
+            maksavad ja kuidas neid ennetada.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="/koolitajale/#lisa-programm" data-track-event="cta_click" data-track-label="kv_hero_lisa">Lisa oma programm registrisse</a>
+            <a class="btn btn-secondary" href="/koolitajale/" data-track-event="cta_click" data-track-label="kv_hero_protsess">Pakkujaks saamise sammud</a>
+          </div>
+          <p class="report-date">Ametlike nõuete põhjal koostatud kokkuvõte. Kontrollitud: {officialCheckedAt}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Kuidas otsus sünnib</span>
+            <h2>Kaheksa valdkonda, 27 kriteeriumi — ja üks kuldne reegel.</h2>
+          </div>
+          <p>
+            Hindamine jaguneb <strong>kaheksaks valdkonnaks</strong> ja kokku 27 kriteeriumiks.
+            Positiivseks otsuseks peavad <strong>kõik kaheksa valdkonda</strong> vastama nõuetele;
+            otsus kehtib viis aastat. Mitu „vastab osaliselt“ hinnangut võivad langetada terve
+            valdkonna ja koos sellega otsuse.
+          </p>
+          <p class="callout">
+            <strong>Kuldne reegel:</strong> kui midagi on <em>osaliselt</em> täidetud, loeb hindaja
+            seda praktikas <em>täitmata</em>. Sihi seda, et iga kriteerium oleks selgelt „vastab“ —
+            mitte „peaaegu“.
+          </p>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">8 valdkonda</span>
+            <h2>Mida igas valdkonnas vaadatakse — ja kuidas valmistuda.</h2>
+          </div>
+          <div class="measure-list">
+            {domains.map((d) => (
+              <article class="measure-card">
+                <div>
+                  <span class="status-tag status-blue">Valdkond {d.n}</span>
+                  <h3>{d.title}</h3>
+                  <p><strong>Mida hindaja vaatab:</strong> {d.look}</p>
+                  <p><strong>Valmistu nii:</strong> {d.prep}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Õpi teiste vigadest</span>
+            <h2>Üheksa viga, mis kõige sagedamini kvaliteedimärgi maksavad.</h2>
+          </div>
+          <ul class="check warn-list">
+            {mistakes.map((m) => <li>{m}</li>)}
+          </ul>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Positiivne muster</span>
+            <h2>Mis annab „vastab nõuetele“.</h2>
+          </div>
+          <ul class="check">
+            {wins.map((w) => <li>{w}</li>)}
+          </ul>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Sagedaseim komistuskivi</span>
+            <h2>Maht ja EAP — arvuta üks kord, õigesti.</h2>
+          </div>
+          <p>
+            Mahuarvestuse viga on dokumenteeritult üks sagedasemaid „parendusvaldkondi“. Lukusta
+            mahunumbrid ühte kohta ja loe alati sealt — ära arvuta mälust ega kopeeri kontrollimata.
+          </p>
+          <ul class="check">
+            <li><strong>1 EAP = 26 astronoomilist tundi.</strong></li>
+            <li><strong>1 akadeemiline tund (45 min) = 0,75 astronoomilist tundi.</strong> Astronoomilised = akadeemilised × 0,75.</li>
+            <li><strong>Kontaktõpe + iseseisev töö = kogumaht.</strong> Summa peab klappima nii akadeemilistes kui astronoomilistes tundides.</li>
+            <li>Sama mahunumber peab esinema õppekavas, veebis ja eneseanalüüsis — täht-täheliselt.</li>
+          </ul>
+          <p class="field-help">
+            Näide loogikast (illustratiivne): 208 akadeemilist tundi × 0,75 = 156 astronoomilist tundi;
+            156 ÷ 26 = 6 EAP. Sinu programmi numbrid tulevad muidugi sinu õppekavast.
+          </p>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Enne esitamist</span>
+            <h2>Kiire eelkontroll.</h2>
+          </div>
+          <ul class="check">
+            <li>Kõik mahunumbrid klapivad igas dokumendis ja mõlemas ühikus.</li>
+            <li>Õpiväljundite arv ja sõnastus on sama õppekavas, veebis ja eneseanalüüsis.</li>
+            <li>Eneseanalüüs on täidetud <strong>iga kriteeriumi kohta eraldi</strong> (mitte valdkonna üldjutuna) ja mahub tähemärgipiirangusse.</li>
+            <li>Iga väide viitab konkreetsele tõendile; kõik kohustuslikud lisad on komplektis.</li>
+            <li>Iga avalik dokument (kvaliteedialused, koolitajate info) on veebis <strong>ühes versioonis ja ühes kohas</strong>, kuupäev nähtaval.</li>
+            <li>Keel ja terminoloogia on järjepidevad; tunnistuse näidis vastab täielikult standardile.</li>
+            <li>Esitamise kanal (EHIS), tähtaeg ja riigilõiv on kontrollitud.</li>
+          </ul>
+          <p class="notice">
+            See on praktiline kokkuvõte ametlike nõuete põhjal, et aidata sul paremini valmistuda —
+            mitte ametlik juhis. Siduvad nõuded, vormid ja riigilõivud kinnitab alati ametlik allikas:
+            <a href="https://haka.ee/mikrokvalifikatsioonioppe-labiviimine/" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="kv_haka">HAKA</a>,
+            <a href="https://www.hm.ee/mikrokvalifikatsioonid" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="kv_htm">Haridus- ja Teadusministeerium</a> ja
+            <a href="https://ehis.edu.ee/" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="kv_ehis">EHIS</a>.
+          </p>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Edasi</span>
+            <h2>Valmistud pakkuma? Tee oma programm ka nähtavaks.</h2>
+            <p>Kui programm on valmis, lisa see Eesti suurimasse avalikku registrisse — õppijad, ettevõtted ja nõustajad leiavad selle ühest kohast.</p>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/koolitajale/#lisa-programm" data-track-event="cta_click" data-track-label="kv_bottom_lisa">Lisa oma programm</a>
+              <a class="btn btn-secondary" href="/kuidas-koostame/" data-track-event="cta_click" data-track-label="kv_bottom_metoodika">Kuidas registrit koostame</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="kv_email">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="kv_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Kvaliteedihindamine" />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #0d2a4a; }
+      .callout {
+        margin-top: 14px; padding: 14px 18px; background: #fff;
+        border: 1px solid #d9e3ea; border-left: 4px solid #0d9488; border-radius: 10px;
+      }
+      .warn-list li::marker { color: #b4540a; }
+    </style>
+  </body>
+</html>

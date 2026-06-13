@@ -2,6 +2,7 @@
 import Seo from "../../components/Seo.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
+import Nav from "../../components/Nav.astro";
 import { catalog, providers } from "../../data/catalog";
 
 const faqItems = [
@@ -93,17 +94,7 @@ const schema = {
     />
   </head>
   <body>
-    <header class="topbar">
-      <nav class="nav" aria-label="Põhinavigeerimine">
-        <a class="brand" href="/">Mikrokvalifikatsioon.ee</a>
-        <div class="navlinks">
-          <a href="/kataloog/">Kataloog</a>
-          <a href="/mikrokraadid/">Mikrokraadid</a>
-          <a href="/kes-maksab/">Kes maksab?</a>
-          <a href="/#suunatest">Suunatest</a>
-        </div>
-      </nav>
-    </header>
+    <Nav />
 
     <main class="report-page simple-report">
       <section class="report-hero simple-report-hero">

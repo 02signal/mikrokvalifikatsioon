@@ -33,6 +33,7 @@ export async function GET() {
       { url: "https://mikrokvalifikatsioon.ee/mis-on-mikrokvalifikatsioon/", purpose: "Definitsioon, võrdlus (mikrokraad, kutsetunnistus, sertifikaat) ja KKK." },
       { url: "https://mikrokvalifikatsioon.ee/kes-maksab/", purpose: "Rahastuse teejuht: tööandja, Töötukassa, ise — kuidas igaüht küsida." },
       { url: "https://mikrokvalifikatsioon.ee/koolitajale/", purpose: "Koolitajale: ametlik raamistik (TKS, 5–30 EAP, HAKA, EHIS) ja vorm oma programmi registrisse lisamiseks." },
+      { url: "https://mikrokvalifikatsioon.ee/koolitajale/kvaliteedihindamine/", purpose: "Praktiline juhend: kvaliteedihindamise 8 valdkonda, tüüpvead ja ettevalmistus koolitajale." },
       { url: "https://mikrokvalifikatsioon.ee/andmed/", purpose: "Turukaart ja avaandmed ametnikele/uurijatele: jaotused valdkonniti, hinna- ja mahuvahemik, link catalog.json-ile." },
       { url: "https://mikrokvalifikatsioon.ee/kuidas-koostame/", purpose: "Metoodika ja sõltumatus: allikad, kontrollkuupäevad, neutraalsus, paranduste protsess." },
       { url: "https://mikrokvalifikatsioon.ee/catalog.json", purpose: "Masinloetav register koos sourceCheckedAt kuupäevadega." }
