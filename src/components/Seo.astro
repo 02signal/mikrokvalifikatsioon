@@ -26,13 +26,17 @@ const {
   ogTitle,
   ogDescription,
   ogType = "website",
-  ogImage = "/og-default.png",
+  ogImage,
   robots,
   jsonLd
 } = Astro.props;
 
 const canonical = new URL(canonicalPath, SITE).href;
-const image = new URL(ogImage, SITE).href;
+// Per-lehe OG: tuletame võtme canonical-tee viimasest segmendist (sama loogika
+// kui /og/[route].png.ts pages-võtmed). Leht võib ogImage'i ka käsitsi üle kirjutada.
+const ogKey = canonicalPath.replace(/^\/+|\/+$/g, "").split("/").pop() || "home";
+const resolvedOgImage = ogImage ?? `/og/${ogKey}.png`;
+const image = new URL(resolvedOgImage, SITE).href;
 const ogT = ogTitle ?? title;
 const ogD = ogDescription ?? description;
 ---
