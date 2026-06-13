@@ -1,4 +1,5 @@
 import { catalog, catalogCheckedAt } from "../data/catalog";
+import { detailUrl } from "../data/courseSchema";
 
 export async function GET() {
   return new Response(
@@ -11,7 +12,8 @@ export async function GET() {
         importantCaveat:
           "See register on info koondamiseks. Hinnad, mahud ja vastuvõtud muutuvad — ametlik info on iga kooli enda lehel (iga kirje url-väli).",
         count: catalog.length,
-        programs: catalog
+        // pageUrl = programmi siseleht; url = kooli ametlik leht.
+        programs: catalog.map((entry) => ({ ...entry, pageUrl: detailUrl(entry) }))
       },
       null,
       2

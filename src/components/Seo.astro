@@ -1,0 +1,72 @@
+---
+import Analytics from "./Analytics.astro";
+
+// Üks koht kogu <head> SEO/GEO märgenditele, et lehed püsiks järjepidevad.
+// Lõpetab <Analytics />-iga (nõusolek + jälgimine + küpsiseriba).
+interface Props {
+  title: string;
+  description: string;
+  /** Tee algus- ja lõpukaldkriipsuga, nt "/kataloog/" */
+  canonicalPath: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogType?: "website" | "article";
+  ogImage?: string;
+  /** nt "noindex,follow" utiliidilehtedele; vaikimisi indekseeritav */
+  robots?: string;
+  /** schema.org JSON-LD graaf (objekt või massiiv) */
+  jsonLd?: unknown;
+}
+
+const SITE = "https://mikrokvalifikatsioon.ee";
+const {
+  title,
+  description,
+  canonicalPath,
+  ogTitle,
+  ogDescription,
+  ogType = "website",
+  ogImage = "/og-default.png",
+  robots,
+  jsonLd
+} = Astro.props;
+
+const canonical = new URL(canonicalPath, SITE).href;
+const image = new URL(ogImage, SITE).href;
+const ogT = ogTitle ?? title;
+const ogD = ogDescription ?? description;
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{title}</title>
+<meta name="description" content={description} />
+{robots ? <meta name="robots" content={robots} /> : null}
+<link rel="canonical" href={canonical} />
+<link rel="alternate" hreflang="et" href={canonical} />
+<link rel="alternate" hreflang="x-default" href={canonical} />
+
+<meta property="og:title" content={ogT} />
+<meta property="og:description" content={ogD} />
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={image} />
+<meta property="og:site_name" content="Mikrokvalifikatsioon.ee" />
+<meta property="og:locale" content="et_EE" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={ogT} />
+<meta name="twitter:description" content={ogD} />
+<meta name="twitter:image" content={image} />
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<meta name="theme-color" content="#0d2a4a" />
+
+<!-- AI-loetavad allikad (GEO) -->
+<link rel="alternate" type="text/plain" href="/llms.txt" title="Mikrokvalifikatsioon.ee LLM summary" />
+<link rel="alternate" type="application/json" href="/site-profile.json" title="Mikrokvalifikatsioon.ee machine-readable profile" />
+
+{jsonLd ? (
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+) : null}
+
+<Analytics />

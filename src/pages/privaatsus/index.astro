@@ -1,5 +1,5 @@
 ---
-import Analytics from "../../components/Analytics.astro";
+import Seo from "../../components/Seo.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 
@@ -9,15 +9,11 @@ const updatedAt = "12.06.2026";
 <!doctype html>
 <html lang="et">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Privaatsus ja küpsised | Mikrokvalifikatsioon.ee</title>
-    <meta name="description" content="Mis andmeid Mikrokvalifikatsioon.ee kogub, milleks neid kasutame, kus neid hoiame ja millised on sinu õigused." />
-    <meta name="robots" content="index,follow" />
-    <link rel="canonical" href="https://mikrokvalifikatsioon.ee/privaatsus/" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#0d2a4a" />
-    <Analytics />
+    <Seo
+      title="Privaatsus ja küpsised | Mikrokvalifikatsioon.ee"
+      description="Mis andmeid Mikrokvalifikatsioon.ee kogub, milleks neid kasutame, kus neid hoiame ja millised on sinu õigused."
+      canonicalPath="/privaatsus/"
+    />
   </head>
   <body>
     <header class="topbar">

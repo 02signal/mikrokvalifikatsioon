@@ -1,5 +1,5 @@
 ---
-import Analytics from "../components/Analytics.astro";
+import Seo from "../components/Seo.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
 import { catalog, providers, catalogCheckedAt } from "../data/catalog";
@@ -16,6 +16,9 @@ const schema = {
       url: "https://mikrokvalifikatsioon.ee/",
       email: "info@02signal.ai",
       telephone: "+37258180435",
+      description: "Sõltumatu register ja teejuht: kõik Eesti mikrokvalifikatsioonid ja ülikoolide mikrokraadid ühes filtreeritavas kataloogis koos hinna, mahu ja rahastusvõimalustega.",
+      areaServed: "EE",
+      logo: "https://mikrokvalifikatsioon.ee/og-default.png",
       contactPoint: { "@type": "ContactPoint", areaServed: "EE", availableLanguage: ["et"] }
     },
     {
@@ -23,7 +26,15 @@ const schema = {
       url: "https://mikrokvalifikatsioon.ee/",
       name: "Mikrokvalifikatsioon.ee",
       inLanguage: "et",
-      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" }
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: "https://mikrokvalifikatsioon.ee/kataloog/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
     },
     {
       "@type": "Dataset",
@@ -41,24 +52,14 @@ const schema = {
 <!doctype html>
 <html lang="et">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mikrokvalifikatsioon.ee | Eesti mikrokvalifikatsioonide ja mikrokraadide register</title>
-    <meta
-      name="description"
-      content="Kõik Eesti mikrokvalifikatsioonid ja ülikoolide mikrokraadid ühes kataloogis: valdkond, maht, hind ja kes selle kinni maksab. Leia oskus, mis tasub ära."
+    <Seo
+      title="Mikrokvalifikatsioon.ee | Eesti mikrokvalifikatsioonide ja mikrokraadide register"
+      description="Kõik Eesti mikrokvalifikatsioonid ja ülikoolide mikrokraadid ühes kataloogis: valdkond, maht, hind ja kes selle kinni maksab. Leia oskus, mis tasub ära."
+      canonicalPath="/"
+      ogTitle="Eesti mikrokvalifikatsioonide ja mikrokraadide register"
+      ogDescription="Leia uus oskus, mida tunnustatakse: kõik mikrokvalifikatsioonid ja mikrokraadid ühest kohast, koos hinna ja rahastusvõimalustega."
+      jsonLd={schema}
     />
-    <link rel="canonical" href="https://mikrokvalifikatsioon.ee/" />
-    <meta property="og:title" content="Eesti mikrokvalifikatsioonide ja mikrokraadide register" />
-    <meta property="og:description" content="Leia uus oskus, mida tunnustatakse: kõik mikrokvalifikatsioonid ja mikrokraadid ühest kohast, koos hinna ja rahastusvõimalustega." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://mikrokvalifikatsioon.ee/" />
-    <meta property="og:image" content="https://mikrokvalifikatsioon.ee/og-default.png" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
-    <Analytics />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#0d2a4a" />
     <style is:global>
       /* Suunatesti tulemuskaardid elavad kitsas vormiveerus — kompaktne püstpaigutus.
          is:global, sest kaardid genereeritakse JS-iga ja Astro skoop ei kataks neid. */
@@ -348,6 +349,14 @@ const schema = {
         language: string | null;
         intakeText: string | null;
         summary: string;
+        slug?: string;
+      };
+
+      // Väljaminev link kooli lehele koos UTM-iga (lead-gen tõend freemium-mudelile).
+      const outbound = (p: Program): string => {
+        const sep = p.url.includes("?") ? "&" : "?";
+        const tail = p.slug ? `&utm_content=${encodeURIComponent(p.slug)}` : "";
+        return `${p.url}${sep}utm_source=mikrokvalifikatsioon.ee&utm_medium=suunatest&utm_campaign=mikrokvalifikatsioon${tail}`;
       };
 
       const form = document.querySelector("[data-suunatest-form]") as HTMLFormElement | null;
@@ -437,7 +446,7 @@ const schema = {
                 ${p.priceText ? `<div><dt>Hind</dt><dd>${p.priceText}</dd></div>` : ""}
                 ${p.ects ? `<div><dt>Maht</dt><dd>${p.ects} EAP</dd></div>` : ""}
               </dl>
-              <a href="${p.url}" target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label="suunatest_${p.provider}">Vaata kooli lehel</a>
+              <a href="${outbound(p)}" target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label="suunatest_${p.provider}">Vaata kooli lehel</a>
             </article>
           `).join("");
         }

@@ -1,8 +1,9 @@
 ---
-import Analytics from "../../components/Analytics.astro";
+import Seo from "../../components/Seo.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import { catalog, providers, fields, catalogCheckedAt } from "../../data/catalog";
+import { outboundUrl } from "../../data/courseSchema";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
 const schema = {
@@ -23,24 +24,15 @@ const schema = {
       ]
     },
     {
+      // Loend viitab programmilehtedele; rikas Course-schema elab iga programmilehe peal.
       "@type": "ItemList",
       name: "Eesti mikrokvalifikatsioonide ja mikrokraadide kataloog",
       numberOfItems: catalog.length,
       itemListElement: catalog.map((entry, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        item: {
-          "@type": "Course",
-          name: entry.name,
-          url: entry.url,
-          description: entry.summary,
-          provider: { "@type": "Organization", name: entry.provider },
-          educationalCredentialAwarded: {
-            "@type": "EducationalOccupationalCredential",
-            name: entry.name,
-            credentialCategory: "mikrokvalifikatsioon"
-          }
-        }
+        name: entry.name,
+        url: `https://mikrokvalifikatsioon.ee/kataloog/${entry.slug}/`
       }))
     }
   ]
@@ -50,24 +42,14 @@ const schema = {
 <!doctype html>
 <html lang="et">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kataloog | Kõik Eesti mikrokvalifikatsioonid ja mikrokraadid ühes kohas</title>
-    <meta
-      name="description"
-      content={`${catalog.length} mikrokvalifikatsiooni ja mikrokraadi ${providers.length} koolist: valdkond, maht, hind, õppevorm. Filtreeri ja leia oskus, mis sulle sobib.`}
+    <Seo
+      title="Kataloog | Kõik Eesti mikrokvalifikatsioonid ja mikrokraadid ühes kohas"
+      description={`${catalog.length} mikrokvalifikatsiooni ja mikrokraadi ${providers.length} koolist: valdkond, maht, hind, õppevorm. Filtreeri ja leia oskus, mis sulle sobib.`}
+      canonicalPath="/kataloog/"
+      ogTitle="Eesti mikrokvalifikatsioonide ja mikrokraadide kataloog"
+      ogDescription="Kõik programmid ühes kohas: valdkond, maht, hind ja link kooli lehele."
+      jsonLd={schema}
     />
-    <link rel="canonical" href="https://mikrokvalifikatsioon.ee/kataloog/" />
-    <meta property="og:title" content="Eesti mikrokvalifikatsioonide ja mikrokraadide kataloog" />
-    <meta property="og:description" content="Kõik programmid ühes kohas: valdkond, maht, hind ja link kooli lehele." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://mikrokvalifikatsioon.ee/kataloog/" />
-    <meta property="og:image" content="https://mikrokvalifikatsioon.ee/og-default.png" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#0d2a4a" />
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
-    <Analytics />
   </head>
   <body>
     <header class="topbar">
@@ -141,12 +123,18 @@ const schema = {
                 {entry.intakeText && <p class="report-date">{entry.intakeText}</p>}
                 <div class="catalog-card-actions">
                   <a
-                    href={entry.url}
+                    class="catalog-detail-link"
+                    href={`/kataloog/${entry.slug}/`}
+                    data-track-event="cta_click"
+                    data-track-label="catalog_detail"
+                  >Vaata lähemalt →</a>
+                  <a
+                    href={outboundUrl(entry, "kataloog")}
                     target="_blank"
                     rel="noreferrer"
                     data-track-event="partner_site_click"
                     data-track-label={`catalog_${entry.provider}`}
-                  >Vaata kooli lehel</a>
+                  >Kooli leht ↗</a>
                   <label class="compare-pick">
                     <input type="checkbox" data-compare-pick data-url={entry.url} />
                     <span>Võrdle</span>
@@ -186,6 +174,7 @@ const schema = {
          ilma selleta uuendab filter ainult loendurit, aga kaardid jäävad nähtavale. */
       .measure-card[hidden] { display: none; }
       .catalog-card-actions { display: flex; gap: 16px; align-items: center; white-space: nowrap; flex-wrap: wrap; }
+      .catalog-detail-link { font-weight: 700; color: #0d9488; }
       .compare-pick { display: inline-flex; gap: 6px; align-items: center; font-size: 0.9rem; color: #44546a; cursor: pointer; }
       .compare-pick input { width: 16px; height: 16px; min-height: 0; accent-color: #0d9488; }
       .compare-bar {
@@ -230,6 +219,13 @@ const schema = {
       search?.addEventListener("input", applyFilters);
       fieldSelect?.addEventListener("change", applyFilters);
       providerSelect?.addEventListener("change", applyFilters);
+
+      // Sügavlink /kataloog/?q=... eeltäidab otsingu (toetab WebSite SearchActionit ja jagatavaid linke).
+      const initialQuery = new URLSearchParams(window.location.search).get("q");
+      if (initialQuery && search) {
+        search.value = initialQuery;
+        applyFilters();
+      }
 
       // Võrdluse valik: kuni 3 programmi, valik püsib sessionStorage'is.
       const compareKey = "mkval:compare";

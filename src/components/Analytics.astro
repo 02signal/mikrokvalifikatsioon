@@ -1,9 +1,7 @@
 ---
 const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? "";
+// NB: <link rel="alternate"> GEO-vihjed (llms.txt, site-profile.json) elavad nüüd Seo.astro-s.
 ---
-
-<link rel="alternate" type="text/plain" href="/llms.txt" title="Mikrokvalifikatsioon.ee LLM summary" />
-<link rel="alternate" type="application/json" href="/site-profile.json" title="Mikrokvalifikatsioon.ee machine-readable profile" />
 
 {gaMeasurementId ? (
   <script is:inline define:vars={{ gaMeasurementId }}>

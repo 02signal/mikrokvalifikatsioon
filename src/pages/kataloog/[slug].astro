@@ -1,0 +1,182 @@
+---
+import Seo from "../../components/Seo.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { catalog, type CatalogEntryWithSlug } from "../../data/catalog";
+import { toCourse, outboundUrl } from "../../data/courseSchema";
+
+export function getStaticPaths() {
+  return catalog.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props as { entry: CatalogEntryWithSlug };
+
+const canonicalPath = `/kataloog/${entry.slug}/`;
+const checkedAtText = entry.sourceCheckedAt.split("-").reverse().join(".");
+const providerLink = outboundUrl(entry, "programmileht");
+const languageText = entry.language === "en" ? "inglise" : entry.language === "et" ? "eesti" : null;
+
+const facts = [
+  entry.ects != null ? { label: "Maht", value: `${entry.ects} EAP` } : null,
+  entry.priceText ? { label: "Hind", value: entry.priceText } : null,
+  entry.durationText ? { label: "Kestus", value: entry.durationText } : null,
+  entry.format ? { label: "Õppevorm", value: entry.format } : null,
+  languageText ? { label: "Keel", value: languageText } : null,
+  entry.intakeText ? { label: "Vastuvõtt", value: entry.intakeText } : null
+].filter((fact): fact is { label: string; value: string } => fact !== null);
+
+const metaTail = [
+  entry.ects != null ? `${entry.ects} EAP` : null,
+  entry.priceText,
+  entry.format,
+  entry.provider
+].filter(Boolean).join(" · ");
+const description = `${entry.summary} ${metaTail}.`.replace(/\s+/g, " ").trim().slice(0, 300);
+const title = `${entry.name} – ${entry.provider} | Mikrokvalifikatsioon.ee`;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
+        { "@type": "ListItem", position: 2, name: "Kataloog", item: "https://mikrokvalifikatsioon.ee/kataloog/" },
+        { "@type": "ListItem", position: 3, name: entry.name, item: `https://mikrokvalifikatsioon.ee${canonicalPath}` }
+      ]
+    },
+    toCourse(entry)
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title={title}
+      description={description}
+      canonicalPath={canonicalPath}
+      ogTitle={`${entry.name} — ${entry.provider}`}
+      ogDescription={entry.summary}
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <header class="topbar">
+      <nav class="nav" aria-label="Põhinavigeerimine">
+        <a class="brand" href="/">Mikrokvalifikatsioon.ee</a>
+        <div class="navlinks">
+          <a href="/kataloog/">Kataloog</a>
+          <a href="/mikrokraadid/">Mikrokraadid</a>
+          <a href="/kes-maksab/">Kes maksab?</a>
+          <a href="/#suunatest">Suunatest</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <a href="/kataloog/">Kataloog</a> › <span>{entry.name}</span>
+          </nav>
+          <span class="eyebrow">{entry.field}</span>
+          <h1>{entry.name}</h1>
+          <p class="detail-provider">{entry.provider}</p>
+          <p>{entry.summary}</p>
+          <div class="actions">
+            <a class="btn btn-primary" href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_${entry.provider}`}>Vaata ja registreeru kooli lehel</a>
+            <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="detail_back_catalog">← Tagasi kataloogi</a>
+          </div>
+          <p class="report-date">Andmed kontrollitud kooli lehelt: {checkedAtText}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          {facts.length > 0 && (
+            <dl class="detail-facts">
+              {facts.map((fact) => (
+                <div><dt>{fact.label}</dt><dd>{fact.value}</dd></div>
+              ))}
+            </dl>
+          )}
+
+          {entry.goalText && (
+            <div class="detail-block">
+              <h2>Mille jaoks see programm on?</h2>
+              <p>{entry.goalText}</p>
+            </div>
+          )}
+
+          {entry.outcomes && entry.outcomes.length > 0 && (
+            <div class="detail-block">
+              <h2>Mida sa pärast oskad?</h2>
+              <ul class="check">
+                {entry.outcomes.map((outcome) => <li>{outcome}</li>)}
+              </ul>
+            </div>
+          )}
+
+          {entry.assessmentText && (
+            <div class="detail-block">
+              <h2>Kuidas hinnatakse?</h2>
+              <p>{entry.assessmentText}</p>
+            </div>
+          )}
+
+          <p class="notice">
+            See on koondinfo Mikrokvalifikatsioon.ee kataloogist. Ametlik ja lõplik info — hind,
+            vastuvõtt ja tingimused — on alati <a href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_source_${entry.provider}`}>{entry.provider} enda lehel</a>.
+            Märkasid viga? Kirjuta <a href={`mailto:info@02signal.ai?subject=${encodeURIComponent("Kataloogi parandus: " + entry.name)}`} data-track-event="email_click" data-track-label="detail_correction">info@02signal.ai</a>.
+          </p>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Raha küsimus</span>
+            <h2>Kes võiks selle õppe kinni maksta?</h2>
+            <p>Sageli ei pea sa ise kogu hinda maksma — tööandja koolituseelarve, Töötukassa või ise koos lihtsa tasuvusarvutusega.</p>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/kes-maksab/" data-track-event="cta_click" data-track-label="detail_kesmaksab">Vaata, kes maksab</a>
+              <a class="btn btn-secondary" href="/#suunatest" data-track-event="cta_click" data-track-label="detail_suunatest">Tee suunatest</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="detail_email">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="detail_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label={entry.field} />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #0d2a4a; }
+      .detail-provider { font-weight: 700; color: #0d2a4a; margin-top: -4px; }
+      .detail-facts {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+        margin: 0 0 28px;
+        padding: 18px 20px;
+        background: #fff;
+        border: 1px solid #d9e3ea;
+        border-radius: 12px;
+      }
+      .detail-facts div { min-width: 0; }
+      .detail-facts dt { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; color: #5a6b80; }
+      .detail-facts dd { margin: 3px 0 0; font-weight: 700; color: #0d2a4a; overflow-wrap: anywhere; }
+      .detail-block { margin-bottom: 24px; }
+      .detail-block h2 { font-size: 1.15rem; margin-bottom: 8px; }
+    </style>
+  </body>
+</html>

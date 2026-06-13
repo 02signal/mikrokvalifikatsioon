@@ -1,5 +1,5 @@
 ---
-import Analytics from "../../components/Analytics.astro";
+import Seo from "../../components/Seo.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 ---
@@ -7,15 +7,12 @@ import "../../styles/global.css";
 <!doctype html>
 <html lang="et">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Programmide võrdlus | Mikrokvalifikatsioon.ee</title>
-    <meta name="description" content="Võrdle Eesti mikrokvalifikatsioone ja mikrokraade kõrvuti: hind, maht, kestus, õppevorm, eesmärk ja õpiväljundid ühes tabelis." />
-    <meta name="robots" content="noindex,follow" />
-    <link rel="canonical" href="https://mikrokvalifikatsioon.ee/vordlus/" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#0d2a4a" />
-    <Analytics />
+    <Seo
+      title="Programmide võrdlus | Mikrokvalifikatsioon.ee"
+      description="Võrdle Eesti mikrokvalifikatsioone ja mikrokraade kõrvuti: hind, maht, kestus, õppevorm, eesmärk ja õpiväljundid ühes tabelis."
+      canonicalPath="/vordlus/"
+      robots="noindex,follow"
+    />
     <style is:global>
       .compare-wrap { overflow-x: auto; }
       .compare-table {

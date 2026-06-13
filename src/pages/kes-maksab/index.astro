@@ -1,5 +1,5 @@
 ---
-import Analytics from "../../components/Analytics.astro";
+import Seo from "../../components/Seo.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 
@@ -25,6 +25,7 @@ const schema = {
       headline: "Kes maksab mikrokvalifikatsiooni eest? Töötukassa, tööandja või ise",
       description: "Kolm rada mikrokvalifikatsiooni või mikrokraadi rahastamiseks: Töötukassa toetused, tööandja koolituseelarve ja ise makstes. Kuidas igaüht küsida.",
       inLanguage: "et",
+      datePublished: "2026-06-12",
       dateModified: "2026-06-12",
       author: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
       publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
@@ -37,24 +38,15 @@ const schema = {
 <!doctype html>
 <html lang="et">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kes maksab mikrokvalifikatsiooni eest? | Töötukassa, tööandja või ise</title>
-    <meta
-      name="description"
-      content="Sageli ei pea sa kogu õpet ise kinni maksma. Kolm rada: Töötukassa toetused, tööandja koolituseelarve, ise makstes — ja kuidas igaüht praktiliselt küsida."
+    <Seo
+      title="Kes maksab mikrokvalifikatsiooni eest? | Töötukassa, tööandja või ise"
+      description="Sageli ei pea sa kogu õpet ise kinni maksma. Kolm rada: Töötukassa toetused, tööandja koolituseelarve, ise makstes — ja kuidas igaüht praktiliselt küsida."
+      canonicalPath="/kes-maksab/"
+      ogType="article"
+      ogTitle="Kes maksab mikrokvalifikatsiooni eest?"
+      ogDescription="Töötukassa, tööandja või ise — kolm rada uue oskuse rahastamiseks ja kuidas igaüht küsida."
+      jsonLd={schema}
     />
-    <link rel="canonical" href="https://mikrokvalifikatsioon.ee/kes-maksab/" />
-    <meta property="og:title" content="Kes maksab mikrokvalifikatsiooni eest?" />
-    <meta property="og:description" content="Töötukassa, tööandja või ise — kolm rada uue oskuse rahastamiseks ja kuidas igaüht küsida." />
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://mikrokvalifikatsioon.ee/kes-maksab/" />
-    <meta property="og:image" content="https://mikrokvalifikatsioon.ee/og-default.png" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#0d2a4a" />
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
-    <Analytics />
   </head>
   <body>
     <header class="topbar">

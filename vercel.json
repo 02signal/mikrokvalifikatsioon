@@ -10,7 +10,7 @@
           }
         }
       ],
-      "destination": "https://mikrokvalifikatsioon.ee/kataloog/",
+      "destination": "https://mikrokvalifikatsioon.ee/kataloog/?utm_source=mikrokvalifikatsioonid.ee&utm_medium=domain_redirect&utm_campaign=plural_catalog",
       "permanent": true
     },
     {
@@ -23,7 +23,7 @@
           }
         }
       ],
-      "destination": "https://mikrokvalifikatsioon.ee/kataloog/",
+      "destination": "https://mikrokvalifikatsioon.ee/kataloog/?utm_source=mikrokvalifikatsioonid.ee&utm_medium=domain_redirect&utm_campaign=plural_catalog",
       "permanent": true
     }
   ]
