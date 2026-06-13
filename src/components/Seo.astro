@@ -16,6 +16,10 @@ interface Props {
   robots?: string;
   /** schema.org JSON-LD graaf (objekt või massiiv) */
   jsonLd?: unknown;
+  /** og:locale, vaikimisi et_EE; ingliskeelsel lehel nt "en" */
+  locale?: string;
+  /** keelevariandid hreflang jaoks, nt [{lang:"et",path:"/"},{lang:"en",path:"/en/"}] */
+  langAlternates?: { lang: string; path: string }[];
 }
 
 const SITE = "https://mikrokvalifikatsioon.ee";
@@ -28,8 +32,12 @@ const {
   ogType = "website",
   ogImage,
   robots,
-  jsonLd
+  jsonLd,
+  locale = "et_EE",
+  langAlternates
 } = Astro.props;
+const abs = (p: string) => new URL(p, SITE).href;
+const xDefault = langAlternates?.find((a) => a.lang === "et")?.path ?? canonicalPath;
 
 const canonical = new URL(canonicalPath, SITE).href;
 // Per-lehe OG: tuletame võtme canonical-tee viimasest segmendist (sama loogika
@@ -47,8 +55,17 @@ const ogD = ogDescription ?? description;
 <meta name="description" content={description} />
 {robots ? <meta name="robots" content={robots} /> : null}
 <link rel="canonical" href={canonical} />
-<link rel="alternate" hreflang="et" href={canonical} />
-<link rel="alternate" hreflang="x-default" href={canonical} />
+{langAlternates ? (
+  <>
+    {langAlternates.map((a) => <link rel="alternate" hreflang={a.lang} href={abs(a.path)} />)}
+    <link rel="alternate" hreflang="x-default" href={abs(xDefault)} />
+  </>
+) : (
+  <>
+    <link rel="alternate" hreflang="et" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
+  </>
+)}
 
 <meta property="og:title" content={ogT} />
 <meta property="og:description" content={ogD} />
@@ -56,7 +73,7 @@ const ogD = ogDescription ?? description;
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={image} />
 <meta property="og:site_name" content="Mikrokvalifikatsioon.ee" />
-<meta property="og:locale" content="et_EE" />
+<meta property="og:locale" content={locale} />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={ogT} />
 <meta name="twitter:description" content={ogD} />

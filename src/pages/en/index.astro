@@ -1,0 +1,271 @@
+---
+import Seo from "../../components/Seo.astro";
+import Faq from "../../components/Faq.astro";
+import "../../styles/global.css";
+import { catalog, providers, fields, catalogCheckedAt } from "../../data/catalog";
+
+const emailHref = "mailto:info@02signal.ai?subject=Microcredentials%20register%20-%20Europe";
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+
+const faqItems = [
+  {
+    question: "What is a microcredential?",
+    answer: "A microcredential is a short, certified and recognised course that proves one concrete skill — not a full degree. In Estonia it is defined in the Adult Education Act, typically 5–30 ECTS, and ends with a certificate you can use across Europe (CV, Europass)."
+  },
+  {
+    question: "What is a microdegree (mikrokraad)?",
+    answer: "A microdegree is a microcredential offered by a university, where at least half of the curriculum is at higher-education level and it usually carries ECTS credits recognised across the EU."
+  },
+  {
+    question: "Is this an official state register?",
+    answer: "No. We are an independent register and guide that collects providers' public information in one place. The official information is always on each provider's own page and in Estonia's Education Information System (EHIS)."
+  },
+  {
+    question: "How much does a microcredential cost in Estonia?",
+    answer: "Most are around 700–1,800 €, and some are free for specific target groups. Often the learner does not pay everything — the employer's training budget or Töötukassa (the Estonian Unemployment Insurance Fund) can cover a large part."
+  }
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mikrokvalifikatsioon.ee/#organization",
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: "https://mikrokvalifikatsioon.ee/"
+    },
+    {
+      "@type": "WebSite",
+      url: "https://mikrokvalifikatsioon.ee/en/",
+      name: "Microcredentials register — Estonia",
+      inLanguage: "en",
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
+        { "@type": "ListItem", position: 2, name: "English", item: "https://mikrokvalifikatsioon.ee/en/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer }
+      }))
+    }
+  ]
+};
+
+const langAlternates = [
+  { lang: "et", path: "/" },
+  { lang: "en", path: "/en/" }
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Seo
+      title="Microcredentials & microdegrees in Estonia — the independent register"
+      description="An independent register and guide to Estonia's microcredentials and university microdegrees: field, ECTS, price and who can fund it. Built from providers' public pages, dated and neutral."
+      canonicalPath="/en/"
+      ogTitle="Microcredentials & microdegrees in Estonia"
+      ogDescription="The independent register: every programme with field, ECTS, price and a link to the provider. Find a recognised skill — and someone to fund it."
+      locale="en"
+      jsonLd={schema}
+      langAlternates={langAlternates}
+    />
+  </head>
+  <body>
+    <header class="topbar">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="/en/" aria-label="Mikrokvalifikatsioon.ee — home">
+          <img src="/mk-logo.png" alt="Mikrokvalifikatsioon.ee — invest in yourself" width="270" height="29" />
+        </a>
+        <div class="navlinks">
+          <a href="#what">What is it?</a>
+          <a href="/kataloog/">Catalog</a>
+          <a href="#faq">FAQ</a>
+          <a href="/" hreflang="et">Eesti</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-inner">
+          <span class="eyebrow">Estonia · independent register</span>
+          <h1>Find a recognised skill — and someone to fund it.</h1>
+          <p>
+            Estonia already has hundreds of microcredentials and university microdegrees, scattered
+            across dozens of provider pages. Here they are in one place: what you learn, how long it
+            takes, what it costs and who can pay for it.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="en_hero_catalog">Browse the catalog</a>
+            <a class="btn btn-secondary" href="#notify" data-track-event="cta_click" data-track-label="en_hero_notify">Get notified</a>
+          </div>
+          <div class="proof">
+            <div><strong>{catalog.length}</strong><span>programmes</span></div>
+            <div><strong>{providers.length}</strong><span>universities &amp; providers</span></div>
+            <div><strong>{fields.length}</strong><span>fields</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="what" class="white">
+        <div class="section-inner">
+          <div class="section-head">
+            <span class="kicker">Plain English</span>
+            <h2>A microcredential is a narrow, recognised skill. A microdegree is one kind of it.</h2>
+            <p>
+              A microcredential is short study that ends with a certificate for one concrete skill — not a
+              full degree. University ones are called microdegrees and usually carry ECTS credits. Both give
+              a certificate you can show an employer across Estonia and Europe. The category follows the EU's
+              <em>European Approach to Micro-credentials</em> and maps to EQF levels and Europass.
+            </p>
+          </div>
+          <div class="grid-3">
+            <article class="card">
+              <h3>Months, not years</h3>
+              <p>Typically a few months to two semesters alongside work — not 3–4 years in a lecture hall.</p>
+            </article>
+            <article class="card">
+              <h3>A certificate that counts</h3>
+              <p>An official certificate you can use in your CV, in Europass and in pay negotiations.</p>
+            </article>
+            <article class="card">
+              <h3>Independent &amp; dated</h3>
+              <p>Built only from providers' public pages; every entry carries a checked date. We never invent missing facts.</p>
+            </article>
+          </div>
+          <p class="report-date">Data last checked: {checkedAtText}. This is an independent aggregator, not an official state register.</p>
+        </div>
+      </section>
+
+      <section id="notify" class="ice">
+        <div class="section-inner lead-section">
+          <div class="lead-promise">
+            <span class="kicker">Tell us what you need</span>
+            <h2>We're exploring a Europe-wide view. Be first to know.</h2>
+            <p>
+              Today this is the independent register of Estonia's microcredentials and microdegrees.
+              We're testing demand for a wider European catalog. Tell us who you are and we'll notify you.
+            </p>
+          </div>
+          <form class="lead-form" data-en-form data-site-lead-form data-webhook-url={import.meta.env.PUBLIC_SITE_LEAD_WEBHOOK_URL || ""} data-source-site="mikrokvalifikatsioon.ee/en">
+            <div class="form-grid">
+              <div class="field">
+                <label for="enRole">I am a…</label>
+                <select id="enRole" name="role">
+                  <option value="learner">Learner / career changer</option>
+                  <option value="employer">Employer</option>
+                  <option value="provider">Training provider</option>
+                  <option value="policy">Policy / research</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="enEmail">Email *</label>
+                <input id="enEmail" name="email" type="email" required autocomplete="email" />
+              </div>
+              <div class="field full">
+                <label for="enMessage">Optional: what are you looking for?</label>
+                <textarea id="enMessage" name="message" placeholder="E.g. data analytics microcredentials in the Baltics, fundable by an employer."></textarea>
+              </div>
+            </div>
+            <label class="checkbox">
+              <input type="checkbox" name="consent" required />
+              <span>I agree that Ettevõtluskeskus OÜ may use my data to reply and to notify me about the register.</span>
+            </label>
+            <button class="btn btn-primary" type="submit">Notify me</button>
+            <p class="form-note" data-en-note>We reply within one business day. If automatic sending fails, an email draft opens as a fallback.</p>
+          </form>
+        </div>
+      </section>
+
+      <section id="faq" class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">FAQ</span>
+            <h2>Short answers.</h2>
+          </div>
+          <Faq items={faqItems} />
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Next step</span>
+            <h2>Browse the catalog or list your programme.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="en_bottom_catalog">Open the catalog</a>
+              <a class="btn btn-secondary" href={emailHref} data-track-event="email_click" data-track-label="en_bottom_email">Email us</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Contact</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href={emailHref} data-track-event="email_click" data-track-label="en_contact_email">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="en_contact_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <strong>Mikrokvalifikatsioon.ee</strong>
+        <nav class="footer-links" aria-label="Footer links">
+          <span>Ettevõtluskeskus OÜ · Estonia's microcredentials &amp; microdegrees register</span>
+          <a href="/kataloog/">Catalog</a>
+          <a href="#faq">FAQ</a>
+          <a href="/" hreflang="et">Eesti keeles</a>
+          <a href="/privaatsus/">Privacy</a>
+          <a href="#" data-cookie-settings>Cookies</a>
+          <a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="en_footer_email">info@02signal.ai</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script>
+      const form = document.querySelector("[data-en-form]") as HTMLFormElement | null;
+      const note = document.querySelector("[data-en-note]");
+      const track = (name: string, params: Record<string, unknown>) => (window as any).digiteekaartTrack?.(name, params);
+
+      form?.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (!form.reportValidity()) return;
+        const webhookUrl = form.getAttribute("data-webhook-url") || "";
+        const payload = Object.fromEntries(new FormData(form).entries());
+        track("lead_form_submit_attempt", { form_name: "en_notify", source_site: "mikrokvalifikatsioon.ee/en", role: String(payload.role || "") });
+        let sent = false;
+        if (webhookUrl) {
+          try {
+            const response = await fetch(webhookUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ form: "en_notify", site: "mikrokvalifikatsioon.ee/en", ...payload })
+            });
+            sent = response.ok;
+          } catch {
+            sent = false;
+          }
+        }
+        if (!sent) {
+          const body = encodeURIComponent(`Role: ${payload.role || "-"}\nEmail: ${payload.email || "-"}\nLooking for: ${payload.message || "-"}`);
+          window.location.href = `mailto:info@02signal.ai?subject=${encodeURIComponent("Microcredentials register - notify me")}&body=${body}`;
+        }
+        track("lead_form_submit", { form_name: "en_notify", source_site: "mikrokvalifikatsioon.ee/en", role: String(payload.role || ""), delivery: sent ? "webhook" : "mailto" });
+        if (note) note.textContent = sent
+          ? "Thanks! We've got your details and will be in touch."
+          : "We opened an email draft — press send to finish.";
+      });
+    </script>
+  </body>
+</html>

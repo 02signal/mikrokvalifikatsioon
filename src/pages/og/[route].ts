@@ -7,6 +7,10 @@ const contentPages: Record<string, { title: string; description: string }> = {
     title: "Eesti mikrokvalifikatsioonide ja mikrokraadide register",
     description: "Leia oskus, mida tööandjad tunnustavad — ja keegi, kes selle kinni maksab."
   },
+  en: {
+    title: "Microcredentials & microdegrees in Estonia",
+    description: "The independent register: field, ECTS, price and who can fund it. Find a recognised skill."
+  },
   kataloog: {
     title: "Kataloog — kõik mikrokvalifikatsioonid ühes kohas",
     description: "Filtreeri valdkonna, kooli ja hinna järgi. Iga programmi juures maht, hind ja link kooli lehele."
