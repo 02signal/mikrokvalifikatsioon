@@ -1,0 +1,42 @@
+---
+// Korduvkasutatav KKK-akordion. Sama items-massiiv toidab ka FAQPage JSON-LD-d
+// (lehe schema-graafis), nii et nähtav sisu ja struktuurandmed püsivad kooskõlas.
+interface Props {
+  items: { question: string; answer: string }[];
+  openFirst?: number;
+}
+const { items, openFirst = 2 } = Astro.props;
+---
+
+<div class="faq">
+  {items.map((item, i) => (
+    <details class="faq-item" open={i < openFirst}>
+      <summary><strong>{item.question}</strong></summary>
+      <p>{item.answer}</p>
+    </details>
+  ))}
+</div>
+
+<style>
+  .faq { display: grid; gap: 10px; }
+  .faq-item {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 18px;
+    background: #fff;
+  }
+  .faq-item summary {
+    cursor: pointer;
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: var(--ink);
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after { content: "+"; color: var(--teal); font-weight: 900; }
+  .faq-item[open] summary::after { content: "–"; }
+  .faq-item p { margin: 10px 0 4px; color: var(--muted); }
+</style>

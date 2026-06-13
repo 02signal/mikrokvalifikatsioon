@@ -3,9 +3,32 @@ import Seo from "../components/Seo.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
 import Nav from "../components/Nav.astro";
+import Faq from "../components/Faq.astro";
 import { catalog, providers, catalogCheckedAt } from "../data/catalog";
 
 const emailHref = "mailto:info@02signal.ai?subject=Mikrokvalifikatsioonide%20uudised";
+const homeFaq = [
+  {
+    question: "Mis on mikrokvalifikatsioon?",
+    answer: "Lühike, tunnustatud õpe, mille lõpus saad tunnistuse ühe konkreetse oskuse kohta — mitte terve eriala diplomi. Tüüpiline maht on mõni kuu kuni kaks semestrit töö kõrvalt."
+  },
+  {
+    question: "Mis vahe on mikrokvalifikatsioonil ja mikrokraadil?",
+    answer: "Mikrokvalifikatsioon on katusmõiste. Mikrokraad on ülikooli pakutav mikrokvalifikatsioon, mis annab tavaliselt EAP-sid ja mille õppekavast vähemalt pool on kõrghariduse tasemel."
+  },
+  {
+    question: "Kui palju see maksab ja kes maksab?",
+    answer: "Enamasti 700–1 800 €, osa programme on sihtrühmale tasuta. Sageli ei pea sa ise maksma: tööandja koolituseelarve, Töötukassa toetused või ise. Hind on iga programmi juures kataloogis."
+  },
+  {
+    question: "Kui kaua õpe kestab?",
+    answer: "Tavaliselt üks kuni kaks semestrit töö kõrvalt — kuud, mitte aastad. Lühemad kestavad paar kuud, pikemad kuni aasta."
+  },
+  {
+    question: "Kas tunnistust tunnustatakse ka välismaal?",
+    answer: "Tunnistust saab kasutada CV-s ja Europassis kogu Euroopas. Ülikooli mikrokraadi EAP-d on ECTS-ainepunktid, mis on Euroopa kõrgkoolides üheselt mõistetavad."
+  }
+];
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
@@ -45,6 +68,14 @@ const schema = {
       inLanguage: "et",
       dateModified: catalogCheckedAt,
       creator: { "@id": "https://mikrokvalifikatsioon.ee/#organization" }
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: homeFaq.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer }
+      }))
     }
   ]
 };
@@ -297,6 +328,19 @@ const schema = {
               <p class="form-note" data-suunatest-note>Vastame üldjuhul ühe tööpäeva jooksul. Kui süsteem ei saada, avaneb e-kirja varuvariant.</p>
             </div>
           </form>
+        </div>
+      </section>
+
+      <section id="kkk" class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Korduma kippuvad küsimused</span>
+            <h2>Lühikesed vastused enne, kui alustad.</h2>
+          </div>
+          <Faq items={homeFaq} />
+          <p class="field-help">
+            Rohkem küsimusi ja vastuseid: <a href="/kkk/" data-track-event="cta_click" data-track-label="home_kkk">vaata kõiki korduma kippuvaid küsimusi →</a>
+          </p>
         </div>
       </section>
 

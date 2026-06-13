@@ -1,0 +1,222 @@
+---
+import Seo from "../../components/Seo.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import Faq from "../../components/Faq.astro";
+import "../../styles/global.css";
+import { catalog, providers } from "../../data/catalog";
+
+const basics = [
+  {
+    question: "Mis on mikrokvalifikatsioon?",
+    answer: "Mikrokvalifikatsioon on lühike, tõendatud ja tunnustatud õpe, mille lõpus saad tunnistuse ühe konkreetse oskuse kohta — mitte terve eriala diplomi. Tüüpiline maht on mõni kuu kuni kaks semestrit töö kõrvalt."
+  },
+  {
+    question: "Mis vahe on mikrokvalifikatsioonil ja mikrokraadil?",
+    answer: "Mikrokvalifikatsioon on katusmõiste. Mikrokraad on ülikooli pakutav mikrokvalifikatsioon, mis annab tavaliselt EAP-sid (ainepunkte) ja mille õppekavast vähemalt pool on kõrghariduse tasemel."
+  },
+  {
+    question: "Mis vahe on mikrokvalifikatsioonil ja kutsetunnistusel?",
+    answer: "Kutsetunnistus kinnitab olemasolevat oskust eksamiga ega pruugi sisaldada õpet. Mikrokvalifikatsioon sisaldab alati õpet — õpid uue oskuse ja saad selle kohta tunnistuse."
+  },
+  {
+    question: "Mis on EAP ja kui suur programm tavaliselt on?",
+    answer: "EAP on Euroopa ainepunkt; 1 EAP vastab umbes 26 tunnile õppija tööd. Mikrokvalifikatsiooni maht on tavaliselt 5–30 EAP, enamasti 12–24 EAP ühe või kahe semestri jooksul."
+  }
+];
+
+const money = [
+  {
+    question: "Kui kaua mikrokvalifikatsiooni õpe kestab?",
+    answer: "Tavaliselt üks kuni kaks semestrit töö kõrvalt. Lühemad programmid kestavad paar kuud, pikemad kuni aasta. Kuud, mitte aastad."
+  },
+  {
+    question: "Kui palju mikrokraad maksab?",
+    answer: "Meie kataloogi andmetel enamasti 700–1 800 € (12–24 EAP). Osa programme on sihtrühmale tasuta. Täpne hind on iga programmi juures kataloogis."
+  },
+  {
+    question: "Kes maksab mikrokvalifikatsiooni eest?",
+    answer: "Kolm rada: tööandja koolituseelarve (kui oskus aitab praegust tööd), Töötukassa toetused (kui oled töötu või su oskused vajavad uuendamist) või ise makstes. Vaata lehte kes-maksab."
+  },
+  {
+    question: "Kas õpe võib olla tasuta?",
+    answer: "Jah, osa programme on kindlale sihtrühmale tasuta (näiteks töötavatele õpetajatele EL-i kaasrahastusel). Need on kataloogis märgitud. Lisaks võib Töötukassa või tööandja katta suure osa hinnast."
+  }
+];
+
+const recognition = [
+  {
+    question: "Kas tunnistust tunnustatakse ka välismaal?",
+    answer: "Tunnistust saab kasutada CV-s ja Europassis kogu Euroopas. Ülikooli mikrokraadi EAP-d on ECTS-ainepunktid, mis on Euroopa kõrgkoolides üheselt mõistetavad."
+  },
+  {
+    question: "Kas mikrokraadiks on vaja varasemat kõrgharidust?",
+    answer: "Sõltub programmist. Paljud nõuavad kõrgharidust, aga mitte kõik — näiteks programmeerimise või ettevõtluse baasprogrammid on sageli avatud kõigile. Nõue on kirjas iga programmi lehel."
+  },
+  {
+    question: "Kuidas valida endale sobiv programm?",
+    answer: "Tee avalehel 2-minutiline suunatest: vasta neljale küsimusele ja saad kohe kolm sobivat programmi ja rahastuse vihje. Või filtreeri kataloogis valdkonna, kooli ja hinna järgi."
+  }
+];
+
+const providersFaq = [
+  {
+    question: "Kuidas saada mikrokvalifikatsiooni pakkujaks?",
+    answer: "Täienduskoolitusasutus läbib HAKA õppekavarühma kvaliteedihindamise (taotlus EHIS-es), saab seejärel tegevusloa ja registreerib õppekava EHIS-es. Vaata samme lehel koolitajale ja kvaliteedihindamise juhendit."
+  },
+  {
+    question: "Kui suur peab mikrokvalifikatsioon mahult olema?",
+    answer: "5–30 EAP, kus 1 EAP = 26 tundi õppija tööd. Mikrokvalifikatsiooni reguleerib täiskasvanute koolituse seadus."
+  },
+  {
+    question: "Kuidas lisada oma programm registrisse?",
+    answer: "Täida lehel koolitajale vorm „lisa oma programm“ — programmi nimi, kool, link ja kontakt. Kontrollime info kooli avalikult lehelt ja lisame kirje koos kontrollkuupäevaga. Lisamine on tasuta."
+  }
+];
+
+const register = [
+  {
+    question: "Kas mikrokvalifikatsioon.ee on ametlik riiklik register?",
+    answer: "Ei. See on sõltumatu register ja teejuht, mis koondab avaliku info ühte kohta. Ametlik info on iga kooli enda lehel ning Eesti Hariduse Infosüsteemis (EHIS) ja Haridus- ja Teadusministeeriumi lehel."
+  },
+  {
+    question: "Kust andmed pärinevad?",
+    answer: `Iga kirje pärineb kooli või koolitaja avalikult lehelt ja kannab kontrollkuupäeva. Praegu on registris ${catalog.length} programmi ${providers.length} koolist ja koolitajalt. Tundmatut väärtust me ei leiuta — jätame välja.`
+  },
+  {
+    question: "Kas registrisse lisamine on tasuta?",
+    answer: "Jah. Lisamine ei maksa midagi ega sõltu sellest, kas pakkuja on meiega seotud. Ükski programm ei osta endale paremat kohta — järjestus ja filtrid tulenevad andmetest, mitte tasust."
+  }
+];
+
+const allItems = [...basics, ...money, ...recognition, ...providersFaq, ...register];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mikrokvalifikatsioon.ee/#organization",
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: "https://mikrokvalifikatsioon.ee/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
+        { "@type": "ListItem", position: 2, name: "KKK", item: "https://mikrokvalifikatsioon.ee/kkk/" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: allItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer }
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Korduma kippuvad küsimused (KKK) | Mikrokvalifikatsioon ja mikrokraadid"
+      description="Vastused kõige sagedasematele küsimustele mikrokvalifikatsioonide ja mikrokraadide kohta: mis see on, kui kaua kestab, mis maksab, kes maksab, tunnustus, ning kuidas saada pakkujaks."
+      canonicalPath="/kkk/"
+      ogTitle="Korduma kippuvad küsimused mikrokvalifikatsioonist"
+      ogDescription="Aeg, raha, rahastus, tunnustus ja koolitajale — lühikesed selged vastused ühes kohas."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <span class="eyebrow">Korduma kippuvad küsimused</span>
+          <h1>Lühikesed selged vastused mikrokvalifikatsioonist.</h1>
+          <p>
+            Mis on mikrokvalifikatsioon, kui kaua kestab, mis maksab, kes selle kinni maksab ja
+            kuidas saada pakkujaks — kõik ühes kohas. Ei leia vastust? Kirjuta info@02signal.ai.
+          </p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Põhitõed</span>
+            <h2>Mis on mikrokvalifikatsioon ja mikrokraad?</h2>
+          </div>
+          <Faq items={basics} />
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Aeg, raha ja rahastus</span>
+            <h2>Kui kaua kestab, mis maksab ja kes maksab?</h2>
+          </div>
+          <Faq items={money} />
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Tunnustus ja valik</span>
+            <h2>Tunnustus, eeldused ja sobiva valimine.</h2>
+          </div>
+          <Faq items={recognition} openFirst={1} />
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Koolitajale</span>
+            <h2>Pakkujaks saamine ja registrisse lisamine.</h2>
+          </div>
+          <Faq items={providersFaq} openFirst={1} />
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Register ja andmed</span>
+            <h2>Kust andmed tulevad ja kas oleme ametlik register?</h2>
+          </div>
+          <Faq items={register} openFirst={1} />
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Leia endale sobiv programm või vaata kataloogi.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="kkk_suunatest">Tee suunatest</a>
+              <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="kkk_kataloog">Ava kataloog</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="kkk_email">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="kkk_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Korduma kippuvad küsimused" />
+  </body>
+</html>
