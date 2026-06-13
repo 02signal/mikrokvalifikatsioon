@@ -7,3 +7,6 @@ supabase/.temp/
 *.log
 .vercel
 CLAUDE.local.md
+
+# Brand source kit (served copies live in public/)
+media/

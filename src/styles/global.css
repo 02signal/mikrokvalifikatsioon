@@ -1,15 +1,18 @@
 :root {
-  --ink: #142033;
-  --navy: #10233f;
+  /* Bränd: roheline #54C247, must #212121, hall #8C8F91 (mk-logo) */
+  --ink: #212121;
+  --navy: #212121;        /* tumedad alad ja pealkirjad (bränd-must) */
   --blue: #1f5f8b;
-  --teal: #0f8b7a;
-  --ice: #eef6f8;
-  --paper: #f7f9fb;
+  --teal: #2e7d22;        /* ligipääsetav roheline TEKSTILE/linkidele */
+  --green: #54c247;       /* bränd-roheline: nupud, aktsendid, esiletõst */
+  --gray: #8c8f91;        /* bränd-hall */
+  --ice: #eef7ec;         /* õrn rohekas taust */
+  --paper: #f6f8f5;
   --white: #ffffff;
-  --muted: #627085;
-  --line: #d9e3ea;
-  --accent: #d6a642;
-  --shadow: 0 18px 46px rgba(16, 35, 63, 0.13);
+  --muted: #5f6569;
+  --line: #e2e4e3;
+  --accent: #54c247;      /* vasaku-ääre aktsent → bränd-roheline */
+  --shadow: 0 18px 46px rgba(33, 33, 33, 0.12);
 }
 
 * {
@@ -59,10 +62,15 @@ textarea {
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
   text-decoration: none;
-  color: var(--navy);
-  font-size: 1.2rem;
-  font-weight: 900;
+}
+
+.brand img {
+  display: block;
+  height: 30px;
+  width: auto;
 }
 
 .navlinks {
@@ -84,9 +92,7 @@ textarea {
   display: flex;
   align-items: center;
   color: var(--white);
-  background:
-    linear-gradient(90deg, rgba(16, 35, 63, 0.96) 0%, rgba(16, 35, 63, 0.78) 45%, rgba(16, 35, 63, 0.24) 76%),
-    url("/hero-digiteekaart.png") center right / cover no-repeat;
+  background: linear-gradient(118deg, #1b1b1b 0%, #242424 54%, #2b5e23 128%);
 }
 
 .hero-inner,
@@ -104,7 +110,7 @@ textarea {
   padding: 7px 10px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.14);
-  color: #ccefed;
+  color: #d9f5d0;
   font-weight: 850;
   font-size: 0.88rem;
 }
@@ -152,8 +158,8 @@ h1 {
 }
 
 .btn-primary {
-  background: var(--teal);
-  color: var(--white);
+  background: var(--green);
+  color: var(--ink);
 }
 
 .btn-secondary {
@@ -166,6 +172,18 @@ h1 {
   background: var(--white);
   color: var(--navy);
   border-color: var(--line);
+}
+
+/* Sekundaarne nupp heledal sektsioonil peab jääma loetavaks (mitte valge-valgel). */
+.white .btn-secondary,
+.ice .btn-secondary {
+  background: var(--white);
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.btn-primary:hover {
+  background: #49b13d;
 }
 
 .proof {
@@ -277,7 +295,7 @@ section {
 
 .stat {
   display: block;
-  color: var(--blue);
+  color: var(--teal);
   font-size: 1.6rem;
   font-weight: 900;
   margin-bottom: 10px;
@@ -299,12 +317,12 @@ section {
 }
 
 .roadmap-item strong {
-  color: #ccefed;
+  color: #d9f5d0;
 }
 
 .notice {
   border-left: 4px solid var(--accent);
-  background: #fff9ea;
+  background: #f1faee;
   padding: 18px;
   border-radius: 8px;
   color: var(--ink);
@@ -473,7 +491,7 @@ section {
   border-left: 4px solid var(--accent);
   border-radius: 8px;
   padding: 12px;
-  background: #fff9ea;
+  background: #f1faee;
 }
 
 .report-window-offer strong,
@@ -503,9 +521,7 @@ section {
 .report-hero {
   padding: 108px 0 74px;
   color: var(--white);
-  background:
-    linear-gradient(90deg, rgba(16, 35, 63, 0.98) 0%, rgba(16, 35, 63, 0.88) 54%, rgba(15, 139, 122, 0.7) 100%),
-    url("/hero-digiteekaart.png") center right / cover no-repeat;
+  background: linear-gradient(100deg, #1b1b1b 0%, #232323 52%, #2f7d22 118%);
 }
 
 .report-hero h1 {
@@ -594,7 +610,7 @@ section {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 28px;
-  background: #fff9ea;
+  background: #f1faee;
   box-shadow: var(--shadow);
 }
 
@@ -675,8 +691,8 @@ section {
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  background: var(--teal);
-  color: var(--white);
+  background: var(--green);
+  color: var(--ink);
   font-weight: 900;
 }
 
@@ -740,7 +756,7 @@ section {
   border-left: 4px solid var(--accent);
   border-radius: 8px;
   padding: 22px;
-  background: #fff9ea;
+  background: #f1faee;
 }
 
 .plain-warning h2 {
@@ -814,13 +830,13 @@ section {
 }
 
 .status-green {
-  background: #dff6ef;
-  color: #086552;
+  background: #e4f7dd;
+  color: #2e7d22;
 }
 
 .status-blue {
-  background: #e2eef8;
-  color: #174d75;
+  background: #ecedef;
+  color: #4b5358;
 }
 
 .status-amber {
@@ -986,7 +1002,7 @@ section {
 
 .funding-teaser {
   margin-top: 14px;
-  background: #fff9ea;
+  background: #f1faee;
 }
 
 .funding-teaser strong {
@@ -1024,8 +1040,8 @@ section {
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  background: var(--teal);
-  color: var(--white);
+  background: var(--green);
+  color: var(--ink);
   font-weight: 900;
 }
 
@@ -1080,7 +1096,7 @@ section {
 .assessment-checks {
   border-radius: 8px;
   padding: 14px;
-  background: #fff9ea;
+  background: #f1faee;
 }
 
 .assessment-money strong,
@@ -1143,7 +1159,7 @@ section {
 
 .rik-lookup-card.is-error {
   border-left-color: var(--accent);
-  background: #fff9ea;
+  background: #f1faee;
 }
 
 .rik-lookup-card .status-tag {
@@ -1319,7 +1335,7 @@ textarea {
 
 .footer {
   padding: 30px 0;
-  background: #071325;
+  background: #212121;
   color: rgba(255, 255, 255, 0.78);
   font-size: 0.92rem;
 }
@@ -1354,7 +1370,7 @@ textarea {
   border-left: 4px solid var(--accent);
   border-radius: 8px;
   padding: 12px;
-  background: #fff9ea;
+  background: #f1faee;
   color: var(--ink) !important;
   font-size: 0.94rem;
 }
@@ -1394,7 +1410,7 @@ textarea {
   margin: 0 auto;
   padding: 18mm;
   background: var(--white);
-  box-shadow: 0 20px 60px rgba(16, 35, 63, 0.18);
+  box-shadow: 0 20px 60px rgba(33, 33, 33, 0.18);
 }
 
 .pdf-header {
@@ -1493,7 +1509,7 @@ textarea {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 14px;
-  background: #fff9ea;
+  background: #f1faee;
 }
 
 .pdf-money-band span,
@@ -1556,7 +1572,7 @@ textarea {
 }
 
 .pdf-risk {
-  background: #fff9ea;
+  background: #f1faee;
 }
 
 .pdf-next {
