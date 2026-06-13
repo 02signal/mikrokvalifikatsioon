@@ -6,7 +6,10 @@
     <a class="brand" href="/" aria-label="Mikrokvalifikatsioon.ee avaleht">
       <img src="/mk-logo.png" alt="Mikrokvalifikatsioon.ee — investeeri endasse" width="270" height="29" />
     </a>
-    <div class="navlinks">
+    <button class="nav-toggle" type="button" aria-label="Menüü" aria-expanded="false" aria-controls="nav-menu" data-nav-toggle>
+      <span></span><span></span><span></span>
+    </button>
+    <div class="navlinks" id="nav-menu" data-nav-menu>
       <a href="/kataloog/">Kataloog</a>
       <a href="/mikrokraadid/">Mikrokraadid</a>
       <a href="/mis-on-mikrokvalifikatsioon/">Mis see on?</a>
@@ -16,3 +19,19 @@
     </div>
   </nav>
 </header>
+
+<script>
+  const toggle = document.querySelector("[data-nav-toggle]");
+  const menu = document.querySelector("[data-nav-menu]");
+  if (toggle && menu) {
+    const setOpen = (open: boolean) => {
+      menu.classList.toggle("open", open);
+      toggle.classList.toggle("is-open", open);
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    toggle.addEventListener("click", () => setOpen(!menu.classList.contains("open")));
+    menu.querySelectorAll("a").forEach((link) =>
+      link.addEventListener("click", () => setOpen(false))
+    );
+  }
+</script>
