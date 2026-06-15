@@ -33,7 +33,11 @@ const metaTail = [
   entry.provider
 ].filter(Boolean).join(" · ");
 const description = `${entry.summary} ${metaTail}.`.replace(/\s+/g, " ").trim().slice(0, 300);
-const title = `${entry.name} – ${entry.provider} | Mikrokvalifikatsioon.ee`;
+// Hoia pealkiri alla 70 tähemärgi: nimi + pakkuja kui mahub, muidu ainult nimi;
+// väga pikk nimi lõigatakse sõnapiiril + „…".
+const fullTitle = `${entry.name} – ${entry.provider}`;
+let title = fullTitle.length <= 68 ? fullTitle : entry.name;
+if (title.length > 70) title = title.slice(0, 66).replace(/\s+\S*$/, "") + "…";
 
 const schema = {
   "@context": "https://schema.org",
