@@ -42,6 +42,8 @@ Same GA4 taxonomy as the site family — keep events stable:
 
 Catalog-specific parameters: `tool_name` ("suunatest" | "kataloogifilter"), `provider`, `field`, `result_route`. Every outbound provider link fires `partner_site_click` with UTM tags — this is the future lead-gen proof for the freemium model.
 
+**Demand radar** (intelligence for building new microcredentials faster than universities): `interest_signal` (`programme_slug`, `field`, `provider`) = per-programme "Mind huvitab" click → ranks which programmes draw interest; `demand_request` (`skill`, `field`) = request for a skill NOT in the catalog → surfaces unmet demand; `lead_form_submit` with `form_name` `interest_waitlist` = email captured against a programme. Read these in GA4 alongside Search Console queries to decide what to build next. Keep them stable.
+
 ## Conversion Design
 
 Value before contact (proven on digiteekaart): the suunatest gives an instant answer (2-3 matching programmes + who pays + payback logic) BEFORE asking for contact. Contact is asked only for the personal/verified answer. No tool may dead-end without a next step.

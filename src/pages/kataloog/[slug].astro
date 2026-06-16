@@ -84,6 +84,18 @@ const schema = {
             <a class="btn btn-primary" href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_${entry.provider}`}>Vaata ja registreeru kooli lehel</a>
             <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="detail_back_catalog">← Tagasi kataloogi</a>
           </div>
+
+          <div class="interest" data-interest data-slug={entry.slug} data-field={entry.field} data-provider={entry.provider}>
+            <button type="button" class="btn btn-interest" data-interest-btn>♥ Mind huvitab see programm</button>
+            <form class="interest-form" data-interest-form data-webhook-url={import.meta.env.PUBLIC_SITE_LEAD_WEBHOOK_URL || ""} hidden>
+              <p data-interest-msg><strong>Aitäh, huvi märgitud!</strong> Anna e-mail, siis teavitame, kui avaneb uus vastuvõtt või lisandub sarnane programm.</p>
+              <div class="interest-row">
+                <input type="email" name="email" placeholder="sinu@email.ee" autocomplete="email" aria-label="E-mail" required />
+                <button type="submit" class="btn btn-primary">Teavita mind</button>
+              </div>
+            </form>
+          </div>
+
           <p class="report-date">Andmed kontrollitud kooli lehelt: {checkedAtText}</p>
         </div>
       </section>
@@ -172,6 +184,57 @@ const schema = {
       .detail-facts dd { margin: 3px 0 0; font-weight: 700; color: #212121; overflow-wrap: anywhere; }
       .detail-block { margin-bottom: 24px; }
       .detail-block h2 { font-size: 1.15rem; margin-bottom: 8px; }
+      .interest { margin-top: 18px; }
+      .btn-interest { background: rgba(255, 255, 255, 0.12); color: #fff; border: 1px solid rgba(255, 255, 255, 0.45); }
+      .btn-interest:hover { background: rgba(255, 255, 255, 0.22); }
+      .interest-form { margin-top: 14px; max-width: 480px; }
+      .interest-form[hidden] { display: none; }
+      .interest-form p { color: rgba(255, 255, 255, 0.88); margin: 0 0 10px; font-size: 0.95rem; }
+      .interest-row { display: flex; gap: 10px; flex-wrap: wrap; }
+      .interest-row input { flex: 1 1 200px; min-width: 0; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.96); color: #212121; }
+      .interest-row .btn { white-space: nowrap; }
     </style>
+
+    <script>
+      const box = document.querySelector("[data-interest]");
+      if (box) {
+        const slug = box.getAttribute("data-slug") || "";
+        const field = box.getAttribute("data-field") || "";
+        const provider = box.getAttribute("data-provider") || "";
+        const btn = box.querySelector("[data-interest-btn]") as HTMLButtonElement | null;
+        const form = box.querySelector("[data-interest-form]") as HTMLFormElement | null;
+        const track = (n: string, p: Record<string, unknown>) => (window as any).digiteekaartTrack?.(n, p);
+        const key = "mkval:interest:" + slug;
+        const marked = () => { try { return localStorage.getItem(key) === "1"; } catch { return false; } };
+        const showMarked = () => { if (btn) btn.textContent = "✓ Huvi märgitud"; if (form) form.hidden = false; };
+        if (marked()) showMarked();
+        btn?.addEventListener("click", () => {
+          track("interest_signal", { programme_slug: slug, field, provider });
+          try { localStorage.setItem(key, "1"); } catch { /* ignore */ }
+          showMarked();
+        });
+        form?.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          if (!form.reportValidity()) return;
+          const email = String(new FormData(form).get("email") || "");
+          const webhookUrl = form.getAttribute("data-webhook-url") || "";
+          track("lead_form_submit_attempt", { form_name: "interest_waitlist", programme_slug: slug });
+          let sent = false;
+          if (webhookUrl) {
+            try {
+              const r = await fetch(webhookUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ form: "interest_waitlist", site: "mikrokvalifikatsioon.ee", programme_slug: slug, field, provider, email }) });
+              sent = r.ok;
+            } catch { sent = false; }
+          }
+          if (!sent) {
+            const body = encodeURIComponent("E-mail: " + email + "\nProgramm: " + slug + " (" + provider + ")");
+            window.location.href = `mailto:info@02signal.ai?subject=${encodeURIComponent("Huvi programmi vastu: " + slug)}&body=${body}`;
+          }
+          track("lead_form_submit", { form_name: "interest_waitlist", programme_slug: slug, delivery: sent ? "webhook" : "mailto" });
+          const msg = box.querySelector("[data-interest-msg]");
+          if (msg) msg.innerHTML = sent ? "<strong>Aitäh!</strong> Teavitame sind, kui midagi muutub." : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
+        });
+      }
+    </script>
   </body>
 </html>

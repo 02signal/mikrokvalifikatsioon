@@ -138,6 +138,37 @@ const schema = {
         </div>
       </section>
 
+      <section class="white" data-tool-section="kusi-oskust">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Nõudlus</span>
+            <h2>Ei leidnud sobivat? Ütle, mida otsid.</h2>
+            <p>Kui sulle vajalikku mikrokvalifikatsiooni veel pole, anna teada. Kogume nõudlust ja teavitame sind, kui selline lisandub.</p>
+          </div>
+          <form class="lead-form" data-demand-form data-webhook-url={import.meta.env.PUBLIC_SITE_LEAD_WEBHOOK_URL || ""}>
+            <div class="form-grid">
+              <div class="field full">
+                <label for="demandSkill">Mis oskust või teemat otsid? *</label>
+                <input id="demandSkill" name="skill" required placeholder="Näiteks: küberturbe alused, AI-tööriistad turunduses, projektijuhtimine" />
+              </div>
+              <div class="field">
+                <label for="demandField">Valdkond</label>
+                <select id="demandField" name="field">
+                  <option value="">Pole kindel / muu</option>
+                  {fields.map((field) => <option value={field}>{field}</option>)}
+                </select>
+              </div>
+              <div class="field">
+                <label for="demandEmail">E-mail (et teavitada)</label>
+                <input id="demandEmail" name="email" type="email" autocomplete="email" placeholder="sinu@email.ee" />
+              </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Saada soov</button>
+            <p class="form-note" data-demand-note>Soovi saab saata ka ilma e-mailita. Kui automaatne saatmine ei tööta, avaneb e-kirja varuvariant.</p>
+          </form>
+        </div>
+      </section>
+
       <section class="ice">
         <div class="section-inner narrow">
           <div class="plain-warning">
@@ -255,6 +286,33 @@ const schema = {
       });
       document.querySelector("[data-compare-clear]")?.addEventListener("click", () => { writePicks([]); syncCompareUi(); });
       syncCompareUi();
+
+      // Nõudlus: "küsi uut oskust" — fikseerib rahuldamata nõudluse (mida järgmisena ehitada).
+      const demandForm = document.querySelector("[data-demand-form]") as HTMLFormElement | null;
+      const demandNote = document.querySelector("[data-demand-note]");
+      const demandTrack = (n: string, p: Record<string, unknown>) => (window as any).digiteekaartTrack?.(n, p);
+      demandForm?.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (!demandForm.reportValidity()) return;
+        const payload = Object.fromEntries(new FormData(demandForm).entries());
+        const webhookUrl = demandForm.getAttribute("data-webhook-url") || "";
+        demandTrack("demand_request", { skill: String(payload.skill || "").slice(0, 100), field: String(payload.field || "kõik"), has_email: payload.email ? "jah" : "ei" });
+        let sent = false;
+        if (webhookUrl) {
+          try {
+            const r = await fetch(webhookUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ form: "demand_request", site: "mikrokvalifikatsioon.ee", ...payload }) });
+            sent = r.ok;
+          } catch { sent = false; }
+        }
+        if (!sent) {
+          const body = encodeURIComponent("Soovitud oskus: " + (payload.skill || "") + "\nValdkond: " + (payload.field || "-") + "\nE-mail: " + (payload.email || "-"));
+          window.location.href = `mailto:info@02signal.ai?subject=${encodeURIComponent("Küsi uut mikrokvalifikatsiooni")}&body=${body}`;
+        }
+        if (demandNote) demandNote.textContent = sent
+          ? "Aitäh! Lisasime su soovi nõudluse-nimekirja. Kui selline programm lisandub, anname teada."
+          : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
+        demandForm.reset();
+      });
     </script>
   </body>
 </html>
