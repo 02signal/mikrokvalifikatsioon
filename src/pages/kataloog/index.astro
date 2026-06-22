@@ -98,7 +98,11 @@ const schema = {
               <a href={`/valdkond/${f.slug}/`} data-track-event="cta_click" data-track-label="catalog_field_link">{f.field} <b>{catalog.filter((e) => e.field === f.field).length}</b></a>
             ))}
           </nav>
-          <p class="field-help"><a href="/registreerimine/" data-track-event="cta_click" data-track-label="catalog_to_registreerimine">Vaata registreerimistähtaegade ja algusaegade järgi →</a></p>
+          <p class="field-help">
+            <a href="/registreerimine/" data-track-event="cta_click" data-track-label="catalog_to_registreerimine">Registreerimistähtaegade ja algusaegade järgi →</a>
+            &nbsp;·&nbsp;
+            <a href="/oskused/" data-track-event="cta_click" data-track-label="catalog_to_oskused">Otsi oskuse (õpiväljundi) järgi →</a>
+          </p>
 
           <div class="measure-list" data-catalog-list>
             {catalog.map((entry) => (

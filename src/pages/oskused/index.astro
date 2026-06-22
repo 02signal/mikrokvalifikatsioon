@@ -1,0 +1,193 @@
+---
+import Seo from "../../components/Seo.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { catalog, fields, catalogCheckedAt } from "../../data/catalog";
+
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+
+// Õpiväljund eraldi objektina: dedup teksti järgi, iga väljundi all programmid, mis seda õpetavad.
+type OutcomeProg = { slug: string; name: string; provider: string; field: string };
+const map = new Map<string, { text: string; programmes: OutcomeProg[] }>();
+for (const e of catalog) {
+  if (!e.outcomes) continue;
+  for (const raw of e.outcomes) {
+    const text = raw.trim();
+    if (!text) continue;
+    const key = text.toLowerCase();
+    let g = map.get(key);
+    if (!g) { g = { text, programmes: [] }; map.set(key, g); }
+    g.programmes.push({ slug: e.slug, name: e.name, provider: e.provider, field: e.field });
+  }
+}
+const outcomes = [...map.values()].sort((a, b) => a.text.localeCompare(b.text, "et"));
+const programmesWithOutcomes = catalog.filter((e) => e.outcomes && e.outcomes.length).length;
+const fieldsWithOutcomes = fields.filter((f) => catalog.some((e) => e.field === f && e.outcomes && e.outcomes.length));
+
+const SITE = "https://mikrokvalifikatsioon.ee";
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": `${SITE}/#organization`, name: "Mikrokvalifikatsioon.ee", legalName: "Ettevõtluskeskus OÜ", url: `${SITE}/` },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Kataloog", item: `${SITE}/kataloog/` },
+        { "@type": "ListItem", position: 3, name: "Oskused ja õpiväljundid", item: `${SITE}/oskused/` }
+      ]
+    },
+    {
+      "@type": "CollectionPage",
+      name: "Mikrokvalifikatsioonide õpiväljundid",
+      description: "Otsitav register mikrokvalifikatsioonide ja mikrokraadide õpiväljunditest — leia programm selle järgi, mida pärast oskad.",
+      inLanguage: "et",
+      url: `${SITE}/oskused/`,
+      isPartOf: { "@id": `${SITE}/#organization` }
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Otsi mikrokraadi oskuse (õpiväljundi) järgi"
+      description={`Otsi ${outcomes.length} õpiväljundi seast märksõna järgi ja leia kohe, milline mikrokvalifikatsioon või mikrokraad selle oskuse annab. Õpiväljund eraldi otsitava ja võrreldava objektina.`}
+      canonicalPath="/oskused/"
+      ogTitle="Otsi mikrokraadi oskuse järgi"
+      ogDescription="Sisesta oskus või märksõna ja näe kohe, millised programmid selle õpiväljundi annavad."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <a href="/kataloog/">Kataloog</a> › <span>Oskused</span>
+          </nav>
+          <span class="eyebrow">Otsi oskuse järgi</span>
+          <h1>Mida sa pärast oskad? Otsi õpiväljundi järgi.</h1>
+          <p>
+            Tavaliselt otsitakse programmi nime või valdkonna järgi. Siin otsid <strong>oskuse järgi</strong>:
+            sisesta märksõna (nt „andmeanalüüs", „auditi", „juhtimine") ja näe kohe, millised
+            mikrokvalifikatsioonid ja mikrokraadid just selle oskuse annavad. {outcomes.length} õpiväljundit
+            {programmesWithOutcomes} programmist.
+          </p>
+          <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
+        </div>
+      </section>
+
+      <section class="white" data-tool-section="oskuste-otsing">
+        <div class="section-inner">
+          <div class="form-grid catalog-filters">
+            <div class="field">
+              <label for="outcomeSearch">Otsi oskust / õpiväljundit</label>
+              <input id="outcomeSearch" data-outcome-search placeholder="Näiteks: andmeanalüüs, auditi, projektijuhtimine" autocomplete="off" />
+            </div>
+            <div class="field">
+              <label for="outcomeField">Valdkond</label>
+              <select id="outcomeField" data-outcome-field>
+                <option value="">Kõik valdkonnad</option>
+                {fieldsWithOutcomes.map((f) => <option value={f}>{f}</option>)}
+              </select>
+            </div>
+          </div>
+          <p class="field-help" data-outcome-count>{outcomes.length} õpiväljundit</p>
+
+          <ul class="outcome-list" data-outcome-list>
+            {outcomes.map((o) => {
+              const ofields = [...new Set(o.programmes.map((p) => p.field))];
+              return (
+                <li class="outcome-item" data-outcome data-text={o.text.toLowerCase()} data-fields={ofields.join("|")}>
+                  <p class="outcome-text">{o.text}</p>
+                  <p class="outcome-progs">
+                    {o.programmes.map((p, i) => (
+                      <>{i > 0 && ", "}<a href={`/kataloog/${p.slug}/`} data-track-event="cta_click" data-track-label="outcome_to_detail">{p.name}</a> <span class="outcome-prov">({p.provider})</span></>
+                    ))}
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+          <p class="field-help" data-outcome-empty hidden>Selle märksõnaga õpiväljundit ei leitud. Proovi laiemat sõna või <a href="/kataloog/">sirvi kataloogi</a>, või <a href="/kataloog/#kusi-oskust">küsi uut oskust</a>.</p>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Ei leidnud?</span>
+            <h2>Küsi oskust, mida veel ei õpetata.</h2>
+            <p>Kui sulle vajalikku oskust kataloogis pole, anna teada — kogume nõudlust ja teavitame, kui selline programm lisandub.</p>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/kataloog/#kusi-oskust" data-track-event="cta_click" data-track-label="oskused_demand">Küsi uut oskust</a>
+              <a class="btn btn-secondary" href="/#suunatest" data-track-event="cta_click" data-track-label="oskused_suunatest">Tee suunatest</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="oskused_email">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="oskused_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Oskused ja õpiväljundid" />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .outcome-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+      .outcome-item { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+      .outcome-item[hidden] { display: none; }
+      .outcome-text { margin: 0; font-weight: 700; color: #212121; }
+      .outcome-progs { margin: 6px 0 0; font-size: 0.92rem; color: var(--muted); }
+      .outcome-progs a { color: var(--teal); font-weight: 700; }
+      .outcome-prov { color: var(--muted); font-weight: 400; }
+    </style>
+
+    <script>
+      const search = document.querySelector("[data-outcome-search]") as HTMLInputElement | null;
+      const fieldSel = document.querySelector("[data-outcome-field]") as HTMLSelectElement | null;
+      const count = document.querySelector("[data-outcome-count]");
+      const empty = document.querySelector("[data-outcome-empty]") as HTMLElement | null;
+      const items = [...document.querySelectorAll<HTMLElement>("[data-outcome]")];
+      const track = (n: string, p: Record<string, unknown>) => (window as any).digiteekaartTrack?.(n, p);
+      let lastTracked = "";
+
+      const apply = (): void => {
+        const term = (search?.value || "").trim().toLowerCase();
+        const f = fieldSel?.value || "";
+        let visible = 0;
+        for (const it of items) {
+          const show = (!term || (it.dataset.text || "").includes(term)) &&
+            (!f || (it.dataset.fields || "").split("|").includes(f));
+          it.hidden = !show;
+          if (show) visible += 1;
+        }
+        if (count) count.textContent = `${visible} õpiväljundit`;
+        if (empty) empty.hidden = visible !== 0;
+        if (term && term !== lastTracked && term.length >= 3) {
+          lastTracked = term;
+          track("outcome_search", { term: term.slice(0, 60), results: visible });
+        }
+      };
+
+      search?.addEventListener("input", apply);
+      fieldSel?.addEventListener("change", apply);
+
+      // Sügavlink /oskused/?q=oskus eeltäidab otsingu.
+      const q = new URLSearchParams(window.location.search).get("q");
+      if (q && search) { search.value = q; apply(); }
+    </script>
+  </body>
+</html>
