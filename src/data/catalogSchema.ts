@@ -33,5 +33,9 @@ export type CatalogEntry = {
   outcomes?: string[] | null;
   /** assessment method(s) as stated by the provider; null until collected */
   assessmentText?: string | null;
+  /** ISO date (YYYY-MM-DD) — registration deadline; from feed or parsed from intakeText */
+  registrationDeadline?: string | null;
+  /** ISO date (YYYY-MM-DD) — study start; from feed or parsed from intakeText */
+  startDate?: string | null;
   sourceCheckedAt: string;
 };

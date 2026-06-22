@@ -79,6 +79,7 @@ export function toCourse(entry: CatalogEntryWithSlug): Record<string, unknown> {
   course.hasCourseInstance = {
     "@type": "CourseInstance",
     ...(courseMode ? { courseMode } : {}),
+    ...(entry.startDate ? { startDate: entry.startDate } : {}),
     inLanguage: entry.language ?? "et"
   };
 

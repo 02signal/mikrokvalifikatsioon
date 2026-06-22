@@ -1,0 +1,213 @@
+---
+import Seo from "../../components/Seo.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { catalog, catalogCheckedAt } from "../../data/catalog";
+import { formatEt, monthKey, monthLabel } from "../../data/dates";
+
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+
+const byDeadline = catalog
+  .filter((e) => e.registrationDeadline)
+  .sort((a, b) => (a.registrationDeadline as string).localeCompare(b.registrationDeadline as string));
+
+const byStart = catalog
+  .filter((e) => e.startDate)
+  .sort((a, b) => (a.startDate as string).localeCompare(b.startDate as string));
+
+const startMonths: { key: string; label: string; entries: typeof byStart }[] = [];
+for (const e of byStart) {
+  const k = monthKey(e.startDate as string);
+  let g = startMonths.find((x) => x.key === k);
+  if (!g) { g = { key: k, label: monthLabel(e.startDate as string), entries: [] }; startMonths.push(g); }
+  g.entries.push(e);
+}
+
+const nearest = byDeadline[0]?.registrationDeadline ? formatEt(byDeadline[0].registrationDeadline as string) : null;
+const SITE = "https://mikrokvalifikatsioon.ee";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": `${SITE}/#organization`, name: "Mikrokvalifikatsioon.ee", legalName: "Ettevõtluskeskus OÜ", url: `${SITE}/` },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Kataloog", item: `${SITE}/kataloog/` },
+        { "@type": "ListItem", position: 3, name: "Registreerimine ja algus", item: `${SITE}/registreerimine/` }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      name: "Mikrokvalifikatsioonid registreerimistähtaja järgi",
+      numberOfItems: byDeadline.length,
+      itemListElement: byDeadline.map((entry, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: entry.name,
+        url: `${SITE}/kataloog/${entry.slug}/`
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Registreerimine ja algusajad – mikrokvalifikatsioonid"
+      description={`Millal mikrokvalifikatsioonide ja mikrokraadide registreerimine lõpeb ja millal õpe algab. ${byDeadline.length} tähtaega ja ${byStart.length} algusaega, sorditud — leia, millele jõuad veel registreeruda ja planeeri kalendrisse.`}
+      canonicalPath="/registreerimine/"
+      ogTitle="Registreerimine ja algusajad"
+      ogDescription="Mis lõpeb varsti ja mis algab millal — planeeri õpingud kalendri järgi."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <a href="/kataloog/">Kataloog</a> › <span>Registreerimine ja algus</span>
+          </nav>
+          <span class="eyebrow">Tähtajad ja algusajad</span>
+          <h1>Millal registreerida ja millal õpe algab</h1>
+          <p>
+            {byDeadline.length} programmil on teada registreerimistähtaeg ja {byStart.length}-l algusaeg.
+            {nearest && <> Lähim tähtaeg: <strong>{nearest}</strong>.</>}
+            {" "}Vaata, millele jõuad veel registreeruda, või planeeri õpingud kuude kaupa kalendrisse.
+          </p>
+          <p class="report-date">Andmed kontrollitud: {checkedAtText}. Lõplik tähtaeg on alati kooli lehel.</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Registreerimine</span>
+            <h2>Registreerimine lõpeb — kõige varem lõppevad ees.</h2>
+          </div>
+          <div class="compare-wrap">
+            <table class="time-table">
+              <thead>
+                <tr><th>Programm</th><th>Kool</th><th>Registreerimine kuni</th><th>Algab</th><th>Maht</th><th>Hind</th></tr>
+              </thead>
+              <tbody>
+                {byDeadline.map((entry) => (
+                  <tr data-deadline={entry.registrationDeadline}>
+                    <td><a href={`/kataloog/${entry.slug}/`} data-track-event="cta_click" data-track-label="reg_to_detail">{entry.name}</a></td>
+                    <td>{entry.provider}</td>
+                    <td class="nowrap"><time datetime={entry.registrationDeadline}>{formatEt(entry.registrationDeadline as string)}</time> <span class="dl-badge" data-dl-badge></span></td>
+                    <td class="nowrap">{entry.startDate ? <time datetime={entry.startDate}>{formatEt(entry.startDate)}</time> : "—"}</td>
+                    <td class="nowrap">{entry.ects != null ? `${entry.ects} EAP` : "—"}</td>
+                    <td class="nowrap">{entry.priceText || "kooli lehel"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Algusajad</span>
+            <h2>Algavad õpingud kuude kaupa — planeeri kalendrisse.</h2>
+          </div>
+          {startMonths.map((m) => (
+            <div class="month-block">
+              <h3>{m.label} <span class="month-count">{m.entries.length}</span></h3>
+              <ul class="check">
+                {m.entries.map((entry) => (
+                  <li>
+                    <a href={`/kataloog/${entry.slug}/`}>{entry.name}</a> — {entry.provider}
+                    {entry.registrationDeadline && <>, registreerimine kuni {formatEt(entry.registrationDeadline)}</>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <p class="notice">
+            Kuupäevad pärinevad koolide avalikelt lehtedelt ja võivad muutuda — kinnita alati programmi lehel.
+            Programmid ilma kindla kuupäevata leiad <a href="/kataloog/">kataloogist</a>.
+          </p>
+          <div class="inline-actions">
+            <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="reg_suunatest">Tee suunatest</a>
+            <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="reg_kataloog">Ava kataloog</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Püsi kursis</span>
+            <h2>Tahad teada, kui avaneb uus vastuvõtt?</h2>
+            <p>Vali valdkond ja telli teavitus — anname teada, kui sinu valdkonnas avaneb uus registreerimine.</p>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="reg_fields">Vali valdkond</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="reg_email">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="reg_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Registreerimine ja algus" />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .compare-wrap { overflow-x: auto; }
+      .time-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); border-radius: 10px; min-width: 720px; }
+      .time-table th, .time-table td { border-bottom: 1px solid var(--line); padding: 12px 14px; text-align: left; vertical-align: top; font-size: 0.95rem; }
+      .time-table thead th { background: #212121; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.02em; }
+      .time-table tbody tr:last-child td { border-bottom: 0; }
+      .time-table td a { color: var(--teal); font-weight: 700; }
+      .time-table .nowrap { white-space: nowrap; }
+      .time-table tr.passed { opacity: 0.45; }
+      .dl-badge { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px; font-size: 0.78rem; font-weight: 800; }
+      .dl-badge.soon { background: #fff1cc; color: #815900; }
+      .dl-badge.today { background: #ffe0e0; color: #a11; }
+      .dl-badge.past { background: #eceef0; color: #5f6569; }
+      .month-block { margin-bottom: 22px; }
+      .month-block h3 { font-size: 1.15rem; }
+      .month-count { display: inline-flex; padding: 1px 9px; border-radius: 999px; background: #e4f7dd; color: #2e7d22; font-size: 0.82rem; font-weight: 800; margin-left: 6px; }
+    </style>
+
+    <script>
+      // Värske kiireloomulisus: arvuta päevad tähtajani külastaja "praegu" järgi (mitte build-ajast).
+      const DAY = 86400000;
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      document.querySelectorAll<HTMLElement>("tr[data-deadline]").forEach((row) => {
+        const iso = row.getAttribute("data-deadline");
+        if (!iso) return;
+        const due = new Date(iso + "T00:00:00");
+        const days = Math.round((due.getTime() - today.getTime()) / DAY);
+        const badge = row.querySelector<HTMLElement>("[data-dl-badge]");
+        if (!badge) return;
+        if (days < 0) { badge.textContent = "möödas"; badge.classList.add("past"); row.classList.add("passed"); }
+        else if (days === 0) { badge.textContent = "täna!"; badge.classList.add("today"); }
+        else if (days <= 14) { badge.textContent = days + " p"; badge.classList.add("soon"); }
+        else { badge.textContent = days + " p"; badge.classList.add("past"); }
+      });
+    </script>
+  </body>
+</html>

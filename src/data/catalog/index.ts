@@ -3,6 +3,7 @@ import taltech from "./taltech.json";
 import tartuYlikool from "./tartu-ylikool.json";
 import muudKoolid from "./muud-koolid.json";
 import { assignSlugs, slugify } from "../slug";
+import { parseIntakeDates } from "../dates";
 
 /** Kohalik snapshot — fallback, kui AMOS feedi pole seatud või see ei vasta. */
 const LOCAL_CHECKED_AT = "2026-06-12";
@@ -56,10 +57,15 @@ const sorted: CatalogEntry[] = feed.entries
 
 const slugs = assignSlugs(sorted, (entry) => `${entry.provider} ${entry.name}`);
 
-export const catalog: CatalogEntryWithSlug[] = sorted.map((entry) => ({
-  ...entry,
-  slug: slugs.get(entry) as string
-}));
+export const catalog: CatalogEntryWithSlug[] = sorted.map((entry) => {
+  const parsed = parseIntakeDates(entry.intakeText);
+  return {
+    ...entry,
+    slug: slugs.get(entry) as string,
+    registrationDeadline: entry.registrationDeadline ?? parsed.registrationDeadline,
+    startDate: entry.startDate ?? parsed.startDate
+  };
+});
 
 /** Slug -> kirje, programmilehe (getStaticPaths) ja masinliideste jaoks. */
 export const bySlug = new Map(catalog.map((entry) => [entry.slug, entry]));
