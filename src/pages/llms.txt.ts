@@ -39,6 +39,7 @@ Data checked: ${catalogCheckedAt}. ${catalog.length} programmes from ${providers
 - Homepage with the suunatest (2-minute direction test, instant answer): https://mikrokvalifikatsioon.ee/
 - Catalog (all programmes, filterable; deep-link search via /kataloog/?q=term): https://mikrokvalifikatsioon.ee/kataloog/
 - Every programme has its own page: https://mikrokvalifikatsioon.ee/kataloog/<slug>/ (slug + pageUrl in catalog.json)
+- Per-field comparison pages (all programmes in a field, compared): https://mikrokvalifikatsioon.ee/valdkond/<field-slug>/ (fields: ${fields.filter((f) => f !== "muu").join(", ")})
 - Microdegrees overview by university: https://mikrokvalifikatsioon.ee/mikrokraadid/
 - What is a mikrokvalifikatsioon (definitions + FAQ): https://mikrokvalifikatsioon.ee/mis-on-mikrokvalifikatsioon/
 - Who pays (Töötukassa, employer, self): https://mikrokvalifikatsioon.ee/kes-maksab/

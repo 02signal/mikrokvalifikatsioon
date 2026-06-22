@@ -1,0 +1,229 @@
+---
+import Seo from "../../components/Seo.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { catalog, fieldsWithSlug, catalogCheckedAt } from "../../data/catalog";
+import { parsePriceEur } from "../../data/courseSchema";
+
+export function getStaticPaths() {
+  return fieldsWithSlug.map((f) => ({ params: { slug: f.slug }, props: { field: f.field } }));
+}
+
+const { field } = Astro.props as { field: string };
+const entries = catalog.filter((e) => e.field === field);
+const fieldCap = field.charAt(0).toUpperCase() + field.slice(1);
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+
+const providersInField = [...new Set(entries.map((e) => e.provider))];
+const prices = entries.map((e) => parsePriceEur(e.priceText)).filter((p): p is number => p != null && p > 0);
+const minPrice = prices.length ? Math.min(...prices) : null;
+const maxPrice = prices.length ? Math.max(...prices) : null;
+const freeCount = entries.filter((e) => parsePriceEur(e.priceText) === 0).length;
+const ectsVals = entries.map((e) => e.ects).filter((n): n is number => n != null);
+const minEcts = ectsVals.length ? Math.min(...ectsVals) : null;
+const maxEcts = ectsVals.length ? Math.max(...ectsVals) : null;
+
+const title = `${fieldCap} mikrokraadid – võrdlus ja hinnad`;
+const description = `${entries.length} ${field} mikrokvalifikatsiooni ja mikrokraadi ${providersInField.length} koolist — võrdle mahtu (EAP), hinda ja õppevormi ühes tabelis ja leia parim valik.`;
+
+const SITE = "https://mikrokvalifikatsioon.ee";
+const canonicalPath = `/valdkond/${fieldsWithSlug.find((f) => f.field === field)?.slug}/`;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE}/#organization`,
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: `${SITE}/`
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Kataloog", item: `${SITE}/kataloog/` },
+        { "@type": "ListItem", position: 3, name: fieldCap, item: `${SITE}${canonicalPath}` }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      name: `${fieldCap} mikrokvalifikatsioonid ja mikrokraadid`,
+      numberOfItems: entries.length,
+      itemListElement: entries.map((entry, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: entry.name,
+        url: `${SITE}/kataloog/${entry.slug}/`
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title={title}
+      description={description}
+      canonicalPath={canonicalPath}
+      ogTitle={`${fieldCap} mikrokraadid ja mikrokvalifikatsioonid`}
+      ogDescription={`Võrdle ${entries.length} programmi ${providersInField.length} koolist: maht, hind ja õppevorm ühes kohas.`}
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <a href="/kataloog/">Kataloog</a> › <span>{fieldCap}</span>
+          </nav>
+          <span class="eyebrow">Valdkonna võrdlus</span>
+          <h1>{fieldCap}: mikrokvalifikatsioonid ja mikrokraadid</h1>
+          <p>
+            {entries.length} programmi {providersInField.length} koolist valdkonnas „{field}".
+            {minEcts != null && maxEcts != null && <> Maht {minEcts}–{maxEcts} EAP.</>}
+            {minPrice != null && maxPrice != null && <> Hind {minPrice}–{maxPrice} €{freeCount > 0 && <>, {freeCount} tasuta sihtrühmale</>}.</>}
+            {" "}Võrdle kõiki allolevas tabelis.
+          </p>
+          <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <div class="compare-wrap">
+            <table class="field-table">
+              <thead>
+                <tr><th>Programm</th><th>Kool</th><th>Maht</th><th>Hind</th><th>Õppevorm</th><th>Vastuvõtt</th></tr>
+              </thead>
+              <tbody>
+                {entries.map((entry) => (
+                  <tr>
+                    <td><a href={`/kataloog/${entry.slug}/`} data-track-event="cta_click" data-track-label="field_to_detail">{entry.name}</a></td>
+                    <td>{entry.provider}</td>
+                    <td>{entry.ects != null ? `${entry.ects} EAP` : "—"}</td>
+                    <td>{entry.priceText || "kooli lehel"}</td>
+                    <td>{entry.format || "—"}</td>
+                    <td>{entry.intakeText || "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="field-help">
+            Iga programmi nimi viib selle lehele, kus on eesmärk, õpiväljundid, hindamine ja link kooli ametlikule lehele.
+          </p>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Kuidas valida</span>
+            <h2>Mille järgi {field} programme võrrelda?</h2>
+          </div>
+          <ul class="check">
+            <li><strong>Maht ja kestus</strong> — kui palju aega sul on (EAP ja semestrid).</li>
+            <li><strong>Hind ja rahastus</strong> — vaata <a href="/kes-maksab/">kes maksab</a>: tööandja, Töötukassa või ise.</li>
+            <li><strong>Õppevorm</strong> — kas saad õppida veebis töö kõrvalt või käia kohapeal.</li>
+            <li><strong>Eeldused ja õpiväljundid</strong> — mida pead oskama enne ja mida oskad pärast (programmi lehel).</li>
+          </ul>
+          <div class="inline-actions">
+            <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="field_suunatest">Tee 2 minuti suunatest</a>
+            <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="field_kataloog">Ava kogu kataloog</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Püsi kursis</span>
+            <h2>Anna teada, kui {field} lisandub uusi programme.</h2>
+            <p>Valdkond areneb ja vastuvõtud muutuvad. Jäta e-mail, siis teavitame, kui siia lisandub uusi mikrokvalifikatsioone või avaneb uus vastuvõtt.</p>
+          </div>
+          <form class="lead-form" data-field-form data-field={field} data-webhook-url={import.meta.env.PUBLIC_SITE_LEAD_WEBHOOK_URL || ""}>
+            <div class="form-grid">
+              <div class="field">
+                <label for="fieldEmail">E-mail *</label>
+                <input id="fieldEmail" name="email" type="email" required autocomplete="email" placeholder="sinu@email.ee" />
+              </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Teavita {field} uudistest</button>
+            <p class="form-note" data-field-note>Saadame ainult sisulisi teavitusi selle valdkonna kohta. Kui automaatne saatmine ei tööta, avaneb e-kirja varuvariant.</p>
+          </form>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Kahtled valikus? Tee suunatest või küsi nõu.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="field_bottom_suunatest">Tee suunatest</a>
+              <a class="btn btn-secondary" href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="field_email">Küsi nõu</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="field_contact_email">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="field_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label={`${fieldCap} mikrokraadid`} />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .compare-wrap { overflow-x: auto; }
+      .field-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); border-radius: 10px; min-width: 720px; }
+      .field-table th, .field-table td { border-bottom: 1px solid var(--line); padding: 12px 14px; text-align: left; vertical-align: top; font-size: 0.95rem; }
+      .field-table thead th { background: #212121; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.02em; }
+      .field-table tbody tr:last-child td { border-bottom: 0; }
+      .field-table td a { color: var(--teal); font-weight: 700; }
+    </style>
+
+    <script>
+      const form = document.querySelector("[data-field-form]") as HTMLFormElement | null;
+      const note = document.querySelector("[data-field-note]");
+      const track = (n: string, p: Record<string, unknown>) => (window as any).digiteekaartTrack?.(n, p);
+      if (form) {
+        const field = form.getAttribute("data-field") || "";
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          if (!form.reportValidity()) return;
+          const email = String(new FormData(form).get("email") || "");
+          const webhookUrl = form.getAttribute("data-webhook-url") || "";
+          track("field_subscribe", { field });
+          let sent = false;
+          if (webhookUrl) {
+            try {
+              const r = await fetch(webhookUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ form: "field_subscribe", site: "mikrokvalifikatsioon.ee", field, email }) });
+              sent = r.ok;
+            } catch { sent = false; }
+          }
+          if (!sent) {
+            const body = encodeURIComponent("Valdkond: " + field + "\nE-mail: " + email);
+            window.location.href = `mailto:info@02signal.ai?subject=${encodeURIComponent("Teavitus valdkonnast: " + field)}&body=${body}`;
+          }
+          track("lead_form_submit", { form_name: "field_subscribe", field, delivery: sent ? "webhook" : "mailto" });
+          if (note) note.textContent = sent ? "Aitäh! Teavitame sind selle valdkonna uudistest." : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
+          form.reset();
+        });
+      }
+    </script>
+  </body>
+</html>

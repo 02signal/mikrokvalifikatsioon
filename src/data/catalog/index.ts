@@ -2,7 +2,7 @@ import type { CatalogEntry } from "../catalogSchema";
 import taltech from "./taltech.json";
 import tartuYlikool from "./tartu-ylikool.json";
 import muudKoolid from "./muud-koolid.json";
-import { assignSlugs } from "../slug";
+import { assignSlugs, slugify } from "../slug";
 
 export const catalogCheckedAt = "2026-06-12";
 
@@ -27,3 +27,9 @@ export const bySlug = new Map(catalog.map((entry) => [entry.slug, entry]));
 
 export const providers = [...new Set(catalog.map((entry) => entry.provider))];
 export const fields = [...new Set(catalog.map((entry) => entry.field))].sort((a, b) => a.localeCompare(b, "et"));
+
+/** Valdkonnad koos slugiga (/valdkond/<slug>/). "muu" on koondkategooria — sellele eraldi lehte ei tee. */
+export const fieldsWithSlug = fields
+  .filter((field) => field !== "muu")
+  .map((field) => ({ field, slug: slugify(field) }));
+export const fieldBySlug = new Map(fieldsWithSlug.map((f) => [f.slug, f.field]));

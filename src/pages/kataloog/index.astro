@@ -3,7 +3,7 @@ import Seo from "../../components/Seo.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
-import { catalog, providers, fields, catalogCheckedAt } from "../../data/catalog";
+import { catalog, providers, fields, fieldsWithSlug, catalogCheckedAt } from "../../data/catalog";
 import { outboundUrl } from "../../data/courseSchema";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
@@ -91,6 +91,13 @@ const schema = {
             </div>
           </div>
           <p class="field-help" data-catalog-count>{catalog.length} programmi</p>
+
+          <nav class="field-links" aria-label="Sirvi valdkonniti">
+            <span>Võrdle valdkonniti:</span>
+            {fieldsWithSlug.map((f) => (
+              <a href={`/valdkond/${f.slug}/`} data-track-event="cta_click" data-track-label="catalog_field_link">{f.field}</a>
+            ))}
+          </nav>
 
           <div class="measure-list" data-catalog-list>
             {catalog.map((entry) => (
@@ -198,6 +205,10 @@ const schema = {
       .measure-card[hidden] { display: none; }
       .catalog-card-actions { display: flex; gap: 16px; align-items: center; white-space: nowrap; flex-wrap: wrap; }
       .catalog-detail-link { font-weight: 700; color: #2e7d22; }
+      .field-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 24px; }
+      .field-links span { color: #5f6569; font-weight: 700; font-size: 0.9rem; margin-right: 4px; }
+      .field-links a { display: inline-flex; padding: 6px 12px; border-radius: 999px; background: #eef7ec; color: #2e7d22; font-size: 0.88rem; font-weight: 700; text-decoration: none; border: 1px solid #e2e4e3; }
+      .field-links a:hover { background: #e4f7dd; }
       .compare-pick { display: inline-flex; gap: 6px; align-items: center; font-size: 0.9rem; color: #44546a; cursor: pointer; }
       .compare-pick input { width: 16px; height: 16px; min-height: 0; accent-color: #2e7d22; }
       .compare-bar {
