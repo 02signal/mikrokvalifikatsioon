@@ -101,7 +101,7 @@ const schema = {
           <div class="compare-wrap">
             <table class="field-table">
               <thead>
-                <tr><th>Programm</th><th>Kool</th><th>Maht</th><th>Hind</th><th>Õppevorm</th><th>Vastuvõtt</th></tr>
+                <tr><th>Programm</th><th>Kool</th><th>Maht</th><th>Hind</th><th>Õppevorm</th><th>Vastuvõtt</th><th>Vali</th></tr>
               </thead>
               <tbody>
                 {entries.map((entry) => (
@@ -112,6 +112,13 @@ const schema = {
                     <td>{entry.priceText || "kooli lehel"}</td>
                     <td>{entry.format || "—"}</td>
                     <td>{entry.intakeText || "—"}</td>
+                    <td class="row-actions">
+                      <button type="button" class="row-interest" data-interest-btn data-slug={entry.slug} data-field={entry.field} data-provider={entry.provider} title="Mind huvitab" aria-label={`Mind huvitab: ${entry.name}`}>♥</button>
+                      <label class="compare-pick">
+                        <input type="checkbox" data-compare-pick data-url={entry.url} />
+                        <span>Võrdle</span>
+                      </label>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -184,6 +191,12 @@ const schema = {
 
     <Footer label={`${fieldCap} mikrokraadid`} />
 
+    <div class="compare-bar" data-compare-bar hidden>
+      <span data-compare-count>0 valitud</span>
+      <a class="btn btn-primary" href="/vordlus/" data-compare-go data-track-event="cta_click" data-track-label="field_compare_go">Võrdle valituid</a>
+      <button type="button" class="btn btn-secondary" data-compare-clear>Tühjenda</button>
+    </div>
+
     <style>
       .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
       .crumbs a { color: #5a6b80; }
@@ -194,6 +207,14 @@ const schema = {
       .field-table thead th { background: #212121; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.02em; }
       .field-table tbody tr:last-child td { border-bottom: 0; }
       .field-table td a { color: var(--teal); font-weight: 700; }
+      .row-actions { white-space: nowrap; }
+      .row-interest { background: none; border: 0; color: #c9ccd2; font-size: 1.2rem; cursor: pointer; padding: 0 8px 0 0; line-height: 1; }
+      .row-interest.is-marked { color: #54c247; }
+      .compare-pick { display: inline-flex; gap: 5px; align-items: center; font-size: 0.85rem; color: #5f6569; cursor: pointer; }
+      .compare-pick input { width: 16px; height: 16px; min-height: 0; accent-color: #54c247; }
+      .compare-bar { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 50; display: flex; gap: 12px; align-items: center; padding: 10px 16px; background: #212121; color: #fff; border-radius: 12px; box-shadow: 0 18px 46px rgba(33, 33, 33, 0.3); }
+      .compare-bar[hidden] { display: none; }
+      .compare-bar .btn { width: auto; padding: 9px 14px; font-size: 0.9rem; }
     </style>
 
     <script>
@@ -224,6 +245,45 @@ const schema = {
           form.reset();
         });
       }
+
+      // Võrdluse valik — sama sessionStorage kui kataloogis (valik püsib ka üle valdkondade).
+      const compareKey = "mkval:compare";
+      const compareBar = document.querySelector("[data-compare-bar]") as HTMLElement | null;
+      const compareCount = document.querySelector("[data-compare-count]");
+      const compareGo = document.querySelector("[data-compare-go]") as HTMLAnchorElement | null;
+      const picks = [...document.querySelectorAll<HTMLInputElement>("[data-compare-pick]")];
+      const readPicks = (): string[] => { try { return JSON.parse(sessionStorage.getItem(compareKey) || "[]"); } catch { return []; } };
+      const writePicks = (urls: string[]): void => { try { sessionStorage.setItem(compareKey, JSON.stringify(urls)); } catch { /* valik elab lehe piires */ } };
+      const syncCompareUi = (): void => {
+        const urls = readPicks();
+        picks.forEach((box) => { box.checked = urls.includes(box.dataset.url || ""); });
+        if (compareBar) compareBar.hidden = urls.length < 2;
+        if (compareCount) compareCount.textContent = `${urls.length} valitud`;
+        if (compareGo) compareGo.href = `/vordlus/?p=${urls.map(encodeURIComponent).join("|")}`;
+      };
+      picks.forEach((box) => {
+        box.addEventListener("change", () => {
+          let urls = readPicks();
+          const url = box.dataset.url || "";
+          if (box.checked) { if (urls.length >= 3) { box.checked = false; return; } if (!urls.includes(url)) urls.push(url); }
+          else { urls = urls.filter((u) => u !== url); }
+          writePicks(urls); syncCompareUi();
+        });
+      });
+      document.querySelector("[data-compare-clear]")?.addEventListener("click", () => { writePicks([]); syncCompareUi(); });
+      syncCompareUi();
+
+      // Huvi: per-rida "Mind huvitab" → interest_signal + localStorage (jagatud detaillehega).
+      const interestKey = (slug: string) => "mkval:interest:" + slug;
+      [...document.querySelectorAll<HTMLButtonElement>("[data-interest-btn]")].forEach((b) => {
+        const slug = b.getAttribute("data-slug") || "";
+        try { if (localStorage.getItem(interestKey(slug)) === "1") b.classList.add("is-marked"); } catch { /* ignore */ }
+        b.addEventListener("click", () => {
+          track("interest_signal", { programme_slug: slug, field: b.getAttribute("data-field") || "", provider: b.getAttribute("data-provider") || "" });
+          try { localStorage.setItem(interestKey(slug), "1"); } catch { /* ignore */ }
+          b.classList.add("is-marked");
+        });
+      });
     </script>
   </body>
 </html>

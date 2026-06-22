@@ -95,7 +95,7 @@ const schema = {
           <nav class="field-links" aria-label="Sirvi valdkonniti">
             <span>Võrdle valdkonniti:</span>
             {fieldsWithSlug.map((f) => (
-              <a href={`/valdkond/${f.slug}/`} data-track-event="cta_click" data-track-label="catalog_field_link">{f.field}</a>
+              <a href={`/valdkond/${f.slug}/`} data-track-event="cta_click" data-track-label="catalog_field_link">{f.field} <b>{catalog.filter((e) => e.field === f.field).length}</b></a>
             ))}
           </nav>
 
@@ -207,8 +207,9 @@ const schema = {
       .catalog-detail-link { font-weight: 700; color: #2e7d22; }
       .field-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 24px; }
       .field-links span { color: #5f6569; font-weight: 700; font-size: 0.9rem; margin-right: 4px; }
-      .field-links a { display: inline-flex; padding: 6px 12px; border-radius: 999px; background: #eef7ec; color: #2e7d22; font-size: 0.88rem; font-weight: 700; text-decoration: none; border: 1px solid #e2e4e3; }
+      .field-links a { display: inline-flex; gap: 4px; padding: 6px 12px; border-radius: 999px; background: #eef7ec; color: #2e7d22; font-size: 0.88rem; font-weight: 700; text-decoration: none; border: 1px solid #e2e4e3; }
       .field-links a:hover { background: #e4f7dd; }
+      .field-links a b { font-weight: 800; opacity: 0.6; }
       .compare-pick { display: inline-flex; gap: 6px; align-items: center; font-size: 0.9rem; color: #44546a; cursor: pointer; }
       .compare-pick input { width: 16px; height: 16px; min-height: 0; accent-color: #2e7d22; }
       .compare-bar {
