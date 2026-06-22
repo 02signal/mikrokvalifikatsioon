@@ -26,6 +26,29 @@
   build + auto-rebuilds via a Vercel Deploy Hook. Full architecture + feed contract in
   `docs/data-pipeline.md`. Consumer change (env `PUBLIC_CATALOG_FEED_URL` + fallback) is
   small and pending the AMOS feed.
+- Delivery backlog:
+  1. AMOS contract: define `amos.mkval.catalog/v1`, valid/poisoned fixtures, and validator
+     tests for missing freshness, forbidden keys, candidate rows, invalid counts, and
+     owner-gated rows.
+  2. AMOS model: add provider/programme source registry, publication state separate from
+     data state, source evidence hash, fetch timestamp, parser status, and imported
+     `aggregated` rows for today's catalog.
+  3. AMOS refresh job: scheduled fetch/diff pipeline with JS-capable fetch where needed;
+     narrow auto-apply for deterministic changes; review queue for new programmes, large
+     changes, curriculum/assessment facts, and any publication-state transition.
+  4. AMOS public feed publisher: generate validated feed with `schemaVersion`,
+     `generatedAt`, `checkedAt`, `contentHash`, `count`, and public rows only; retain a
+     previous-good artifact for rollback.
+  5. mkval consumer: implement build-time `PUBLIC_CATALOG_FEED_URL` loading, schema
+     validation, and committed-snapshot fallback while preserving slug generation,
+     `/catalog.json`, `/kataloog/`, `/valdkond/`, `llms.txt`, `site-profile.json`, and
+     existing analytics.
+  6. Operations: store Vercel Deploy Hook as an AMOS secret, call it only after a validated
+     feed diff changes public output, rate-limit triggers, add daily safety rebuild, and
+     smoke-test public `/catalog.json` count/content hash after deploy.
+  7. Cutover: run feed and snapshot side by side, compare counts/provider distribution/null
+     counts/sample pages, switch Vercel env to the feed, and document rollback by unsetting
+     the env var or restoring the previous-good feed.
 - Done: `license` (CC BY 4.0) added to Dataset schema (homepage + /andmed/) — fixes Search
   Console "Missing field 'license'". (Owner may change the licence.)
 
@@ -43,5 +66,6 @@
 - Private-provider entries (3-4 known) once their public pages are verified.
 - mikrokvalifikatsioonid.ee → 301 to /kataloog/ (DNS/Vercel config, owner-gated).
 - Lead webhook + email list backend (family pattern, PUBLIC_SITE_LEAD_WEBHOOK_URL).
-- Weekly catalog freshness re-check loop (intakes change); add `roundsCheckedAt`-style stamp to catalog.json.
+- Until the AMOS feed is live: keep the weekly catalog freshness re-check loop (intakes
+  change) and add a `roundsCheckedAt`-style stamp to catalog.json or the future feed.
 - Owner-gated future item: see CLAUDE.local.md.
