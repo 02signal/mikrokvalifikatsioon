@@ -20,6 +20,21 @@
 - Done: per-programme "Mind huvitab" button on every detail page → GA4 `interest_signal` (programme_slug/field/provider) + optional waitlist email (`interest_waitlist`); "Ei leidnud sobivat? Küsi uut oskust" form on the catalog → GA4 `demand_request` (skill/field). Lets EVK rank programme interest and surface unmet demand to build new microcredentials fast.
 - Next: GA4 exploration / Looker Studio board (top interest_signal by programme, top demand_request skills) + n8n routing of `interest_waitlist`/`demand_request` to a demand list. Optional phase 2: public "X huvitatud" social-proof counter (needs a small datastore, e.g. Vercel KV).
 
+## Data freshness / AMOS
+- Plan: automate catalog check + enrichment in AMOS (source of truth, holistic curriculum
+  architecture shared with internal trainings); this site consumes a public-safe feed at
+  build + auto-rebuilds via a Vercel Deploy Hook. Full architecture + feed contract in
+  `docs/data-pipeline.md`. Consumer change (env `PUBLIC_CATALOG_FEED_URL` + fallback) is
+  small and pending the AMOS feed.
+- Done: `license` (CC BY 4.0) added to Dataset schema (homepage + /andmed/) — fixes Search
+  Console "Missing field 'license'". (Owner may change the licence.)
+
+## Search Console housekeeping
+- Phantom URLs from a PREVIOUS site on this domain (HiStudy LMS demo: /courses/, /en/courses/,
+  /ru/courses/, ~10 YouTube-embed "videos", queries like "client/server model", "react",
+  "histudy") are indexed but now 404. They self-de-index; optionally speed via GSC Removals.
+  Not our pages — no code action needed. Watch that no REAL page sits in 404/5xx/noindex buckets.
+
 ## Next
 
 - Verify and complete the first data wave (prices/EAP/intakes have nulls where pages did not state facts — especially Tallinna Ülikool and EBS; re-check before any paid traffic).
