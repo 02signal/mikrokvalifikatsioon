@@ -14,6 +14,7 @@
 
 - 2026-06-12: consent-gated analytics (Consent Mode v2 basic, equal-buttons banner, footer "Küpsised" reopen) — reference implementation for the whole site family (`docs/cookie-consent-standard.md`); /privaatsus/ page (data, retention, rights, cookie section); RU+EN localization architecture and professional workflow planned (`docs/i18n-plan.md`).
 
+- 2026-06-22: time view `/registreerimine/` (registration deadlines with live client-side urgency + start dates grouped by month; SEO/GEO, dates parsed into `registrationDeadline`/`startDate`, exposed in `catalog.json` + Course `startDate`) and outcome explorer `/oskused/` (605 deduped learning outcomes as a searchable + comparable object: search by skill → matching programmes; `?q=` deep-link; GA4 `outcome_search` incl. zero-result demand gaps). Linked from catalog/footer/llms.txt. AMOS agent brief written (`docs/amos-catalog-agent-brief.md`).
 - 2026-06-13: SEO/GEO instrumentation wave. Per-programme indexable pages `/kataloog/<slug>/` (169, stable Estonian-aware slug, full schema.org `Course` with offers/credits/courseMode + `BreadcrumbList`, real content: goal/outcomes/assessment) — biggest long-tail lever and spin-out marketplace foundation. Catalog cards + mikrokraadid hub now link internally to detail pages; index `ItemList` points to them. Shared `Seo.astro` head (og:site_name/locale, twitter, hreflang, JSON-LD, alternates) adopted by all 7 pages. Homepage `Organization` (logo/areaServed/description) + `WebSite` `SearchAction` (`/kataloog/?q=`, deep-link prefill wired). `llms.txt` + `site-profile.json` now generated from catalog data (live counts/providers/fields/price range — kills drift); `catalog.json` carries `slug`+`pageUrl`. Outbound provider links carry UTM (lead-gen proof). `mikrokvalifikatsioonid.ee` 301 → `/kataloog/?utm_source=mikrokvalifikatsioonid.ee&utm_medium=domain_redirect` (measures plural-domain demand before any spin-out). Sitemap priorities/lastmod; robots.txt extra AI crawlers. `npm run build` green (176 pages, 0 check errors).
 
 ## Demand radar (interest intelligence)
@@ -26,6 +27,14 @@
   build + auto-rebuilds via a Vercel Deploy Hook. Full architecture + feed contract in
   `docs/data-pipeline.md`. Consumer change (env `PUBLIC_CATALOG_FEED_URL` + fallback) is
   small and pending the AMOS feed.
+- **Object model & two-way intelligence brief for the AMOS agents:**
+  `docs/amos-catalog-agent-brief.md`. Defines the canonical curriculum objects to scrape →
+  warehouse → sync (Provider, Programme, **ProgrammeInstance** = parallel/sequential runs
+  with own dates/language/format/price, Outcome 1..N, Module, Assessment, Credential,
+  multilingual et/en/ru), dynamic-cardinality scraping, the **v2** feed (`instances[]` +
+  `outcomes[]` + localized fields, mkval consumes the soonest-deadline instance), and the
+  two-way loop (mkval demand signals → AMOS planning; AMOS competitive-intel views → EVK
+  programme planning). Hand to the AMOS agents to expand into their backlog.
 - Delivery backlog:
   1. AMOS contract: define `amos.mkval.catalog/v1`, valid/poisoned fixtures, and validator
      tests for missing freshness, forbidden keys, candidate rows, invalid counts, and
