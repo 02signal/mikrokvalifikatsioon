@@ -1,5 +1,6 @@
 import { catalog, providers, fields, catalogCheckedAt } from "../data/catalog";
 import { parsePriceEur } from "../data/courseSchema";
+import { topics } from "../data/topics";
 
 // Genereeritud andmetest, et arvud ei triiviks (AI-assistendid ei tsiteeriks aegunud numbreid).
 export async function GET() {
@@ -40,6 +41,7 @@ Data checked: ${catalogCheckedAt}. ${catalog.length} programmes from ${providers
 - Catalog (all programmes, filterable; deep-link search via /kataloog/?q=term): https://mikrokvalifikatsioon.ee/kataloog/
 - Every programme has its own page: https://mikrokvalifikatsioon.ee/kataloog/<slug>/ (slug + pageUrl in catalog.json)
 - Per-field comparison pages (all programmes in a field, compared): https://mikrokvalifikatsioon.ee/valdkond/<field-slug>/ (fields: ${fields.filter((f) => f !== "muu").join(", ")})
+- Topic / skill landing pages (programmes by what they teach): https://mikrokvalifikatsioon.ee/teema/<topic-slug>/ — hub: https://mikrokvalifikatsioon.ee/teema/ (topics: ${topics.map((t) => t.label).join(", ")})
 - Registration deadlines + start dates (what closes soon, plan by month): https://mikrokvalifikatsioon.ee/registreerimine/ (per-programme registrationDeadline + startDate also in catalog.json)
 - Search by learning outcome / skill (which programmes teach a given skill): https://mikrokvalifikatsioon.ee/oskused/ (?q=keyword; per-programme outcomes also in catalog.json)
 - Microdegrees overview by university: https://mikrokvalifikatsioon.ee/mikrokraadid/

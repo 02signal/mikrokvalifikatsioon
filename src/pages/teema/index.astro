@@ -1,0 +1,116 @@
+---
+import Seo from "../../components/Seo.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { topics } from "../../data/topics";
+import { catalogCheckedAt } from "../../data/catalog";
+
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const SITE = "https://mikrokvalifikatsioon.ee";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": `${SITE}/#organization`, name: "Mikrokvalifikatsioon.ee", legalName: "Ettevõtluskeskus OÜ", url: `${SITE}/` },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Teemad", item: `${SITE}/teema/` }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      name: "Mikrokvalifikatsioonide teemad ja oskused",
+      numberOfItems: topics.length,
+      itemListElement: topics.map((t, i) => ({
+        "@type": "ListItem", position: i + 1, name: t.label, url: `${SITE}/teema/${t.slug}/`
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Mikrokraadid teemade ja oskuste kaupa"
+      description={`Sirvi Eesti mikrokvalifikatsioone ${topics.length} oskuse ja teema järgi — andmeanalüüs, juhtimine, tehisintellekt, turundus ja palju muud. Iga teema all vastavad programmid ja õpiväljundid.`}
+      canonicalPath="/teema/"
+      ogTitle="Mikrokraadid teemade kaupa"
+      ogDescription="Leia mikrokvalifikatsioon oskuse järgi — andmeanalüüs, juhtimine, AI, turundus ja muu."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <span>Teemad</span>
+          </nav>
+          <span class="eyebrow">Teemad ja oskused</span>
+          <h1>Mikrokraadid teemade ja oskuste kaupa</h1>
+          <p>
+            Otsid kindlat oskust? Vali teema ja näe kohe kõik vastavad mikrokvalifikatsioonid ja
+            mikrokraadid koos õpiväljundite, mahu ja hinnaga. Või <a href="/oskused/">otsi otse õpiväljundi järgi</a>.
+          </p>
+          <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <ul class="topic-grid">
+            {topics.map((t) => (
+              <li class="topic-card">
+                <a href={`/teema/${t.slug}/`} data-track-event="cta_click" data-track-label="hub_to_topic">
+                  <span class="topic-name">{t.label}</span>
+                  <span class="topic-count">{t.entries.length} programmi</span>
+                </a>
+                {t.synonyms.length > 0 && <p class="topic-syn">{t.synonyms.slice(0, 3).join(" · ")}</p>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Ei leidnud oma teemat?</span>
+            <h2>Otsi õpiväljundi järgi või küsi uut oskust.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/oskused/" data-track-event="cta_click" data-track-label="hub_oskused">Otsi õpiväljundi järgi</a>
+              <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="hub_kataloog">Ava kogu kataloog</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="hub_email">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="hub_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Teemad ja oskused" />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .topic-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+      .topic-card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+      .topic-card > a { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+      .topic-name { color: #212121; font-weight: 700; }
+      .topic-count { color: var(--teal); font-weight: 700; font-size: 0.85rem; white-space: nowrap; }
+      .topic-syn { margin: 6px 0 0; color: var(--muted); font-size: 0.84rem; }
+    </style>
+  </body>
+</html>

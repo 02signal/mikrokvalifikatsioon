@@ -1,0 +1,240 @@
+---
+import Seo from "../../components/Seo.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { topics, topicOutcomes, type Topic } from "../../data/topics";
+import { fieldsWithSlug, catalogCheckedAt } from "../../data/catalog";
+import { parsePriceEur } from "../../data/courseSchema";
+
+export function getStaticPaths() {
+  return topics.map((t) => ({ params: { slug: t.slug }, props: { topic: t } }));
+}
+
+const { topic } = Astro.props as { topic: Topic };
+const entries = topic.entries;
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const labelLower = topic.label.replace(/\s*\(.*?\)\s*/g, "").toLowerCase();
+
+const providersInTopic = [...new Set(entries.map((e) => e.provider))];
+const prices = entries.map((e) => parsePriceEur(e.priceText)).filter((p): p is number => p != null && p > 0);
+const minPrice = prices.length ? Math.min(...prices) : null;
+const maxPrice = prices.length ? Math.max(...prices) : null;
+const freeCount = entries.filter((e) => parsePriceEur(e.priceText) === 0).length;
+
+// Valdkonnad, mida see teema katab → lingid valdkonnalehtedele.
+const topicFields = fieldsWithSlug.filter((f) => entries.some((e) => e.field === f.field));
+
+// Seotud teemad: jagavad programme selle teemaga.
+const mySlugs = new Set(entries.map((e) => e.slug));
+const related = topics
+  .filter((t) => t.slug !== topic.slug)
+  .map((t) => ({ t, overlap: t.entries.filter((e) => mySlugs.has(e.slug)).length }))
+  .filter((r) => r.overlap > 0)
+  .sort((a, b) => b.overlap - a.overlap)
+  .slice(0, 6)
+  .map((r) => r.t);
+
+const outcomes = topicOutcomes(topic).slice(0, 14);
+
+const SITE = "https://mikrokvalifikatsioon.ee";
+const canonicalPath = `/teema/${topic.slug}/`;
+
+const fullTitle = `${topic.label} mikrokraadid ja õpiväljundid`;
+const title = fullTitle.length <= 66 ? fullTitle : `${topic.label} – mikrokraadid`;
+const description = `${entries.length} ${labelLower} mikrokvalifikatsiooni ja mikrokraadi ${providersInTopic.length} koolist — võrdle õpiväljundeid, mahtu ja hinda. Seotud: ${topic.synonyms.join(", ")}.`;
+
+const faq = [
+  { q: `Millised koolid pakuvad ${labelLower} mikrokraadi või mikrokvalifikatsiooni?`,
+    a: `${providersInTopic.length} kooli: ${providersInTopic.join(", ")}. Kõik ${entries.length} programmi on allpool koos õpiväljundite, mahu ja hinnaga.` },
+  { q: `Kui palju maksab ${labelLower} mikrokraad?`,
+    a: minPrice != null && maxPrice != null
+      ? `Selle teema programmid maksavad umbes ${minPrice}–${maxPrice} €${freeCount ? `, ${freeCount} on mõnele sihtrühmale tasuta` : ""}. Täpne hind on iga programmi juures.`
+      : `Hind on iga programmi juures ja kooli lehel.` },
+  { q: `Kes maksab ${labelLower} õppe eest?`,
+    a: `Sageli ei maksa õppija kõike ise: Töötukassa, tööandja koolituseelarve või õppija ise. Vaata lähemalt lehelt „Kes maksab?".` }
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": `${SITE}/#organization`, name: "Mikrokvalifikatsioon.ee", legalName: "Ettevõtluskeskus OÜ", url: `${SITE}/` },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Teemad", item: `${SITE}/teema/` },
+        { "@type": "ListItem", position: 3, name: topic.label, item: `${SITE}${canonicalPath}` }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      name: `${topic.label} — mikrokvalifikatsioonid ja mikrokraadid`,
+      numberOfItems: entries.length,
+      itemListElement: entries.map((entry, index) => ({
+        "@type": "ListItem", position: index + 1, name: entry.name, url: `${SITE}/kataloog/${entry.slug}/`
+      }))
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title={title}
+      description={description}
+      canonicalPath={canonicalPath}
+      ogTitle={`${topic.label} — mikrokraadid Eestis`}
+      ogDescription={`${entries.length} programmi ${providersInTopic.length} koolist: õpiväljundid, maht ja hind ühes kohas.`}
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <a href="/teema/">Teemad</a> › <span>{topic.label}</span>
+          </nav>
+          <span class="eyebrow">Teema</span>
+          <h1>{topic.label}: mikrokraadid ja õpiväljundid</h1>
+          <p>
+            {entries.length} mikrokvalifikatsiooni ja mikrokraadi {providersInTopic.length} koolist teemal „{labelLower}".
+            {minPrice != null && maxPrice != null && <> Hind {minPrice}–{maxPrice} €{freeCount > 0 && <>, {freeCount} tasuta sihtrühmale</>}.</>}
+            {" "}Võrdle õpiväljundeid, mahtu ja hinda — või <a href={`/oskused/?q=${encodeURIComponent(labelLower)}`} data-track-event="cta_click" data-track-label="topic_to_oskused">otsi õpiväljundi järgi</a>.
+          </p>
+          {topic.synonyms.length > 0 && (
+            <p class="syn">Seotud otsingud: {topic.synonyms.join(" · ")}</p>
+          )}
+          <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <h2 class="block-title">{entries.length} programmi</h2>
+          <ul class="prog-grid">
+            {entries.map((entry) => (
+              <li class="prog-card">
+                <a class="prog-name" href={`/kataloog/${entry.slug}/`} data-track-event="cta_click" data-track-label="topic_to_detail">{entry.name}</a>
+                <p class="prog-prov">{entry.provider}</p>
+                <p class="prog-facts">
+                  {entry.field && <span class="tag">{entry.field}</span>}
+                  {entry.ects != null && <span>{entry.ects} EAP</span>}
+                  {entry.priceText && <span>{entry.priceText}</span>}
+                  {entry.format && <span>{entry.format}</span>}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {outcomes.length > 0 && (
+        <section class="ice">
+          <div class="section-inner">
+            <div class="section-head compact-head">
+              <span class="kicker">Õpiväljundid</span>
+              <h2>Mida sa „{labelLower}" õppes selgeks saad</h2>
+              <p>Konkreetsed õpiväljundid selle teema programmidest. Otsi rohkem <a href={`/oskused/?q=${encodeURIComponent(labelLower)}`}>õpiväljundite seast</a>.</p>
+            </div>
+            <ul class="outcome-list">
+              {outcomes.map((o) => (
+                <li class="outcome-item">
+                  <p class="outcome-text">{o.text}</p>
+                  <p class="outcome-progs"><a href={`/kataloog/${o.slug}/`}>{o.name}</a></p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">KKK</span>
+            <h2>{topic.label} — korduvad küsimused</h2>
+          </div>
+          <div class="faq">
+            {faq.map((f) => (
+              <details>
+                <summary>{f.q}</summary>
+                <p>{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {(related.length > 0 || topicFields.length > 0) && (
+        <section class="ice">
+          <div class="section-inner narrow">
+            {related.length > 0 && (
+              <>
+                <div class="section-head compact-head"><span class="kicker">Seotud teemad</span><h2>Vaata ka</h2></div>
+                <p class="chips">{related.map((r) => <a class="chip" href={`/teema/${r.slug}/`}>{r.label} <b>{r.entries.length}</b></a>)}</p>
+              </>
+            )}
+            {topicFields.length > 0 && (
+              <p class="chips">{topicFields.map((f) => <a class="chip chip-alt" href={`/valdkond/${f.slug}/`}>{f.field}</a>)}</p>
+            )}
+          </div>
+        </section>
+      )}
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Kahtled, kas „{labelLower}" sobib sulle?</h2>
+            <p>Tee 2 minuti suunatest või otsi õpiväljundi järgi — leia just sulle sobiv oskus ja kes selle kinni maksab.</p>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="topic_suunatest">Tee suunatest</a>
+              <a class="btn btn-secondary" href={`/oskused/?q=${encodeURIComponent(labelLower)}`} data-track-event="cta_click" data-track-label="topic_oskused_bottom">Otsi õpiväljundi järgi</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ / 02Signal</p>
+            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="topic_email">info@02signal.ai</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="topic_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label={`${topic.label} mikrokraadid`} />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .syn { color: var(--muted); font-size: 0.92rem; margin-top: 4px; }
+      .block-title { margin: 0 0 16px; }
+      .prog-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+      .prog-card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+      .prog-name { color: var(--teal); font-weight: 700; }
+      .prog-prov { margin: 4px 0 8px; color: var(--muted); font-size: 0.9rem; }
+      .prog-facts { margin: 0; display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 0.85rem; color: #5f6569; }
+      .prog-facts .tag { background: #eef4ee; color: #2f6b2c; border-radius: 999px; padding: 1px 9px; }
+      .outcome-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+      .outcome-item { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+      .outcome-text { margin: 0; font-weight: 600; color: #212121; }
+      .outcome-progs { margin: 4px 0 0; font-size: 0.88rem; }
+      .outcome-progs a { color: var(--teal); font-weight: 700; }
+      .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 0; }
+      .chip { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 0.9rem; color: #212121; }
+      .chip b { color: var(--teal); }
+      .chip-alt { background: #f3f6f3; }
+    </style>
+  </body>
+</html>

@@ -1,5 +1,6 @@
 import { OGImageRoute } from "astro-og-canvas";
 import { catalog } from "../../data/catalog";
+import { topics } from "../../data/topics";
 
 // Sisulehed: võti = canonical-tee viimane segment (Seo.astro tuletab sama võtme).
 const contentPages: Record<string, { title: string; description: string }> = {
@@ -51,6 +52,18 @@ const contentPages: Record<string, { title: string; description: string }> = {
     title: "Programmide võrdlus",
     description: "Võrdle kuni 3 mikrokvalifikatsiooni kõrvuti: hind, maht, kestus, õpiväljundid."
   },
+  oskused: {
+    title: "Otsi mikrokraadi oskuse järgi",
+    description: "Sisesta oskus ja näe kohe, millised programmid selle õpiväljundi annavad."
+  },
+  registreerimine: {
+    title: "Registreerimine ja algusajad",
+    description: "Mis on kohe lõppemas ja millal õpingud algavad — planeeri kalendri järgi."
+  },
+  teema: {
+    title: "Mikrokraadid teemade ja oskuste kaupa",
+    description: "Leia mikrokvalifikatsioon oskuse järgi — andmeanalüüs, juhtimine, AI, turundus ja muu."
+  },
   privaatsus: {
     title: "Privaatsus ja küpsised",
     description: "Mis andmeid kogume, milleks ja millised on sinu õigused."
@@ -69,9 +82,14 @@ const programmePages = Object.fromEntries(
   })
 );
 
+// Teemalehed: võti = teema slug (ei kattu programmislugidega — teemad on üksiksõnad).
+const topicPages = Object.fromEntries(
+  topics.map((t) => [t.slug, { title: `${t.label} — mikrokraadid`, description: `${t.entries.length} programmi · õpiväljundid, maht ja hind` }])
+);
+
 export const { getStaticPaths, GET } = await OGImageRoute({
   param: "route",
-  pages: { ...contentPages, ...programmePages },
+  pages: { ...contentPages, ...programmePages, ...topicPages },
   getImageOptions: (_path, page) => ({
     title: page.title,
     description: page.description,
