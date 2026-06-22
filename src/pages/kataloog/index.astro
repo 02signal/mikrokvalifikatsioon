@@ -236,6 +236,28 @@ const schema = {
       const count = document.querySelector("[data-catalog-count]");
       const entries = [...document.querySelectorAll<HTMLElement>("[data-catalog-entry]")];
 
+      let lastVisible = entries.length;
+      let searchTimer: ReturnType<typeof setTimeout> | undefined;
+
+      // Otsing salvestatakse alles kui kirjutamine vaibub (väldib müra iga klahvi pealt)
+      // ja GA4-natiivse `view_search_results` + `search_term`-ina → näha GA4 "Otsingusõnad"
+      // tavaaruandes ilma lisaseadistuseta.
+      const trackSearch = (): void => {
+        const term = (search?.value || "").trim();
+        const field = fieldSelect?.value || "";
+        const provider = providerSelect?.value || "";
+        const T = (window as any).digiteekaartTrack;
+        if (term.length >= 2) {
+          T?.("view_search_results", { search_term: term.toLowerCase().slice(0, 80), results: lastVisible, source: "kataloog" });
+        }
+        T?.("tool_completed", {
+          tool_name: "kataloogifilter",
+          result_tier: lastVisible > 0 ? "leitud" : "tühi",
+          field: field || "kõik",
+          provider: provider || "kõik"
+        });
+      };
+
       const applyFilters = (): void => {
         const term = (search?.value || "").trim().toLowerCase();
         const field = fieldSelect?.value || "";
@@ -249,13 +271,10 @@ const schema = {
           entry.hidden = !show;
           if (show) visible += 1;
         }
+        lastVisible = visible;
         if (count) count.textContent = `${visible} programmi`;
-        (window as any).digiteekaartTrack?.("tool_completed", {
-          tool_name: "kataloogifilter",
-          result_tier: visible > 0 ? "leitud" : "tühi",
-          field: field || "kõik",
-          provider: provider || "kõik"
-        });
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(trackSearch, 600);
       };
 
       search?.addEventListener("input", applyFilters);

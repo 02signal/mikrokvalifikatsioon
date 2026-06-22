@@ -163,6 +163,18 @@ const schema = {
       const items = [...document.querySelectorAll<HTMLElement>("[data-outcome]")];
       const track = (n: string, p: Record<string, unknown>) => (window as any).digiteekaartTrack?.(n, p);
       let lastTracked = "";
+      let visibleNow = items.length;
+      let searchTimer: ReturnType<typeof setTimeout> | undefined;
+
+      // Salvesta alles kirjutamise vaibumisel: oma `outcome_search` (tulemustega, sh 0 = auk)
+      // + GA4-natiivne `view_search_results`/`search_term` (näha GA4 "Otsingusõnad" aruandes).
+      const trackSearch = (): void => {
+        const term = (search?.value || "").trim().toLowerCase();
+        if (!term || term.length < 3 || term === lastTracked) return;
+        lastTracked = term;
+        track("outcome_search", { term: term.slice(0, 60), results: visibleNow });
+        track("view_search_results", { search_term: term.slice(0, 80), results: visibleNow, source: "oskused" });
+      };
 
       const apply = (): void => {
         const term = (search?.value || "").trim().toLowerCase();
@@ -174,12 +186,11 @@ const schema = {
           it.hidden = !show;
           if (show) visible += 1;
         }
+        visibleNow = visible;
         if (count) count.textContent = `${visible} õpiväljundit`;
         if (empty) empty.hidden = visible !== 0;
-        if (term && term !== lastTracked && term.length >= 3) {
-          lastTracked = term;
-          track("outcome_search", { term: term.slice(0, 60), results: visible });
-        }
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(trackSearch, 600);
       };
 
       search?.addEventListener("input", apply);
