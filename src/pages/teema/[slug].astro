@@ -277,26 +277,28 @@ const schema = {
           const field = String(data.get('field') || '');
           if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.className = 'subscribe-msg err'; msg.textContent = 'Palun sisesta korrektne e-post.'; return; }
           msg.className = 'subscribe-msg'; msg.textContent = 'Saadan…';
+          let sent = false;
           try {
             const r = await fetch('/api/subscribe', {
               method: 'POST', headers: { 'content-type': 'application/json' },
-              body: JSON.stringify({ email, topic, field, source_site: 'mikrokvalifikatsioon_ee' }),
+              body: JSON.stringify({ kind: 'topic_subscribe', email, topic, field, source_site: 'mikrokvalifikatsioon_ee' }),
             });
             if (r.ok) {
-              msg.className = 'subscribe-msg ok';
-              msg.textContent = 'Aitäh! Saatsime sulle kinnituskirja — palun kinnita tellimus.';
-              f.reset();
-              const dl = (window as unknown as { dataLayer?: unknown[] }).dataLayer;
-              if (dl) dl.push({ event: 'lead_form_submit', form_name: 'topic_subscribe', field });
-            } else {
-              const d = await r.json().catch(() => ({} as { message?: string }));
-              msg.className = 'subscribe-msg err';
-              msg.textContent = d.message || 'Tellimine ebaõnnestus. Proovi hiljem uuesti.';
+              sent = true;
             }
-          } catch {
-            msg.className = 'subscribe-msg err';
-            msg.textContent = 'Tellimine ebaõnnestus. Proovi hiljem uuesti.';
+          } catch { sent = false; }
+
+          if (!sent) {
+            const body = encodeURIComponent("Teema: " + field + "\nE-mail: " + email);
+            window.location.href = `mailto:info@02signal.ai?subject=${encodeURIComponent("Teavitus mikrokvalifikatsioonidest: " + field)}&body=${body}`;
           }
+          msg.className = sent ? 'subscribe-msg ok' : 'subscribe-msg';
+          msg.textContent = sent
+            ? 'Aitäh! Saatsime sulle kinnituskirja — palun kinnita tellimus.'
+            : 'Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.';
+          f.reset();
+          const dl = (window as unknown as { dataLayer?: unknown[] }).dataLayer;
+          if (dl) dl.push({ event: 'lead_form_submit', form_name: 'topic_subscribe', field, delivery: sent ? 'webhook' : 'mailto' });
         });
       }
     </script>

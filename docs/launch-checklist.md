@@ -49,6 +49,16 @@ Owner steps to go fully live. Updated 2026-06-12. Decision: DNS moves to Cloudfl
 Set `PUBLIC_SITE_LEAD_WEBHOOK_URL` in Vercel env (family n8n pattern). Until then the
 suunatest form falls back to a prefilled email draft — works, but no automation.
 
+The topic pages (`/teema/<slug>/`) and outcome-package builder (`/oskused/`) post to
+the Vercel function `/api/subscribe`. For automated double opt-in, set these server-side
+Vercel env vars:
+
+- `AMOS_TOPIC_CAPTURE_URL` — AMOS capture ingress URL.
+- `AMOS_CAPTURE_TOKEN` — optional bearer token checked by the ingress.
+
+Until the AMOS ingress is configured, these forms also fall back to a prefilled email
+draft so a visitor never lands on a dead 503-only path.
+
 ## 5. Smoke test after DNS
 
 - https://mikrokvalifikatsioon.ee/ → 200, suunatest answers instantly
