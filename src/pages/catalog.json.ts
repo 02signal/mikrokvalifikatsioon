@@ -1,4 +1,4 @@
-import { catalog, catalogCheckedAt } from "../data/catalog";
+import { catalog, catalogCheckedAt, catalogUpdatedAt, catalogContentHash } from "../data/catalog";
 import { detailUrl } from "../data/courseSchema";
 
 export async function GET() {
@@ -8,7 +8,9 @@ export async function GET() {
         site: "Mikrokvalifikatsioon.ee",
         description:
           "Eesti mikrokvalifikatsioonide ja mikrokraadide avalik register. Andmed pärinevad koolide avalikelt lehtedelt; tundmatu väärtus on null.",
+        updatedAt: catalogUpdatedAt,
         checkedAt: catalogCheckedAt,
+        sourceFeedHash: catalogContentHash,
         importantCaveat:
           "See register on info koondamiseks. Hinnad, mahud ja vastuvõtud muutuvad — ametlik info on iga kooli enda lehel (iga kirje url-väli).",
         count: catalog.length,

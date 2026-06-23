@@ -4,7 +4,7 @@ import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import { topics, topicOutcomes, type Topic } from "../../data/topics";
-import { fieldsWithSlug, catalogCheckedAt } from "../../data/catalog";
+import { fieldsWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 import { parsePriceEur } from "../../data/courseSchema";
 
 export function getStaticPaths() {
@@ -14,6 +14,7 @@ export function getStaticPaths() {
 const { topic } = Astro.props as { topic: Topic };
 const entries = topic.entries;
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
 const labelLower = topic.label.replace(/\s*\(.*?\)\s*/g, "").toLowerCase();
 
 const providersInTopic = [...new Set(entries.map((e) => e.provider))];
@@ -114,7 +115,7 @@ const schema = {
           {topic.synonyms.length > 0 && (
             <p class="syn">Seotud otsingud: {topic.synonyms.join(" · ")}</p>
           )}
-          <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
+          <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
         </div>
       </section>
 

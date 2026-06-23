@@ -16,13 +16,17 @@ const localEntries: CatalogEntry[] = [
 /**
  * Andmeallikas. Kui PUBLIC_CATALOG_FEED_URL on seatud, tarbime AMOS-i avaldatud
  * public-safe feedi build-ajal; muidu kasutame kohalikku snapshotti (resilientne).
- * Feedi kuju: { checkedAt, programs: CatalogEntry[] } VÕI lihtsalt CatalogEntry[].
+ * Feedi kuju: { checkedAt, generatedAt, contentHash, programs: CatalogEntry[] } VÕI lihtsalt CatalogEntry[].
  * Ainult `status: "active"` (või staatuseta) kirjed lähevad avalikku saiti.
  * Vt docs/data-pipeline.md.
  */
 const FEED_URL = import.meta.env.PUBLIC_CATALOG_FEED_URL as string | undefined;
 
-async function loadFeed(): Promise<{ entries: CatalogEntry[]; checkedAt: string }> {
+function isoDate(value: unknown): string | null {
+  return typeof value === "string" && /^\d{4}-\d{2}-\d{2}/.test(value) ? value.slice(0, 10) : null;
+}
+
+async function loadFeed(): Promise<{ entries: CatalogEntry[]; checkedAt: string; updatedAt: string; contentHash: string | null }> {
   if (FEED_URL) {
     try {
       const res = await fetch(FEED_URL);
@@ -31,9 +35,11 @@ async function loadFeed(): Promise<{ entries: CatalogEntry[]; checkedAt: string 
         const raw = (Array.isArray(data) ? data : data?.programs) as Array<CatalogEntry & { status?: string }> | undefined;
         if (Array.isArray(raw) && raw.length) {
           const entries = raw.filter((p) => !p.status || p.status === "active");
-          const checkedAt = !Array.isArray(data) && typeof data?.checkedAt === "string" ? data.checkedAt : LOCAL_CHECKED_AT;
+          const checkedAt = !Array.isArray(data) ? (isoDate(data?.checkedAt) ?? LOCAL_CHECKED_AT) : LOCAL_CHECKED_AT;
+          const updatedAt = !Array.isArray(data) ? (isoDate(data?.generatedAt) ?? isoDate(data?.updatedAt) ?? checkedAt) : checkedAt;
+          const contentHash = !Array.isArray(data) && typeof data?.contentHash === "string" ? data.contentHash : null;
           console.log(`[catalog] AMOS feed: ${entries.length} programmi (${FEED_URL})`);
-          return { entries, checkedAt };
+          return { entries, checkedAt, updatedAt, contentHash };
         }
       }
       console.warn(`[catalog] feed ei vasta (HTTP ${res.status}); kasutan kohalikku snapshotti`);
@@ -41,12 +47,14 @@ async function loadFeed(): Promise<{ entries: CatalogEntry[]; checkedAt: string 
       console.warn(`[catalog] feedi laadimine ebaõnnestus; kasutan kohalikku snapshotti: ${(e as Error).message}`);
     }
   }
-  return { entries: localEntries, checkedAt: LOCAL_CHECKED_AT };
+  return { entries: localEntries, checkedAt: LOCAL_CHECKED_AT, updatedAt: LOCAL_CHECKED_AT, contentHash: null };
 }
 
 const feed = await loadFeed();
 
 export const catalogCheckedAt = feed.checkedAt;
+export const catalogUpdatedAt = feed.updatedAt;
+export const catalogContentHash = feed.contentHash;
 
 /** Kataloogi kirje koos püsiva slugiga (/kataloog/<slug>/). */
 export type CatalogEntryWithSlug = CatalogEntry & { slug: string };

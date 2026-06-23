@@ -4,9 +4,10 @@ import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import { topics } from "../../data/topics";
-import { catalogCheckedAt } from "../../data/catalog";
+import { catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
 const SITE = "https://mikrokvalifikatsioon.ee";
 
 const schema = {
@@ -59,7 +60,7 @@ const schema = {
             Otsid kindlat oskust? Vali teema ja näe kohe kõik vastavad mikrokvalifikatsioonid ja
             mikrokraadid koos õpiväljundite, mahu ja hinnaga. Või <a href="/oskused/">otsi otse õpiväljundi järgi</a>.
           </p>
-          <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
+          <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
         </div>
       </section>
 

@@ -3,10 +3,11 @@ import Seo from "../../components/Seo.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
-import { catalog, catalogCheckedAt } from "../../data/catalog";
+import { catalog, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 import { formatEt, monthKey, monthLabel } from "../../data/dates";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
 
 const byDeadline = catalog
   .filter((e) => e.registrationDeadline)
@@ -82,7 +83,7 @@ const schema = {
             {nearest && <> Lähim tähtaeg: <strong>{nearest}</strong>.</>}
             {" "}Vaata, millele jõuad veel registreeruda, või planeeri õpingud kuude kaupa kalendrisse.
           </p>
-          <p class="report-date">Andmed kontrollitud: {checkedAtText}. Lõplik tähtaeg on alati kooli lehel.</p>
+          <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}. Lõplik tähtaeg on alati kooli lehel.</p>
         </div>
       </section>
 

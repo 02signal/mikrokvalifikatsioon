@@ -3,9 +3,10 @@ import Seo from "../../components/Seo.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
-import { catalog, fields, catalogCheckedAt } from "../../data/catalog";
+import { catalog, fields, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
 
 // Õpiväljund eraldi objektina: dedup teksti järgi, iga väljundi all programmid, mis seda õpetavad.
 type OutcomeProg = { slug: string; name: string; provider: string; field: string };
@@ -92,7 +93,7 @@ const schema = {
             mis oskuse saad, õpitulemused, kursuse sisu. Korja sobivad õpiväljundid <strong>oma paketti</strong>
             ja jäta e-mail — siis teavitame, kui sellele lähedane programm või kombinatsioon lisandub.
           </p>
-          <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
+          <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
         </div>
       </section>
 
