@@ -4,7 +4,7 @@ import Footer from "../components/Footer.astro";
 import "../styles/global.css";
 import Nav from "../components/Nav.astro";
 import Faq from "../components/Faq.astro";
-import { catalog, providers, catalogCheckedAt } from "../data/catalog";
+import { catalog, providers, catalogUpdatedAt } from "../data/catalog";
 
 const emailHref = "mailto:info@02signal.ai?subject=Mikrokvalifikatsioonide%20uudised";
 const homeFaq = [
@@ -66,7 +66,7 @@ const schema = {
       description: "Avalik register Eesti ülikoolide ja koolitajate mikrokvalifikatsioonidest ja mikrokraadidest: nimi, pakkuja, valdkond, maht, hind, õppevorm.",
       url: "https://mikrokvalifikatsioon.ee/catalog.json",
       inLanguage: "et",
-      dateModified: catalogCheckedAt,
+      dateModified: catalogUpdatedAt,
       license: "https://creativecommons.org/licenses/by/4.0/",
       creator: { "@id": "https://mikrokvalifikatsioon.ee/#organization" }
     },

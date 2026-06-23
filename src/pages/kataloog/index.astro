@@ -3,10 +3,11 @@ import Seo from "../../components/Seo.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
-import { catalog, providers, fields, fieldsWithSlug, catalogCheckedAt } from "../../data/catalog";
+import { catalog, providers, fields, fieldsWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 import { outboundUrl } from "../../data/courseSchema";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
@@ -64,7 +65,7 @@ const schema = {
             Iga kirje juures on valdkond, maht, hind (kui kool on selle avaldanud) ja link
             kooli enda lehele. Andmed pärinevad koolide avalikelt lehtedelt.
           </p>
-          <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
+          <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
         </div>
       </section>
 

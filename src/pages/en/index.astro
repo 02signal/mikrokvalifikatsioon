@@ -2,10 +2,11 @@
 import Seo from "../../components/Seo.astro";
 import Faq from "../../components/Faq.astro";
 import "../../styles/global.css";
-import { catalog, providers, fields, catalogCheckedAt } from "../../data/catalog";
+import { catalog, providers, fields, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 
 const emailHref = "mailto:info@02signal.ai?subject=Microcredentials%20register%20-%20Europe";
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
 
 const faqItems = [
   {
@@ -144,7 +145,7 @@ const langAlternates = [
               <p>Built only from providers' public pages; every entry carries a checked date. We never invent missing facts.</p>
             </article>
           </div>
-          <p class="report-date">Data last checked: {checkedAtText}. This is an independent aggregator, not an official state register.</p>
+          <p class="report-date">Dataset updated: {updatedAtText}. Public source facts checked: {checkedAtText}. This is an independent aggregator, not an official state register.</p>
         </div>
       </section>
 

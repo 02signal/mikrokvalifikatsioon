@@ -3,9 +3,10 @@ import Seo from "../../components/Seo.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
-import { catalog, providers, catalogCheckedAt } from "../../data/catalog";
+import { catalog, providers, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
 
 const schema = {
   "@context": "https://schema.org",
@@ -30,7 +31,7 @@ const schema = {
       description: "Mikrokvalifikatsioon.ee metoodika ja sõltumatus: allikad, kontrollkuupäevad, neutraalsus (kõik programmid samade reeglite järgi, tasuta), paranduste protsess.",
       inLanguage: "et",
       datePublished: "2026-06-13",
-      dateModified: "2026-06-13",
+      dateModified: catalogUpdatedAt,
       author: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
       publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
       mainEntityOfPage: "https://mikrokvalifikatsioon.ee/kuidas-koostame/"
@@ -66,7 +67,7 @@ const schema = {
             kui kaua kestab, mis maksab ja kes selle kinni maksab. Siin on lahti seletatud, kuidas
             andmed sünnivad ja mille poolest oleme neutraalsed.
           </p>
-          <p class="report-date">Andmed viimati kontrollitud: {checkedAtText}</p>
+          <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
         </div>
       </section>
 

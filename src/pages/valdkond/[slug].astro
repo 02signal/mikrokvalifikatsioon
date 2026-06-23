@@ -3,7 +3,7 @@ import Seo from "../../components/Seo.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
-import { catalog, fieldsWithSlug, catalogCheckedAt } from "../../data/catalog";
+import { catalog, fieldsWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 import { parsePriceEur } from "../../data/courseSchema";
 
 export function getStaticPaths() {
@@ -14,6 +14,7 @@ const { field } = Astro.props as { field: string };
 const entries = catalog.filter((e) => e.field === field);
 const fieldCap = field.charAt(0).toUpperCase() + field.slice(1);
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
 
 const providersInField = [...new Set(entries.map((e) => e.provider))];
 const prices = entries.map((e) => parsePriceEur(e.priceText)).filter((p): p is number => p != null && p > 0);
@@ -92,7 +93,7 @@ const schema = {
             {minPrice != null && maxPrice != null && <> Hind {minPrice}–{maxPrice} €{freeCount > 0 && <>, {freeCount} tasuta sihtrühmale</>}.</>}
             {" "}Võrdle kõiki allolevas tabelis.
           </p>
-          <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
+          <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
         </div>
       </section>
 

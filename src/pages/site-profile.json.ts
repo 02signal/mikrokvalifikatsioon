@@ -1,4 +1,4 @@
-import { catalog, providers, fields, catalogCheckedAt } from "../data/catalog";
+import { catalog, providers, fields, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
 
 // Genereeritud andmetest, et loendid ja kuupäev ei triiviks reaalsest kataloogist.
 export async function GET() {
@@ -7,6 +7,7 @@ export async function GET() {
     operator: "Ettevõtluskeskus OÜ / 02Signal",
     contact: { email: "info@02signal.ai", phone: "+372 5818 0435" },
     language: "et",
+    updatedAt: catalogUpdatedAt,
     checkedAt: catalogCheckedAt,
     audience:
       "Eesti täiskasvanud õppija (25-55), kes kaalub ümberõpet või täiendõpet ja tahab kiiret, tunnustatud oskust.",

@@ -3,10 +3,11 @@ import Seo from "../../components/Seo.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
-import { catalog, providers, fields, catalogCheckedAt } from "../../data/catalog";
+import { catalog, providers, fields, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 import { parsePriceEur } from "../../data/courseSchema";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
 
 const byField = fields
   .map((field) => ({ field, count: catalog.filter((entry) => entry.field === field).length }))
@@ -67,7 +68,7 @@ const schema = {
       description: `Avaandmestik Eesti ${catalog.length} mikrokvalifikatsioonist ja mikrokraadist ${providers.length} koolist ja koolitajalt: nimi, pakkuja, valdkond, maht (EAP), hind, õppevorm, keel ja vastuvõtt. Andmed pärinevad pakkujate avalikelt lehtedelt.`,
       url: "https://mikrokvalifikatsioon.ee/andmed/",
       inLanguage: "et",
-      dateModified: catalogCheckedAt,
+      dateModified: catalogUpdatedAt,
       temporalCoverage: catalogCheckedAt,
       license: "https://creativecommons.org/licenses/by/4.0/",
       creator: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
@@ -109,7 +110,7 @@ const schema = {
             <a class="btn btn-primary" href="/catalog.json" data-track-event="cta_click" data-track-label="andmed_catalog_json">Ava avaandmed (JSON)</a>
             <a class="btn btn-secondary" href="/kuidas-koostame/" data-track-event="cta_click" data-track-label="andmed_metoodika">Kuidas andmed kogume</a>
           </div>
-          <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
+          <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
         </div>
       </section>
 
@@ -193,7 +194,7 @@ const schema = {
             <li><a href="/llms.txt" data-track-event="cta_click" data-track-label="andmed_llms">llms.txt</a> — kokkuvõte AI-assistentidele</li>
           </ul>
           <p class="field-help">
-            <strong>Kuidas viidata:</strong> „Mikrokvalifikatsioon.ee register, kontrollitud {checkedAtText},
+            <strong>Kuidas viidata:</strong> „Mikrokvalifikatsioon.ee register, uuendatud {updatedAtText}; avalikud allikafaktid kontrollitud {checkedAtText},
             https://mikrokvalifikatsioon.ee/andmed/". Vaata ka <a href="/kuidas-koostame/">metoodikat ja sõltumatust</a>.
             <br /><strong>Litsents:</strong> <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a> — vaba kasutada viitega.
           </p>

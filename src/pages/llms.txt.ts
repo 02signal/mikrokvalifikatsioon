@@ -1,4 +1,4 @@
-import { catalog, providers, fields, catalogCheckedAt } from "../data/catalog";
+import { catalog, providers, fields, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
 import { parsePriceEur } from "../data/courseSchema";
 import { topics } from "../data/topics";
 
@@ -24,7 +24,7 @@ export async function GET() {
 
 Eesti mikrokvalifikatsioonide ja mikrokraadide register ja teejuht. Operated by
 Ettevõtluskeskus OÜ / 02Signal. Contact: info@02signal.ai, +372 5818 0435.
-Data checked: ${catalogCheckedAt}. ${catalog.length} programmes from ${providers.length} providers.
+Data updated: ${catalogUpdatedAt}. Public source facts checked: ${catalogCheckedAt}. ${catalog.length} programmes from ${providers.length} providers.
 
 ## Core definitions (Estonian terminology)
 
@@ -65,7 +65,7 @@ with goal, learning outcomes and assessment. Data comes from providers' public
 pages; each entry carries a sourceCheckedAt date.
 
 Q: Which Estonian universities and schools offer microdegrees (mikrokraadid)?
-A: As of ${catalogCheckedAt} the catalog covers ${catalog.length} programmes from
+A: As of update ${catalogUpdatedAt} the catalog covers ${catalog.length} programmes from
 ${providers.length} providers: ${providerList}. The full list:
 https://mikrokvalifikatsioon.ee/kataloog/
 
