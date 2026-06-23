@@ -192,6 +192,26 @@ const schema = {
         </section>
       )}
 
+      <section class="ice" id="telli-teavitus">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Püsi kursis</span>
+            <h2>Anna teada, kui Eestis lisandub uusi mikrokvalifikatsioone</h2>
+            <p>Jäta oma e-post — saadame kirja, kui registrisse lisandub uus mikrokvalifikatsioon või mikrokraadi õppekava. Ei rämpsposti, saad iga hetk loobuda.</p>
+          </div>
+          <form id="subscribe-form" class="subscribe-form" novalidate>
+            <input type="hidden" name="topic" value="mikrokvalifikatsioon" />
+            <input type="hidden" name="field" value={topic.slug} />
+            <label class="sr-only" for="subscribe-email">E-post</label>
+            <input id="subscribe-email" name="email" type="email" required autocomplete="email"
+              placeholder="sinu@epost.ee" data-track-event="lead_form_start" data-track-label="topic_subscribe" />
+            <button type="submit" class="btn btn-primary" data-track-event="lead_form_submit_attempt" data-track-label="topic_subscribe">Telli teavitus</button>
+          </form>
+          <p id="subscribe-msg" class="subscribe-msg" role="status" aria-live="polite"></p>
+          <p class="subscribe-fine">Vastutav töötleja: Ettevõtluskeskus OÜ. Loe <a href="/privaatsus/">privaatsusteatist</a>.</p>
+        </div>
+      </section>
+
       <section class="navy">
         <div class="section-inner contact">
           <div>
@@ -236,6 +256,49 @@ const schema = {
       .chip { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 0.9rem; color: #212121; }
       .chip b { color: var(--teal); }
       .chip-alt { background: #f3f6f3; }
+      .subscribe-form { display: flex; flex-wrap: wrap; gap: 10px; margin: 4px 0 10px; }
+      .subscribe-form input[type=email] { flex: 1 1 240px; min-width: 0; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; font-size: 1rem; }
+      .subscribe-form button { flex: 0 0 auto; }
+      .subscribe-msg { margin: 0; font-weight: 600; min-height: 1.2em; }
+      .subscribe-msg.ok { color: #2f6b2c; }
+      .subscribe-msg.err { color: #b3261e; }
+      .subscribe-fine { margin: 8px 0 0; font-size: 0.82rem; color: var(--muted); }
+      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); border: 0; }
     </style>
+    <script>
+      const f = document.getElementById('subscribe-form') as HTMLFormElement | null;
+      const msg = document.getElementById('subscribe-msg') as HTMLElement | null;
+      if (f && msg) {
+        f.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const data = new FormData(f);
+          const email = String(data.get('email') || '').trim();
+          const topic = String(data.get('topic') || '');
+          const field = String(data.get('field') || '');
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.className = 'subscribe-msg err'; msg.textContent = 'Palun sisesta korrektne e-post.'; return; }
+          msg.className = 'subscribe-msg'; msg.textContent = 'Saadan…';
+          try {
+            const r = await fetch('/api/subscribe', {
+              method: 'POST', headers: { 'content-type': 'application/json' },
+              body: JSON.stringify({ email, topic, field, source_site: 'mikrokvalifikatsioon_ee' }),
+            });
+            if (r.ok) {
+              msg.className = 'subscribe-msg ok';
+              msg.textContent = 'Aitäh! Saatsime sulle kinnituskirja — palun kinnita tellimus.';
+              f.reset();
+              const dl = (window as unknown as { dataLayer?: unknown[] }).dataLayer;
+              if (dl) dl.push({ event: 'lead_form_submit', form_name: 'topic_subscribe', field });
+            } else {
+              const d = await r.json().catch(() => ({} as { message?: string }));
+              msg.className = 'subscribe-msg err';
+              msg.textContent = d.message || 'Tellimine ebaõnnestus. Proovi hiljem uuesti.';
+            }
+          } catch {
+            msg.className = 'subscribe-msg err';
+            msg.textContent = 'Tellimine ebaõnnestus. Proovi hiljem uuesti.';
+          }
+        });
+      }
+    </script>
   </body>
 </html>
