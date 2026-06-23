@@ -6,7 +6,7 @@ import Nav from "../components/Nav.astro";
 import Faq from "../components/Faq.astro";
 import { catalog, providers, catalogUpdatedAt } from "../data/catalog";
 
-const emailHref = "mailto:info@02signal.ai?subject=Mikrokvalifikatsioonide%20uudised";
+const emailHref = "mailto:info@mikrokvalifikatsioon.ee?subject=Mikrokvalifikatsioonide%20uudised";
 const homeFaq = [
   {
     question: "Mis on mikrokvalifikatsioon?",
@@ -38,7 +38,7 @@ const schema = {
       name: "Mikrokvalifikatsioon.ee",
       legalName: "Ettevõtluskeskus OÜ",
       url: "https://mikrokvalifikatsioon.ee/",
-      email: "info@02signal.ai",
+      email: "info@mikrokvalifikatsioon.ee",
       telephone: "+37258180435",
       description: "Sõltumatu register ja teejuht: kõik Eesti mikrokvalifikatsioonid ja ülikoolide mikrokraadid ühes filtreeritavas kataloogis koos hinna, mahu ja rahastusvõimalustega.",
       areaServed: "EE",
@@ -367,8 +367,8 @@ const schema = {
           </div>
           <aside class="contact-card">
             <h3>Kontakt</h3>
-            <p>Ettevõtluskeskus OÜ / 02Signal</p>
-            <p><a href={emailHref} data-track-event="email_click" data-track-label="contact_card_email">info@02signal.ai</a></p>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href={emailHref} data-track-event="email_click" data-track-label="contact_card_email">info@mikrokvalifikatsioon.ee</a></p>
             <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="contact_card_phone">+372 5818 0435</a></p>
           </aside>
         </div>
@@ -530,7 +530,7 @@ const schema = {
         }
         if (!sent) {
           const body = encodeURIComponent(`Suunatesti vastus:\n${payload.suunatestSummary || ""}\n\nTaust: ${payload.message || "-"}\nE-mail: ${payload.email || "-"}`);
-          window.location.href = `mailto:info@02signal.ai?subject=${encodeURIComponent("Suunatest - mikrokvalifikatsioon.ee")}&body=${body}`;
+          window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Suunatest - mikrokvalifikatsioon.ee")}&body=${body}`;
         }
         track("lead_form_submit", { form_name: "suunatest_vorm", source_site: "mikrokvalifikatsioon.ee", delivery: sent ? "webhook" : "mailto" });
         if (noteEl) noteEl.textContent = sent

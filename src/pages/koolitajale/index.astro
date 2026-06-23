@@ -241,7 +241,7 @@ const schema = {
 
           <p class="field-help">
             Märkasid oma programmi juures viga või aegunud infot? Kirjuta
-            <a href="mailto:info@02signal.ai?subject=Kataloogi%20parandus" data-track-event="email_click" data-track-label="koolitaja_parandus">info@02signal.ai</a> —
+            <a href="mailto:info@mikrokvalifikatsioon.ee?subject=Kataloogi%20parandus" data-track-event="email_click" data-track-label="koolitaja_parandus">info@mikrokvalifikatsioon.ee</a> —
             parandame allika põhjal. Vaata ka, <a href="/kuidas-koostame/">kuidas me registrit koostame</a>.
           </p>
         </div>
@@ -259,8 +259,8 @@ const schema = {
           </div>
           <aside class="contact-card">
             <h3>Kontakt</h3>
-            <p>Ettevõtluskeskus OÜ / 02Signal</p>
-            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="koolitaja_email">info@02signal.ai</a></p>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="koolitaja_email">info@mikrokvalifikatsioon.ee</a></p>
             <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="koolitaja_phone">+372 5818 0435</a></p>
           </aside>
         </div>
@@ -297,7 +297,7 @@ const schema = {
           const body = encodeURIComponent(
             `Programm: ${payload.programmName || ""}\nKool/koolitaja: ${payload.providerName || ""}\nLink: ${payload.programUrl || ""}\nValdkond: ${payload.field || "-"}\nMärkused: ${payload.notes || "-"}\nKontakt: ${payload.email || ""}`
           );
-          window.location.href = `mailto:info@02signal.ai?subject=${encodeURIComponent("Lisa programm registrisse")}&body=${body}`;
+          window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Lisa programm registrisse")}&body=${body}`;
         }
         track("lead_form_submit", { form_name: "koolitaja_lisa_programm", source_site: "mikrokvalifikatsioon.ee", delivery: sent ? "webhook" : "mailto" });
         if (note) note.textContent = sent

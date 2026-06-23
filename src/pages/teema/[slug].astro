@@ -225,8 +225,8 @@ const schema = {
           </div>
           <aside class="contact-card">
             <h3>Kontakt</h3>
-            <p>Ettevõtluskeskus OÜ / 02Signal</p>
-            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="topic_email">info@02signal.ai</a></p>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="topic_email">info@mikrokvalifikatsioon.ee</a></p>
             <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="topic_phone">+372 5818 0435</a></p>
           </aside>
         </div>
@@ -290,7 +290,7 @@ const schema = {
 
           if (!sent) {
             const body = encodeURIComponent("Teema: " + field + "\nE-mail: " + email);
-            window.location.href = `mailto:info@02signal.ai?subject=${encodeURIComponent("Teavitus mikrokvalifikatsioonidest: " + field)}&body=${body}`;
+            window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Teavitus mikrokvalifikatsioonidest: " + field)}&body=${body}`;
           }
           msg.className = sent ? 'subscribe-msg ok' : 'subscribe-msg';
           msg.textContent = sent

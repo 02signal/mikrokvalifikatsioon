@@ -1,6 +1,6 @@
 # Mikrokvalifikatsioon.ee
 
-Eesti mikrokvalifikatsioonide ja mikrokraadide register ja teejuht. Operated by Ettevõtluskeskus OÜ / 02Signal.
+Eesti mikrokvalifikatsioonide ja mikrokraadide register ja teejuht. Operated by Ettevõtluskeskus OÜ.
 
 - **Kataloog:** 169 programmi 9 koolist, masinloetav kujul `/catalog.json`
 - **Suunatest:** 4 küsimust → kohe 3 sobivat programmi + rahastuse vihje

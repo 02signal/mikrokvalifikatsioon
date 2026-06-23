@@ -191,7 +191,7 @@ const schema = {
             <p>
               Register on koostatud koolide avalike lehtede põhjal ja hinnad/tähtajad muutuvad.
               Kui näed aegunud infot või sinu kooli programm puudub, kirjuta
-              <a href="mailto:info@02signal.ai?subject=Kataloogi%20parandus" data-track-event="email_click" data-track-label="catalog_correction">info@02signal.ai</a>
+              <a href="mailto:info@mikrokvalifikatsioon.ee?subject=Kataloogi%20parandus" data-track-event="email_click" data-track-label="catalog_correction">info@mikrokvalifikatsioon.ee</a>
               — parandame allika põhjal.
             </p>
           </div>
@@ -345,7 +345,7 @@ const schema = {
         }
         if (!sent) {
           const body = encodeURIComponent("Soovitud oskus: " + (payload.skill || "") + "\nValdkond: " + (payload.field || "-") + "\nE-mail: " + (payload.email || "-"));
-          window.location.href = `mailto:info@02signal.ai?subject=${encodeURIComponent("Küsi uut mikrokvalifikatsiooni")}&body=${body}`;
+          window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Küsi uut mikrokvalifikatsiooni")}&body=${body}`;
         }
         if (demandNote) demandNote.textContent = sent
           ? "Aitäh! Lisasime su soovi nõudluse-nimekirja. Kui selline programm lisandub, anname teada."

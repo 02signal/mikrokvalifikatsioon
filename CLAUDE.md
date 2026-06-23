@@ -1,6 +1,6 @@
 # Mikrokvalifikatsioon.ee Site Rules
 
-This repository is part of the Ettevõtluskeskus OÜ / 02Signal sales-site group.
+This repository is part of the Ettevõtluskeskus OÜ sales-site group.
 
 ## PUBLISHING GATE — HARD RULE, CHECK BEFORE EVERY PUBLIC CHANGE
 

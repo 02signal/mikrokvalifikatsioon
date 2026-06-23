@@ -4,7 +4,7 @@ import Faq from "../../components/Faq.astro";
 import "../../styles/global.css";
 import { catalog, providers, fields, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 
-const emailHref = "mailto:info@02signal.ai?subject=Microcredentials%20register%20-%20Europe";
+const emailHref = "mailto:info@mikrokvalifikatsioon.ee?subject=Microcredentials%20register%20-%20Europe";
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
 const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
 
@@ -211,8 +211,8 @@ const langAlternates = [
           </div>
           <aside class="contact-card">
             <h3>Contact</h3>
-            <p>Ettevõtluskeskus OÜ / 02Signal</p>
-            <p><a href={emailHref} data-track-event="email_click" data-track-label="en_contact_email">info@02signal.ai</a></p>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href={emailHref} data-track-event="email_click" data-track-label="en_contact_email">info@mikrokvalifikatsioon.ee</a></p>
             <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="en_contact_phone">+372 5818 0435</a></p>
           </aside>
         </div>
@@ -229,7 +229,7 @@ const langAlternates = [
           <a href="/" hreflang="et">Eesti keeles</a>
           <a href="/privaatsus/">Privacy</a>
           <a href="#" data-cookie-settings>Cookies</a>
-          <a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="en_footer_email">info@02signal.ai</a>
+          <a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="en_footer_email">info@mikrokvalifikatsioon.ee</a>
         </nav>
       </div>
     </footer>
@@ -260,7 +260,7 @@ const langAlternates = [
         }
         if (!sent) {
           const body = encodeURIComponent(`Role: ${payload.role || "-"}\nEmail: ${payload.email || "-"}\nLooking for: ${payload.message || "-"}`);
-          window.location.href = `mailto:info@02signal.ai?subject=${encodeURIComponent("Microcredentials register - notify me")}&body=${body}`;
+          window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Microcredentials register - notify me")}&body=${body}`;
         }
         track("lead_form_submit", { form_name: "en_notify", source_site: "mikrokvalifikatsioon.ee/en", role: String(payload.role || ""), delivery: sent ? "webhook" : "mailto" });
         if (note) note.textContent = sent

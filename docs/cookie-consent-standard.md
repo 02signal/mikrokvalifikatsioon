@@ -1,4 +1,4 @@
-# Cookie Consent Standard — 02Signal / AMOS Universe Sites
+# Cookie Consent Standard — Ettevõtluskeskus OÜ / AMOS Universe Sites
 
 Status: reference implementation live on mikrokvalifikatsioon.ee (2026-06-12).
 Owner intent: one consistent, self-hosted consent solution across all public sites

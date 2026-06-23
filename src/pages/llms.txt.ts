@@ -23,7 +23,7 @@ export async function GET() {
   const body = `# Mikrokvalifikatsioon.ee
 
 Eesti mikrokvalifikatsioonide ja mikrokraadide register ja teejuht. Operated by
-Ettevõtluskeskus OÜ / 02Signal. Contact: info@02signal.ai, +372 5818 0435.
+Ettevõtluskeskus OÜ. Contact: info@mikrokvalifikatsioon.ee, +372 5818 0435.
 Data updated: ${catalogUpdatedAt}. Public source facts checked: ${catalogCheckedAt}. ${catalog.length} programmes from ${providers.length} providers.
 
 ## Core definitions (Estonian terminology)

@@ -136,7 +136,7 @@ const schema = {
           <p class="notice">
             See on koondinfo Mikrokvalifikatsioon.ee kataloogist. Ametlik ja lõplik info — hind,
             vastuvõtt ja tingimused — on alati <a href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_source_${entry.provider}`}>{entry.provider} enda lehel</a>.
-            Märkasid viga? Kirjuta <a href={`mailto:info@02signal.ai?subject=${encodeURIComponent("Kataloogi parandus: " + entry.name)}`} data-track-event="email_click" data-track-label="detail_correction">info@02signal.ai</a>.
+            Märkasid viga? Kirjuta <a href={`mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Kataloogi parandus: " + entry.name)}`} data-track-event="email_click" data-track-label="detail_correction">info@mikrokvalifikatsioon.ee</a>.
           </p>
         </div>
       </section>
@@ -154,8 +154,8 @@ const schema = {
           </div>
           <aside class="contact-card">
             <h3>Kontakt</h3>
-            <p>Ettevõtluskeskus OÜ / 02Signal</p>
-            <p><a href="mailto:info@02signal.ai" data-track-event="email_click" data-track-label="detail_email">info@02signal.ai</a></p>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="detail_email">info@mikrokvalifikatsioon.ee</a></p>
             <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="detail_phone">+372 5818 0435</a></p>
           </aside>
         </div>
@@ -228,7 +228,7 @@ const schema = {
           }
           if (!sent) {
             const body = encodeURIComponent("E-mail: " + email + "\nProgramm: " + slug + " (" + provider + ")");
-            window.location.href = `mailto:info@02signal.ai?subject=${encodeURIComponent("Huvi programmi vastu: " + slug)}&body=${body}`;
+            window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Huvi programmi vastu: " + slug)}&body=${body}`;
           }
           track("lead_form_submit", { form_name: "interest_waitlist", programme_slug: slug, delivery: sent ? "webhook" : "mailto" });
           const msg = box.querySelector("[data-interest-msg]");

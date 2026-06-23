@@ -4,8 +4,8 @@ import { catalog, providers, fields, catalogCheckedAt, catalogUpdatedAt } from "
 export async function GET() {
   const profile = {
     site: "Mikrokvalifikatsioon.ee",
-    operator: "Ettevõtluskeskus OÜ / 02Signal",
-    contact: { email: "info@02signal.ai", phone: "+372 5818 0435" },
+    operator: "Ettevõtluskeskus OÜ",
+    contact: { email: "info@mikrokvalifikatsioon.ee", phone: "+372 5818 0435" },
     language: "et",
     updatedAt: catalogUpdatedAt,
     checkedAt: catalogCheckedAt,
