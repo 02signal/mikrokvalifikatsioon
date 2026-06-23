@@ -55,10 +55,10 @@ const schema = {
   <head>
     <Seo
       title="Otsi mikrokraadi oskuse (õpiväljundi) järgi"
-      description={`Otsi ${outcomes.length} õpiväljundi seast märksõna järgi ja leia kohe, milline mikrokvalifikatsioon või mikrokraad selle oskuse annab. Õpiväljund eraldi otsitava ja võrreldava objektina.`}
+      description={`Mida sa pärast oskad? Otsi ${outcomes.length} õpiväljundi (õpitulemuse) seast märksõna järgi ja leia kohe, milline mikrokvalifikatsioon või mikrokraad selle oskuse annab. Pane kokku oma oskuste pakett.`}
       canonicalPath="/oskused/"
-      ogTitle="Otsi mikrokraadi oskuse järgi"
-      ogDescription="Sisesta oskus või märksõna ja näe kohe, millised programmid selle õpiväljundi annavad."
+      ogTitle="Otsi mikrokraadi oskuse järgi — mida sa pärast oskad"
+      ogDescription="Sisesta oskus ja näe, millised programmid selle annavad. Korja sobivad õpiväljundid oma paketti."
       jsonLd={schema}
     />
   </head>
@@ -78,6 +78,11 @@ const schema = {
             sisesta märksõna (nt „andmeanalüüs", „auditi", „juhtimine") ja näe kohe, millised
             mikrokvalifikatsioonid ja mikrokraadid just selle oskuse annavad. {outcomes.length} õpiväljundit
             {programmesWithOutcomes} programmist. Või <a href="/teema/" data-track-event="cta_click" data-track-label="oskused_to_teema">sirvi teemade kaupa</a>.
+          </p>
+          <p class="syn">
+            „Õpiväljund" on lihtsalt see, <strong>mida sa pärast oskad</strong> — ehk mida õpetatakse,
+            mis oskuse saad, õpitulemused, kursuse sisu. Korja sobivad õpiväljundid <strong>oma paketti</strong>
+            ja jäta e-mail — siis teavitame, kui sellele lähedane programm või kombinatsioon lisandub.
           </p>
           <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
         </div>
@@ -111,11 +116,43 @@ const schema = {
                       <>{i > 0 && ", "}<a href={`/kataloog/${p.slug}/`} data-track-event="cta_click" data-track-label="outcome_to_detail">{p.name}</a> <span class="outcome-prov">({p.provider})</span></>
                     ))}
                   </p>
+                  <button type="button" class="pkg-add" data-pkg-add data-key={o.text.toLowerCase()} data-text={o.text}>+ Lisa paketti</button>
                 </li>
               );
             })}
           </ul>
           <p class="field-help" data-outcome-empty hidden>Selle märksõnaga õpiväljundit ei leitud. Proovi laiemat sõna või <a href="/kataloog/">sirvi kataloogi</a>, või <a href="/kataloog/#kusi-oskust">küsi uut oskust</a>.</p>
+        </div>
+      </section>
+
+      <section class="ice" id="minu-pakett" data-pkg-section hidden>
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Minu pakett</span>
+            <h2>Sinu õpiväljundite pakett (<span data-pkg-count>0</span>)</h2>
+            <p>
+              Korjasid kokku oskused, mida tahad õppida. Hoiame paketi sinu brauseris.
+              Jäta e-mail, siis teavitame, kui sellele <strong>lähedane programm või kombinatsioon</strong>
+              lisandub. (Parima programmi ja kombinatsiooni soovituse lisame peagi.)
+            </p>
+          </div>
+          <ul class="pkg-list" data-pkg-list></ul>
+          <form class="lead-form" data-pkg-form data-site-lead-form>
+            <div class="form-grid">
+              <div class="field">
+                <label for="pkgEmail">E-mail *</label>
+                <input id="pkgEmail" name="email" type="email" required autocomplete="email" placeholder="sinu@email.ee" />
+              </div>
+            </div>
+            <div class="inline-actions">
+              <button class="btn btn-primary" type="submit">Teavita mind sobivast</button>
+              <button type="button" class="btn btn-secondary" data-pkg-clear>Tühjenda pakett</button>
+            </div>
+            <p class="form-note" data-pkg-note>
+              Kogume ainult sinu valitud õpiväljundid ja e-maili, et saata teade sobivast programmist või kombinatsioonist.
+              Pakett püsib su brauseris. Vaata <a href="/privaatsus/">privaatsust</a>.
+            </p>
+          </form>
         </div>
       </section>
 
@@ -142,6 +179,12 @@ const schema = {
 
     <Footer label="Oskused ja õpiväljundid" />
 
+    <div class="pkg-bar" data-pkg-bar hidden>
+      <span data-pkg-bar-count>0 õpiväljundit paketis</span>
+      <a class="btn btn-primary" href="#minu-pakett" data-pkg-open data-track-event="cta_click" data-track-label="pkg_open">Vaata paketti</a>
+      <button type="button" class="btn btn-secondary" data-pkg-clear>Tühjenda</button>
+    </div>
+
     <style>
       .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
       .crumbs a { color: #5a6b80; }
@@ -153,6 +196,17 @@ const schema = {
       .outcome-progs { margin: 6px 0 0; font-size: 0.92rem; color: var(--muted); }
       .outcome-progs a { color: var(--teal); font-weight: 700; }
       .outcome-prov { color: var(--muted); font-weight: 400; }
+      .syn { color: var(--muted); font-size: 0.95rem; margin-top: 4px; }
+      .pkg-add { margin-top: 10px; background: #fff; border: 1px solid var(--teal); color: var(--teal); border-radius: 999px; padding: 5px 12px; font-size: 0.82rem; font-weight: 700; cursor: pointer; }
+      .pkg-add.is-added { background: var(--teal); color: #fff; }
+      .pkg-list { list-style: none; padding: 0; margin: 0 0 16px; display: grid; gap: 8px; }
+      .pkg-item { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+      .pkg-item span { font-weight: 600; color: #212121; }
+      .pkg-remove { background: none; border: 0; color: #c9ccd2; font-size: 1.3rem; line-height: 1; cursor: pointer; padding: 0 4px; }
+      .pkg-remove:hover { color: #e2574c; }
+      .pkg-bar { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 50; display: flex; gap: 12px; align-items: center; padding: 10px 16px; background: #212121; color: #fff; border-radius: 12px; box-shadow: 0 18px 46px rgba(33, 33, 33, 0.3); }
+      .pkg-bar[hidden] { display: none; }
+      .pkg-bar .btn { width: auto; padding: 9px 14px; font-size: 0.9rem; }
     </style>
 
     <script>
@@ -199,6 +253,111 @@ const schema = {
       // Sügavlink /oskused/?q=oskus eeltäidab otsingu.
       const q = new URLSearchParams(window.location.search).get("q");
       if (q && search) { search.value = q; apply(); }
+
+      // ---- Õpiväljundite pakett (kogu oskused → jäta e-mail; match tuleb järgmisena) ----
+      type PkgItem = { key: string; text: string };
+      const PKG_KEY = "mkval:pakett";
+      const pkgBar = document.querySelector("[data-pkg-bar]") as HTMLElement | null;
+      const pkgBarCount = document.querySelector("[data-pkg-bar-count]");
+      const pkgSection = document.querySelector("[data-pkg-section]") as HTMLElement | null;
+      const pkgCount = document.querySelector("[data-pkg-count]");
+      const pkgList = document.querySelector("[data-pkg-list]") as HTMLElement | null;
+      const pkgForm = document.querySelector("[data-pkg-form]") as HTMLFormElement | null;
+      const pkgNote = document.querySelector("[data-pkg-note]");
+      const addBtns = [...document.querySelectorAll<HTMLButtonElement>("[data-pkg-add]")];
+
+      const readPkg = (): PkgItem[] => { try { return JSON.parse(localStorage.getItem(PKG_KEY) || "[]"); } catch { return []; } };
+      const writePkg = (arr: PkgItem[]): void => { try { localStorage.setItem(PKG_KEY, JSON.stringify(arr)); } catch { /* pakett elab lehe piires */ } };
+
+      let pkgViewed = false;
+      const renderPkg = (): void => {
+        const arr = readPkg();
+        const keys = new Set(arr.map((i) => i.key));
+        addBtns.forEach((b) => {
+          const inPkg = keys.has(b.dataset.key || "");
+          b.classList.toggle("is-added", inPkg);
+          b.textContent = inPkg ? "✓ Paketis" : "+ Lisa paketti";
+        });
+        if (pkgBar) pkgBar.hidden = arr.length === 0;
+        if (pkgBarCount) pkgBarCount.textContent = `${arr.length} õpiväljundit paketis`;
+        if (pkgSection) pkgSection.hidden = arr.length === 0;
+        if (pkgCount) pkgCount.textContent = String(arr.length);
+        if (pkgList) {
+          pkgList.innerHTML = "";
+          for (const it of arr) {
+            const li = document.createElement("li");
+            li.className = "pkg-item";
+            const span = document.createElement("span");
+            span.textContent = it.text;
+            const rm = document.createElement("button");
+            rm.type = "button";
+            rm.className = "pkg-remove";
+            rm.setAttribute("data-pkg-remove", it.key);
+            rm.setAttribute("aria-label", "Eemalda paketist");
+            rm.textContent = "×";
+            li.append(span, rm);
+            pkgList.appendChild(li);
+          }
+        }
+        if (arr.length && !pkgViewed) { pkgViewed = true; track("package_view", { count: arr.length }); }
+      };
+
+      addBtns.forEach((b) => b.addEventListener("click", () => {
+        const key = b.dataset.key || "";
+        const text = b.dataset.text || "";
+        if (!key) return;
+        let arr = readPkg();
+        if (arr.some((i) => i.key === key)) {
+          arr = arr.filter((i) => i.key !== key);
+        } else {
+          arr.push({ key, text: text.slice(0, 200) });
+          track("outcome_add", { outcome: text.slice(0, 80), package_size: arr.length });
+        }
+        writePkg(arr);
+        renderPkg();
+      }));
+
+      pkgList?.addEventListener("click", (e) => {
+        const t = e.target as HTMLElement;
+        const k = t.getAttribute?.("data-pkg-remove");
+        if (!k) return;
+        writePkg(readPkg().filter((i) => i.key !== k));
+        renderPkg();
+      });
+
+      [...document.querySelectorAll("[data-pkg-clear]")].forEach((b) =>
+        b.addEventListener("click", () => { writePkg([]); renderPkg(); })
+      );
+
+      pkgForm?.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!pkgForm.reportValidity()) return;
+        const arr = readPkg();
+        if (!arr.length) { if (pkgNote) pkgNote.textContent = "Lisa esmalt mõni õpiväljund paketti."; return; }
+        const email = String(new FormData(pkgForm).get("email") || "");
+        track("lead_form_submit_attempt", { form_name: "outcome_package", count: arr.length });
+        // Suuname AMOS-i sissevoolu (api/subscribe → double-opt-in). Kuni backend pole
+        // main'is / env seadmata, vastab see 404/503 → mailto varuvariant (leadi ei kaota).
+        let sent = false;
+        try {
+          const r = await fetch("/api/subscribe", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ kind: "outcome_package", email, source_site: "mikrokvalifikatsioon_ee", outcomes: arr.map((i) => i.text) })
+          });
+          sent = r.ok;
+        } catch { sent = false; }
+        if (!sent) {
+          const body = encodeURIComponent("Soovitud õpiväljundid:\n- " + arr.map((i) => i.text).join("\n- ") + "\n\nE-mail: " + email);
+          window.location.href = `mailto:info@02signal.ai?subject=${encodeURIComponent("Õpiväljundite pakett")}&body=${body}`;
+        }
+        track("lead_form_submit", { form_name: "outcome_package", count: arr.length, delivery: sent ? "webhook" : "mailto" });
+        if (pkgNote) pkgNote.textContent = sent
+          ? "Aitäh! Teavitame sind, kui sobiv programm või kombinatsioon lisandub."
+          : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
+      });
+
+      renderPkg();
     </script>
   </body>
 </html>
