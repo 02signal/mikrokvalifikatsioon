@@ -25,6 +25,14 @@ const outcomes = [...map.values()].sort((a, b) => a.text.localeCompare(b.text, "
 const programmesWithOutcomes = catalog.filter((e) => e.outcomes && e.outcomes.length).length;
 const fieldsWithOutcomes = fields.filter((f) => catalog.some((e) => e.field === f && e.outcomes && e.outcomes.length));
 
+// Match jaoks: programmi slug → metaandmed. Paketi-kirjed kannavad oma programmi-slugid
+// (loetud DOM-ist lisamise hetkel), nii et katvuse arvutus käib kliendipoolel sellest kaardist.
+const progIndex: Record<string, { name: string; provider: string; ects: number | null; price: string | null }> = {};
+for (const e of catalog) {
+  progIndex[e.slug] = { name: e.name, provider: e.provider, ects: e.ects ?? null, price: e.priceText ?? null };
+}
+const matchJson = JSON.stringify(progIndex).replace(/</g, "\\u003c");
+
 const SITE = "https://mikrokvalifikatsioon.ee";
 const schema = {
   "@context": "https://schema.org",
@@ -131,12 +139,13 @@ const schema = {
             <span class="kicker">Minu pakett</span>
             <h2>Sinu õpiväljundite pakett (<span data-pkg-count>0</span>)</h2>
             <p>
-              Korjasid kokku oskused, mida tahad õppida. Hoiame paketi sinu brauseris.
-              Jäta e-mail, siis teavitame, kui sellele <strong>lähedane programm või kombinatsioon</strong>
-              lisandub. (Parima programmi ja kombinatsiooni soovituse lisame peagi.)
+              Korjasid kokku oskused, mida tahad õppida. Hoiame paketi sinu brauseris ja näitame
+              allpool, milline <strong>programm või kombinatsioon</strong> su valitud oskustele kõige
+              lähemal on. Jäta e-mail, siis teavitame, kui veelgi sobivam lahendus lisandub.
             </p>
           </div>
           <ul class="pkg-list" data-pkg-list></ul>
+          <div class="pkg-match" data-pkg-match hidden></div>
           <form class="lead-form" data-pkg-form data-site-lead-form>
             <div class="form-grid">
               <div class="field">
@@ -185,6 +194,8 @@ const schema = {
       <button type="button" class="btn btn-secondary" data-pkg-clear>Tühjenda</button>
     </div>
 
+    <script type="application/json" id="pkg-data" is:inline set:html={matchJson} />
+
     <style>
       .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
       .crumbs a { color: #5a6b80; }
@@ -207,6 +218,17 @@ const schema = {
       .pkg-bar { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 50; display: flex; gap: 12px; align-items: center; padding: 10px 16px; background: #212121; color: #fff; border-radius: 12px; box-shadow: 0 18px 46px rgba(33, 33, 33, 0.3); }
       .pkg-bar[hidden] { display: none; }
       .pkg-bar .btn { width: auto; padding: 9px 14px; font-size: 0.9rem; }
+      .pkg-match { background: #f3f6f3; border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin: 0 0 16px; }
+      .pkg-match[hidden] { display: none; }
+      .pm-h { margin: 0 0 8px; font-size: 1.05rem; }
+      .pm-h2 { margin: 14px 0 6px; font-weight: 700; color: #212121; }
+      .pm-best { margin: 0; }
+      .pm-best a, .pm-combo a { color: var(--teal); font-weight: 700; }
+      .pm-prov { color: var(--muted); font-weight: 400; font-size: 0.9rem; }
+      .cov { display: inline-block; background: #eef4ee; color: #2f6b2c; border-radius: 999px; padding: 1px 9px; font-size: 0.8rem; font-weight: 700; }
+      .pm-combo { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+      .pm-note { margin: 12px 0 0; font-size: 0.9rem; color: var(--muted); }
+      .pm-good { color: #2f6b2c; font-weight: 700; }
     </style>
 
     <script>
@@ -255,7 +277,7 @@ const schema = {
       if (q && search) { search.value = q; apply(); }
 
       // ---- Õpiväljundite pakett (kogu oskused → jäta e-mail; match tuleb järgmisena) ----
-      type PkgItem = { key: string; text: string };
+      type PkgItem = { key: string; text: string; progs?: string[] };
       const PKG_KEY = "mkval:pakett";
       const pkgBar = document.querySelector("[data-pkg-bar]") as HTMLElement | null;
       const pkgBarCount = document.querySelector("[data-pkg-bar-count]");
@@ -265,9 +287,72 @@ const schema = {
       const pkgForm = document.querySelector("[data-pkg-form]") as HTMLFormElement | null;
       const pkgNote = document.querySelector("[data-pkg-note]");
       const addBtns = [...document.querySelectorAll<HTMLButtonElement>("[data-pkg-add]")];
+      const matchBox = document.querySelector("[data-pkg-match]") as HTMLElement | null;
+      const pkgDataEl = document.getElementById("pkg-data");
+      let PROG: Record<string, { name: string; provider: string; ects: number | null; price: string | null }> = {};
+      try { if (pkgDataEl) PROG = JSON.parse(pkgDataEl.textContent || "{}"); } catch { PROG = {}; }
+      const escHtml = (s: string) => s.replace(/[&<>"]/g, (c) => (({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }) as Record<string, string>)[c] || c);
+      let lastMatchSig = "";
 
       const readPkg = (): PkgItem[] => { try { return JSON.parse(localStorage.getItem(PKG_KEY) || "[]"); } catch { return []; } };
       const writePkg = (arr: PkgItem[]): void => { try { localStorage.setItem(PKG_KEY, JSON.stringify(arr)); } catch { /* pakett elab lehe piires */ } };
+
+      // Parim üksik programm + parim kombinatsioon (greedy set-cover) valitud õpiväljunditele.
+      const renderMatch = (arr: PkgItem[]): void => {
+        if (!matchBox) return;
+        const matchable = arr.filter((i) => i.progs && i.progs.length);
+        if (matchable.length < 1) { matchBox.hidden = true; matchBox.innerHTML = ""; return; }
+        const total = matchable.length;
+        const cover = new Map<string, Set<string>>(); // programmi slug → kaetud õpiväljundid
+        for (const it of matchable) {
+          for (const slug of it.progs as string[]) {
+            if (!cover.has(slug)) cover.set(slug, new Set());
+            (cover.get(slug) as Set<string>).add(it.key);
+          }
+        }
+        let best: { slug: string; n: number } | null = null;
+        for (const [slug, set] of cover) { if (!best || set.size > best.n) best = { slug, n: set.size }; }
+        const uncovered = new Set(matchable.map((i) => i.key));
+        const combo: string[] = [];
+        while (uncovered.size > 0 && combo.length < 6) {
+          let pick: { slug: string; gain: number } | null = null;
+          for (const [slug, set] of cover) {
+            let gain = 0;
+            for (const k of set) if (uncovered.has(k)) gain += 1;
+            if (gain > 0 && (!pick || gain > pick.gain)) pick = { slug, gain };
+          }
+          if (!pick) break;
+          combo.push(pick.slug);
+          for (const k of (cover.get(pick.slug) as Set<string>)) uncovered.delete(k);
+        }
+        const covered = total - uncovered.size;
+        const meta = (slug: string) => PROG[slug] || { name: slug, provider: "", ects: null, price: null };
+        const line = (slug: string, n?: number): string => {
+          const p = meta(slug);
+          const facts = [p.provider, p.ects != null ? `${p.ects} EAP` : "", p.price || ""].filter(Boolean).join(" · ");
+          const cov = n != null ? ` <span class="cov">katab ${n}/${total}</span>` : "";
+          return `<a href="/kataloog/${slug}/" data-track-event="cta_click" data-track-label="pkg_match_detail">${escHtml(p.name)}</a> <span class="pm-prov">${escHtml(facts)}</span>${cov}`;
+        };
+        const allInOne = !!best && best.n === total;
+        let html = `<h3 class="pm-h">Sobivaim sinu paketile (${total} oskust)</h3>`;
+        if (best) {
+          html += `<p class="pm-best">${line(best.slug, best.n)}</p>`;
+          if (allInOne) {
+            html += `<p class="pm-note pm-good">✓ See üksik programm katab kogu su paketi.</p>`;
+          } else {
+            html += `<p class="pm-h2">Täielikuks katteks (${covered}/${total}) sobib kombinatsioon:</p>`;
+            html += `<ol class="pm-combo">${combo.map((slug) => `<li>${line(slug)}</li>`).join("")}</ol>`;
+            html += `<p class="pm-note">Ükski üksik programm ei kata kogu su paketti — sa soovid oskuste kombinatsiooni, mida praegu pakub vaid mitu eri programmi. Jäta e-mail, siis teavitame, kui sellele lähedasem terviklik lahendus lisandub.</p>`;
+          }
+        }
+        matchBox.innerHTML = html;
+        matchBox.hidden = false;
+        const sig = matchable.map((i) => i.key).sort().join("|");
+        if (sig !== lastMatchSig) {
+          lastMatchSig = sig;
+          track("package_match", { count: total, best_coverage: best ? best.n : 0, combo_size: combo.length, all_in_one: allInOne ? "jah" : "ei" });
+        }
+      };
 
       let pkgViewed = false;
       const renderPkg = (): void => {
@@ -299,6 +384,7 @@ const schema = {
             pkgList.appendChild(li);
           }
         }
+        renderMatch(arr);
         if (arr.length && !pkgViewed) { pkgViewed = true; track("package_view", { count: arr.length }); }
       };
 
@@ -310,7 +396,13 @@ const schema = {
         if (arr.some((i) => i.key === key)) {
           arr = arr.filter((i) => i.key !== key);
         } else {
-          arr.push({ key, text: text.slice(0, 200) });
+          const li = b.closest("[data-outcome]");
+          const progs = li
+            ? [...li.querySelectorAll('a[href^="/kataloog/"]')]
+                .map((a) => (a.getAttribute("href") || "").split("/").filter(Boolean).pop() || "")
+                .filter(Boolean)
+            : [];
+          arr.push({ key, text: text.slice(0, 200), progs });
           track("outcome_add", { outcome: text.slice(0, 80), package_size: arr.length });
         }
         writePkg(arr);
