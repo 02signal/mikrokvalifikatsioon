@@ -1,0 +1,368 @@
+---
+import Seo from "../components/Seo.astro";
+import Footer from "../components/Footer.astro";
+import Faq from "../components/Faq.astro";
+import "../styles/global.css";
+import Nav from "../components/Nav.astro";
+import { catalog, providers, catalogCheckedAt } from "../data/catalog";
+import { slugify } from "../data/slug";
+
+const SITE = "https://mikrokvalifikatsioon.ee";
+const PATH = "/mikrokvalifikatsioonide-vordlus/";
+
+// Mikrokvalifikatsioon = katusmõiste. Selle lehe fookus on MITTE-ülikooli pakkujad:
+// rakenduskõrgkoolid ja koolitusettevõtted (erakoolid). Ülikoolide oma on mikrokraad,
+// millel on eraldi /mikrokraadide-vordlus/ leht.
+const microQuals = catalog.filter((e) => e.providerType !== "ülikool");
+const microDegrees = catalog.filter((e) => e.providerType === "ülikool");
+
+// Tabeli näited: ainult kirjed, kus avalik hind JA maht on koolilehel olemas
+// (et tabel ei sisaldaks tühje lahtreid ega väljamõeldud arve). Eelistame valdkonniti
+// mitmekesist valimit, seejärel täidame ülejäänuga kuni 6 reani.
+const withPriceAndEap = microQuals.filter((e) => e.priceText && e.ects);
+const diverse: typeof microQuals = [];
+for (const e of withPriceAndEap) {
+  if (diverse.length < 6 && !diverse.some((x) => x.field === e.field)) diverse.push(e);
+}
+for (const e of withPriceAndEap) {
+  if (diverse.length < 6 && !diverse.some((x) => x.slug === e.slug)) diverse.push(e);
+}
+const tableRows = diverse.slice(0, 6);
+
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+
+// Valdkonnalingid, mida mikrokvalifikatsioonide pakkujad katavad (ilma "muu"-ta).
+const microFields = [...new Set(microQuals.map((e) => e.field))]
+  .filter((f) => f !== "muu")
+  .map((field) => ({ field, slug: slugify(field) }));
+
+const faqItems = [
+  {
+    question: "Mis on mikrokvalifikatsioon?",
+    answer:
+      "Mikrokvalifikatsioon on lühike tunnustatud õpe, mille lõpus saad tunnistuse ühe konkreetse oskuse kohta — mitte terve eriala diplomi. Pakkuja võib olla rakenduskõrgkool, ülikool või koolitusettevõte. Tüüpiline maht on mõni kuu kuni paar semestrit töö kõrvalt."
+  },
+  {
+    question: "Mille poolest erineb mikrokvalifikatsioon mikrokraadist?",
+    answer:
+      "Mikrokvalifikatsioon on katusmõiste. Mikrokraad on selle ülikooli versioon: ülikooli pakutav mikrokvalifikatsioon, mis annab EAP-sid (Euroopa ainepunkte), mida saab hiljem kraadiõppes arvestada. Iga mikrokraad on mikrokvalifikatsioon, aga mitte iga mikrokvalifikatsioon pole mikrokraad."
+  },
+  {
+    question: "Kuidas mikrokvalifikatsioone võrrelda?",
+    answer:
+      "Vaata viit asja kõrvuti: hind, maht (EAP või akadeemilised tunnid), kestus, õppevorm (veebis, hübriid või kohapeal) ja kes selle kinni maksab. Märgi kataloogis kuni kolm sind huvitavat programmi ja võrdle neid ühes tabelis. Lõplik info on alati kooli enda lehel."
+  },
+  {
+    question: "Kes mikrokvalifikatsiooni kinni maksab?",
+    answer:
+      "Kolm rada: tööandja koolituseelarve (kui oskus aitab praegust tööd), Töötukassa toetused (kui oled töötu või su oskused vajavad uuendamist) või ise makstes. Sobiva raja leiad lehelt /kes-maksab/."
+  },
+  {
+    question: "Kust pärinevad võrdluse andmed?",
+    answer:
+      "Hind, maht, kestus ja õppevorm pärinevad koolide avalikelt lehtedelt ja need on kontrollitud kuupäeval, mis on iga kirje juures kataloogis. Andmemetoodika on lahti kirjutatud lehel /andmed/. Lõplik ja siduv info on alati kooli enda registreerimislehel."
+  }
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE}/#organization`,
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: `${SITE}/`
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${SITE}${PATH}#webpage`,
+      name: "Mikrokvalifikatsioonide võrdlus",
+      description:
+        "Kuidas võrrelda Eesti mikrokvalifikatsioone: hind, maht/EAP, kestus, õppevorm ja kes maksab. Reaalsed näited rakenduskõrgkoolide ja koolitusettevõtete programmidest.",
+      inLanguage: "et",
+      isPartOf: { "@id": `${SITE}/#organization` },
+      dateModified: catalogCheckedAt,
+      mainEntityOfPage: `${SITE}${PATH}`
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Kataloog", item: `${SITE}/kataloog/` },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: "Mikrokvalifikatsioonide võrdlus",
+          item: `${SITE}${PATH}`
+        }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      name: "Mikrokvalifikatsioonide võrdlus — näiteprogrammid",
+      numberOfItems: tableRows.length,
+      itemListElement: tableRows.map((entry, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: `${entry.name} — ${entry.provider}`,
+        url: `${SITE}/kataloog/${entry.slug}/`
+      }))
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer }
+      }))
+    }
+  ]
+};
+
+const fmtEap = (e: (typeof catalog)[number]): string => (e.ects ? `${e.ects} EAP` : "—");
+const fmtFormat = (e: (typeof catalog)[number]): string =>
+  e.format === "veebis" ? "veebis" : e.format === "hübriid" ? "hübriid" : e.format === "kohapeal" ? "kohapeal" : "—";
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Mikrokvalifikatsioonide võrdlus — hind, maht, EAP, õppevorm | Mikrokvalifikatsioon.ee"
+      description="Mikrokvalifikatsioonide võrdlus: hind, maht/EAP, kestus, õppevorm ja kes maksab. Reaalsed näited Eesti programmidest ja võrdlustööriist kõrvutamiseks."
+      canonicalPath={PATH}
+      ogType="article"
+      ogTitle="Mikrokvalifikatsioonide võrdlus"
+      ogDescription="Kuidas võrrelda mikrokvalifikatsioone: hind, maht, kestus, õppevorm ja kes maksab — reaalsete Eesti näidetega."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <span class="eyebrow">Võrdlus</span>
+          <h1>Mikrokvalifikatsioonide võrdlus</h1>
+          <p>
+            Mikrokvalifikatsioon on lühike, tunnustatud õpe ühe konkreetse oskuse kohta — mitte
+            terve eriala diplom. Et leida endale õige, tasub programme võrrelda viie tunnuse järgi:
+            <strong>hind, maht (EAP), kestus, õppevorm ja kes maksab</strong>. Siin on lihtne juhend
+            ja reaalsed näited Eesti pakkujatelt.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="/vordlus/" data-track-event="cta_click" data-track-label="mkv_vordlus_hero_tool">Võrdle kuni 3 kõrvuti</a>
+            <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="mkv_vordlus_hero_kataloog">Vaata kõiki ({catalog.length})</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mis on mikrokvalifikatsioon — GEO: lühike, faktiline definitsioon -->
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Lühidalt</span>
+            <h2>Mis on mikrokvalifikatsioon ja kuidas see erineb mikrokraadist?</h2>
+          </div>
+          <p>
+            <strong>Mikrokvalifikatsioon</strong> on katusmõiste lühikesele tunnustatud õppele, mille
+            lõpus saad tunnistuse ühe oskuse kohta. Pakkuja võib olla rakenduskõrgkool, ülikool või
+            koolitusettevõte. <strong>Mikrokraad</strong> on selle ülikooli versioon — annab EAP-sid
+            (Euroopa ainepunkte), mida saab hiljem kraadiõppes arvestada. Iga mikrokraad on
+            mikrokvalifikatsioon, aga mitte vastupidi. Pikem selgitus on lehel
+            <a href="/mis-on-mikrokvalifikatsioon/">Mis on mikrokvalifikatsioon?</a>
+          </p>
+          <p>
+            See leht keskendub eelkõige rakenduskõrgkoolide ja koolitusettevõtete praktilistele
+            mikrokvalifikatsioonidele. Ülikoolide mikrokraade saad eraldi võrrelda lehel
+            <a href="/mikrokraadide-vordlus/">Mikrokraadide võrdlus</a>.
+          </p>
+          <ul class="check">
+            <li><strong>{catalog.length}</strong> programmi {providers.length} koolist meie kataloogis.</li>
+            <li><strong>{microQuals.length}</strong> neist on rakenduskõrgkoolide ja koolitusettevõtete mikrokvalifikatsioonid.</li>
+            <li><strong>{microDegrees.length}</strong> on ülikoolide mikrokraadid (vaata <a href="/mikrokraadide-vordlus/">mikrokraadide võrdlust</a>).</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Kuidas võrrelda — GEO: selge how-to, extractable -->
+      <section class="ice">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Kuidas võrrelda?</span>
+            <h2>Viis tunnust, mida iga mikrokvalifikatsiooni puhul kõrvutada.</h2>
+          </div>
+          <div class="grid-3">
+            <article class="card">
+              <span class="stat">1 · Hind</span>
+              <h3>Mida õpe maksab?</h3>
+              <p>Vaata kooli avaldatud hinda. Pea meeles, et hinna võib katta tööandja või Töötukassa — vaata <a href="/kes-maksab/">kes maksab</a>.</p>
+            </article>
+            <article class="card">
+              <span class="stat">2 · Maht (EAP)</span>
+              <h3>Kui suur on õpe?</h3>
+              <p>EAP on Euroopa ainepunkt (1 EAP ≈ 26 tundi tööd). Mõni kool annab mahu hoopis akadeemilistes tundides.</p>
+            </article>
+            <article class="card">
+              <span class="stat">3 · Kestus</span>
+              <h3>Kui kaua see võtab?</h3>
+              <p>Tavaliselt paar kuud kuni kaks-kolm semestrit töö kõrvalt. Vaata, kas see sobib su graafikuga.</p>
+            </article>
+            <article class="card">
+              <span class="stat">4 · Õppevorm</span>
+              <h3>Veebis, hübriid või kohapeal?</h3>
+              <p>Õppevorm otsustab, kui paindlik õpe on. Veeb sobib töö kõrvalt, kohapealne annab rohkem praktikat.</p>
+            </article>
+            <article class="card">
+              <span class="stat">5 · Kes maksab</span>
+              <h3>Kuidas rahastada?</h3>
+              <p>Kolm rada: tööandja koolituseelarve, Töötukassa toetus või ise. <a href="/kes-maksab/">Leia oma rada</a>.</p>
+            </article>
+            <article class="card">
+              <span class="stat">+ Tunnistus</span>
+              <h3>Mida lõpus saad?</h3>
+              <p>Tunnistust saab kasutada CV-s ja Europassis. Ülikooli mikrokraadi EAP-d on ECTS-punktid kogu Euroopas.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Reaalne võrdlustabel — GEO: extractable structured data -->
+      <section class="white">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Näited kataloogist</span>
+            <h2>Mikrokvalifikatsioonid kõrvuti: hind, maht, kestus, õppevorm.</h2>
+          </div>
+          <div class="compare-wrap">
+            <table class="compare-table">
+              <thead>
+                <tr>
+                  <th scope="col">Programm</th>
+                  <th scope="col">Kool</th>
+                  <th scope="col">Hind</th>
+                  <th scope="col">Maht / EAP</th>
+                  <th scope="col">Kestus</th>
+                  <th scope="col">Õppevorm</th>
+                  <th scope="col">Kes maksab</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableRows.map((e) => (
+                  <tr>
+                    <th scope="row"><a href={`/kataloog/${e.slug}/`}>{e.name}</a></th>
+                    <td>{e.provider}</td>
+                    <td>{e.priceText}</td>
+                    <td>{fmtEap(e)}</td>
+                    <td>{e.durationText ?? "kooli lehel"}</td>
+                    <td>{fmtFormat(e)}</td>
+                    <td>tööandja, Töötukassa või ise</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="notice">
+            Andmed pärinevad koolide avalikelt lehtedelt (kontrollitud {checkedAtText}). Veerg „Kes maksab" näitab
+            tüüpilisi rahastusradu, mitte konkreetset soodustust. Lõplik ja ametlik hind on alati kooli enda lehel —
+            metoodika on kirjas lehel <a href="/andmed/">Andmed</a>.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="/vordlus/" data-track-event="cta_click" data-track-label="mkv_vordlus_tool">Vali kuni 3 ja võrdle kõrvuti</a>
+            <a class="btn btn-secondary" href="/kataloog/?q=" data-track-event="cta_click" data-track-label="mkv_vordlus_kataloog">Ava kogu kataloog</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Valdkonnad — internal links -->
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Valdkonna järgi</span>
+            <h2>Vaata mikrokvalifikatsioone valdkonniti.</h2>
+          </div>
+          <ul class="check">
+            {microFields.map((f) => (
+              <li><a href={`/valdkond/${f.slug}/`}>{f.field}</a></li>
+            ))}
+          </ul>
+          <p>
+            Kaalud karjäärivahetust? Vaata, millised oskused ja ametid kokku käivad — <a href="/karjaar/">karjäärirajad</a>
+            ja <a href="/oskused/">oskuste ülevaade</a> aitavad valida.
+          </p>
+        </div>
+      </section>
+
+      <!-- FAQ — GEO: FAQPage, sourced -->
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Korduvad küsimused</span>
+            <h2>Lühikesed vastused.</h2>
+          </div>
+          <Faq items={faqItems} openFirst={3} />
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Kahtled valikus? Võrdle kõrvuti või tee suunatest.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/vordlus/" data-track-event="cta_click" data-track-label="mkv_vordlus_bottom_tool">Võrdle kuni 3 programmi</a>
+              <a class="btn btn-secondary" href="/#suunatest" data-track-event="cta_click" data-track-label="mkv_vordlus_bottom_suunatest">Tee suunatest</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="mkv_vordlus_email">info@mikrokvalifikatsioon.ee</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="mkv_vordlus_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Mikrokvalifikatsioonide võrdlus" />
+
+    <style>
+      .compare-wrap { overflow-x: auto; }
+      .compare-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        min-width: 760px;
+      }
+      .compare-table th,
+      .compare-table td {
+        border: 1px solid #e4ecf2;
+        padding: 12px 14px;
+        text-align: left;
+        vertical-align: top;
+        font-size: 0.95rem;
+      }
+      .compare-table thead th {
+        background: var(--navy);
+        color: #fff;
+        font-size: 0.9rem;
+      }
+      .compare-table tbody th[scope="row"] {
+        font-weight: 800;
+        background: #f4f8fb;
+      }
+      .compare-table tbody th[scope="row"] a {
+        color: var(--teal);
+        font-weight: 900;
+      }
+      .compare-table tbody tr:nth-child(even) td,
+      .compare-table tbody tr:nth-child(even) th[scope="row"] {
+        background: #fafdf9;
+      }
+    </style>
+  </body>
+</html>
