@@ -5,6 +5,7 @@ import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import { careers, type Career } from "../../data/careers";
 import { fieldsWithSlug, catalogCheckedAt } from "../../data/catalog";
+import { toCourse } from "../../data/courseSchema";
 import LaborDemandStats from "../../components/LaborDemandStats.astro";
 import SalaryStats from "../../components/SalaryStats.astro";
 import DataProvenance from "../../components/DataProvenance.astro";
@@ -69,7 +70,7 @@ const schema = {
       name: `${career.role} — sobivad mikrokvalifikatsioonid ja mikrokraadid`,
       numberOfItems: entries.length,
       itemListElement: entries.map((entry, index) => ({
-        "@type": "ListItem", position: index + 1, name: entry.name, url: `${SITE}/kataloog/${entry.slug}/`
+        "@type": "ListItem", position: index + 1, item: toCourse(entry)
       }))
     },
     {

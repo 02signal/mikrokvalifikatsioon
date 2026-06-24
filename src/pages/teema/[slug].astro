@@ -5,7 +5,7 @@ import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import { topics, topicOutcomes, type Topic } from "../../data/topics";
 import { fieldsWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
-import { parsePriceEur } from "../../data/courseSchema";
+import { parsePriceEur, toCourse } from "../../data/courseSchema";
 
 export function getStaticPaths() {
   return topics.map((t) => ({ params: { slug: t.slug }, props: { topic: t } }));
@@ -73,7 +73,7 @@ const schema = {
       name: `${topic.label} — mikrokvalifikatsioonid ja mikrokraadid`,
       numberOfItems: entries.length,
       itemListElement: entries.map((entry, index) => ({
-        "@type": "ListItem", position: index + 1, name: entry.name, url: `${SITE}/kataloog/${entry.slug}/`
+        "@type": "ListItem", position: index + 1, item: toCourse(entry)
       }))
     },
     {
