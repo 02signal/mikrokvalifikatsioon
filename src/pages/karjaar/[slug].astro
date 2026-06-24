@@ -6,14 +6,21 @@ import "../../styles/global.css";
 import { careers, type Career } from "../../data/careers";
 import { fieldsWithSlug, catalogCheckedAt } from "../../data/catalog";
 import LaborDemandStats from "../../components/LaborDemandStats.astro";
+import SalaryStats from "../../components/SalaryStats.astro";
+import DataProvenance from "../../components/DataProvenance.astro";
 import { asOfText, iscoLabel, laborCheckedAt, laborGeneratedAt } from "../../data/labor";
 
-// Map each career to its ISCO major group (the Töötukassa open-data granularity).
-// All current careers are professional roles → group 2 (Tippspetsialistid); the map
-// allows differentiation later (e.g. a trades role → 7).
+// Map each career to its ISCO major group (Töötukassa vacancy granularity).
 const CAREER_ISCO: Record<string, string> = {
   andmeanaluutik: "2", tarkvaraarendaja: "2", projektijuht: "2", raamatupidaja: "2",
   turundusspetsialist: "2", personalijuht: "2", kuberturve: "2", "ux-disainer": "2",
+};
+// Map each career to its ISCO 2-digit SUB-group — the level at which SALARY genuinely
+// differs (Statistikaamet PA626). 25 = IKT, 24 = äri/haldus, 21 = tehnika/loodus.
+const CAREER_SUBMAJOR: Record<string, string> = {
+  andmeanaluutik: "25", tarkvaraarendaja: "25", kuberturve: "25",
+  raamatupidaja: "24", turundusspetsialist: "24", personalijuht: "24", projektijuht: "24",
+  "ux-disainer": "21",
 };
 
 export function getStaticPaths() {
@@ -23,6 +30,7 @@ export function getStaticPaths() {
 const { career } = Astro.props as { career: Career };
 const { entries, portfolio } = career;
 const careerIsco = CAREER_ISCO[career.slug] ?? "2";
+const careerSubmajor = CAREER_SUBMAJOR[career.slug] ?? "";
 const roleLower = career.role.replace(/\s*\(.*?\)\s*/g, "").toLowerCase();
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
 const otherEntries = entries.filter((e) => !portfolio.includes(e));
@@ -132,6 +140,8 @@ const schema = {
       </section>
 
       <LaborDemandStats iscoGroup={careerIsco} />
+      <SalaryStats submajor={careerSubmajor} />
+      <DataProvenance />
 
       {portfolio.length > 0 && (
         <section class="ice">
