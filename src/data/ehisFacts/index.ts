@@ -44,7 +44,22 @@ export interface EhisFactsSnapshot {
 }
 
 const FEED_URL = import.meta.env.PUBLIC_EHIS_FACTS_FEED_URL as string | undefined;
-const local = snapshot as unknown as EhisFactsSnapshot;
+
+/** v1 contract: official_pdf_url is an http(s) URL or null. The live EHIS field can be
+ * a placeholder ("Hetkel puudub") or a bare code ("AYC0439"); coerce non-URLs to null so
+ * the detail page never renders a broken PDF href. Applied to feed AND snapshot. */
+function httpUrlOrNull(v: unknown): string | null {
+  return typeof v === "string" && /^https?:\/\//i.test(v.trim()) ? v.trim() : null;
+}
+
+function sanitize(s: EhisFactsSnapshot): EhisFactsSnapshot {
+  return {
+    ...s,
+    curricula: s.curricula.map((c) => ({ ...c, official_pdf_url: httpUrlOrNull(c.official_pdf_url) })),
+  };
+}
+
+const local = sanitize(snapshot as unknown as EhisFactsSnapshot);
 
 async function load(): Promise<EhisFactsSnapshot> {
   if (FEED_URL) {
@@ -54,7 +69,7 @@ async function load(): Promise<EhisFactsSnapshot> {
         const data = (await res.json()) as EhisFactsSnapshot;
         if (data?.curricula?.length && data.snapshot_version === local.snapshot_version) {
           console.log(`[ehis] AMOS feed: ${data.curricula.length} õppekava (${FEED_URL})`);
-          return data;
+          return sanitize(data);
         }
       }
       console.warn(`[ehis] feed ei vasta (HTTP ${res.status}); kasutan kohalikku snapshotti`);

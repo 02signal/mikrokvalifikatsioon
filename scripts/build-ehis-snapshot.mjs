@@ -75,6 +75,14 @@ function strOrNull(v) {
   return s.length ? s : null;
 }
 
+// official_pdf_url must be an http(s) URL or null (v1 contract). The live EHIS
+// avalikOppekavaFailUrl is sometimes a placeholder ("Hetkel puudub") or a bare
+// code ("AYC0439"), not a URL — coerce any non-URL value to null.
+function httpUrlOrNull(v) {
+  const s = typeof v === "string" ? v.trim() : "";
+  return /^https?:\/\//i.test(s) ? s : null;
+}
+
 function mapRecord(rec) {
   return {
     ehis_kood: strOrNull(rec.oppekavaKood),
@@ -93,7 +101,7 @@ function mapRecord(rec) {
     status: strOrNull(rec.kehtivStaatus),
     registered_at: isoFromDots(rec.registrKuupaev),
     updated_at: isoFromDots(rec.muudetud),
-    official_pdf_url: strOrNull(rec.avalikOppekavaFailUrl),
+    official_pdf_url: httpUrlOrNull(rec.avalikOppekavaFailUrl),
   };
 }
 

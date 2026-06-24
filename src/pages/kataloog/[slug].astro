@@ -27,6 +27,10 @@ const displayEcts = entry.ects ?? ehis?.eap ?? null;
 const ehisNameEn = ehis?.name_en ?? null;
 const ehisFieldName = ehis?.field_name ?? null;
 
+// PDF-link ainult kehtiva http(s) URL-i korral — EHIS võib siia panna kohahoidja
+// ("Hetkel puudub") või paljast koodi; ära kunagi renderda katkist linki.
+const ehisPdfUrl = ehis?.official_pdf_url && /^https?:\/\//i.test(ehis.official_pdf_url) ? ehis.official_pdf_url : null;
+
 // Õpiväljundid: kui EHISel on need olemas, kuva need (ametlik avaandmestik, viitega).
 // Per-school õpiväljundid jäävad varuvariandiks.
 const ehisOutcomes = ehis?.outcomes && ehis.outcomes.length > 0 ? ehis.outcomes : null;
@@ -164,8 +168,8 @@ const schema = {
               <strong>Ametlik allikas: EHIS — Haridus- ja Teadusministeerium.</strong>
               Õppekava on registreeritud Eesti Hariduse Infosüsteemis (EHIS)
               {ehis.ehis_kood && <> koodiga <strong>{ehis.ehis_kood}</strong></>}.
-              {ehis.official_pdf_url && (
-                <> Vaata <a href={ehis.official_pdf_url} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_ehis_pdf_${entry.provider}`}>ametlik õppekava (PDF)</a>.</>
+              {ehisPdfUrl && (
+                <> Vaata <a href={ehisPdfUrl} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_ehis_pdf_${entry.provider}`}>ametlik õppekava (PDF)</a>.</>
               )}
               {" "}{ehisAttribution}.
             </p>
