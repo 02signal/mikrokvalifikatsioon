@@ -1,0 +1,99 @@
+---
+// Labour-market demand for one occupation group, shown on a career page.
+// Honest about granularity: the official Töötukassa open data is by ISCO major group
+// (broad occupation group), so this shows the GROUP's demand, not the exact role.
+// Banded + attributed (CC BY-NC 3.0). Renders nothing if there is no data.
+import {
+  laborSignals, demandFor, openingsBandText, trendInfo, regionLabel, iscoLabel,
+  asOfText, laborCheckedAt, laborGeneratedAt,
+} from "../data/labor";
+
+interface Props { iscoGroup: string; }
+const { iscoGroup } = Astro.props;
+
+const national = demandFor(iscoGroup, "unknown");
+const groupLabel = iscoLabel(iscoGroup);
+// regional breakdown for this group (skip the no-county bucket + "none" regions), top 6 by band
+const BAND_ORDER = ["none", "band_1_5", "band_6_20", "band_21_50", "band_gt_50"];
+const regional = laborSignals
+  .filter((s) => s.isco_major_group === iscoGroup && s.region !== "unknown" && s.openings_now_band !== "none")
+  .sort((a, b) => BAND_ORDER.indexOf(b.openings_now_band) - BAND_ORDER.indexOf(a.openings_now_band))
+  .slice(0, 6);
+const ref = national ?? regional[0] ?? null;
+const trend = ref ? trendInfo(ref.trend) : null;
+function dateText(value: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(value || "");
+  return m ? `${m[3]}.${m[2]}.${m[1]}` : value;
+}
+const updated = dateText(laborGeneratedAt || laborCheckedAt);
+---
+
+{ref && (
+  <section class="ice">
+    <div class="section-inner narrow">
+      <div class="section-head compact-head">
+        <span class="kicker">Tööturg</span>
+        <h2>Kui palju on selle ametirühma kohti?</h2>
+        <p class="muted">
+          Ametlik Töötukassa avaandmestik näitab vabu töökohti <strong>ametirühma</strong> kaupa
+          (mitte üksikrolli kaupa). See roll kuulub rühma <strong>{groupLabel}</strong>.
+        </p>
+      </div>
+
+      <div class="demand-grid">
+        <div class="demand-card demand-card--lead">
+          <span class="demand-label">Avatud kohti (kogu Eesti, {asOfText(ref.as_of)})</span>
+          <strong class="demand-value">{openingsBandText((national ?? ref).openings_now_band)}</strong>
+          {trend && (
+            <span class="demand-trend" data-dir={ref.trend}>{trend.arrow} {trend.label}</span>
+          )}
+        </div>
+        {regional.length > 0 && (
+          <ul class="demand-regions">
+            {regional.map((s) => (
+              <li>
+                <span>{regionLabel(s.region)}</span>
+                <span class="demand-band">{openingsBandText(s.openings_now_band)}
+                  <em data-dir={s.trend}>{trendInfo(s.trend).arrow}</em></span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <p class="demand-source">
+        Allikas: <a href="https://andmed.eesti.ee/datasets/eesti-tootukassa-poolt-vahendatud-vabade-tookohtade-statistika" rel="noopener" target="_blank">Eesti Töötukassa avaandmed</a>,
+        litsents <a href="https://creativecommons.org/licenses/by-nc/3.0/" rel="noopener" target="_blank">CC BY-NC 3.0</a>.
+        Andmeseis {asOfText(ref.as_of)}; AMOS feed uuendatud {updated}.
+        Arvud on toodud vahemikena (ametirühma tasemel).
+      </p>
+    </div>
+  </section>
+)}
+
+<style>
+  .demand-grid { display: grid; gap: 14px; margin-top: 6px; }
+  .demand-card {
+    background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--green);
+    border-radius: 10px; padding: 14px 16px; display: flex; flex-wrap: wrap;
+    align-items: baseline; gap: 6px 14px;
+  }
+  .demand-label { font-size: 0.85rem; color: var(--muted); flex: 1 1 100%; }
+  .demand-value { color: var(--teal); font-weight: 700; font-size: 1.5rem; }
+  .demand-trend { font-size: 0.95rem; font-weight: 600; color: var(--muted); }
+  .demand-trend[data-dir="up"] { color: #2e7d22; }
+  .demand-trend[data-dir="down"] { color: #b3541e; }
+  .demand-regions {
+    list-style: none; margin: 0; padding: 0; display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px 16px;
+  }
+  .demand-regions li {
+    display: flex; justify-content: space-between; gap: 10px;
+    font-size: 0.92rem; padding: 6px 0; border-bottom: 1px solid var(--line);
+  }
+  .demand-band { font-weight: 600; color: var(--navy); white-space: nowrap; }
+  .demand-band em { font-style: normal; color: var(--muted); margin-left: 4px; }
+  .demand-band em[data-dir="up"] { color: #2e7d22; }
+  .demand-band em[data-dir="down"] { color: #b3541e; }
+  .demand-source { font-size: 0.8rem; color: var(--muted); margin: 12px 0 0; }
+</style>
