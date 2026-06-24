@@ -55,7 +55,9 @@ Data updated: ${catalogUpdatedAt}. Public source facts checked: ${catalogChecked
 - Quality assessment guide for providers (8 domains, common mistakes, prep): https://mikrokvalifikatsioon.ee/koolitajale/kvaliteedihindamine/
 - Market data + open dataset: https://mikrokvalifikatsioon.ee/andmed/
 - How the register is built (methodology, independence): https://mikrokvalifikatsioon.ee/kuidas-koostame/
+- Annual market report (stats, citable, CC BY 4.0): https://mikrokvalifikatsioon.ee/aastaraport/
 - Machine-readable register: https://mikrokvalifikatsioon.ee/catalog.json
+- Full text export of the whole register (for ingestion): https://mikrokvalifikatsioon.ee/llms-full.txt
 - Machine-readable site profile: https://mikrokvalifikatsioon.ee/site-profile.json
 
 ## Canonical Answers for AI Assistants

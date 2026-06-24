@@ -1,0 +1,201 @@
+---
+import Seo from "../../components/Seo.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { catalog, providers, fields, catalogUpdatedAt } from "../../data/catalog";
+import { parsePriceEur } from "../../data/courseSchema";
+
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
+const year = catalogUpdatedAt.slice(0, 4);
+const SITE = "https://mikrokvalifikatsioon.ee";
+
+const median = (arr: number[]): number | null => {
+  if (!arr.length) return null;
+  const s = [...arr].sort((a, b) => a - b);
+  const m = Math.floor(s.length / 2);
+  return s.length % 2 ? s[m] : Math.round((s[m - 1] + s[m]) / 2);
+};
+
+const total = catalog.length;
+const byField = fields.map((f) => ({ field: f, n: catalog.filter((e) => e.field === f).length })).sort((a, b) => b.n - a.n);
+const byProvider = providers.map((p) => ({ provider: p, n: catalog.filter((e) => e.provider === p).length })).sort((a, b) => b.n - a.n);
+const fieldMax = Math.max(...byField.map((f) => f.n), 1);
+const provMax = Math.max(...byProvider.map((p) => p.n), 1);
+
+const prices = catalog.map((e) => parsePriceEur(e.priceText)).filter((p): p is number => p != null);
+const paid = prices.filter((p) => p > 0);
+const freeCount = prices.filter((p) => p === 0).length;
+const minPrice = paid.length ? Math.min(...paid) : null;
+const maxPrice = paid.length ? Math.max(...paid) : null;
+const medPrice = median(paid);
+const noPriceCount = total - prices.length;
+
+const ects = catalog.map((e) => e.ects).filter((n): n is number => n != null);
+const minEcts = ects.length ? Math.min(...ects) : null;
+const maxEcts = ects.length ? Math.max(...ects) : null;
+const medEcts = median(ects);
+
+const withOutcomes = catalog.filter((e) => e.outcomes && e.outcomes.length).length;
+const totalOutcomes = catalog.reduce((s, e) => s + (e.outcomes?.length ?? 0), 0);
+const withDeadline = catalog.filter((e) => e.registrationDeadline).length;
+
+const fmtCount = (pred: (f: string) => boolean) => catalog.filter((e) => e.format != null && pred(e.format.toLowerCase())).length;
+const online = fmtCount((f) => f.includes("veeb") || f.includes("online") || f.includes("kaug"));
+const onsite = fmtCount((f) => f.includes("kohapeal") || f.includes("auditoor"));
+const blended = fmtCount((f) => f.includes("hübriid") || f.includes("põimitud") || f.includes("blended"));
+const inEnglish = catalog.filter((e) => e.language === "en").length;
+
+const title = `Eesti mikrokvalifikatsioonide ja mikrokraadide turg ${year}`;
+const description = `Andmeülevaade: ${total} mikrokvalifikatsiooni ja mikrokraadi ${providers.length} koolist ${fields.length} valdkonnas. Hinnad, mahud, õppevormid ja õpiväljundid — sõltumatu registri ${year} aasta seis.`;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": `${SITE}/#organization`, name: "Mikrokvalifikatsioon.ee", legalName: "Ettevõtluskeskus OÜ", url: `${SITE}/` },
+    {
+      "@type": "Article",
+      headline: title,
+      description,
+      datePublished: catalogUpdatedAt,
+      dateModified: catalogUpdatedAt,
+      inLanguage: "et",
+      author: { "@id": `${SITE}/#organization` },
+      publisher: { "@id": `${SITE}/#organization` },
+      mainEntityOfPage: `${SITE}/aastaraport/`,
+      license: "https://creativecommons.org/licenses/by/4.0/"
+    },
+    {
+      "@type": "Dataset",
+      name: `Eesti mikrokvalifikatsioonide register — ${year}`,
+      description,
+      license: "https://creativecommons.org/licenses/by/4.0/",
+      creator: { "@id": `${SITE}/#organization` },
+      distribution: { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${SITE}/catalog.json` }
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Aastaraport", item: `${SITE}/aastaraport/` }
+      ]
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo title={title} description={description} canonicalPath="/aastaraport/" ogType="article" jsonLd={schema} />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <span>Aastaraport</span>
+          </nav>
+          <span class="eyebrow">Turuülevaade {year}</span>
+          <h1>Eesti mikrokvalifikatsioonide ja mikrokraadide turg {year}</h1>
+          <p>
+            Sõltumatu register koondab Eesti mikrokvalifikatsioonid ja ülikoolide mikrokraadid ühte kohta.
+            See on hetkeseis arvudes — kõik faktid pärinevad koolide avalikelt lehtedelt.
+          </p>
+          <p class="report-date">Andmestik uuendatud: {updatedAtText}. Andmed: <a href="/catalog.json">catalog.json</a> (avaandmed, CC BY 4.0).</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <ul class="stat-grid">
+            <li><b>{total}</b><span>programmi</span></li>
+            <li><b>{providers.length}</b><span>kooli</span></li>
+            <li><b>{fields.length}</b><span>valdkonda</span></li>
+            <li><b>{totalOutcomes}</b><span>õpiväljundit</span></li>
+            {medPrice != null && <li><b>{medPrice} €</b><span>mediaanhind</span></li>}
+            {medEcts != null && <li><b>{medEcts} EAP</b><span>mediaanmaht</span></li>}
+            {freeCount > 0 && <li><b>{freeCount}</b><span>tasuta sihtrühmale</span></li>}
+            <li><b>{withDeadline}</b><span>lähiajal tähtajaga</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head"><span class="kicker">Valdkonnad</span><h2>Programmid valdkonniti</h2></div>
+          <ul class="bars">
+            {byField.map((f) => (
+              <li><span class="bar-label">{f.field}</span><span class="bar"><span class="bar-fill" style={`width:${Math.round((f.n / fieldMax) * 100)}%`}></span></span><span class="bar-n">{f.n}</span></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head"><span class="kicker">Koolid</span><h2>Programmid koolide kaupa</h2></div>
+          <ul class="bars">
+            {byProvider.map((p) => (
+              <li><span class="bar-label">{p.provider}</span><span class="bar"><span class="bar-fill" style={`width:${Math.round((p.n / provMax) * 100)}%`}></span></span><span class="bar-n">{p.n}</span></li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head"><span class="kicker">Hind ja maht</span><h2>Mida õpe maksab ja kui mahukas on</h2></div>
+          <ul class="check">
+            {minPrice != null && maxPrice != null && <li><strong>Hind</strong> {minPrice}–{maxPrice} €, mediaan {medPrice} €. {freeCount > 0 && <>{freeCount} programmi on mõnele sihtrühmale tasuta. </>}{noPriceCount > 0 && <>{noPriceCount} programmil hind ainult kooli lehel.</>}</li>}
+            {minEcts != null && maxEcts != null && <li><strong>Maht</strong> {minEcts}–{maxEcts} EAP, mediaan {medEcts} EAP.</li>}
+            <li><strong>Õppevorm</strong> {online} veebis/kaugõppes{blended > 0 && <>, {blended} põimitud</>}{onsite > 0 && <>, {onsite} kohapeal</>} (kus kool on vormi avaldanud).</li>
+            {inEnglish > 0 && <li><strong>Keel</strong> {inEnglish} programmi inglise keeles, ülejäänud eesti keeles.</li>}
+            <li><strong>Sisu</strong> {withOutcomes} programmil on avaldatud õpiväljundid (kokku {totalOutcomes}).</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head"><span class="kicker">Metoodika ja kasutus</span><h2>Kuidas neid arve kasutada</h2></div>
+          <p>
+            Arvud on koostatud koolide avalikelt lehtedelt ja uuenevad andmestikuga. Numbrid kajastavad
+            seda, mis on avaldatud — kui kool ei ole hinda või mahtu märkinud, jääb see lahtri „—".
+            Vaata ka <a href="/kuidas-koostame/">kuidas registrit koostame</a> ja <a href="/andmed/">avaandmeid</a>.
+          </p>
+          <p class="cite">
+            <strong>Tsiteeri:</strong> „Mikrokvalifikatsioon.ee — Eesti mikrokvalifikatsioonide ja mikrokraadide turg {year}",
+            Ettevõtluskeskus OÜ, {updatedAtText}, https://mikrokvalifikatsioon.ee/aastaraport/ (CC BY 4.0).
+          </p>
+          <div class="inline-actions">
+            <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="report_kataloog">Ava kataloog</a>
+            <a class="btn btn-secondary" href="/catalog.json" data-track-event="cta_click" data-track-label="report_dataset">Avaandmed (JSON)</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <Footer label={`Turuülevaade ${year}`} />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .stat-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+      .stat-grid li { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 18px; text-align: center; }
+      .stat-grid b { display: block; font-size: 1.9rem; color: var(--teal); line-height: 1; }
+      .stat-grid span { display: block; margin-top: 6px; color: var(--muted); font-size: 0.9rem; }
+      .bars { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+      .bars li { display: grid; grid-template-columns: 190px 1fr 36px; align-items: center; gap: 10px; font-size: 0.92rem; }
+      .bar-label { color: #212121; }
+      .bar { background: #eef0ef; border-radius: 999px; height: 14px; overflow: hidden; }
+      .bar-fill { display: block; height: 100%; background: #54c247; border-radius: 999px; }
+      .bar-n { text-align: right; font-weight: 700; color: #2f6b2c; }
+      .cite { background: #f3f6f3; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; font-size: 0.9rem; color: #41484d; }
+      @media (max-width: 640px) { .bars li { grid-template-columns: 120px 1fr 30px; } }
+    </style>
+  </body>
+</html>

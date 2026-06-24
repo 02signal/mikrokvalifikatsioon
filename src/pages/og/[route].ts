@@ -69,6 +69,10 @@ const contentPages: Record<string, { title: string; description: string }> = {
     title: "Karjäärirajad: kuidas alustada ja läbi lüüa",
     description: "Portfoolio ja isikuomadused otsustavad — vali roll ja sobiv õpe."
   },
+  aastaraport: {
+    title: "Eesti mikrokvalifikatsioonide ja mikrokraadide turg",
+    description: "Sõltumatu registri turuülevaade arvudes: programmid, koolid, hinnad, mahud."
+  },
   privaatsus: {
     title: "Privaatsus ja küpsised",
     description: "Mis andmeid kogume, milleks ja millised on sinu õigused."
