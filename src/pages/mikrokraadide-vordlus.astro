@@ -1,0 +1,332 @@
+---
+import Seo from "../components/Seo.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import Faq from "../components/Faq.astro";
+import "../styles/global.css";
+import { catalog, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
+
+// Ülikoolide mikrokraadid = providerType "ülikool". Mikrokraad on ülikooli
+// pakutav mikrokvalifikatsioon, annab tüüpiliselt EAP-sid.
+const universityEntries = catalog.filter((entry) => entry.providerType === "ülikool");
+const universityProviders = [...new Set(universityEntries.map((entry) => entry.provider))];
+const withEcts = universityEntries.filter((entry) => entry.ects != null);
+const withPrice = universityEntries.filter((entry) => entry.priceText);
+
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
+
+// Kõrvutiv tabel: päris ülikoolide mikrokraadid registrist (slug-link kataloogi
+// kirjele). Valime ühe igast ülikoolist, kus EAP, hind, kestus ja õppevorm on
+// kõik avaldatud — väljamõeldud arve me siia ei pane.
+const tableSlugs = [
+  "tartu-ulikool-infotehnoloogia-alused",
+  "taltech-it-juhtimine-ja-ariarhitektuur",
+  "tallinna-ulikool-infotehnoloogia-haldamine",
+  "ebs-digitoodete-uurimine-analuusimine-ja-strateegia",
+  "eesti-maaulikool-taimekahjustajad-ja-nende-torje",
+  "eesti-kunstiakadeemia-disain-hariduses-ja-haridusdisain"
+];
+const formatLabel: Record<string, string> = {
+  veebis: "veebis",
+  "hübriid": "hübriid",
+  kohapeal: "kohapeal"
+};
+const tableRows = tableSlugs
+  .map((slug) => universityEntries.find((entry) => entry.slug === slug))
+  .filter((entry): entry is (typeof universityEntries)[number] => Boolean(entry));
+
+const faqItems = [
+  {
+    question: "Mis on mikrokraad?",
+    answer:
+      "Mikrokraad on ülikooli pakutav mikrokvalifikatsioon: lühike, tunnustatud õpe ühe konkreetse oskuse kohta, mille lõpus saad ametliku tunnistuse. Tüüpiline maht on 12–24 EAP ühe kuni kahe semestri jooksul töö kõrvalt — kuud, mitte aastad."
+  },
+  {
+    question: "Mikrokraad vs mikrokvalifikatsioon — mis vahe on?",
+    answer:
+      "Mikrokvalifikatsioon on katusmõiste igale lühikesele tunnustatud õppele. Mikrokraad on selle alaliik: ülikooli (kõrgkooli) pakutav mikrokvalifikatsioon, mis annab tavaliselt EAP-sid ja mille õppest vähemalt pool on kõrghariduse tasemel. Koolitusettevõtte lühiõpe on samuti mikrokvalifikatsioon, aga seda ei nimetata mikrokraadiks."
+  },
+  {
+    question: "Kas mikrokraad annab EAP-d (ainepunkte)?",
+    answer:
+      "Tavaliselt jah. EAP on Euroopa ainepunkt ja 1 EAP vastab umbes 26 tunnile õppija tööd. Ülikooli mikrokraadi EAP-d on ECTS-ainepunktid, mida saab sageli hiljem tasemeõppes arvestada. Täpne EAP-maht on iga programmi juures kataloogis; kui kool pole seda avaldanud, jätame välja, mitte ei leiuta."
+  },
+  {
+    question: "Kuidas mikrokraade võrrelda?",
+    answer:
+      "Vaata kõrvuti viit asja: ülikool ja sihtrühm, maht (EAP), hind, kestus ja õppevorm (veebis, hübriid või kohapeal). Lisaks kontrolli eeldusi — osa mikrokraade nõuab varasemat kõrgharidust. Märgi kataloogis kuni kolm programmi „Võrdle“ ja vaata need ühes tabelis."
+  },
+  {
+    question: "Kas mikrokraadi õpe võib olla osaliselt rahastatud?",
+    answer:
+      "Sageli jah. Kulu võib katta tööandja koolituseelarve, Töötukassa toetus (kui oled töötu või su oskused vajavad uuendamist) või osa programme on kindlale sihtrühmale soodsamad EL-i kaasrahastusel. Iga kirje hind on kataloogis; rahastusradadest räägib leht „Kes maksab?“."
+  }
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mikrokvalifikatsioon.ee/#organization",
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: "https://mikrokvalifikatsioon.ee/"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://mikrokvalifikatsioon.ee/mikrokraadide-vordlus/#webpage",
+      url: "https://mikrokvalifikatsioon.ee/mikrokraadide-vordlus/",
+      name: "Mikrokraadide võrdlus — ülikoolide mikrokraadid kõrvuti",
+      inLanguage: "et",
+      isPartOf: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      dateModified: catalogUpdatedAt
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
+        { "@type": "ListItem", position: 2, name: "Mikrokraadid", item: "https://mikrokvalifikatsioon.ee/mikrokraadid/" },
+        { "@type": "ListItem", position: 3, name: "Mikrokraadide võrdlus", item: "https://mikrokvalifikatsioon.ee/mikrokraadide-vordlus/" }
+      ]
+    },
+    {
+      "@type": "Article",
+      headline: "Mikrokraadide võrdlus: ülikoolide mikrokraadid kõrvuti",
+      description:
+        "Kuidas mikrokraade võrrelda — EAP, hind, kestus, õppevorm ja ülikool ühes tabelis. Päris andmed Eesti ülikoolide mikrokraadidest.",
+      inLanguage: "et",
+      datePublished: "2026-06-24",
+      dateModified: catalogUpdatedAt,
+      author: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      mainEntityOfPage: "https://mikrokvalifikatsioon.ee/mikrokraadide-vordlus/"
+    },
+    {
+      "@type": "ItemList",
+      name: "Ülikoolide mikrokraadid — võrdlusvalim",
+      itemListOrder: "https://schema.org/ItemListUnordered",
+      numberOfItems: tableRows.length,
+      itemListElement: tableRows.map((entry, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: `${entry.name} — ${entry.provider}`,
+        url: `https://mikrokvalifikatsioon.ee/kataloog/${entry.slug}/`
+      }))
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer }
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Mikrokraadide võrdlus — ülikoolide mikrokraadid kõrvuti | Mikrokvalifikatsioon.ee"
+      description="Mikrokraadide võrdlus: EAP, hind, kestus, õppevorm ja ülikool kõrvuti. Päris andmed Eesti ülikoolide mikrokraadidest ühes kohas."
+      canonicalPath="/mikrokraadide-vordlus/"
+      ogType="article"
+      ogTitle="Mikrokraadide võrdlus — ülikoolide mikrokraadid kõrvuti"
+      ogDescription="EAP, hind, kestus ja õppevorm ühes tabelis. Kuidas mikrokraade võrrelda ja kuidas valida."
+      jsonLd={schema}
+    />
+    <style is:global>
+      .mkr-wrap { overflow-x: auto; }
+      .mkr-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        min-width: 720px;
+      }
+      .mkr-table th, .mkr-table td {
+        border: 1px solid var(--line);
+        padding: 12px 14px;
+        text-align: left;
+        vertical-align: top;
+        font-size: 0.95rem;
+      }
+      .mkr-table thead th { background: var(--navy); color: #fff; font-size: 0.95rem; }
+      .mkr-table tbody th {
+        font-weight: 800;
+        color: var(--ink);
+        background: var(--ice);
+      }
+      .mkr-table caption {
+        caption-side: bottom;
+        text-align: left;
+        color: var(--muted);
+        font-size: 0.85rem;
+        padding-top: 10px;
+      }
+      .mkr-criteria { display: grid; gap: 10px; padding-left: 0; list-style: none; }
+      .mkr-criteria li { padding-left: 26px; position: relative; color: var(--muted); }
+      .mkr-criteria li::before { content: "→"; position: absolute; left: 0; color: var(--teal); font-weight: 900; }
+      .mkr-criteria li strong { color: var(--ink); }
+    </style>
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <span class="eyebrow">Mikrokraadide võrdlus</span>
+          <h1>Mikrokraadide võrdlus</h1>
+          <p>
+            Mikrokraad on ülikooli pakutav mikrokvalifikatsioon — lühike, tunnustatud õpe
+            ühe oskuse kohta, mis annab tavaliselt EAP-sid. Erinevus mikrokvalifikatsioonist
+            on lihtne: <strong>mikrokvalifikatsioon</strong> on katusmõiste igale lühiõppele,
+            <strong>mikrokraad</strong> on selle ülikoolitasemel alaliik. Siin näitame, kuidas
+            ülikoolide mikrokraade kõrvutada — mahu (EAP), hinna, kestuse, õppevormi, ülikooli
+            ja eelduste järgi — ja toome päris näited registrist.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="mkr_vordlus_hero_kataloog">Ava filtreeritav kataloog</a>
+          </div>
+          <p class="report-date">
+            Registris on praegu {universityEntries.length} ülikooli mikrokraadi {universityProviders.length} ülikoolist.
+            Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud koolide lehtedelt: {checkedAtText}.
+          </p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Mille järgi võrrelda</span>
+            <h2>Kuus asja, mida mikrokraadi juures kõrvutada.</h2>
+          </div>
+          <ul class="mkr-criteria">
+            <li><strong>Ülikool ja sihtrühm</strong> — kes pakub ja kellele programm mõeldud on.</li>
+            <li><strong>Maht (EAP)</strong> — Euroopa ainepunktid; 1 EAP ≈ 26 tundi õppija tööd. Registris on {withEcts.length} mikrokraadi avaldanud oma EAP-mahu.</li>
+            <li><strong>Hind</strong> — õppemaks; {withPrice.length} kirjet näitab hinda avalikult. Osa kulust võib katta tööandja või Töötukassa.</li>
+            <li><strong>Kestus</strong> — paarist nädalast kuni kahe semestrini töö kõrvalt.</li>
+            <li><strong>Õppevorm</strong> — veebis, hübriid või kohapeal.</li>
+            <li><strong>Eeldused</strong> — osa mikrokraade nõuab varasemat kõrgharidust; vaata iga programmi lehelt.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Näidisvõrdlus</span>
+            <h2>Ülikoolide mikrokraadid kõrvuti.</h2>
+            <p>
+              Valim päris registrikirjetest, kus ülikool, EAP, hind, kestus ja õppevorm on
+              kõik koolide lehtedel avaldatud. Klõpsa programmile, et näha täisinfot ja allikalinki.
+            </p>
+          </div>
+          <div class="mkr-wrap">
+            <table class="mkr-table">
+              <caption>Allikas: koolide avalikud lehed, kontrollitud {checkedAtText}. Lõplik ja ametlik info on alati ülikooli enda lehel.</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Mikrokraad</th>
+                  <th scope="col">Ülikool</th>
+                  <th scope="col">EAP</th>
+                  <th scope="col">Hind</th>
+                  <th scope="col">Kestus</th>
+                  <th scope="col">Õppevorm</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableRows.map((entry) => (
+                  <tr>
+                    <th scope="row"><a href={`/kataloog/${entry.slug}/`}>{entry.name}</a></th>
+                    <td>{entry.provider}</td>
+                    <td>{entry.ects} EAP</td>
+                    <td>{entry.priceText}</td>
+                    <td>{entry.durationText}</td>
+                    <td>{entry.format ? formatLabel[entry.format] : "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="notice">
+            See on väike valim. Kõiki {universityEntries.length} ülikooli mikrokraadi saad
+            filtreerida ja kõrvutada <a href="/kataloog/">kataloogis</a> — märgi kuni kolm
+            programmi „Võrdle“ ja vaata need ühes tabelis <a href="/vordlus/">võrdlustööriistas</a>.
+          </p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Kuidas valida?</span>
+            <h2>Neli sammu sobiva mikrokraadini.</h2>
+          </div>
+          <ol class="check">
+            <li><strong>Alusta oskusest, mitte koolist.</strong> Mõtle, millist konkreetset oskust tahad tõendada — siis sobib filtreerida valdkonna järgi, näiteks <a href="/valdkond/it-ja-andmed/">IT ja andmed</a> või <a href="/valdkond/majandus-ja-juhtimine/">majandus ja juhtimine</a>.</li>
+            <li><strong>Vaata mahtu ja kestust koos.</strong> 24 EAP kahe semestriga on tuntav koormus töö kõrvalt; lühem 12–15 EAP programm mahub kiiremini graafikusse.</li>
+            <li><strong>Kontrolli õppevormi ja eeldusi.</strong> Veebis või hübriid sobib töötavale inimesele; vaata ka, kas programm nõuab varasemat kõrgharidust.</li>
+            <li><strong>Võrdle hinda ja rahastust.</strong> Kõrvuta kuni kolm programmi ja kaalu, kas kulu katab tööandja, Töötukassa või sina ise (<a href="/kes-maksab/">kes maksab?</a>).</li>
+          </ol>
+          <div class="actions">
+            <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="mkr_vordlus_suunatest">Tee 2-minutiline suunatest</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Korduvad küsimused</span>
+            <h2>Mikrokraad, EAP ja võrdlemine — lühivastused.</h2>
+          </div>
+          <Faq items={faqItems} />
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Seotud</span>
+            <h2>Vaata edasi.</h2>
+          </div>
+          <ul class="check">
+            <li><a href="/mikrokraadid/">Mikrokraadid Eestis</a> — kõik ülikoolide mikrokraadid koolide kaupa.</li>
+            <li><a href="/mikrokvalifikatsioonide-vordlus/">Mikrokvalifikatsioonide võrdlus</a> — laiem võrdlus, sh koolitusettevõtete lühiõpe.</li>
+            <li><a href="/kataloog/">Filtreeritav kataloog</a> ja <a href="/vordlus/">võrdlustööriist</a> — kõrvuta kuni kolm programmi.</li>
+            <li><a href="/karjaar/andmeanaluutik/">Karjäärirajad</a>, näiteks andmeanalüütik — millised oskused viivad sihile.</li>
+            <li><a href="/andmed/">Andmed ja metoodika</a> — kust info pärineb ja kuidas kontrollime.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Filtreeri ülikool, hind ja valdkond — leia oma mikrokraad.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="mkr_vordlus_bottom_kataloog">Ava kataloog</a>
+              <a class="btn btn-secondary" href="mailto:info@mikrokvalifikatsioon.ee?subject=Mikrokraadi%20valik" data-track-event="email_click" data-track-label="mkr_vordlus_bottom_email">Küsi nõu e-mailiga</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="mkr_vordlus_email">info@mikrokvalifikatsioon.ee</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="mkr_vordlus_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Mikrokraadide võrdlus" />
+  </body>
+</html>
