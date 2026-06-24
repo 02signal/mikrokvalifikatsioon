@@ -6,6 +6,7 @@ import Nav from "../../components/Nav.astro";
 import { catalog, providersWithSlug, type CatalogEntryWithSlug } from "../../data/catalog";
 import { toCourse, outboundUrl } from "../../data/courseSchema";
 import { comparisonsFor } from "../../data/comparisons";
+import { matchForCatalogEntry, ehisAttribution } from "../../data/ehisFacts";
 
 export function getStaticPaths() {
   return catalog.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
@@ -15,18 +16,41 @@ const { entry } = Astro.props as { entry: CatalogEntryWithSlug };
 const providerSlug = providersWithSlug.find((p) => p.provider === entry.provider)?.slug;
 const relatedComparisons = comparisonsFor(entry.slug).slice(0, 4);
 
+// Ametlik allikas: EHIS (avaandmed). Sobitame kirje EHIS õppekavaga deterministlikult.
+// SAFE & incremental: täidame ainult PUUDUVAID fakte; ei kirjuta üle olemasolevat
+// per-school väärtust. Õpiväljundeid TOHIB EHISest viitega taasesitada.
+const ehisMatch = matchForCatalogEntry(entry);
+const ehis = ehisMatch.curriculum;
+
+// Fill-only-missing: EN-nimi, EAP (kui puudub), valdkonna nimi (kui puudub).
+const displayEcts = entry.ects ?? ehis?.eap ?? null;
+const ehisNameEn = ehis?.name_en ?? null;
+const ehisFieldName = ehis?.field_name ?? null;
+
+// PDF-link ainult kehtiva http(s) URL-i korral — EHIS võib siia panna kohahoidja
+// ("Hetkel puudub") või paljast koodi; ära kunagi renderda katkist linki.
+const ehisPdfUrl = ehis?.official_pdf_url && /^https?:\/\//i.test(ehis.official_pdf_url) ? ehis.official_pdf_url : null;
+
+// Õpiväljundid: kui EHISel on need olemas, kuva need (ametlik avaandmestik, viitega).
+// Per-school õpiväljundid jäävad varuvariandiks.
+const ehisOutcomes = ehis?.outcomes && ehis.outcomes.length > 0 ? ehis.outcomes : null;
+const displayOutcomes = ehisOutcomes ?? (entry.outcomes && entry.outcomes.length > 0 ? entry.outcomes : null);
+const outcomesFromEhis = ehisOutcomes != null;
+
 const canonicalPath = `/kataloog/${entry.slug}/`;
 const checkedAtText = entry.sourceCheckedAt.split("-").reverse().join(".");
 const providerLink = outboundUrl(entry, "programmileht");
 const languageText = entry.language === "en" ? "inglise" : entry.language === "et" ? "eesti" : null;
 
 const facts = [
-  entry.ects != null ? { label: "Maht", value: `${entry.ects} EAP` } : null,
+  displayEcts != null ? { label: "Maht", value: `${displayEcts} EAP` } : null,
   entry.priceText ? { label: "Hind", value: entry.priceText } : null,
   entry.durationText ? { label: "Kestus", value: entry.durationText } : null,
   entry.format ? { label: "Õppevorm", value: entry.format } : null,
   languageText ? { label: "Keel", value: languageText } : null,
-  entry.intakeText ? { label: "Vastuvõtt", value: entry.intakeText } : null
+  entry.intakeText ? { label: "Vastuvõtt", value: entry.intakeText } : null,
+  ehisNameEn ? { label: "Nimi (EN)", value: ehisNameEn } : null,
+  ehisFieldName ? { label: "Valdkond (EHIS)", value: ehisFieldName } : null
 ].filter((fact): fact is { label: string; value: string } => fact !== null);
 
 const metaTail = [
@@ -120,12 +144,15 @@ const schema = {
             </div>
           )}
 
-          {entry.outcomes && entry.outcomes.length > 0 && (
+          {displayOutcomes && displayOutcomes.length > 0 && (
             <div class="detail-block">
               <h2>Mida sa pärast oskad?</h2>
               <ul class="check">
-                {entry.outcomes.map((outcome) => <li>{outcome}</li>)}
+                {displayOutcomes.map((outcome) => <li>{outcome}</li>)}
               </ul>
+              {outcomesFromEhis && (
+                <p class="src-credit">Õpiväljundid pärinevad EHISe ametlikust õppekavast (avaandmed). {ehisAttribution}.</p>
+              )}
             </div>
           )}
 
@@ -134,6 +161,18 @@ const schema = {
               <h2>Kuidas hinnatakse?</h2>
               <p>{entry.assessmentText}</p>
             </div>
+          )}
+
+          {ehis && (
+            <p class="notice notice-official">
+              <strong>Ametlik allikas: EHIS — Haridus- ja Teadusministeerium.</strong>
+              Õppekava on registreeritud Eesti Hariduse Infosüsteemis (EHIS)
+              {ehis.ehis_kood && <> koodiga <strong>{ehis.ehis_kood}</strong></>}.
+              {ehisPdfUrl && (
+                <> Vaata <a href={ehisPdfUrl} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_ehis_pdf_${entry.provider}`}>ametlik õppekava (PDF)</a>.</>
+              )}
+              {" "}{ehisAttribution}.
+            </p>
           )}
 
           <p class="notice">
@@ -209,6 +248,8 @@ const schema = {
       .detail-facts dd { margin: 3px 0 0; font-weight: 700; color: #212121; overflow-wrap: anywhere; }
       .detail-block { margin-bottom: 24px; }
       .detail-block h2 { font-size: 1.15rem; margin-bottom: 8px; }
+      .src-credit { margin: 10px 0 0; font-size: 0.82rem; color: #5a6b80; }
+      .notice-official { border-left-color: var(--teal); background: #eef5f4; margin-bottom: 16px; }
       .interest { margin-top: 18px; }
       .btn-interest { background: rgba(255, 255, 255, 0.12); color: #fff; border: 1px solid rgba(255, 255, 255, 0.45); }
       .btn-interest:hover { background: rgba(255, 255, 255, 0.22); }
