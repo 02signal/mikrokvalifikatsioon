@@ -233,6 +233,7 @@ const schema = {
     </style>
 
     <script>
+      import { computeFit, type CoverageRow } from "../../lib/outcome-fit";
       const search = document.querySelector("[data-outcome-search]") as HTMLInputElement | null;
       const fieldSel = document.querySelector("[data-outcome-field]") as HTMLSelectElement | null;
       const count = document.querySelector("[data-outcome-count]");
@@ -293,6 +294,14 @@ const schema = {
       let PROG: Record<string, { name: string; provider: string; ects: number | null; price: string | null }> = {};
       try { if (pkgDataEl) PROG = JSON.parse(pkgDataEl.textContent || "{}"); } catch { PROG = {}; }
       const escHtml = (s: string) => s.replace(/[&<>"]/g, (c) => (({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }) as Record<string, string>)[c] || c);
+      // Hinna esimene arvugrupp ("2 530 €" → 2530); tundmatu → null (ei mõtle juurde).
+      const parsePriceEur = (priceText: string | null): number | null => {
+        if (typeof priceText !== "string") return null;
+        const m = priceText.replace(/ /g, " ").match(/\d[\d\s]*/);
+        if (!m) return null;
+        const n = Number(m[0].replace(/\s/g, ""));
+        return Number.isFinite(n) && n > 0 ? n : null;
+      };
       let lastMatchSig = "";
 
       const readPkg = (): PkgItem[] => { try { return JSON.parse(localStorage.getItem(PKG_KEY) || "[]"); } catch { return []; } };
@@ -304,6 +313,8 @@ const schema = {
         const matchable = arr.filter((i) => i.progs && i.progs.length);
         if (matchable.length < 1) { matchBox.hidden = true; matchBox.innerHTML = ""; return; }
         const total = matchable.length;
+        // Ehita AMOS-i katvuse-projektsioon paketist (slug → kaetud õpiväljundid + faktid)
+        // ja lase see läbi kanoonilise fit-mootori (amos.outcome.fit/v1, vendored).
         const cover = new Map<string, Set<string>>(); // programmi slug → kaetud õpiväljundid
         for (const it of matchable) {
           for (const slug of it.progs as string[]) {
@@ -311,22 +322,20 @@ const schema = {
             (cover.get(slug) as Set<string>).add(it.key);
           }
         }
-        let best: { slug: string; n: number } | null = null;
-        for (const [slug, set] of cover) { if (!best || set.size > best.n) best = { slug, n: set.size }; }
-        const uncovered = new Set(matchable.map((i) => i.key));
-        const combo: string[] = [];
-        while (uncovered.size > 0 && combo.length < 6) {
-          let pick: { slug: string; gain: number } | null = null;
-          for (const [slug, set] of cover) {
-            let gain = 0;
-            for (const k of set) if (uncovered.has(k)) gain += 1;
-            if (gain > 0 && (!pick || gain > pick.gain)) pick = { slug, gain };
-          }
-          if (!pick) break;
-          combo.push(pick.slug);
-          for (const k of (cover.get(pick.slug) as Set<string>)) uncovered.delete(k);
-        }
-        const covered = total - uncovered.size;
+        const projection: CoverageRow[] = [...cover.entries()].map(([slug, set]) => {
+          const p = PROG[slug];
+          return {
+            variant_ref: slug,
+            outcome_refs: [...set],
+            eap: p && p.ects != null ? p.ects : null,
+            price_eur: parsePriceEur(p ? p.price : null),
+            title: p ? p.name : slug,
+            school: p ? p.provider : null,
+          };
+        });
+        const fit = computeFit(matchable.map((i) => i.key), projection);
+        const best = fit.best_single;
+        const combo = fit.combination;
         const meta = (slug: string) => PROG[slug] || { name: slug, provider: "", ects: null, price: null };
         const line = (slug: string, n?: number): string => {
           const p = meta(slug);
@@ -334,16 +343,19 @@ const schema = {
           const cov = n != null ? ` <span class="cov">katab ${n}/${total}</span>` : "";
           return `<a href="/kataloog/${slug}/" data-track-event="cta_click" data-track-label="pkg_match_detail">${escHtml(p.name)}</a> <span class="pm-prov">${escHtml(facts)}</span>${cov}`;
         };
-        const allInOne = !!best && best.n === total;
+        const allInOne = !!best && best.fully_covers;
         let html = `<h3 class="pm-h">Sobivaim sinu paketile (${total} oskust)</h3>`;
         if (best) {
-          html += `<p class="pm-best">${line(best.slug, best.n)}</p>`;
+          html += `<p class="pm-best">${line(best.variant_ref, best.covered_count)}</p>`;
           if (allInOne) {
             html += `<p class="pm-note pm-good">✓ See üksik programm katab kogu su paketi.</p>`;
           } else {
-            html += `<p class="pm-h2">Täielikuks katteks (${covered}/${total}) sobib kombinatsioon:</p>`;
-            html += `<ol class="pm-combo">${combo.map((slug) => `<li>${line(slug)}</li>`).join("")}</ol>`;
-            html += `<p class="pm-note">Ükski üksik programm ei kata kogu su paketti — sa soovid oskuste kombinatsiooni, mida praegu pakub vaid mitu eri programmi. Jäta e-mail, siis teavitame, kui sellele lähedasem terviklik lahendus lisandub.</p>`;
+            html += `<p class="pm-h2">Täielikuks katteks (${combo.covered_refs.length}/${total}) sobib kombinatsioon:</p>`;
+            html += `<ol class="pm-combo">${combo.variants.map((v) => `<li>${line(v.variant_ref)}</li>`).join("")}</ol>`;
+            const tail = combo.fully_covered
+              ? "Ükski üksik programm ei kata kogu su paketti — sa soovid oskuste kombinatsiooni, mida praegu pakub vaid mitu eri programmi. Jäta e-mail, siis teavitame, kui sellele lähedasem terviklik lahendus lisandub."
+              : `Praegused programmid katavad sinu paketist ${combo.covered_refs.length}/${total} oskust — kõigile su valitud oskustele veel ühtegi katet pole. Jäta e-mail, siis teavitame, kui lisandub programm, mis su paketti paremini katab.`;
+            html += `<p class="pm-note">${tail}</p>`;
           }
         }
         matchBox.innerHTML = html;
@@ -351,7 +363,7 @@ const schema = {
         const sig = matchable.map((i) => i.key).sort().join("|");
         if (sig !== lastMatchSig) {
           lastMatchSig = sig;
-          track("package_match", { count: total, best_coverage: best ? best.n : 0, combo_size: combo.length, all_in_one: allInOne ? "jah" : "ei" });
+          track("package_match", { count: total, best_coverage: best ? best.covered_count : 0, combo_size: combo.program_count, all_in_one: allInOne ? "jah" : "ei" });
         }
       };
 
