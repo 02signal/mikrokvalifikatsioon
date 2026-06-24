@@ -1,6 +1,96 @@
 {
   "redirects": [
     {
+      "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid/",
+      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-2/",
+      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-2/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-3/",
+      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-3/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-4/",
+      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-4/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-5/",
+      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-5/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-6/",
+      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-6/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-7/",
+      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-7/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-8/",
+      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-8/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-9/",
+      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-9/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-10/",
+      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-10/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-11/",
+      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-11/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-andmep-otilde-hine-riskijuhtimine/",
+      "destination": "/kataloog/tartu-ulikool-andmepohine-riskijuhtimine/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-loovettev-otilde-tja-mikrokraadiprogramm/",
+      "destination": "/kataloog/tartu-ulikool-loovettevotja-mikrokraadiprogramm/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-loovettev-otilde-tluse-projektijuhtimise-mikrokraadiprogramm/",
+      "destination": "/kataloog/tartu-ulikool-loovettevotluse-projektijuhtimise-mikrokraadiprogramm/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-mikrokraadiprogramm-ouml-koloogia-ja-looduskaitse-globaalmuutuste-tingimustes/",
+      "destination": "/kataloog/tartu-ulikool-mikrokraadiprogramm-okoloogia-ja-looduskaitse-globaalmuutuste-tingimustes/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-mikrokraadiprogramm-bdquo-andmeanal-uuml-uuml-s-ldquo/",
+      "destination": "/kataloog/tartu-ulikool-mikrokraadiprogramm-andmeanaluus/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-mikrokraadiprogramm-bdquo-riigihangete-korraldamine-ldquo/",
+      "destination": "/kataloog/tartu-ulikool-mikrokraadiprogramm-riigihangete-korraldamine/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-s-uuml-steemianal-uuml-uuml-s/",
+      "destination": "/kataloog/tartu-ulikool-susteemianaluus/",
+      "permanent": true
+    },
+    {
       "source": "/(.*)",
       "has": [
         {
