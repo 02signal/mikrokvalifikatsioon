@@ -1,0 +1,297 @@
+{
+  "snapshot_version": "amos.statistikaamet.salary/v1",
+  "attribution_text": "Allikas: Statistikaamet (tabelid PA626, PA625), litsents CC BY-SA 4.0",
+  "licence": "CC_BY_SA_4_0",
+  "occupation_monthly": {
+    "source": "PA626",
+    "year": 2018,
+    "unit": "eur_month",
+    "median": true,
+    "occupations": [
+      {
+        "isco_submajor": "11",
+        "label_en": "Chief executives, senior officials and legislators",
+        "median_eur_monthly": 2050
+      },
+      {
+        "isco_submajor": "12",
+        "label_en": "Administrative and commercial managers",
+        "median_eur_monthly": 1795
+      },
+      {
+        "isco_submajor": "13",
+        "label_en": "Production and specialized services managers",
+        "median_eur_monthly": 1639
+      },
+      {
+        "isco_submajor": "14",
+        "label_en": "Hospitality, retail and other services managers",
+        "median_eur_monthly": 1181
+      },
+      {
+        "isco_submajor": "21",
+        "label_en": "Science and engineering professionals",
+        "median_eur_monthly": 1600
+      },
+      {
+        "isco_submajor": "22",
+        "label_en": "Health professionals",
+        "median_eur_monthly": 1671
+      },
+      {
+        "isco_submajor": "23",
+        "label_en": "Teaching professionals",
+        "median_eur_monthly": 1280
+      },
+      {
+        "isco_submajor": "24",
+        "label_en": "Business and administration professionals",
+        "median_eur_monthly": 1700
+      },
+      {
+        "isco_submajor": "25",
+        "label_en": "Information and communications technology professionals",
+        "median_eur_monthly": 2300
+      },
+      {
+        "isco_submajor": "26",
+        "label_en": "Legal, social and cultural professionals",
+        "median_eur_monthly": 1382
+      },
+      {
+        "isco_submajor": "31",
+        "label_en": "Science and engineering associate professionals",
+        "median_eur_monthly": 1344
+      },
+      {
+        "isco_submajor": "32",
+        "label_en": "Health associate professionals",
+        "median_eur_monthly": 1266
+      },
+      {
+        "isco_submajor": "33",
+        "label_en": "Business and administration associate professionals",
+        "median_eur_monthly": 1291
+      },
+      {
+        "isco_submajor": "34",
+        "label_en": "Legal, social, cultural and related associate professionals",
+        "median_eur_monthly": 1000
+      },
+      {
+        "isco_submajor": "35",
+        "label_en": "Information and communications technicians",
+        "median_eur_monthly": 1485
+      },
+      {
+        "isco_submajor": "41",
+        "label_en": "General and keyboard clerks",
+        "median_eur_monthly": 1100
+      },
+      {
+        "isco_submajor": "42",
+        "label_en": "Customer services clerks",
+        "median_eur_monthly": 1060
+      },
+      {
+        "isco_submajor": "43",
+        "label_en": "Numerical and material recording clerks",
+        "median_eur_monthly": 1110
+      },
+      {
+        "isco_submajor": "44",
+        "label_en": "Other clerical support workers",
+        "median_eur_monthly": 935
+      },
+      {
+        "isco_submajor": "51",
+        "label_en": "Personal service workers",
+        "median_eur_monthly": 793
+      },
+      {
+        "isco_submajor": "52",
+        "label_en": "Sales workers",
+        "median_eur_monthly": 765
+      },
+      {
+        "isco_submajor": "53",
+        "label_en": "Personal care workers",
+        "median_eur_monthly": 740
+      },
+      {
+        "isco_submajor": "54",
+        "label_en": "Protective services workers",
+        "median_eur_monthly": 894
+      },
+      {
+        "isco_submajor": "61",
+        "label_en": "Market-oriented skilled agricultural workers",
+        "median_eur_monthly": 965
+      },
+      {
+        "isco_submajor": "62",
+        "label_en": "Market-oriented skilled forestry, fishing and hunting workers",
+        "median_eur_monthly": 1000
+      },
+      {
+        "isco_submajor": "63",
+        "label_en": "Subsistence farmers, fishers, hunters and gatherers",
+        "median_eur_monthly": null
+      },
+      {
+        "isco_submajor": "71",
+        "label_en": "Building and related trades workers, excluding electricians",
+        "median_eur_monthly": 1050
+      },
+      {
+        "isco_submajor": "72",
+        "label_en": "Metal, machinery and related trades workers",
+        "median_eur_monthly": 1277
+      },
+      {
+        "isco_submajor": "73",
+        "label_en": "Handicraft and printing workers",
+        "median_eur_monthly": 940
+      },
+      {
+        "isco_submajor": "74",
+        "label_en": "Electrical and electronic trades workers",
+        "median_eur_monthly": 1221
+      },
+      {
+        "isco_submajor": "75",
+        "label_en": "Food processing, wood working, garment and other craft and related trades workers",
+        "median_eur_monthly": 957
+      },
+      {
+        "isco_submajor": "81",
+        "label_en": "Stationary plant and machine operators",
+        "median_eur_monthly": 1076
+      },
+      {
+        "isco_submajor": "82",
+        "label_en": "Assemblers",
+        "median_eur_monthly": 1000
+      },
+      {
+        "isco_submajor": "83",
+        "label_en": "Drivers and mobile plant operators",
+        "median_eur_monthly": 1076
+      },
+      {
+        "isco_submajor": "91",
+        "label_en": "Cleaners and helpers",
+        "median_eur_monthly": 588
+      },
+      {
+        "isco_submajor": "92",
+        "label_en": "Agricultural, forestry and fishery labourers",
+        "median_eur_monthly": 778
+      },
+      {
+        "isco_submajor": "93",
+        "label_en": "Labourers in mining, construction, manufacturing and transport",
+        "median_eur_monthly": 984
+      },
+      {
+        "isco_submajor": "94",
+        "label_en": "Food preparation assistants",
+        "median_eur_monthly": 650
+      },
+      {
+        "isco_submajor": "95",
+        "label_en": "Street and related sales and service workers",
+        "median_eur_monthly": null
+      },
+      {
+        "isco_submajor": "96",
+        "label_en": "Refuse workers and other elementary workers",
+        "median_eur_monthly": 670
+      },
+      {
+        "isco_submajor": "01",
+        "label_en": "Commissioned armed forces officers",
+        "median_eur_monthly": null
+      },
+      {
+        "isco_submajor": "02",
+        "label_en": "Non-commissioned armed forces officers",
+        "median_eur_monthly": null
+      },
+      {
+        "isco_submajor": "03",
+        "label_en": "Armed forces occupations, other ranks",
+        "median_eur_monthly": null
+      }
+    ]
+  },
+  "regional_professionals_hourly": {
+    "source": "PA625",
+    "year": 2022,
+    "unit": "eur_hour",
+    "isco_major_group": "2",
+    "median": true,
+    "regions": [
+      {
+        "region": "harju",
+        "median_eur_hourly": 13.1
+      },
+      {
+        "region": "hiiu",
+        "median_eur_hourly": 9.08
+      },
+      {
+        "region": "ida-viru",
+        "median_eur_hourly": 10.38
+      },
+      {
+        "region": "jogeva",
+        "median_eur_hourly": 9.65
+      },
+      {
+        "region": "jarva",
+        "median_eur_hourly": 10.04
+      },
+      {
+        "region": "laane",
+        "median_eur_hourly": 10.54
+      },
+      {
+        "region": "laane-viru",
+        "median_eur_hourly": 10.12
+      },
+      {
+        "region": "polva",
+        "median_eur_hourly": 10.25
+      },
+      {
+        "region": "parnu",
+        "median_eur_hourly": 9.96
+      },
+      {
+        "region": "rapla",
+        "median_eur_hourly": 10.15
+      },
+      {
+        "region": "saare",
+        "median_eur_hourly": 10.05
+      },
+      {
+        "region": "tartu",
+        "median_eur_hourly": 11.28
+      },
+      {
+        "region": "valga",
+        "median_eur_hourly": 10.22
+      },
+      {
+        "region": "viljandi",
+        "median_eur_hourly": 9.81
+      },
+      {
+        "region": "voru",
+        "median_eur_hourly": 10.01
+      }
+    ]
+  }
+}

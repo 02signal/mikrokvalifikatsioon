@@ -1,0 +1,73 @@
+---
+// Salary facts for a career, from Statistikaamet open data (CC BY-SA 4.0).
+// Honest about granularity: gross MONTHLY median by occupation SUB-group (ISCO 2-digit,
+// national) — the figure that genuinely differs between e.g. IKT vs äri/haldus roles.
+// Renders nothing if there is no figure for the group.
+import {
+  medianMonthlyFor, nationalMedianMonthly, salaryMonthlyYear, salaryAttribution, eur,
+} from "../data/salary";
+
+interface Props { submajor: string; }
+const { submajor } = Astro.props;
+
+// Short Estonian labels for the occupation sub-groups we map careers to.
+const ET_LABEL: Record<string, string> = {
+  "21": "tehnika- ja loodusteaduse tippspetsialistid",
+  "24": "äri- ja haldustippspetsialistid",
+  "25": "IKT-tippspetsialistid",
+  "26": "õigus-, sotsiaal- ja kultuuritippspetsialistid",
+  "35": "IKT-tehnikud",
+};
+
+const row = medianMonthlyFor(submajor);
+const national = nationalMedianMonthly();
+const groupLabel = ET_LABEL[submajor] || (row?.label ?? "");
+const median = row?.median ?? null;
+---
+
+{median != null && (
+  <section class="white">
+    <div class="section-inner narrow">
+      <div class="section-head compact-head">
+        <span class="kicker">Palk</span>
+        <h2>Kui palju selle ameti­rühma eest makstakse?</h2>
+        <p class="muted">
+          Ametlik <strong>brutopalga mediaan</strong> ametiala-rühma <strong>{groupLabel}</strong> kohta
+          (Eesti, {salaryMonthlyYear}). Mediaan = poolte palgad jäävad alla, poolte üle selle.
+        </p>
+      </div>
+
+      <div class="salary-cards">
+        <div class="salary-card salary-card--lead">
+          <span class="salary-label">Mediaanpalk (bruto, €/kuu)</span>
+          <strong class="salary-value">{eur(median)} €</strong>
+        </div>
+        {national != null && (
+          <div class="salary-card">
+            <span class="salary-label">Eesti kõigi ametite mediaan</span>
+            <strong class="salary-value salary-value--muted">{eur(national)} €</strong>
+          </div>
+        )}
+      </div>
+
+      <p class="salary-source">
+        Allikas: <a href="https://andmed.stat.ee/en/stat/PA626" rel="noopener" target="_blank">Statistikaamet (tabel PA626)</a>,
+        litsents <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank">CC BY-SA 4.0</a>.
+        Bruto kuupalga mediaan ametiala-alarühma tasemel; viimane avaldatud aasta {salaryMonthlyYear}.
+      </p>
+    </div>
+  </section>
+)}
+
+<style>
+  .salary-cards { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
+  .salary-card {
+    background: var(--ice); border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 18px; display: grid; gap: 4px; min-width: 200px; flex: 1 1 200px;
+  }
+  .salary-card--lead { border-left: 4px solid var(--green); }
+  .salary-label { font-size: 0.85rem; color: var(--muted); }
+  .salary-value { color: var(--teal); font-weight: 700; font-size: 1.6rem; }
+  .salary-value--muted { color: var(--navy); font-weight: 700; font-size: 1.3rem; }
+  .salary-source { font-size: 0.8rem; color: var(--muted); margin: 12px 0 0; }
+</style>
