@@ -8,7 +8,7 @@ Owner constraints: family rules (CLAUDE.md) + embargo (CLAUDE.local.md).
 This brief defines **what to model, scrape, store and sync** so that:
 1. mikrokvalifikatsioon.ee can show seekers richer comparison/analysis (by field, date,
    outcome, delivery instance), and
-2. AMOS gains a **competitive-intelligence + demand radar** for planning EVK's own
+2. AMOS gains a **competitive-intelligence + demand radar** for planning new
    microcredentials faster than universities.
 
 It is intentionally a brief, not a final schema. AMOS agents should turn it into a proper
@@ -170,8 +170,8 @@ From the warehouse, when planning a new EVK programme, answer instantly:
   no secrets, no raw private docs. Person data stays in the AMOS restricted zone.
 - **Never invent:** unknown = null; AI may suggest, but cannot be canonical without source
   evidence + review.
-- **Embargo:** EVK's own programmes excluded from the public feed until the owner lifts it
-  (publicationState ≠ public). See CLAUDE.local.md.
+- **Embargo:** any operator's own programmes (`publicationState ≠ public`) are excluded from
+  the public feed until the owner lifts the embargo. See CLAUDE.local.md.
 - **Evidence + rollback:** every object carries source evidence; keep previous-good feed.
 
 ---

@@ -91,9 +91,9 @@ rollups + `SalaryObservation` aggregates, **no employer-specific or person data*
   > (portfolio)** over a CV line. So: pick learning that lets you **build a portfolio of real
   > work**, not just a certificate.
   → recommend **portfolio-friendly programmes** (filter catalog for practical/portfolio
-  output). This is a true, high-engagement angle that also sets the stage for an **embargoed
-  EVK portfolio-first offering** (see CLAUDE.local.md): **prepare the neutral ground now;
-  name/imply nothing until it is approved and the owner lifts the embargo.**
+  output). This is a true, high-engagement angle. **Owner-gated note (see CLAUDE.local.md):**
+  keep the framing provider-neutral and name/imply no operator's own programme; demand capture
+  stays neutral until the owner directs otherwise.
 
 All public copy stays neutral, money-and-payback-first, and **never implies EVK's own
 programme** until the embargo is lifted.
@@ -115,8 +115,9 @@ context attached to the org/company view. Person/contact data restricted, consen
   B2B contacts (Twenty); GDPR lawful basis + retention.
 - **Scraping** respects ToS/robots/rate limits; sources + evidence stored; skipped sources
   logged (no silent undercount).
-- **Embargo:** no public mention or implication of EVK's own portfolio-first offering until
-  approved + owner lifts it. Internal planning may prepare the ground.
+- **Embargo:** no surface may state or imply that the operator has (or is about to have) its
+  own mikrokvalifikatsioon until the owner lifts the embargo (CLAUDE.local.md). Keep all
+  framing provider-neutral.
 
 ## 7. Backlog for AMOS agents
 1. Occupation/skill taxonomy + the `occupation ↔ skillTag ↔ outcome` bridge.
@@ -135,4 +136,4 @@ context attached to the org/company view. Person/contact data restricted, consen
   trend; no employer-identified or person data public.
 - B2B "who's hiring" worklist in Twenty (restricted) for sales planning.
 - Demand (mkval signals) × labor (jobs) × supply (catalog) joined → "build-next" ranking.
-- Embargo intact; portfolio narrative live and DACA-ready without naming it.
+- Embargo intact; portfolio narrative live and provider-neutral — no operator's own programme named or implied.
