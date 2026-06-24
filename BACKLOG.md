@@ -6,6 +6,16 @@
 - Own the defining content: "mikrokraad on üks mikrokvalifikatsiooni liik".
 - Every conversion path measurable in GA4 with the family event taxonomy.
 - Publishing gate active: see CLAUDE.md (and CLAUDE.local.md where present).
+- **Cross-brand identity & unified engagement amendment:** `docs/amos-identity-engagement-amendment.md`
+  — makes the identity model person-centric across the whole brand portfolio (EVK site,
+  mikrokvalifikatsioon, credentialstudy, digiteekaart, automatiseerimine, teekaart, future
+  brands): one canonical Twenty Person (identity-resolved), **per-brand roles** (learner /
+  owner-grant-seeker / B2B buyer / provider / partner), **brand-scoped consent + cross-brand-use
+  lawful basis**, and **one unified messaging/email/issue plane** independent of brand/service.
+  Requires the matching amendment to the canonical AMOS learner-identity ADR + PR notification
+  to all agents. The `source_site` capture enum is already multi-brand; Twenty-as-person is the
+  base — this makes roles/relationships, brand-scoped consent, and the unified engagement layer
+  first-class.
 - **Account layer plan (Phase C):** `docs/amos-account-layer-plan.md` — registered-user layer
   as a brand face on the shared AMOS OPK/identity spine (ET `konto.mikrokvalifikatsioon.ee`,
   EN `credentialstudy.com`); magic-link auth, Twenty-as-person (bridged via the consent ledger
