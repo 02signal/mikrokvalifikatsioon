@@ -223,3 +223,106 @@ export function matchForCatalogEntry(entry: CatalogEntry): EhisMatch {
 
   return { confidence: "none", curriculum: null };
 }
+
+// ---- authoritative override layer ----------------------------------------
+// Owner decision (2026-06-24): on a matched (exact|strong) entry, EHIS is the
+// AUTHORITATIVE source for the official curriculum facts. We FULLY OVERRIDE
+// name / EAP / outcomes / language from EHIS — these are official open data.
+// We KEEP per-school: priceText, durationText, format, summary, goalText,
+// assessmentText, url (EHIS does not carry these). Unmatched (`none`) entries
+// stay entirely per-school.
+//
+// CRITICAL: we never replace the curated navigation taxonomy `field` (it powers
+// /valdkond, catalog filters, and the comparison landings). EHIS's raw
+// õppekavarühm (field_code + field_name) is ATTACHED as an extra authoritative
+// classification, displayed on the detail page — not used for navigation/URLs.
+
+/** Map EHIS `languages` (full ET strings like "eesti keel"/"inglise keel") back
+ * to the catalog enum. Estonian present (alone or mixed) → "et"; otherwise if
+ * English present → "en"; else null. Mirrors the catalog's "et|en|null" shape. */
+export function ehisLanguageToCatalog(languages: string[] | null | undefined): "et" | "en" | null {
+  if (!languages || !languages.length) return null;
+  const lower = languages.map((l) => l.toLowerCase());
+  if (lower.some((l) => l.includes("eesti"))) return "et";
+  if (lower.some((l) => l.includes("inglise"))) return "en";
+  return null;
+}
+
+/** The EHIS-authoritative fields attached to a matched catalog entry, plus the
+ * provenance metadata the detail page renders. `null` `ehis` = unmatched. */
+export interface EhisAuthoritative {
+  /** true when EHIS is the authoritative source for this entry's facts. */
+  authoritative: boolean;
+  confidence: MatchConfidence;
+  /** EHIS official code (oppekavaKood). */
+  ehisKood: string | null;
+  /** EHIS EN name, kept for EN context (not the override target for `name`). */
+  nameEn: string | null;
+  /** EHIS official õppekavarühm — ATTACHED, not used for nav/URLs. */
+  fieldCode: string | null;
+  fieldName: string | null;
+  /** Valid http(s) official PDF URL or null. */
+  officialPdfUrl: string | null;
+  /** true when displayed outcomes come from EHIS (vs per-school fallback). */
+  outcomesFromEhis: boolean;
+}
+
+export interface EhisOverride {
+  /** Fields to spread over the catalog entry (only present when authoritative). */
+  patch: Partial<{
+    name: string;
+    ects: number | null;
+    outcomes: string[] | null;
+    language: "et" | "en" | null;
+  }>;
+  ehis: EhisAuthoritative;
+}
+
+/** Compute the authoritative EHIS override for a catalog entry. On a matched
+ * entry, returns the patch (name/EAP/outcomes/language fully from EHIS) plus
+ * the õppekavarühm + provenance. On `none`, returns an empty patch and
+ * `authoritative: false` so the caller leaves per-school facts untouched. */
+export function ehisOverrideFor(entry: CatalogEntry): EhisOverride {
+  const match = matchForCatalogEntry(entry);
+  const c = match.curriculum;
+  if (!c) {
+    return {
+      patch: {},
+      ehis: {
+        authoritative: false,
+        confidence: "none",
+        ehisKood: null,
+        nameEn: null,
+        fieldCode: null,
+        fieldName: null,
+        officialPdfUrl: null,
+        outcomesFromEhis: false,
+      },
+    };
+  }
+
+  const officialName = c.name_et.replace(/\s+/g, " ").trim();
+  const ehisOutcomes = c.outcomes && c.outcomes.length > 0 ? c.outcomes : null;
+  // EHIS outcomes are primary; per-school outcomes only when EHIS has none.
+  const outcomes = ehisOutcomes ?? (entry.outcomes && entry.outcomes.length > 0 ? entry.outcomes : null);
+  const language = ehisLanguageToCatalog(c.languages) ?? entry.language ?? null;
+
+  return {
+    patch: {
+      name: officialName || entry.name,
+      ects: c.eap ?? entry.ects ?? null,
+      outcomes,
+      language,
+    },
+    ehis: {
+      authoritative: true,
+      confidence: match.confidence,
+      ehisKood: c.ehis_kood,
+      nameEn: c.name_en,
+      fieldCode: c.field_code,
+      fieldName: c.field_name,
+      officialPdfUrl: httpUrlOrNull(c.official_pdf_url),
+      outcomesFromEhis: ehisOutcomes != null,
+    },
+  };
+}

@@ -1,22 +1,77 @@
 # EHIS official facts — merge & diff report
 
-> Genereeritud: 2026-06-24. Allikas: Allikas: EHIS (Eesti Hariduse Infosüsteem), Haridus- ja Teadusministeerium.
+> Genereeritud: 2026-06-24. Allikas: EHIS (Eesti Hariduse Infosüsteem), Haridus- ja Teadusministeerium.
 > Litsents: avaandmed.eesti.ee — taaskasutatav, viitega allikale (HTM/EHIS).
 
 Deterministlik sobitus (provider + nimi). EHIS-i õpiväljundid on ametlik avaandmestik,
-mida tohib viitega taasesitada. See raport ei muuda kuvatavat — see näitab omanikule,
-**kus EHIS erineb praegusest kuvast**, et omanik saaks hiljem täieliku ülekirjutuse heaks kiita.
+mida tohib viitega taasesitada.
+
+## Staatus: TÄIELIK ÜLEKIRJUTUS RAKENDATUD (omaniku otsus 2026-06-24)
+
+EHIS on nüüd **autoriteetne ametlik allikas** sobitatud (`exact`/`strong`) kirjete
+õppekavafaktide jaoks. Sobitatud kirjel kirjutame **täielikult üle** järgmised väljad
+otse EHIS-ist (vt `src/data/catalog/index.ts` → `ehisOverrideFor`):
+
+- **name** ← EHIS `name_et` (tühikud normaliseeritud); `name_en` jääb EN-kontekstiks alles.
+- **EAP (ects)** ← EHIS `eap`.
+- **õpiväljundid (outcomes)** ← EHIS `outcomes` (ametlik avaandmestik, viitega taasesitamine OK)
+  primaarsena; per-school õpiväljundid ainult varuks, kui EHIS-il neid pole.
+- **keel (language)** ← EHIS `languages` (kaardistatud `et`/`en`/`null` peale).
+
+**Per-school jäävad** (EHIS neid ei kanna): `priceText`, `durationText`, `format`,
+`summary`, `goalText`, `assessmentText`, `url`. Sobimata (`none`) kirjed: **muutmata**.
+
+URL-id (slug) püsivad muutumatuna — slug arvutatakse ORIGINAALSE `provider + name`
+põhjalt ENNE ülekirjutust, seega nime muutus ei katkesta ühtki olemasolevat aadressi.
+
+### Navigatsiooni-taksonoomia otsus (oluline nüanss)
+
+Kureeritud `field` (väike eestikeelne navigatsiooni-taksonoomia, mis toidab
+`/valdkond/[slug]`, kataloogi filtreid JA valdkonnapõhiseid võrdluslehti) **JÄÄB
+muutmata**. EHIS-i toores õppekavarühm (ISCED-F, 100+ peent rühma) **EI ASENDA**
+kureeritud valdkonda — vastasel juhul fragmenteeruks navigatsioon. Selle asemel
+**lisame** EHIS-i ametliku õppekavarühma (`field_code` + `field_name`)
+klassifikatsioonina detaillehele (faktirida „Ametlik õppekavarühm (EHIS): …").
 
 ## Sobituse statistika
 
 - Kataloogi kirjeid kokku: **169**
-- Sobitatud: **148** (täpne: 146, tugev: 2)
+- Sobitatud (EHIS-autoriteetne): **148** (täpne: 146, tugev: 2)
 - Sobimata (per-school faktid puutumata): **21**
 - EHIS õppekavasid snapshotis: **450** (30 õppeasutust)
 
-## Erinevused (sobitatud kirjed, kus EHIS erineb praegusest kuvast)
+## Mis kuvatav muutus (vana → uus), kui ülekirjutus rakendati
 
-| Pakkuja | Kataloogi nimi | EHIS name_et | Kataloogi EAP | EHIS maht | Kataloogi valdkond | EHIS field_name | Usaldus | EHIS kood |
+- **Nime muutus: 3 kirjet**
+  - Tartu Ülikool — „Füüsika õpetamine põhikoolis: 8. klassi kursused (Pärnus)“ → „Füüsika õpetamine põhikoolis: 8. klassi kursused“ *(strong; asukohatäpsustus „(Pärnus)“ kaob EHIS-nimest)*
+  - Tartu Ülikool — „Matemaatikaõpetaja erialaained Ida-Virumaa õpetajatele (Narvas)“ → „Matemaatikaõpetaja erialaained Ida-Virumaa õpetajatele“ *(strong; „(Narvas)“ kaob)*
+  - Tallinna Ülikool — „Educational Innovation and Leadership“ → „Haridusinnovatsioon ja juhtimine“ *(exact; EN-nimi liigub „Nimi (EN)“ ritta)*
+- **EAP (maht) muutus: 8 kirjet** — 2 parandust + 6 varem puuduva EAP täitmist:
+  - TalTech — „Toit ja toitumine“: **33 → 30 EAP** *(parandus)*
+  - Tartu Ülikool — „Turundus sotsiaalmeedias ja brändijuhtimine mikroettevõtetele“: **16 → 15 EAP** *(parandus)*
+  - Tartu Ülikool — „Matemaatikaõpetaja erialaained Ida-Virumaa õpetajatele“: **— → 18 EAP**
+  - Tallinna Ülikool — „Täiskasvanute koolituste korraldus“: **— → 12 EAP**
+  - Eesti Maaülikool — „Keskkonnasäästlik taimekasvatus ja mahetootmine“: **— → 9 EAP**
+  - Eesti Maaülikool — „Maastiku kujundus, ehitus ja esitlus“: **— → 17 EAP**
+  - Eesti Maaülikool — „Maastiku planeerimine, hindamine ja kaitse“: **— → 23 EAP**
+  - Eesti Ettevõtluskõrgkool Mainor — „Tarneahelajuhi arenguprogramm“: **— → 5 EAP**
+- **Õpiväljundid: kõik 148 sobitatud kirjet** kuvavad nüüd EHIS-i ametlikke õpiväljundeid
+  (avaandmed, viitega). Kus varem oli per-school õpiväljundeid, on need asendatud EHIS-i
+  ametlikega; kus polnud, on nüüd EHIS-i omad. Per-school õpiväljundid jäävad ainult
+  varuks (kasutusel ainult siis, kui EHIS-il neid pole).
+- **Õppekeel: 2 kirjet** said EHIS-ist täpsema keele.
+- **Kokku name/EAP/outcomes muutus: 148 kirjet** (eelkõige õpiväljundite muutuse tõttu).
+- **Ametlik õppekavarühm (EHIS)** lisati klassifikatsioonina kõigile 148 sobitatud
+  kirjele; kureeritud `field` jäi navigatsioonis kehtima.
+
+## Sobitatud kirjete täisvaade (rakendatud ülekirjutuse võrdlustabel)
+
+Veerg „Kataloogi valdkond" näitab **kureeritud** navigatsiooni-valdkonda (JÄÄB kehtima);
+veerg „EHIS field_name" on EHIS-i ametlik õppekavarühm (LISATUD klassifikatsioonina,
+EI asenda navigatsiooni). „Kataloogi EAP" = vana per-school väärtus, „EHIS maht" = nüüd
+kuvatav autoriteetne EAP.
+
+| Pakkuja | Kataloogi nimi | EHIS name_et | Kataloogi EAP (vana) | EHIS maht (kuvatav) | Kataloogi valdkond (kureeritud, nav) | EHIS õppekavarühm (lisatud) | Usaldus | EHIS kood |
 |---|---|---|---|---|---|---|---|---|
 | TalTech | Auditeerimise baasteadmised | Auditeerimise baasteadmised | 12 | 12 | majandus ja juhtimine | Majandusarvestus ja maksundus | exact | 259353 |
 | TalTech | Avalik haldus ja kaasaegne andmepõhine valitsemine | Avalik haldus ja kaasaegne andmepõhine valitsemine | 12 | 12 | majandus ja juhtimine | Juhtimine ja haldus | exact | 259348 |

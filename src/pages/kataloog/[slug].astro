@@ -6,7 +6,7 @@ import Nav from "../../components/Nav.astro";
 import { catalog, providersWithSlug, type CatalogEntryWithSlug } from "../../data/catalog";
 import { toCourse, outboundUrl } from "../../data/courseSchema";
 import { comparisonsFor } from "../../data/comparisons";
-import { matchForCatalogEntry, ehisAttribution } from "../../data/ehisFacts";
+import { ehisAttribution } from "../../data/ehisFacts";
 
 export function getStaticPaths() {
   return catalog.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
@@ -16,26 +16,25 @@ const { entry } = Astro.props as { entry: CatalogEntryWithSlug };
 const providerSlug = providersWithSlug.find((p) => p.provider === entry.provider)?.slug;
 const relatedComparisons = comparisonsFor(entry.slug).slice(0, 4);
 
-// Ametlik allikas: EHIS (avaandmed). Sobitame kirje EHIS õppekavaga deterministlikult.
-// SAFE & incremental: täidame ainult PUUDUVAID fakte; ei kirjuta üle olemasolevat
-// per-school väärtust. Õpiväljundeid TOHIB EHISest viitega taasesitada.
-const ehisMatch = matchForCatalogEntry(entry);
-const ehis = ehisMatch.curriculum;
+// Ametlik allikas: EHIS (avaandmed). Omaniku otsus 2026-06-24 — sobitatud kirjel
+// on EHIS faktide AUTORITEETNE allikas: name/EAP/õpiväljundid/keel on juba EHIS-ist
+// üle kirjutatud kataloogi tasemel (vt src/data/catalog/index.ts). Siin loeme
+// ülekirjutatud väärtusi ja kuvame ametliku päritolu. Kureeritud `field` jääb
+// navigatsioonis kehtima; EHIS-i õppekavarühm kuvatakse ametliku lisaklassina.
+const ehis = entry.ehis;
+const isOfficial = ehis.authoritative;
 
-// Fill-only-missing: EN-nimi, EAP (kui puudub), valdkonna nimi (kui puudub).
-const displayEcts = entry.ects ?? ehis?.eap ?? null;
-const ehisNameEn = ehis?.name_en ?? null;
-const ehisFieldName = ehis?.field_name ?? null;
+const displayEcts = entry.ects ?? null;
+const ehisNameEn = ehis.nameEn;
+const ehisFieldName = ehis.fieldName;
 
-// PDF-link ainult kehtiva http(s) URL-i korral — EHIS võib siia panna kohahoidja
-// ("Hetkel puudub") või paljast koodi; ära kunagi renderda katkist linki.
-const ehisPdfUrl = ehis?.official_pdf_url && /^https?:\/\//i.test(ehis.official_pdf_url) ? ehis.official_pdf_url : null;
+// PDF-link ainult kehtiva http(s) URL-i korral (juba normaliseeritud allikas).
+const ehisPdfUrl = ehis.officialPdfUrl;
 
-// Õpiväljundid: kui EHISel on need olemas, kuva need (ametlik avaandmestik, viitega).
-// Per-school õpiväljundid jäävad varuvariandiks.
-const ehisOutcomes = ehis?.outcomes && ehis.outcomes.length > 0 ? ehis.outcomes : null;
-const displayOutcomes = ehisOutcomes ?? (entry.outcomes && entry.outcomes.length > 0 ? entry.outcomes : null);
-const outcomesFromEhis = ehisOutcomes != null;
+// Õpiväljundid kuvatakse juba ülekirjutatud kujul; lipp ütleb, kas need pärinevad
+// EHIS-ist (siis lisame ametliku viite) või on per-school varuvariant.
+const displayOutcomes = entry.outcomes && entry.outcomes.length > 0 ? entry.outcomes : null;
+const outcomesFromEhis = ehis.outcomesFromEhis;
 
 const canonicalPath = `/kataloog/${entry.slug}/`;
 const checkedAtText = entry.sourceCheckedAt.split("-").reverse().join(".");
@@ -50,7 +49,7 @@ const facts = [
   languageText ? { label: "Keel", value: languageText } : null,
   entry.intakeText ? { label: "Vastuvõtt", value: entry.intakeText } : null,
   ehisNameEn ? { label: "Nimi (EN)", value: ehisNameEn } : null,
-  ehisFieldName ? { label: "Valdkond (EHIS)", value: ehisFieldName } : null
+  ehisFieldName ? { label: "Ametlik õppekavarühm (EHIS)", value: ehisFieldName } : null
 ].filter((fact): fact is { label: string; value: string } => fact !== null);
 
 const metaTail = [
@@ -151,7 +150,7 @@ const schema = {
                 {displayOutcomes.map((outcome) => <li>{outcome}</li>)}
               </ul>
               {outcomesFromEhis && (
-                <p class="src-credit">Õpiväljundid pärinevad EHISe ametlikust õppekavast (avaandmed). {ehisAttribution}.</p>
+                <p class="src-credit">Õpiväljundid pärinevad EHISe ametlikust õppekavast (avaandmed) ja on selle programmi autoriteetne allikas. {ehisAttribution}.</p>
               )}
             </div>
           )}
@@ -163,24 +162,34 @@ const schema = {
             </div>
           )}
 
-          {ehis && (
-            <p class="notice notice-official">
-              <strong>Ametlik allikas: EHIS — Haridus- ja Teadusministeerium.</strong>
-              Õppekava on registreeritud Eesti Hariduse Infosüsteemis (EHIS)
-              {ehis.ehis_kood && <> koodiga <strong>{ehis.ehis_kood}</strong></>}.
-              {ehisPdfUrl && (
-                <> Vaata <a href={ehisPdfUrl} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_ehis_pdf_${entry.provider}`}>ametlik õppekava (PDF)</a>.</>
-              )}
-              {" "}{ehisAttribution}.
+          {isOfficial ? (
+            <>
+              <p class="notice notice-official">
+                <strong>Ametlik allikas (faktid): EHIS — Haridus- ja Teadusministeerium.</strong>
+                Programmi nimi, maht (EAP), õpiväljundid ja õppekeel pärinevad otse Eesti Hariduse
+                Infosüsteemi (EHIS) ametlikust õppekavast
+                {ehis.ehisKood && <> koodiga <strong>{ehis.ehisKood}</strong></>}
+                {ehisFieldName && <> (õppekavarühm: <strong>{ehisFieldName}</strong>)</>}.
+                {ehisPdfUrl && (
+                  <> Vaata <a href={ehisPdfUrl} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_ehis_pdf_${entry.provider}`}>ametlik õppekava (PDF)</a>.</>
+                )}
+                {" "}{ehisAttribution}.
+              </p>
+              <p class="notice">
+                <strong>Hind ja registreerumine:</strong> hind, vastuvõtt ja tingimused on
+                <a href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_source_${entry.provider}`}>{entry.provider} lehel</a>
+                (kontrollitud {checkedAtText}).
+                Märkasid viga? Kirjuta <a href={`mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Kataloogi parandus: " + entry.name)}`} data-track-event="email_click" data-track-label="detail_correction">info@mikrokvalifikatsioon.ee</a>.
+              </p>
+            </>
+          ) : (
+            <p class="notice">
+              <strong>Allikas:</strong> selle programmi õppekava info — eesmärk ja õpiväljundid — pärineb
+              <a href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_source_${entry.provider}`}>{entry.provider} koolituslehelt</a>
+              (kontrollitud {checkedAtText}). Ametlik ja lõplik info — hind, vastuvõtt ja tingimused — on samuti seal.
+              Märkasid viga? Kirjuta <a href={`mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Kataloogi parandus: " + entry.name)}`} data-track-event="email_click" data-track-label="detail_correction">info@mikrokvalifikatsioon.ee</a>.
             </p>
           )}
-
-          <p class="notice">
-            <strong>Allikas:</strong> selle programmi õppekava info — eesmärk ja õpiväljundid — pärineb
-            <a href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_source_${entry.provider}`}>{entry.provider} koolituslehelt</a>
-            (kontrollitud {checkedAtText}). Ametlik ja lõplik info — hind, vastuvõtt ja tingimused — on samuti seal.
-            Märkasid viga? Kirjuta <a href={`mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Kataloogi parandus: " + entry.name)}`} data-track-event="email_click" data-track-label="detail_correction">info@mikrokvalifikatsioon.ee</a>.
-          </p>
         </div>
       </section>
 

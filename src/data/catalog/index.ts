@@ -4,6 +4,7 @@ import tartuYlikool from "./tartu-ylikool.json";
 import muudKoolid from "./muud-koolid.json";
 import { assignSlugs, slugify } from "../slug";
 import { parseIntakeDates } from "../dates";
+import { ehisOverrideFor, type EhisAuthoritative } from "../ehisFacts";
 
 /** Kohalik snapshot — fallback, kui AMOS feedi pole seatud või see ei vasta. */
 const LOCAL_CHECKED_AT = "2026-06-12";
@@ -56,22 +57,34 @@ export const catalogCheckedAt = feed.checkedAt;
 export const catalogUpdatedAt = feed.updatedAt;
 export const catalogContentHash = feed.contentHash;
 
-/** Kataloogi kirje koos püsiva slugiga (/kataloog/<slug>/). */
-export type CatalogEntryWithSlug = CatalogEntry & { slug: string };
+/** Kataloogi kirje koos püsiva slugiga (/kataloog/<slug>/) ja EHIS-i ametliku
+ * päritoluga. `ehis` on iga kirje küljes: sobitatud kirjel `authoritative: true`
+ * ja name/EAP/õpiväljundid/keel on EHIS-ist üle kirjutatud; sobimata kirjel
+ * `authoritative: false` ja per-school faktid jäävad puutumata. */
+export type CatalogEntryWithSlug = CatalogEntry & { slug: string; ehis: EhisAuthoritative };
 
 const sorted: CatalogEntry[] = feed.entries
   .slice()
   .sort((a, b) => a.provider.localeCompare(b.provider, "et") || a.name.localeCompare(b.name, "et"));
 
+// Slugid arvutatakse ORIGINAALSE provider + name põhjal ENNE EHIS-i ülekirjutust,
+// et URL-id püsiksid muutumatuna ka siis, kui kuvatav nimi EHIS-ist muutub.
 const slugs = assignSlugs(sorted, (entry) => `${entry.provider} ${entry.name}`);
 
 export const catalog: CatalogEntryWithSlug[] = sorted.map((entry) => {
   const parsed = parseIntakeDates(entry.intakeText);
+  // Ametlik allikas: EHIS (avaandmed). Sobitatud kirjel kirjutame name/EAP/
+  // õpiväljundid/keele EHIS-ist üle (täielik ülekirjutus). Kureeritud `field`
+  // (navigatsiooni taksonoomia) JÄÄB puutumata; EHIS-i õppekavarühm lisatakse
+  // ametliku klassifikatsioonina `ehis.fieldCode/fieldName` kaudu.
+  const { patch, ehis } = ehisOverrideFor(entry);
   return {
     ...entry,
+    ...patch,
     slug: slugs.get(entry) as string,
     registrationDeadline: entry.registrationDeadline ?? parsed.registrationDeadline,
-    startDate: entry.startDate ?? parsed.startDate
+    startDate: entry.startDate ?? parsed.startDate,
+    ehis
   };
 });
 
