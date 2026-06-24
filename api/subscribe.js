@@ -71,6 +71,46 @@ function cleanOutcomes(value) {
   return out;
 }
 
+// GDPR erasure (Art. 17): route an account-deletion request to the AMOS erasure endpoint
+// (POST /api/outreach/v1/erasure — suppression-first, then deletion). NEVER subscribes.
+// Endpoint: AMOS_ERASURE_URL, else derived from AMOS_TOPIC_CAPTURE_URL (…/erasure).
+async function forwardErasure(email, sourceSite, res) {
+  const erasureUrl =
+    process.env.AMOS_ERASURE_URL
+    || (process.env.AMOS_TOPIC_CAPTURE_URL || '').replace(/\/[^/]*$/, '/erasure');
+  if (erasureUrl) {
+    try {
+      const r = await fetch(erasureUrl, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          ...(process.env.AMOS_CAPTURE_TOKEN ? { authorization: `Bearer ${process.env.AMOS_CAPTURE_TOKEN}` } : {}),
+        },
+        body: JSON.stringify({
+          capture_version: 'amos.outreach.lead_capture/v1',
+          email,
+          requested_at: new Date().toISOString(),
+          scope: 'all_outreach_data',
+          status: 'received',
+          source_site: sourceSite,
+        }),
+      });
+      if (r.ok) { res.status(200).json({ ok: true, status: 'erasure_requested' }); return; }
+      console.error('subscribe: erasure ingress status', r.status);
+    } catch (e) {
+      console.error('subscribe: erasure ingress error', e && e.message);
+    }
+  } else {
+    console.error('subscribe: no erasure endpoint configured (AMOS_ERASURE_URL / AMOS_TOPIC_CAPTURE_URL)');
+  }
+  // Fail-closed for GDPR: we did NOT subscribe. Honest response; the /konto/ UI offers a mailto fallback.
+  res.status(200).json({
+    ok: true,
+    status: 'erasure_pending',
+    message: 'Kustutustaotlus on vastu võetud. Kui see ei jõua automaatselt kohale, kirjuta info@mikrokvalifikatsioon.ee.',
+  });
+}
+
 export default async function handler(req, res) {
   res.setHeader('content-type', 'application/json; charset=utf-8');
   if (req.method !== 'POST') { res.status(405).json({ message: 'Method not allowed' }); return; }
@@ -85,6 +125,13 @@ export default async function handler(req, res) {
   const sourceSite = ALLOWED_SITES.has(body.source_site) ? body.source_site : 'mikrokvalifikatsioon_ee';
 
   if (!EMAIL_RE.test(email) || email.length > 254) { res.status(400).json({ message: 'Palun sisesta korrektne e-post.' }); return; }
+
+  // PBI-01 (GDPR Art. 17): account deletion must NEVER fall through to a subscription.
+  // Route the raw account_delete/erasure kind to the AMOS erasure endpoint (suppression-first),
+  // with an honest fallback. Checked on the RAW body.kind before the capture-kind normalisation.
+  if (body.kind === 'account_delete' || body.kind === 'erasure') {
+    return forwardErasure(email, sourceSite, res);
+  }
 
   // Per-kind validation + the bounded payload we forward to AMOS.
   let topic;
