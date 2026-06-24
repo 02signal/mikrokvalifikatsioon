@@ -5,6 +5,7 @@ import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import { catalog, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 import { formatEt, monthKey, monthLabel } from "../../data/dates";
+import { toCourse } from "../../data/courseSchema";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
 const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
@@ -47,8 +48,7 @@ const schema = {
       itemListElement: byDeadline.map((entry, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        name: entry.name,
-        url: `${SITE}/kataloog/${entry.slug}/`
+        item: toCourse(entry)
       }))
     }
   ]

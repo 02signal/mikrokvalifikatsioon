@@ -3,6 +3,7 @@ import Seo from "../../components/Seo.astro";
 import Faq from "../../components/Faq.astro";
 import "../../styles/global.css";
 import { catalog, providers, fields, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
+import { organization } from "../../data/organizationSchema";
 
 const emailHref = "mailto:info@mikrokvalifikatsioon.ee?subject=Microcredentials%20register%20-%20Europe";
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
@@ -30,26 +31,21 @@ const faqItems = [
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://mikrokvalifikatsioon.ee/#organization",
-      name: "Mikrokvalifikatsioon.ee",
-      legalName: "Ettevõtluskeskus OÜ",
-      url: "https://mikrokvalifikatsioon.ee/"
-    },
+    organization,
     {
       "@type": "WebSite",
       url: "https://mikrokvalifikatsioon.ee/en/",
       name: "Microcredentials register — Estonia",
       inLanguage: "en",
-      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" }
-    },
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
-        { "@type": "ListItem", position: 2, name: "English", item: "https://mikrokvalifikatsioon.ee/en/" }
-      ]
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: "https://mikrokvalifikatsioon.ee/kataloog/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
     },
     {
       "@type": "FAQPage",

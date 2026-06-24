@@ -1,7 +1,8 @@
 import { OGImageRoute } from "astro-og-canvas";
-import { catalog, providersWithSlug } from "../../data/catalog";
+import { catalog, providersWithSlug, fieldsWithSlug } from "../../data/catalog";
 import { topics } from "../../data/topics";
 import { careers } from "../../data/careers";
+import { comparisons } from "../../data/comparisons";
 
 // Sisulehed: võti = canonical-tee viimane segment (Seo.astro tuletab sama võtme).
 const contentPages: Record<string, { title: string; description: string }> = {
@@ -109,9 +110,23 @@ const careerPages = Object.fromEntries(
   careers.map((c) => [c.slug, { title: `${c.role} — karjäärirada`, description: `${c.entries.length} programmi · portfoolio + sobiv õpe` }])
 );
 
+// Valdkonnalehed: võti = valdkonna slug (varem registreerimata → katkine OG igal /valdkond/ lehel).
+const fieldPages = Object.fromEntries(
+  fieldsWithSlug.map((f) => {
+    const n = catalog.filter((e) => e.field === f.field).length;
+    const fieldCap = f.field.charAt(0).toUpperCase() + f.field.slice(1);
+    return [f.slug, { title: `${fieldCap} — mikrokraadid`, description: `${n} programmi · maht, hind, õppevorm` }];
+  })
+);
+
+// Võrdluslehed: võti = paari slug — annab igale pSEO X-vs-Y lehele oma kaardi (mitte ühe geneerilise).
+const comparisonPages = Object.fromEntries(
+  comparisons.map((c) => [c.pair, { title: `${c.a.name} vs ${c.b.name}`, description: `${c.a.field} · ${c.a.provider} vs ${c.b.provider}` }])
+);
+
 export const { getStaticPaths, GET } = await OGImageRoute({
   param: "route",
-  pages: { ...contentPages, ...programmePages, ...topicPages, ...providerPages, ...careerPages },
+  pages: { ...contentPages, ...programmePages, ...topicPages, ...providerPages, ...careerPages, ...fieldPages, ...comparisonPages },
   getImageOptions: (_path, page) => ({
     title: page.title,
     description: page.description,

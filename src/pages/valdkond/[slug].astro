@@ -4,7 +4,7 @@ import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import { catalog, fieldsWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
-import { parsePriceEur } from "../../data/courseSchema";
+import { parsePriceEur, toCourse } from "../../data/courseSchema";
 
 export function getStaticPaths() {
   return fieldsWithSlug.map((f) => ({ params: { slug: f.slug }, props: { field: f.field } }));
@@ -56,8 +56,7 @@ const schema = {
       itemListElement: entries.map((entry, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        name: entry.name,
-        url: `${SITE}/kataloog/${entry.slug}/`
+        item: toCourse(entry)
       }))
     }
   ]
