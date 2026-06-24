@@ -137,8 +137,9 @@ const schema = {
           )}
 
           <p class="notice">
-            See on koondinfo Mikrokvalifikatsioon.ee kataloogist. Ametlik ja lõplik info — hind,
-            vastuvõtt ja tingimused — on alati <a href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_source_${entry.provider}`}>{entry.provider} enda lehel</a>.
+            <strong>Allikas:</strong> selle programmi õppekava info — eesmärk ja õpiväljundid — pärineb
+            <a href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_source_${entry.provider}`}>{entry.provider} koolituslehelt</a>
+            (kontrollitud {checkedAtText}). Ametlik ja lõplik info — hind, vastuvõtt ja tingimused — on samuti seal.
             Märkasid viga? Kirjuta <a href={`mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Kataloogi parandus: " + entry.name)}`} data-track-event="email_click" data-track-label="detail_correction">info@mikrokvalifikatsioon.ee</a>.
           </p>
         </div>
