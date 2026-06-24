@@ -6,6 +6,7 @@ import "../styles/global.css";
 import Nav from "../components/Nav.astro";
 import { catalog, providers, catalogCheckedAt } from "../data/catalog";
 import { slugify } from "../data/slug";
+import { fieldStats, ectsRangeText, priceRangeText } from "../lib/fieldComparison";
 
 const SITE = "https://mikrokvalifikatsioon.ee";
 const PATH = "/mikrokvalifikatsioonide-vordlus/";
@@ -30,6 +31,23 @@ for (const e of withPriceAndEap) {
 const tableRows = diverse.slice(0, 6);
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+
+// Valdkonnapõhine võrdlus: päris kataloogiandmetest tuletatud programmide arv,
+// EAP-vahemik, hinnavahemik ja näiteprogrammid valdkonna kohta (ilma "muu"-ta).
+const fieldComparison = fieldStats(microQuals);
+const topFields = fieldComparison.slice(0, 6);
+
+// Faktid KKK ja "kuidas valida" jaoks — kõik päris kataloogiandmetest.
+const biggestField = fieldComparison[0] ?? null;
+const microEcts = microQuals.map((e) => e.ects).filter((n): n is number => n != null);
+const ectsLo = microEcts.length ? Math.min(...microEcts) : null;
+const ectsHi = microEcts.length ? Math.max(...microEcts) : null;
+const ectsTypicalText =
+  ectsLo != null && ectsHi != null
+    ? ectsLo === ectsHi
+      ? `${ectsLo} EAP`
+      : `${ectsLo}–${ectsHi} EAP`
+    : "mõni kuni paarkümmend EAP";
 
 // Valdkonnalingid, mida mikrokvalifikatsioonide pakkujad katavad (ilma "muu"-ta).
 const microFields = [...new Set(microQuals.map((e) => e.field))]
@@ -56,6 +74,21 @@ const faqItems = [
     question: "Kes mikrokvalifikatsiooni kinni maksab?",
     answer:
       "Kolm rada: tööandja koolituseelarve (kui oskus aitab praegust tööd), Töötukassa toetused (kui oled töötu või su oskused vajavad uuendamist) või ise makstes. Sobiva raja leiad lehelt /kes-maksab/."
+  },
+  {
+    question: "Millises valdkonnas on kõige rohkem valikut?",
+    answer: biggestField
+      ? `Selle lehe valimis (rakenduskõrgkoolide ja koolitusettevõtete mikrokvalifikatsioonid) on kõige rohkem programme valdkonnas „${biggestField.field}“ — ${biggestField.count} programmi. Kõik valdkonnad koos programmide arvuga on välja toodud allpool valdkonnapõhises võrdluses; täisnimekirja näeb lehel /valdkond/.`
+      : "Valdkonnapõhine jaotus koos programmide arvuga on välja toodud allpool olevas võrdluses ja lehel /valdkond/."
+  },
+  {
+    question: "Kui suur on tüüpiline maht (EAP)?",
+    answer: `Maht antakse Euroopa ainepunktides (EAP); 1 EAP vastab umbes 26 tunnile õppija tööd. Selle lehe valimis jäävad avaldatud mahud vahemikku ${ectsTypicalText} — väiksem maht tähendab kiiremat lühiõpet, suurem maht põhjalikumat programmi. Osa koolitusettevõtteid annab mahu hoopis akadeemilistes tundides; täpne maht on iga programmi juures kataloogis.`
+  },
+  {
+    question: "Kui kaua õpe tüüpiliselt kestab?",
+    answer:
+      "Enamasti paar kuud kuni kaks-kolm semestrit töö kõrvalt. Kestus sõltub mahust ja õppevormist: veebipõhine lühiõpe võib mahtuda mõnda nädalasse, suurema EAP-mahuga programm venib semestriteni. Iga kirje juures on kestus kataloogis nii, nagu kool selle avaldab; lõplik graafik on kooli enda lehel."
   },
   {
     question: "Kust pärinevad võrdluse andmed?",
@@ -107,6 +140,17 @@ const schema = {
         position: index + 1,
         name: `${entry.name} — ${entry.provider}`,
         url: `${SITE}/kataloog/${entry.slug}/`
+      }))
+    },
+    {
+      "@type": "ItemList",
+      name: "Mikrokvalifikatsioonide võrdlus valdkonniti",
+      numberOfItems: topFields.length,
+      itemListElement: topFields.map((stat, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: `${stat.field} — ${stat.count} programmi`,
+        url: `${SITE}/valdkond/${stat.slug}/`
       }))
     },
     {
@@ -276,21 +320,86 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
         </div>
       </section>
 
-      <!-- Valdkonnad — internal links -->
+      <!-- Valdkonnapõhine võrdlus — GEO: per-field, extractable table -->
       <section class="ice">
-        <div class="section-inner narrow">
+        <div class="section-inner">
           <div class="section-head compact-head">
             <span class="kicker">Valdkonna järgi</span>
-            <h2>Vaata mikrokvalifikatsioone valdkonniti.</h2>
+            <h2>Mikrokvalifikatsioonide võrdlus valdkonniti.</h2>
+            <p>
+              Iga valdkonna kohta on toodud programmide arv, mahuvahemik (EAP), hinnavahemik ja
+              paar näiteprogrammi — kõik päris kataloogiandmetest. Klõpsa valdkonnal, et näha
+              kõiki selle programme.
+            </p>
           </div>
-          <ul class="check">
-            {microFields.map((f) => (
-              <li><a href={`/valdkond/${f.slug}/`}>{f.field}</a></li>
-            ))}
-          </ul>
+          <div class="compare-wrap">
+            <table class="compare-table">
+              <thead>
+                <tr>
+                  <th scope="col">Valdkond</th>
+                  <th scope="col">Programme</th>
+                  <th scope="col">Maht (EAP)</th>
+                  <th scope="col">Hinnavahemik</th>
+                  <th scope="col">Näited</th>
+                </tr>
+              </thead>
+              <tbody>
+                {topFields.map((stat) => (
+                  <tr>
+                    <th scope="row"><a href={`/valdkond/${stat.slug}/`}>{stat.field}</a></th>
+                    <td>{stat.count}</td>
+                    <td>{ectsRangeText(stat)}</td>
+                    <td>{priceRangeText(stat)}</td>
+                    <td>
+                      {stat.examples.map((ex, i) => (
+                        <>
+                          {i > 0 && ", "}
+                          <a href={`/kataloog/${ex.slug}/`}>{ex.name}</a>
+                        </>
+                      ))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="notice">
+            Hinnavahemik on tuletatud koolide avaldatud hindadest (kontrollitud {checkedAtText}); kui
+            valdkonnas pole ühtki avalikku hinda, on märge „vaata kataloogist". Maht „kooli lehel"
+            tähendab, et osa pakkujaid kasutab EAP asemel akadeemilisi tunde. Metoodika on lehel
+            <a href="/andmed/">Andmed</a>.
+          </p>
           <p>
-            Kaalud karjäärivahetust? Vaata, millised oskused ja ametid kokku käivad — <a href="/karjaar/">karjäärirajad</a>
-            ja <a href="/oskused/">oskuste ülevaade</a> aitavad valida.
+            Kõik valdkonnad eraldi lehtedena:
+            {microFields.map((f, i) => (
+              <>
+                {i > 0 && " · "}
+                <a href={`/valdkond/${f.slug}/`}>{f.field}</a>
+              </>
+            ))}.
+            Kaalud karjäärivahetust? Vaata, millised oskused ja ametid kokku käivad —
+            <a href="/karjaar/">karjäärirajad</a> ja <a href="/oskused/">oskuste ülevaade</a> aitavad valida.
+          </p>
+        </div>
+      </section>
+
+      <!-- Kuidas valida — GEO: decision guide, extractable steps -->
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Kuidas valida õiget?</span>
+            <h2>Neli sammu sobiva mikrokvalifikatsioonini.</h2>
+          </div>
+          <ol class="check">
+            <li><strong>Alusta oskusest, mitte koolist.</strong> Mõtle, millist konkreetset oskust soovid tõendada, ja filtreeri valdkonna järgi — näiteks <a href="/valdkond/majandus-ja-juhtimine/">majandus ja juhtimine</a> või <a href="/valdkond/it-ja-andmed/">IT ja andmed</a>.</li>
+            <li><strong>Vaata mahtu ja kestust koos.</strong> Väiksem EAP-maht sobib kiiresse graafikusse töö kõrvalt; suurem maht annab põhjalikuma tulemuse, aga nõuab rohkem aega.</li>
+            <li><strong>Kontrolli õppevormi.</strong> Veebis või hübriid sobib töötavale inimesele; kohapealne annab rohkem praktikat ja kontakti.</li>
+            <li><strong>Võrdle hinda ja rahastust.</strong> Märgi kataloogis kuni kolm programmi, vaata need <a href="/vordlus/">võrdlustööriistas</a> kõrvuti ja kaalu, kas kulu katab tööandja, Töötukassa või sina ise (<a href="/kes-maksab/">kes maksab?</a>).</li>
+          </ol>
+          <p>
+            Kui kahtled, kas sulle sobib pigem koolitusettevõtte praktiline mikrokvalifikatsioon või
+            ülikooli mikrokraad, vaata kõrvale <a href="/mikrokraadide-vordlus/">mikrokraadide võrdlust</a> —
+            ülikoolide mikrokraadid annavad ECTS-ainepunkte, mida saab hiljem tasemeõppes arvestada.
           </p>
         </div>
       </section>
