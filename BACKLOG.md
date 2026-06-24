@@ -6,6 +6,7 @@
 - Own the defining content: "mikrokraad on üks mikrokvalifikatsiooni liik".
 - Every conversion path measurable in GA4 with the family event taxonomy.
 - Publishing gate active: see CLAUDE.md (and CLAUDE.local.md where present).
+- **Growth program:** `docs/mkval-growth-plan.md` — public moat (SEO/GEO, always cutting-edge) vs account-gated personalization, the AMOS demand×supply speed loop (build/publish faster than universities), instrumentation per layer, sequenced build roadmap (Phase A public-first → B retention → C accounts → D ecosystem), and the marketing/value-prop plan per persona.
 
 ## Done
 
