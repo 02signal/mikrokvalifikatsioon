@@ -1,0 +1,170 @@
+---
+import Seo from "../../../components/Seo.astro";
+import Nav from "../../../components/Nav.astro";
+import Footer from "../../../components/Footer.astro";
+import "../../../styles/global.css";
+
+// ============================================================================
+// /konto/kinnita?token=… — magic-link'i maandumisleht (Ekraan D).
+//
+// TOOTMINE: token valideeritakse AMOS-i vastu (HMAC confirm-token seam),
+// seans luuakse, double-opt-in läheb "confirmed", siis jookseb lossless
+// union-merge migratsioon enne "Minu konto" kuvamist. See elab SSR-
+// alamdomeenil (konto.mikrokvalifikatsioon.ee), sest apex on output:"static".
+//
+// STAATILINE SILD (praegu): tokenit me siin valideerida ei saa (pole serverit).
+// Seega: kui pending_email on seansis olemas (kasutaja tuli just Ekraanilt C),
+// loome/avame konto ja jookseme SAMA union-merge'i mis /konto/. Muidu palume
+// uue lingi. Migratsiooni-algoritm on identne /konto/ omaga (loss-less).
+// ============================================================================
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Logime sind sisse — Minu konto"
+      description="Kinnitame su e-posti ja viime su kontole."
+      canonicalPath="/konto/kinnita/"
+      robots="noindex,nofollow"
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <span class="eyebrow">Minu konto</span>
+          <h1 data-confirm-title>Logime sind sisse…</h1>
+          <p data-confirm-body>Üks hetk — kinnitame su e-posti ja toome su paketi kontole.</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="card" data-confirm-card hidden>
+            <p data-confirm-detail></p>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/konto/" data-track-event="cta_click" data-track-label="confirm_to_account">Telli uus link</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Minu konto" />
+
+    <script>
+      // BRIDGE: sama migratsioon nagu /konto/ — token-valideerimine elab AMOS-is.
+      type PkgItem = { key: string; text: string; progs?: string[] };
+      type AccountPackage = { id: string; name: string; items: PkgItem[] };
+      type AccountState = {
+        email: string; consent: boolean;
+        packages: AccountPackage[]; interests: string[];
+        notifyFields: string[]; notifySkills: string[]; comboWaitlist: string[];
+        reminders: boolean; funding_route: "ise" | "tootukassa" | "tooandja" | null;
+      };
+
+      const PKG_KEY = "mkval:pakett";
+      const ACCOUNT_KEY = "mkval:account";
+      const INTEREST_RE = /^mkval:interest:(.+)$/;
+      const track = (n: string, p: Record<string, unknown> = {}) => (window as any).digiteekaartTrack?.(n, p);
+
+      const readPkg = (): PkgItem[] => { try { return JSON.parse(localStorage.getItem(PKG_KEY) || "[]"); } catch { return []; } };
+      const readInterestSlugs = (): string[] => {
+        const out: string[] = [];
+        try {
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            const m = k && INTEREST_RE.exec(k);
+            if (m) out.push(m[1]);
+          }
+        } catch { /* private mode */ }
+        return out;
+      };
+      const readAccount = (): AccountState | null => {
+        try { const raw = localStorage.getItem(ACCOUNT_KEY); return raw ? JSON.parse(raw) : null; } catch { return null; }
+      };
+      const writeAccount = (s: AccountState): void => {
+        try { localStorage.setItem(ACCOUNT_KEY, JSON.stringify(s)); } catch { /* ignore */ }
+      };
+      const blankState = (email: string, consent: boolean): AccountState => ({
+        email, consent, packages: [], interests: [], notifyFields: [], notifySkills: [], comboWaitlist: [],
+        reminders: false, funding_route: null,
+      });
+
+      // Lossless union-merge (identne /konto/ algoritmiga).
+      const migrateInto = (state: AccountState): { movedOutcomes: number; movedProgs: number } => {
+        const localPkg = readPkg();
+        let movedOutcomes = 0;
+        if (localPkg.length) {
+          let target = state.packages[state.packages.length - 1];
+          if (!target) { target = { id: `pkg_${Date.now()}`, name: "Minu salvestatud pakett", items: [] }; state.packages.push(target); }
+          const have = new Set(target.items.map((i) => i.key));
+          for (const it of localPkg) {
+            if (have.has(it.key)) {
+              const ex = target.items.find((x) => x.key === it.key);
+              if (ex) ex.progs = [...new Set([...(ex.progs || []), ...(it.progs || [])])];
+            } else {
+              target.items.push({ key: it.key, text: it.text, progs: [...(it.progs || [])] });
+              have.add(it.key); movedOutcomes += 1;
+            }
+          }
+        }
+        const localInterests = readInterestSlugs();
+        const before = state.interests.length;
+        state.interests = [...new Set([...state.interests, ...localInterests])];
+        return { movedOutcomes, movedProgs: state.interests.length - before };
+      };
+
+      const fail = (title: string, detail: string): void => {
+        const t = document.querySelector("[data-confirm-title]");
+        const b = document.querySelector("[data-confirm-body]");
+        const card = document.querySelector("[data-confirm-card]") as HTMLElement | null;
+        const d = document.querySelector("[data-confirm-detail]");
+        if (t) t.textContent = title;
+        if (b) (b as HTMLElement).hidden = true;
+        if (d) d.textContent = detail;
+        if (card) card.hidden = false;
+      };
+
+      const run = (): void => {
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get("token");
+        // SILD: päris token-valideerimist pole. Kasutame pending_email'i, mille
+        // /konto/ Ekraan B salvestas. Tootmises asendab selle AMOS-i /konto/state.
+        const pendingEmail = sessionStorage.getItem("mkval:pending_email") || "";
+        const pendingConsent = sessionStorage.getItem("mkval:pending_consent") === "1";
+
+        if (!pendingEmail && !token) {
+          fail("Sisselogimine vajab linki", "See sisselogimislink on aegunud või juba kasutatud. Telli uus link.");
+          return;
+        }
+        if (!pendingEmail) {
+          // Token on URL-is, aga me ei saa seda staatiliselt valideerida → suuna /konto/.
+          fail("See link vajab kinnitust serveris", "Demorežiimis kinnitame su e-posti /konto/ lehel. Telli uus link.");
+          return;
+        }
+
+        const isNew = !readAccount();
+        let state = readAccount();
+        if (!state || state.email !== pendingEmail) state = blankState(pendingEmail, pendingConsent);
+        if (pendingConsent) state.consent = true;
+        const moved = migrateInto(state);
+        writeAccount(state);   // BRIDGE → AMOS /konto/migrate
+        if (moved.movedOutcomes || moved.movedProgs) {
+          try { localStorage.removeItem(PKG_KEY); } catch { /* ignore */ }
+          for (const slug of readInterestSlugs()) { try { localStorage.removeItem(`mkval:interest:${slug}`); } catch { /* ignore */ } }
+        }
+        track("tool_completed", { tool_name: "account_login" });
+        if (isNew) track("result_high_intent", { result_route: "account_create", form_name: "account_create" });
+        // Suuna kontole — /konto/ loeb union-merge'itud seisundi ja näitab Ekraani E.
+        window.location.replace("/konto/");
+      };
+
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run);
+      else run();
+    </script>
+  </body>
+</html>

@@ -23,7 +23,21 @@ const ALLOWED_SITES = new Set([
   'funnel_teekaart', 'funnel_automatiseerimine', 'funnel_digitaliseerimine',
   'funnel_digiteekaart', 'event_webinar', 'conference', 'project',
 ]);
-const ALLOWED_KINDS = new Set(['topic_subscribe', 'outcome_package']);
+const ALLOWED_KINDS = new Set([
+  'topic_subscribe', 'outcome_package',
+  // Account-layer kinds — canonical names per the AMOS lead_capture/v1 contract.
+  'account_created', 'package_saved', 'reminder_subscribed', 'funding_profile_set', 'combo_waitlist',
+]);
+// The /konto/ face uses action-verb names; normalise them to the canonical AMOS kinds
+// (so both repos agree on one taxonomy and the account path actually connects).
+const KIND_ALIASES = {
+  account_create: 'account_created',
+  deadline_reminder: 'reminder_subscribed',
+  notify_list: 'combo_waitlist',
+  funding_profile: 'funding_profile_set',
+};
+const ACCOUNT_KINDS = new Set(['account_created', 'package_saved', 'reminder_subscribed', 'funding_profile_set', 'combo_waitlist']);
+const ALLOWED_FUNDING_ROUTES = new Set(['ise', 'tootukassa', 'tooandja']);
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Bounded outcome-package payload — never trust client size/length.
@@ -64,7 +78,8 @@ export default async function handler(req, res) {
   const body = await readBody(req);
   if (!body || typeof body !== 'object') { res.status(400).json({ message: 'Vigane päring.' }); return; }
 
-  const kind = ALLOWED_KINDS.has(body.kind) ? body.kind : 'topic_subscribe';
+  const rawKind = KIND_ALIASES[body.kind] || body.kind;
+  const kind = ALLOWED_KINDS.has(rawKind) ? rawKind : 'topic_subscribe';
   const email = String(body.email || '').trim().toLowerCase();
   const field = body.field ? String(body.field).trim().slice(0, 64) : null;
   const sourceSite = ALLOWED_SITES.has(body.source_site) ? body.source_site : 'mikrokvalifikatsioon_ee';
@@ -74,10 +89,12 @@ export default async function handler(req, res) {
   // Per-kind validation + the bounded payload we forward to AMOS.
   let topic;
   let outcomes = null;
-  if (kind === 'outcome_package') {
-    topic = 'mikrokvalifikatsioon'; // the package lives on the mikrokvalifikatsioon register
+  let fundingRoute = null;
+  if (kind === 'outcome_package' || ACCOUNT_KINDS.has(kind)) {
+    topic = 'mikrokvalifikatsioon'; // package/account live on the mikrokvalifikatsioon register
     outcomes = cleanOutcomes(body.outcomes);
-    if (!outcomes.length) { res.status(400).json({ message: 'Lisa vähemalt üks õpiväljund paketti.' }); return; }
+    if (kind === 'outcome_package' && !outcomes.length) { res.status(400).json({ message: 'Lisa vähemalt üks õpiväljund paketti.' }); return; }
+    if (kind === 'funding_profile_set') { fundingRoute = ALLOWED_FUNDING_ROUTES.has(body.funding_route) ? body.funding_route : null; }
   } else {
     topic = String(body.topic || '').trim();
     if (!ALLOWED_TOPICS.has(topic)) { res.status(400).json({ message: 'Tundmatu teema.' }); return; }
@@ -103,7 +120,8 @@ export default async function handler(req, res) {
         email,
         interest_topic: topic,
         field,
-        ...(outcomes ? { outcomes } : {}),
+        ...(outcomes && outcomes.length ? { outcomes } : {}),
+        ...(fundingRoute ? { funding_route: fundingRoute } : {}),
         consent_purpose: 'course_offers',
         source_site: sourceSite,
         captured_at: new Date().toISOString(),

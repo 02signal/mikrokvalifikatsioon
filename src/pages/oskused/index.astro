@@ -155,9 +155,14 @@ const schema = {
               </div>
             </div>
             <div class="inline-actions">
-              <button class="btn btn-primary" type="submit">Teavita mind sobivast</button>
+              <a class="btn btn-primary" href="/konto/" data-pkg-account data-track-event="cta_click" data-track-label="pkg_to_account">Salvesta pakett ja loo konto</a>
+              <button class="btn btn-secondary" type="submit">Teavita mind sobivast</button>
               <button type="button" class="btn btn-secondary" data-pkg-clear>Tühjenda pakett</button>
             </div>
+            <p class="form-note" data-pkg-account-help>
+              Loo tasuta konto, siis hoiame su paketi alles ja anname märku, kui sobiv programm,
+              kombinatsioon või tähtaeg lisandub. Saad konto igal ajal kustutada.
+            </p>
             <p class="form-note" data-pkg-note>
               Kogume ainult sinu valitud õpiväljundid ja e-maili, et saata teade sobivast programmist või kombinatsioonist.
               Pakett püsib su brauseris. Vaata <a href="/privaatsus/">privaatsust</a>.
@@ -366,6 +371,18 @@ const schema = {
           track("package_match", { count: total, best_coverage: best ? best.covered_count : 0, combo_size: combo.program_count, all_in_one: allInOne ? "jah" : "ei" });
         }
       };
+
+      // Kui kontosessioon on juba selles brauseris olemas (mkval:account sild),
+      // muudab konto-CTA teksti "Salvesta minu kontole" — pakett liigub kontole
+      // järgmise /konto/ külastuse union-merge'iga (lossless). TOOTMISES asendab
+      // selle silla AMOS-i seansikontroll.
+      const accountBtn = document.querySelector("[data-pkg-account]") as HTMLAnchorElement | null;
+      const hasAccountSession = (): boolean => {
+        try { return !!localStorage.getItem("mkval:account"); } catch { return false; }
+      };
+      if (accountBtn && hasAccountSession()) {
+        accountBtn.textContent = "Salvesta minu kontole";
+      }
 
       let pkgViewed = false;
       const renderPkg = (): void => {
