@@ -1,6 +1,7 @@
 import { OGImageRoute } from "astro-og-canvas";
 import { catalog, providersWithSlug } from "../../data/catalog";
 import { topics } from "../../data/topics";
+import { careers } from "../../data/careers";
 
 // Sisulehed: võti = canonical-tee viimane segment (Seo.astro tuletab sama võtme).
 const contentPages: Record<string, { title: string; description: string }> = {
@@ -64,6 +65,10 @@ const contentPages: Record<string, { title: string; description: string }> = {
     title: "Mikrokraadid teemade ja oskuste kaupa",
     description: "Leia mikrokvalifikatsioon oskuse järgi — andmeanalüüs, juhtimine, AI, turundus ja muu."
   },
+  karjaar: {
+    title: "Karjäärirajad: kuidas alustada ja läbi lüüa",
+    description: "Portfoolio ja isikuomadused otsustavad — vali roll ja sobiv õpe."
+  },
   privaatsus: {
     title: "Privaatsus ja küpsised",
     description: "Mis andmeid kogume, milleks ja millised on sinu õigused."
@@ -95,9 +100,14 @@ const providerPages = Object.fromEntries(
   })
 );
 
+// Karjäärilehed: võti = karjääri slug.
+const careerPages = Object.fromEntries(
+  careers.map((c) => [c.slug, { title: `${c.role} — karjäärirada`, description: `${c.entries.length} programmi · portfoolio + sobiv õpe` }])
+);
+
 export const { getStaticPaths, GET } = await OGImageRoute({
   param: "route",
-  pages: { ...contentPages, ...programmePages, ...topicPages, ...providerPages },
+  pages: { ...contentPages, ...programmePages, ...topicPages, ...providerPages, ...careerPages },
   getImageOptions: (_path, page) => ({
     title: page.title,
     description: page.description,

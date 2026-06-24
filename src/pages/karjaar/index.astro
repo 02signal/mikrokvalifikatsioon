@@ -1,0 +1,113 @@
+---
+import Seo from "../../components/Seo.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { careers } from "../../data/careers";
+import { catalogCheckedAt } from "../../data/catalog";
+
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const SITE = "https://mikrokvalifikatsioon.ee";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": `${SITE}/#organization`, name: "Mikrokvalifikatsioon.ee", legalName: "Ettevõtluskeskus OÜ", url: `${SITE}/` },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Karjäär", item: `${SITE}/karjaar/` }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      name: "Karjäärirajad ja õpe",
+      numberOfItems: careers.length,
+      itemListElement: careers.map((c, i) => ({ "@type": "ListItem", position: i + 1, name: c.role, url: `${SITE}/karjaar/${c.slug}/` }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Karjäärirajad: kuidas alustada ja läbi lüüa"
+      description="Mõtled karjäärivahetusele või edasiminekule? Vali roll ja näe, kuidas alustada, miks portfoolio otsustab ja milline õpe aitab läbi lüüa."
+      canonicalPath="/karjaar/"
+      ogTitle="Karjäärirajad ja õpe"
+      ogDescription="Kuidas alustada ja läbi lüüa — portfoolio, isikuomadused ja sobiv õpe."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <span>Karjäär</span>
+          </nav>
+          <span class="eyebrow">Karjäärirajad</span>
+          <h1>Kuidas alustada ja läbi lüüa</h1>
+          <p>
+            Mõtled karjäärivahetusele või edasiminekule? Vali roll ja näe, kuidas alustada,
+            miks <strong>portfoolio ja isikuomadused</strong> otsustavad ning milline õpe aitab.
+          </p>
+          <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <ul class="topic-grid">
+            {careers.map((c) => (
+              <li class="topic-card">
+                <a href={`/karjaar/${c.slug}/`} data-track-event="cta_click" data-track-label="career_hub_to_role">
+                  <span class="topic-name">{c.role}</span>
+                  <span class="topic-count">{c.entries.length} programmi</span>
+                </a>
+                <p class="topic-syn">{c.intro}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Ei tea, kuhu liikuda?</span>
+            <h2>Tee suunatest või sirvi oskuste järgi.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="career_hub_suunatest">Tee suunatest</a>
+              <a class="btn btn-secondary" href="/oskused/" data-track-event="cta_click" data-track-label="career_hub_oskused">Otsi õpiväljundi järgi</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="career_hub_email">info@mikrokvalifikatsioon.ee</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Karjäärirajad" />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .topic-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+      .topic-card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+      .topic-card > a { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+      .topic-name { color: #212121; font-weight: 700; }
+      .topic-count { color: var(--teal); font-weight: 700; font-size: 0.85rem; white-space: nowrap; }
+      .topic-syn { margin: 6px 0 0; color: var(--muted); font-size: 0.86rem; }
+    </style>
+  </body>
+</html>

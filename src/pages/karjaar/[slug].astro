@@ -1,0 +1,215 @@
+---
+import Seo from "../../components/Seo.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { careers, type Career } from "../../data/careers";
+import { fieldsWithSlug, catalogCheckedAt } from "../../data/catalog";
+
+export function getStaticPaths() {
+  return careers.map((c) => ({ params: { slug: c.slug }, props: { career: c } }));
+}
+
+const { career } = Astro.props as { career: Career };
+const { entries, portfolio } = career;
+const roleLower = career.role.replace(/\s*\(.*?\)\s*/g, "").toLowerCase();
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const otherEntries = entries.filter((e) => !portfolio.includes(e));
+const fieldsCovered = fieldsWithSlug.filter((f) => entries.some((e) => e.field === f.field));
+
+const SITE = "https://mikrokvalifikatsioon.ee";
+const canonicalPath = `/karjaar/${career.slug}/`;
+const title = `${career.role} — karjäärirada ja õpe`;
+const description = `${career.role} karjäärirada: mida amet teeb, kuidas alustada ja läbi lüüa, ning milline õpe ja portfoolio aitavad. ${entries.length} sobivat mikrokvalifikatsiooni ja mikrokraadi.`;
+
+const faq = [
+  { q: `Kas alustajana saab ${roleLower} tööd?`,
+    a: `Saab, aga konkurents on tihe: avaldusi laekub sadu ja trend kasvab. Tööandjad ütlevad, et tugevaid kandidaate on üksikuid — otsustavad isikuomadused ja see, mida oled päriselt teinud (portfoolio), mitte ainult CV-rida. Ehita päris tööde portfoolio juba õppe ajal.` },
+  { q: `Milline õpe aitab ${roleLower}na alustada?`,
+    a: `Allpool on ${entries.length} sobivat mikrokvalifikatsiooni ja mikrokraadi${portfolio.length ? `, sealhulgas ${portfolio.length} portfoolio-sõbralikku, kus saab teha päris töid` : ""}. Vali õpe, mille väljund on midagi käegakatsutavat.` },
+  { q: `Kes maksab ${roleLower} õppe eest?`,
+    a: `Sageli ei maksa õppija kõike ise: Töötukassa, tööandja koolituseelarve või õppija ise. Vaata lähemalt lehelt „Kes maksab?".` }
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": `${SITE}/#organization`, name: "Mikrokvalifikatsioon.ee", legalName: "Ettevõtluskeskus OÜ", url: `${SITE}/` },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Karjäär", item: `${SITE}/karjaar/` },
+        { "@type": "ListItem", position: 3, name: career.role, item: `${SITE}${canonicalPath}` }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      name: `${career.role} — sobivad mikrokvalifikatsioonid ja mikrokraadid`,
+      numberOfItems: entries.length,
+      itemListElement: entries.map((entry, index) => ({
+        "@type": "ListItem", position: index + 1, name: entry.name, url: `${SITE}/kataloog/${entry.slug}/`
+      }))
+    },
+    { "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title={title}
+      description={description}
+      canonicalPath={canonicalPath}
+      ogTitle={`${career.role} — karjäärirada ja õpe`}
+      ogDescription="Kuidas alustada ja läbi lüüa — portfoolio, isikuomadused ja sobiv õpe."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report" data-career={career.slug}>
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <a href="/karjaar/">Karjäär</a> › <span>{career.role}</span>
+          </nav>
+          <span class="eyebrow">Karjäärirada</span>
+          <h1>{career.role}: kuidas alustada ja läbi lüüa</h1>
+          <p>{career.intro}</p>
+          <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="detail-block">
+            <h2>Kas alustajana on võimalik läbi lüüa?</h2>
+            <p>
+              Paljud kardavad, et alustajana on raske läbi lüüa — ja avaldusi laekubki sadu, trend
+              kasvab. Aga tööandjad ütlevad sama selgelt: <strong>tugevaid kandidaate on üksikuid</strong>.
+              Otsustab harva CV-rida. Otsustavad <strong>isikuomadused</strong> ja see, mida oled
+              päriselt teinud — sinu <strong>portfoolio</strong>. Seega vali õpe, mis laseb sul ehitada
+              päris tööde portfoolio, mitte ainult tunnistuse.
+            </p>
+          </div>
+          <div class="detail-block">
+            <h2>Kuidas {roleLower}na läbi lüüa</h2>
+            <ul class="check">
+              <li><strong>Ehita portfoolio</strong> — päris tööd ja projektid, mida saad näidata.</li>
+              <li><strong>Näita isikuomadusi</strong> — algatust, õppimisvõimet, koostööd.</li>
+              <li><strong>Tee praktilisi projekte juba õppe ajal</strong>, mitte alles pärast.</li>
+              <li><strong>Vali õpe käegakatsutava väljundiga</strong> — kus lõpuks on midagi reaalset.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {portfolio.length > 0 && (
+        <section class="ice">
+          <div class="section-inner">
+            <div class="section-head compact-head">
+              <span class="kicker">Soovitus</span>
+              <h2>Portfoolio-sõbralikud programmid ({portfolio.length})</h2>
+              <p>Need programmid lasevad sul teha päris töid ja praktilisi projekte — täpselt seda, mida tööandja vaatab.</p>
+            </div>
+            <ul class="prog-grid">
+              {portfolio.map((entry) => (
+                <li class="prog-card prog-hot">
+                  <a class="prog-name" href={`/kataloog/${entry.slug}/`} data-track-event="cta_click" data-track-label="career_to_portfolio">{entry.name}</a>
+                  <p class="prog-prov">{entry.provider}</p>
+                  <p class="prog-facts">
+                    {entry.field && <span class="tag">{entry.field}</span>}
+                    {entry.ects != null && <span>{entry.ects} EAP</span>}
+                    {entry.priceText && <span>{entry.priceText}</span>}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
+      {otherEntries.length > 0 && (
+        <section class="white">
+          <div class="section-inner">
+            <h2 class="block-title">Kõik {career.role} õppega seotud programmid ({entries.length})</h2>
+            <ul class="prog-grid">
+              {otherEntries.map((entry) => (
+                <li class="prog-card">
+                  <a class="prog-name" href={`/kataloog/${entry.slug}/`} data-track-event="cta_click" data-track-label="career_to_detail">{entry.name}</a>
+                  <p class="prog-prov">{entry.provider}</p>
+                  <p class="prog-facts">
+                    {entry.field && <span class="tag">{entry.field}</span>}
+                    {entry.ects != null && <span>{entry.ects} EAP</span>}
+                    {entry.priceText && <span>{entry.priceText}</span>}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Tööturg</span>
+            <h2>Kui palju on {roleLower} kohti ja mida makstakse?</h2>
+            <p class="muted">Lisame siia peagi värsked tööturu-andmed selle rolli kohta — mitu kohta on hetkel avatud ja milline on palgavahemik. Praegu vaata rolli ja õppe sobivust ülalt; rahastuse kohta vaata „Kes maksab?".</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Leia endale sobiv õpe ja vaata, kes maksab.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="career_suunatest">Tee suunatest</a>
+              <a class="btn btn-secondary" href="/kes-maksab/" data-track-event="cta_click" data-track-label="career_kesmaksab">Kes maksab?</a>
+            </div>
+            <p class="chips">
+              <a class="chip" href="/oskused/" data-track-event="cta_click" data-track-label="career_oskused">Otsi õpiväljundi järgi →</a>
+              {fieldsCovered.slice(0, 3).map((f) => <a class="chip chip-alt" href={`/valdkond/${f.slug}/`}>{f.field} →</a>)}
+            </p>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="career_email">info@mikrokvalifikatsioon.ee</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label={`${career.role} karjäärirada`} />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .block-title { margin: 0 0 16px; }
+      .prog-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+      .prog-card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+      .prog-hot { border-color: #54c247; box-shadow: 0 0 0 1px #54c247 inset; }
+      .prog-name { color: var(--teal); font-weight: 700; }
+      .prog-prov { margin: 4px 0 8px; color: var(--muted); font-size: 0.9rem; }
+      .prog-facts { margin: 0; display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 0.85rem; color: #5f6569; }
+      .prog-facts .tag { background: #eef4ee; color: #2f6b2c; border-radius: 999px; padding: 1px 9px; }
+      .muted { color: var(--muted); }
+      .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
+      .chip { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 0.9rem; color: var(--teal); font-weight: 700; }
+      .chip-alt { color: #212121; background: #f3f6f3; font-weight: 400; }
+    </style>
+
+    <script>
+      const el = document.querySelector("[data-career]") as HTMLElement | null;
+      (window as any).digiteekaartTrack?.("career_page_view", { career: el?.getAttribute("data-career") || "" });
+    </script>
+  </body>
+</html>
