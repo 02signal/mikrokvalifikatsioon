@@ -4,23 +4,26 @@
 // (broad occupation group), so this shows the GROUP's demand, not the exact role.
 // Banded + attributed (CC BY-NC 3.0). Renders nothing if there is no data.
 import {
-  laborSignals, demandFor, openingsBandText, trendInfo, regionLabel, iscoLabel,
+  laborSignals, openingsBandText, trendInfo, regionLabel, iscoLabel,
   asOfText, laborCheckedAt, laborGeneratedAt,
 } from "../data/labor";
 
 interface Props { iscoGroup: string; }
 const { iscoGroup } = Astro.props;
 
-const national = demandFor(iscoGroup, "unknown");
 const groupLabel = iscoLabel(iscoGroup);
-// regional breakdown for this group (skip the no-county bucket + "none" regions), top 6 by band
+// Show vacancies BY COUNTY (real + differentiated), high→low. The open data also has a
+// "maakond määramata" bucket (region "unknown") — that is NOT a national total, so we
+// never present it as "kogu Eesti" (that was the earlier, confusing bug where the small
+// no-county bucket looked smaller than individual counties).
 const BAND_ORDER = ["none", "band_1_5", "band_6_20", "band_21_50", "band_gt_50"];
 const regional = laborSignals
   .filter((s) => s.isco_major_group === iscoGroup && s.region !== "unknown" && s.openings_now_band !== "none")
-  .sort((a, b) => BAND_ORDER.indexOf(b.openings_now_band) - BAND_ORDER.indexOf(a.openings_now_band))
-  .slice(0, 6);
-const ref = national ?? regional[0] ?? null;
-const trend = ref ? trendInfo(ref.trend) : null;
+  .sort((a, b) => BAND_ORDER.indexOf(b.openings_now_band) - BAND_ORDER.indexOf(a.openings_now_band));
+const ref = regional[0] ?? null;
+const topBand = ref ? ref.openings_now_band : null;
+const topCounties = ref ? regional.filter((s) => s.openings_now_band === topBand).map((s) => regionLabel(s.region)) : [];
+const asOf = ref ? asOfText(ref.as_of) : "";
 function dateText(value: string): string {
   const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(value || "");
   return m ? `${m[3]}.${m[2]}.${m[1]}` : value;
@@ -33,20 +36,19 @@ const updated = dateText(laborGeneratedAt || laborCheckedAt);
     <div class="section-inner narrow">
       <div class="section-head compact-head">
         <span class="kicker">Tööturg</span>
-        <h2>Kui palju on selle ametirühma kohti?</h2>
+        <h2>Kui palju on selle ametirühma kohti maakonniti?</h2>
         <p class="muted">
           Ametlik Töötukassa avaandmestik näitab vabu töökohti <strong>ametirühma</strong> kaupa
           (mitte üksikrolli kaupa). See roll kuulub rühma <strong>{groupLabel}</strong>.
+          Allpool on avatud kohad maakonniti, kuu seisuga {asOf}.
         </p>
       </div>
 
       <div class="demand-grid">
         <div class="demand-card demand-card--lead">
-          <span class="demand-label">Avatud kohti (kogu Eesti, {asOfText(ref.as_of)})</span>
-          <strong class="demand-value">{openingsBandText((national ?? ref).openings_now_band)}</strong>
-          {trend && (
-            <span class="demand-trend" data-dir={ref.trend}>{trend.arrow} {trend.label}</span>
-          )}
+          <span class="demand-label">Kõrgeima nõudlusega maakonnad ({asOf})</span>
+          <strong class="demand-value">{openingsBandText(topBand ?? "")}</strong>
+          <span class="demand-top">{topCounties.join(", ")}</span>
         </div>
         {regional.length > 0 && (
           <ul class="demand-regions">
@@ -54,7 +56,7 @@ const updated = dateText(laborGeneratedAt || laborCheckedAt);
               <li>
                 <span>{regionLabel(s.region)}</span>
                 <span class="demand-band">{openingsBandText(s.openings_now_band)}
-                  <em data-dir={s.trend}>{trendInfo(s.trend).arrow}</em></span>
+                  <em data-dir={s.trend} title={trendInfo(s.trend).label}>{trendInfo(s.trend).arrow}</em></span>
               </li>
             ))}
           </ul>
@@ -80,6 +82,7 @@ const updated = dateText(laborGeneratedAt || laborCheckedAt);
   }
   .demand-label { font-size: 0.85rem; color: var(--muted); flex: 1 1 100%; }
   .demand-value { color: var(--teal); font-weight: 700; font-size: 1.5rem; }
+  .demand-top { font-size: 0.9rem; color: var(--muted); flex: 1 1 100%; }
   .demand-trend { font-size: 0.95rem; font-weight: 600; color: var(--muted); }
   .demand-trend[data-dir="up"] { color: #2e7d22; }
   .demand-trend[data-dir="down"] { color: #b3541e; }
