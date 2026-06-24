@@ -163,12 +163,15 @@ export default async function handler(req, res) {
         ...(process.env.AMOS_CAPTURE_TOKEN ? { authorization: `Bearer ${process.env.AMOS_CAPTURE_TOKEN}` } : {}),
       },
       body: JSON.stringify({
+        // PBI-04: forward ONLY keys the AMOS lead_capture ingress allow-lists
+        // (kind, email, interest_topic, field, outcomes, consent_purpose, source_site,
+        // captured_at) — any other key is rejected (422). `funding_route` is NOT accepted;
+        // the adapter expects the funding band in `field`, so fold it there.
         kind,
         email,
         interest_topic: topic,
-        field,
+        field: fundingRoute ? `rahastus_${fundingRoute}` : field,
         ...(outcomes && outcomes.length ? { outcomes } : {}),
-        ...(fundingRoute ? { funding_route: fundingRoute } : {}),
         consent_purpose: 'course_offers',
         source_site: sourceSite,
         captured_at: new Date().toISOString(),
