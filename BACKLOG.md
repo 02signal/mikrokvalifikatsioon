@@ -41,6 +41,14 @@
   `outcomes[]` + localized fields, mkval consumes the soonest-deadline instance), and the
   two-way loop (mkval demand signals → AMOS planning; AMOS competitive-intel views → EVK
   programme planning). Hand to the AMOS agents to expand into their backlog.
+- **Labor-market layer brief for the AMOS agents:** `docs/amos-labor-market-brief.md`.
+  CV-portal job postings + salary + application signals + employer orgs (joined across AMOS ⇄
+  Twenty ⇄ RIK) → one source feeding TWO surfaces: public mkval aggregates (ROI calculator,
+  career/field/programme pages — "N openings now, salary split, trend") and private B2B/REV
+  "who's hiring" sales intel (restricted). Powers the data-backed career-path narrative
+  (#3: hundreds of applications but few strong candidates → portfolio-friendly programmes),
+  which also prepares neutral ground for an embargoed EVK portfolio-first offering (named
+  nowhere; per CLAUDE.local.md). Needs AMOS warehouse + RIK + Twenty design.
 - Delivery backlog:
   1. AMOS contract: define `amos.mkval.catalog/v1`, valid/poisoned fixtures, and validator
      tests for missing freshness, forbidden keys, candidate rows, invalid counts, and
