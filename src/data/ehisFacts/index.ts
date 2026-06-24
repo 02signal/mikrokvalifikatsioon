@@ -223,3 +223,118 @@ export function matchForCatalogEntry(entry: CatalogEntry): EhisMatch {
 
   return { confidence: "none", curriculum: null };
 }
+
+// ---- authoritative-facts + dual-description layer -------------------------
+// Owner decision (2026-06-24, refined): on a matched (exact|strong) entry, EHIS
+// is the AUTHORITATIVE source for the official FACTS — we OVERRIDE name / EAP /
+// language from EHIS (official open data).
+//
+// For the DESCRIPTIVE/OUTCOMES layer we DO NOT replace — we show BOTH. The
+// school's OWN content (summary, goalText, its original `outcomes`) is kept
+// UNTOUCHED on the entry, and the EHIS official `outcomes` are carried
+// SEPARATELY as `ehisOutcomes`. The detail page renders two labelled sections:
+// "Õpiväljundid (ametlik – EHIS)" and "Kooli enda kirjeldus". Nothing
+// disappears.
+//
+// We KEEP per-school: priceText, durationText, format, summary, goalText,
+// outcomes (school original), assessmentText, url. Unmatched (`none`) entries
+// stay entirely per-school.
+//
+// CRITICAL: we never replace the curated navigation taxonomy `field` (it powers
+// /valdkond, catalog filters, and the comparison landings). EHIS's raw
+// õppekavarühm (field_code + field_name) is ATTACHED as an extra authoritative
+// classification, displayed on the detail page — not used for navigation/URLs.
+
+/** Map EHIS `languages` (full ET strings like "eesti keel"/"inglise keel") back
+ * to the catalog enum. Estonian present (alone or mixed) → "et"; otherwise if
+ * English present → "en"; else null. Mirrors the catalog's "et|en|null" shape. */
+export function ehisLanguageToCatalog(languages: string[] | null | undefined): "et" | "en" | null {
+  if (!languages || !languages.length) return null;
+  const lower = languages.map((l) => l.toLowerCase());
+  if (lower.some((l) => l.includes("eesti"))) return "et";
+  if (lower.some((l) => l.includes("inglise"))) return "en";
+  return null;
+}
+
+/** The EHIS-authoritative fields attached to a matched catalog entry, plus the
+ * provenance metadata the detail page renders. `null` `ehis` = unmatched. */
+export interface EhisAuthoritative {
+  /** true when EHIS is the authoritative source for this entry's facts. */
+  authoritative: boolean;
+  confidence: MatchConfidence;
+  /** EHIS official code (oppekavaKood). */
+  ehisKood: string | null;
+  /** EHIS EN name, kept for EN context (not the override target for `name`). */
+  nameEn: string | null;
+  /** EHIS official õppekavarühm — ATTACHED, not used for nav/URLs. */
+  fieldCode: string | null;
+  fieldName: string | null;
+  /** Valid http(s) official PDF URL or null. */
+  officialPdfUrl: string | null;
+  /** EHIS official õpiväljundid (open data, EHIS-attributed). Shown in the
+   * "Õpiväljundid (ametlik – EHIS)" section ALONGSIDE the school's own. null
+   * when EHIS has none for this curriculum. The school's own `outcomes` are
+   * NOT replaced — both are displayed. */
+  ehisOutcomes: string[] | null;
+}
+
+export interface EhisOverride {
+  /** Authoritative FACTS to spread over the catalog entry (only name/EAP/
+   * language). The descriptive layer (summary/goalText/outcomes) is NOT patched
+   * — the school's own content stays on the entry and EHIS outcomes ride along
+   * in `ehis.ehisOutcomes`. */
+  patch: Partial<{
+    name: string;
+    ects: number | null;
+    language: "et" | "en" | null;
+  }>;
+  ehis: EhisAuthoritative;
+}
+
+/** Compute the authoritative EHIS facts override for a catalog entry. On a
+ * matched entry, returns the FACTS patch (name/EAP/language from EHIS) plus the
+ * õppekavarühm, provenance, and the EHIS official outcomes carried SEPARATELY
+ * (so the school's own outcomes/summary/goal are preserved for a dual view). On
+ * `none`, returns an empty patch and `authoritative: false`. */
+export function ehisOverrideFor(entry: CatalogEntry): EhisOverride {
+  const match = matchForCatalogEntry(entry);
+  const c = match.curriculum;
+  if (!c) {
+    return {
+      patch: {},
+      ehis: {
+        authoritative: false,
+        confidence: "none",
+        ehisKood: null,
+        nameEn: null,
+        fieldCode: null,
+        fieldName: null,
+        officialPdfUrl: null,
+        ehisOutcomes: null,
+      },
+    };
+  }
+
+  const officialName = c.name_et.replace(/\s+/g, " ").trim();
+  const ehisOutcomes = c.outcomes && c.outcomes.length > 0 ? c.outcomes : null;
+  const language = ehisLanguageToCatalog(c.languages) ?? entry.language ?? null;
+
+  return {
+    // FACTS only — descriptive layer left to the school's own fields.
+    patch: {
+      name: officialName || entry.name,
+      ects: c.eap ?? entry.ects ?? null,
+      language,
+    },
+    ehis: {
+      authoritative: true,
+      confidence: match.confidence,
+      ehisKood: c.ehis_kood,
+      nameEn: c.name_en,
+      fieldCode: c.field_code,
+      fieldName: c.field_name,
+      officialPdfUrl: httpUrlOrNull(c.official_pdf_url),
+      ehisOutcomes,
+    },
+  };
+}
