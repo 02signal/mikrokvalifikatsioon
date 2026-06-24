@@ -1,0 +1,63 @@
+---
+// "Andmete päritolu ja piirangud" — one honest block summarising, for the tööturg + palk
+// facts on this page: the SOURCES, their LAST-UPDATE / data dates, and the LIMITATIONS
+// (what the official open data can and cannot tell). Calm, text-first.
+import { laborCheckedAt, laborGeneratedAt } from "../data/labor";
+import { salaryMonthlyYear, salaryRegionalYear } from "../data/salary";
+
+function dmy(iso: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || "");
+  return m ? `${m[3]}.${m[2]}.${m[1]}` : iso;
+}
+const demandChecked = dmy(laborCheckedAt);
+const feedUpdated = dmy(laborGeneratedAt);
+---
+
+<section class="ice">
+  <div class="section-inner narrow">
+    <div class="section-head compact-head">
+      <span class="kicker">Andmete päritolu ja piirangud</span>
+      <h2>Kust need arvud tulevad — ja mida nad ei ütle</h2>
+    </div>
+
+    <div class="prov-grid">
+      <div class="prov-col">
+        <h3 class="prov-h">Allikad ja seis</h3>
+        <ul class="prov-list">
+          <li><strong>Vabad töökohad:</strong> <a href="https://andmed.eesti.ee/datasets/eesti-tootukassa-poolt-vahendatud-vabade-tookohtade-statistika" rel="noopener" target="_blank">Eesti Töötukassa avaandmed</a> (CC BY-NC 3.0). Andmeseis kontrollitud {demandChecked}; feed uuendatud {feedUpdated}.</li>
+          <li><strong>Palk:</strong> <a href="https://andmed.stat.ee/en/stat/PA626" rel="noopener" target="_blank">Statistikaamet</a> (CC BY-SA 4.0). Kuupalga mediaan {salaryMonthlyYear}; piirkondlik palk {salaryRegionalYear}.</li>
+        </ul>
+      </div>
+      <div class="prov-col">
+        <h3 class="prov-h">Mida andmed näitavad</h3>
+        <ul class="prov-list prov-yes">
+          <li>Vabu töökohti <strong>maakonniti</strong>, ametirühma kaupa, kuu seisuga.</li>
+          <li>Brutopalga <strong>mediaani</strong> ametiala-rühma kaupa.</li>
+          <li>Ametlikud, avalikud koondnäitajad — viidatavad ja kontrollitavad.</li>
+        </ul>
+      </div>
+      <div class="prov-col">
+        <h3 class="prov-h">Mida andmed EI näita</h3>
+        <ul class="prov-list prov-no">
+          <li>Mitte üksikrolli täpsust — <strong>ametirühma (ISCO) tasemel</strong>, sest avaandmed on selle täpsusega.</li>
+          <li>Mitte üksikuid töökuulutusi ega tööandjate nimesid.</li>
+          <li>Mitte isikuandmeid ega täpseid palku — ainult mediaanid ja vahemikud.</li>
+          <li>Palk pole reaalajas: see on <strong>viimane ametlik aasta</strong> ({salaryMonthlyYear}).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .prov-grid {
+    display: grid; gap: 18px; margin-top: 6px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .prov-col { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .prov-h { margin: 0 0 8px; font-size: 0.95rem; color: var(--navy); }
+  .prov-list { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 0.9rem; color: var(--muted); }
+  .prov-list a { color: var(--teal); }
+  .prov-yes li::marker { content: "✓ "; color: #2e7d22; }
+  .prov-no li::marker { content: "– "; color: #b3541e; }
+</style>
