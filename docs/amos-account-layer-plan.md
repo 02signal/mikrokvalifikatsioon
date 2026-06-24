@@ -29,6 +29,14 @@ not in the mkval repo** (consolidation freeze); mkval gains only a thin brand fa
 - **Auth = passwordless magic-link** (reuse `confirm-token` HMAC seam); no password store, no
   third-party CIAM.
 
+> **Cross-brand scope — see `docs/amos-identity-engagement-amendment.md`.** This plan is the
+> mkval ET face, but identity is **person-centric across the whole brand portfolio** (EVK site,
+> mikrokvalifikatsioon, credentialstudy, digiteekaart, automatiseerimine, teekaart, future
+> brands). One human = one canonical Twenty Person, with **per-brand roles** (learner / owner-
+> grant-seeker / B2B buyer / provider / partner), **brand-scoped consent**, and **one unified
+> messaging/email/issue plane** regardless of brand. The MVP below is mkval-scoped but builds on
+> that shared model — it must not bake in a single-brand or single-role assumption.
+
 ---
 
 ## 1. Architecture (A2 — one spine, many faces)
