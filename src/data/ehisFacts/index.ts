@@ -224,12 +224,20 @@ export function matchForCatalogEntry(entry: CatalogEntry): EhisMatch {
   return { confidence: "none", curriculum: null };
 }
 
-// ---- authoritative override layer ----------------------------------------
-// Owner decision (2026-06-24): on a matched (exact|strong) entry, EHIS is the
-// AUTHORITATIVE source for the official curriculum facts. We FULLY OVERRIDE
-// name / EAP / outcomes / language from EHIS — these are official open data.
+// ---- authoritative-facts + dual-description layer -------------------------
+// Owner decision (2026-06-24, refined): on a matched (exact|strong) entry, EHIS
+// is the AUTHORITATIVE source for the official FACTS — we OVERRIDE name / EAP /
+// language from EHIS (official open data).
+//
+// For the DESCRIPTIVE/OUTCOMES layer we DO NOT replace — we show BOTH. The
+// school's OWN content (summary, goalText, its original `outcomes`) is kept
+// UNTOUCHED on the entry, and the EHIS official `outcomes` are carried
+// SEPARATELY as `ehisOutcomes`. The detail page renders two labelled sections:
+// "Õpiväljundid (ametlik – EHIS)" and "Kooli enda kirjeldus". Nothing
+// disappears.
+//
 // We KEEP per-school: priceText, durationText, format, summary, goalText,
-// assessmentText, url (EHIS does not carry these). Unmatched (`none`) entries
+// outcomes (school original), assessmentText, url. Unmatched (`none`) entries
 // stay entirely per-school.
 //
 // CRITICAL: we never replace the curated navigation taxonomy `field` (it powers
@@ -263,25 +271,31 @@ export interface EhisAuthoritative {
   fieldName: string | null;
   /** Valid http(s) official PDF URL or null. */
   officialPdfUrl: string | null;
-  /** true when displayed outcomes come from EHIS (vs per-school fallback). */
-  outcomesFromEhis: boolean;
+  /** EHIS official õpiväljundid (open data, EHIS-attributed). Shown in the
+   * "Õpiväljundid (ametlik – EHIS)" section ALONGSIDE the school's own. null
+   * when EHIS has none for this curriculum. The school's own `outcomes` are
+   * NOT replaced — both are displayed. */
+  ehisOutcomes: string[] | null;
 }
 
 export interface EhisOverride {
-  /** Fields to spread over the catalog entry (only present when authoritative). */
+  /** Authoritative FACTS to spread over the catalog entry (only name/EAP/
+   * language). The descriptive layer (summary/goalText/outcomes) is NOT patched
+   * — the school's own content stays on the entry and EHIS outcomes ride along
+   * in `ehis.ehisOutcomes`. */
   patch: Partial<{
     name: string;
     ects: number | null;
-    outcomes: string[] | null;
     language: "et" | "en" | null;
   }>;
   ehis: EhisAuthoritative;
 }
 
-/** Compute the authoritative EHIS override for a catalog entry. On a matched
- * entry, returns the patch (name/EAP/outcomes/language fully from EHIS) plus
- * the õppekavarühm + provenance. On `none`, returns an empty patch and
- * `authoritative: false` so the caller leaves per-school facts untouched. */
+/** Compute the authoritative EHIS facts override for a catalog entry. On a
+ * matched entry, returns the FACTS patch (name/EAP/language from EHIS) plus the
+ * õppekavarühm, provenance, and the EHIS official outcomes carried SEPARATELY
+ * (so the school's own outcomes/summary/goal are preserved for a dual view). On
+ * `none`, returns an empty patch and `authoritative: false`. */
 export function ehisOverrideFor(entry: CatalogEntry): EhisOverride {
   const match = matchForCatalogEntry(entry);
   const c = match.curriculum;
@@ -296,22 +310,20 @@ export function ehisOverrideFor(entry: CatalogEntry): EhisOverride {
         fieldCode: null,
         fieldName: null,
         officialPdfUrl: null,
-        outcomesFromEhis: false,
+        ehisOutcomes: null,
       },
     };
   }
 
   const officialName = c.name_et.replace(/\s+/g, " ").trim();
   const ehisOutcomes = c.outcomes && c.outcomes.length > 0 ? c.outcomes : null;
-  // EHIS outcomes are primary; per-school outcomes only when EHIS has none.
-  const outcomes = ehisOutcomes ?? (entry.outcomes && entry.outcomes.length > 0 ? entry.outcomes : null);
   const language = ehisLanguageToCatalog(c.languages) ?? entry.language ?? null;
 
   return {
+    // FACTS only — descriptive layer left to the school's own fields.
     patch: {
       name: officialName || entry.name,
       ects: c.eap ?? entry.ects ?? null,
-      outcomes,
       language,
     },
     ehis: {
@@ -322,7 +334,7 @@ export function ehisOverrideFor(entry: CatalogEntry): EhisOverride {
       fieldCode: c.field_code,
       fieldName: c.field_name,
       officialPdfUrl: httpUrlOrNull(c.official_pdf_url),
-      outcomesFromEhis: ehisOutcomes != null,
+      ehisOutcomes,
     },
   };
 }

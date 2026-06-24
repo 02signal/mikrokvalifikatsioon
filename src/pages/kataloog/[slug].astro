@@ -16,11 +16,12 @@ const { entry } = Astro.props as { entry: CatalogEntryWithSlug };
 const providerSlug = providersWithSlug.find((p) => p.provider === entry.provider)?.slug;
 const relatedComparisons = comparisonsFor(entry.slug).slice(0, 4);
 
-// Ametlik allikas: EHIS (avaandmed). Omaniku otsus 2026-06-24 — sobitatud kirjel
-// on EHIS faktide AUTORITEETNE allikas: name/EAP/õpiväljundid/keel on juba EHIS-ist
-// üle kirjutatud kataloogi tasemel (vt src/data/catalog/index.ts). Siin loeme
-// ülekirjutatud väärtusi ja kuvame ametliku päritolu. Kureeritud `field` jääb
-// navigatsioonis kehtima; EHIS-i õppekavarühm kuvatakse ametliku lisaklassina.
+// Ametlik allikas: EHIS (avaandmed). Omaniku otsus 2026-06-24 (täpsustatud) —
+// sobitatud kirjel on EHIS FAKTIDE autoriteetne allikas: name/EAP/keel on juba
+// EHIS-ist üle kirjutatud kataloogi tasemel (vt src/data/catalog/index.ts).
+// Kirjeldav kiht kuvatakse KAHEKORDSELT: EHIS ametlikud õpiväljundid JA kooli
+// enda kirjeldus — kumbki ei kao. Kureeritud `field` jääb navigatsioonis
+// kehtima; EHIS-i õppekavarühm kuvatakse ametliku lisaklassina.
 const ehis = entry.ehis;
 const isOfficial = ehis.authoritative;
 
@@ -31,10 +32,15 @@ const ehisFieldName = ehis.fieldName;
 // PDF-link ainult kehtiva http(s) URL-i korral (juba normaliseeritud allikas).
 const ehisPdfUrl = ehis.officialPdfUrl;
 
-// Õpiväljundid kuvatakse juba ülekirjutatud kujul; lipp ütleb, kas need pärinevad
-// EHIS-ist (siis lisame ametliku viite) või on per-school varuvariant.
-const displayOutcomes = entry.outcomes && entry.outcomes.length > 0 ? entry.outcomes : null;
-const outcomesFromEhis = ehis.outcomesFromEhis;
+// Kahekordne õpiväljundite/kirjelduse vaade:
+//  - ehisOutcomes  = EHIS ametlikud õpiväljundid (avaandmed, viitega EHIS/HTM);
+//  - schoolOutcomes = kooli ENDA õpiväljundid (originaal, säilitatud).
+// Sobimata (none) kirjel ehisOutcomes puudub ja kuvame ainult kooli oma.
+const ehisOutcomes = ehis.ehisOutcomes && ehis.ehisOutcomes.length > 0 ? ehis.ehisOutcomes : null;
+const schoolOutcomes = entry.outcomes && entry.outcomes.length > 0 ? entry.outcomes : null;
+// Kas kuvada eraldiseisev "Kooli enda kirjeldus" plokk: kui on kas kooli
+// õpiväljundid VÕI eesmärk (summary on alati hero-osas eraldi).
+const hasSchoolDescription = !!(schoolOutcomes || entry.goalText);
 
 const canonicalPath = `/kataloog/${entry.slug}/`;
 const checkedAtText = entry.sourceCheckedAt.split("-").reverse().join(".");
@@ -136,23 +142,53 @@ const schema = {
             </dl>
           )}
 
-          {entry.goalText && (
-            <div class="detail-block">
-              <h2>Mille jaoks see programm on?</h2>
-              <p>{entry.goalText}</p>
-            </div>
-          )}
-
-          {displayOutcomes && displayOutcomes.length > 0 && (
-            <div class="detail-block">
-              <h2>Mida sa pärast oskad?</h2>
-              <ul class="check">
-                {displayOutcomes.map((outcome) => <li>{outcome}</li>)}
-              </ul>
-              {outcomesFromEhis && (
-                <p class="src-credit">Õpiväljundid pärinevad EHISe ametlikust õppekavast (avaandmed) ja on selle programmi autoriteetne allikas. {ehisAttribution}.</p>
+          {isOfficial ? (
+            <>
+              {/* Ametlik EHIS õpiväljundite plokk (kuvatakse kõrvuti kooli omaga) */}
+              {ehisOutcomes && ehisOutcomes.length > 0 && (
+                <div class="detail-block detail-block-official">
+                  <h2>Õpiväljundid (ametlik – EHIS)</h2>
+                  <ul class="check">
+                    {ehisOutcomes.map((outcome) => <li>{outcome}</li>)}
+                  </ul>
+                  <p class="src-credit">Ametlikud õpiväljundid pärinevad EHISe registreeritud õppekavast (avaandmed). {ehisAttribution}.</p>
+                </div>
               )}
-            </div>
+
+              {/* Kooli ENDA kirjeldus — säilitatud, ei kao ülekirjutuse tõttu */}
+              {hasSchoolDescription && (
+                <div class="detail-block detail-block-school">
+                  <h2>Kooli enda kirjeldus</h2>
+                  {entry.goalText && <p>{entry.goalText}</p>}
+                  {schoolOutcomes && schoolOutcomes.length > 0 && (
+                    <ul class="check">
+                      {schoolOutcomes.map((outcome) => <li>{outcome}</li>)}
+                    </ul>
+                  )}
+                  <p class="src-credit">
+                    Kooli lehelt (<a href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_school_desc_${entry.provider}`}>{entry.provider}</a>), kontrollitud {checkedAtText}.
+                  </p>
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              {entry.goalText && (
+                <div class="detail-block">
+                  <h2>Mille jaoks see programm on?</h2>
+                  <p>{entry.goalText}</p>
+                </div>
+              )}
+
+              {schoolOutcomes && schoolOutcomes.length > 0 && (
+                <div class="detail-block">
+                  <h2>Mida sa pärast oskad?</h2>
+                  <ul class="check">
+                    {schoolOutcomes.map((outcome) => <li>{outcome}</li>)}
+                  </ul>
+                </div>
+              )}
+            </>
           )}
 
           {entry.assessmentText && (
@@ -166,10 +202,11 @@ const schema = {
             <>
               <p class="notice notice-official">
                 <strong>Ametlik allikas (faktid): EHIS — Haridus- ja Teadusministeerium.</strong>
-                Programmi nimi, maht (EAP), õpiväljundid ja õppekeel pärinevad otse Eesti Hariduse
+                Programmi nimi, maht (EAP) ja õppekeel pärinevad otse Eesti Hariduse
                 Infosüsteemi (EHIS) ametlikust õppekavast
                 {ehis.ehisKood && <> koodiga <strong>{ehis.ehisKood}</strong></>}
                 {ehisFieldName && <> (õppekavarühm: <strong>{ehisFieldName}</strong>)</>}.
+                Ülal on toodud nii EHISe ametlikud õpiväljundid kui ka kooli enda kirjeldus.
                 {ehisPdfUrl && (
                   <> Vaata <a href={ehisPdfUrl} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_ehis_pdf_${entry.provider}`}>ametlik õppekava (PDF)</a>.</>
                 )}
@@ -257,6 +294,9 @@ const schema = {
       .detail-facts dd { margin: 3px 0 0; font-weight: 700; color: #212121; overflow-wrap: anywhere; }
       .detail-block { margin-bottom: 24px; }
       .detail-block h2 { font-size: 1.15rem; margin-bottom: 8px; }
+      .detail-block-official, .detail-block-school { padding: 16px 18px; border-radius: 12px; border: 1px solid #d9e3ea; }
+      .detail-block-official { background: #eef5f4; border-left: 4px solid var(--teal); }
+      .detail-block-school { background: #fbfbf9; border-left: 4px solid #c9d2c9; }
       .src-credit { margin: 10px 0 0; font-size: 0.82rem; color: #5a6b80; }
       .notice-official { border-left-color: var(--teal); background: #eef5f4; margin-bottom: 16px; }
       .interest { margin-top: 18px; }

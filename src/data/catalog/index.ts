@@ -59,8 +59,10 @@ export const catalogContentHash = feed.contentHash;
 
 /** Kataloogi kirje koos püsiva slugiga (/kataloog/<slug>/) ja EHIS-i ametliku
  * päritoluga. `ehis` on iga kirje küljes: sobitatud kirjel `authoritative: true`
- * ja name/EAP/õpiväljundid/keel on EHIS-ist üle kirjutatud; sobimata kirjel
- * `authoritative: false` ja per-school faktid jäävad puutumata. */
+ * ja name/EAP/keel on EHIS-ist (FAKTID) üle kirjutatud, EHIS ametlikud
+ * õpiväljundid on `ehis.ehisOutcomes` all. Kooli ENDA kirjeldus (summary,
+ * goalText, kooli enda `outcomes`) JÄÄB puutumata — detaillehel kuvatakse MÕLEMAD.
+ * Sobimata kirjel `authoritative: false` ja per-school faktid jäävad puutumata. */
 export type CatalogEntryWithSlug = CatalogEntry & { slug: string; ehis: EhisAuthoritative };
 
 const sorted: CatalogEntry[] = feed.entries
@@ -73,10 +75,12 @@ const slugs = assignSlugs(sorted, (entry) => `${entry.provider} ${entry.name}`);
 
 export const catalog: CatalogEntryWithSlug[] = sorted.map((entry) => {
   const parsed = parseIntakeDates(entry.intakeText);
-  // Ametlik allikas: EHIS (avaandmed). Sobitatud kirjel kirjutame name/EAP/
-  // õpiväljundid/keele EHIS-ist üle (täielik ülekirjutus). Kureeritud `field`
-  // (navigatsiooni taksonoomia) JÄÄB puutumata; EHIS-i õppekavarühm lisatakse
-  // ametliku klassifikatsioonina `ehis.fieldCode/fieldName` kaudu.
+  // Ametlik allikas: EHIS (avaandmed). Sobitatud kirjel kirjutame EHIS-ist üle
+  // ainult FAKTID (name/EAP/keel). Kirjeldav kiht (summary/goalText/outcomes)
+  // EI muutu — kooli enda õpiväljundid jäävad alles ja EHIS ametlikud
+  // õpiväljundid sõidavad kaasa `ehis.ehisOutcomes` all (detaillehel MÕLEMAD).
+  // Kureeritud `field` (navigatsiooni taksonoomia) JÄÄB puutumata; EHIS-i
+  // õppekavarühm lisatakse `ehis.fieldCode/fieldName` kaudu.
   const { patch, ehis } = ehisOverrideFor(entry);
   return {
     ...entry,

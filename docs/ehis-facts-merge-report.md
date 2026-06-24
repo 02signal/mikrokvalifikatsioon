@@ -6,20 +6,30 @@
 Deterministlik sobitus (provider + nimi). EHIS-i õpiväljundid on ametlik avaandmestik,
 mida tohib viitega taasesitada.
 
-## Staatus: TÄIELIK ÜLEKIRJUTUS RAKENDATUD (omaniku otsus 2026-06-24)
+## Staatus: FAKTID EHIS-AUTORITEETSED + KIRJELDUS KAHEKORDNE (omaniku otsus 2026-06-24, täpsustatud)
 
-EHIS on nüüd **autoriteetne ametlik allikas** sobitatud (`exact`/`strong`) kirjete
-õppekavafaktide jaoks. Sobitatud kirjel kirjutame **täielikult üle** järgmised väljad
-otse EHIS-ist (vt `src/data/catalog/index.ts` → `ehisOverrideFor`):
+EHIS on **autoriteetne ametlik allikas** sobitatud (`exact`/`strong`) kirjete
+**FAKTIDE** jaoks. KIRJELDAV kiht (õpiväljundid) EI ole enam ülekirjutatud — sobitatud
+kirjel kuvatakse **MÕLEMAD** (vt `src/data/catalog/index.ts` → `ehisOverrideFor` ja
+`src/pages/kataloog/[slug].astro`).
+
+**Faktid (EHIS kirjutab üle):**
 
 - **name** ← EHIS `name_et` (tühikud normaliseeritud); `name_en` jääb EN-kontekstiks alles.
 - **EAP (ects)** ← EHIS `eap`.
-- **õpiväljundid (outcomes)** ← EHIS `outcomes` (ametlik avaandmestik, viitega taasesitamine OK)
-  primaarsena; per-school õpiväljundid ainult varuks, kui EHIS-il neid pole.
 - **keel (language)** ← EHIS `languages` (kaardistatud `et`/`en`/`null` peale).
 
+**Kirjeldus / õpiväljundid (KAHEKORDNE — kumbki ei kao):**
+
+- **„Õpiväljundid (ametlik – EHIS)"** — EHIS ametlikud `outcomes` (avaandmestik, viitega
+  EHIS/HTM), kantud kirje küljes eraldi väljal `ehis.ehisOutcomes`.
+- **„Kooli enda kirjeldus"** — kooli ENDA sisu, mis on kataloogis juba olemas: `summary`,
+  `goalText` ja kooli ORIGINAAL `outcomes` (säilitatud, MITTE asendatud), koos kooli
+  lingi ja `sourceCheckedAt` kuupäevaga („Kooli lehelt (…), kontrollitud {kuupäev}").
+
 **Per-school jäävad** (EHIS neid ei kanna): `priceText`, `durationText`, `format`,
-`summary`, `goalText`, `assessmentText`, `url`. Sobimata (`none`) kirjed: **muutmata**.
+`summary`, `goalText`, kooli `outcomes` (originaal), `assessmentText`, `url`.
+Sobimata (`none`) kirjed: **muutmata** (ainult kooli oma, nagu varem).
 
 URL-id (slug) püsivad muutumatuna — slug arvutatakse ORIGINAALSE `provider + name`
 põhjalt ENNE ülekirjutust, seega nime muutus ei katkesta ühtki olemasolevat aadressi.
@@ -55,12 +65,16 @@ klassifikatsioonina detaillehele (faktirida „Ametlik õppekavarühm (EHIS): �
   - Eesti Maaülikool — „Maastiku kujundus, ehitus ja esitlus“: **— → 17 EAP**
   - Eesti Maaülikool — „Maastiku planeerimine, hindamine ja kaitse“: **— → 23 EAP**
   - Eesti Ettevõtluskõrgkool Mainor — „Tarneahelajuhi arenguprogramm“: **— → 5 EAP**
-- **Õpiväljundid: kõik 148 sobitatud kirjet** kuvavad nüüd EHIS-i ametlikke õpiväljundeid
-  (avaandmed, viitega). Kus varem oli per-school õpiväljundeid, on need asendatud EHIS-i
-  ametlikega; kus polnud, on nüüd EHIS-i omad. Per-school õpiväljundid jäävad ainult
-  varuks (kasutusel ainult siis, kui EHIS-il neid pole).
+- **Õpiväljundid: KAHEKORDNE — mitte asendatud.** Kõik 148 sobitatud kirjet kuvavad nüüd
+  EHIS-i ametlikke õpiväljundeid (avaandmed, viitega) plokis „Õpiväljundid (ametlik – EHIS)".
+  Kooli ENDA õpiväljundid + eesmärk **säilivad** plokis „Kooli enda kirjeldus" (kooli
+  lingi + kontrollimise kuupäevaga) — kumbki ei kao. (Praktikas: 148 EHIS-plokki, 144
+  „Kooli enda kirjeldus" plokki; 4 kirjel pole kooli omapoolset õpiväljundit/eesmärki,
+  mistõttu eraldi kooliplokki ei teki.)
 - **Õppekeel: 2 kirjet** said EHIS-ist täpsema keele.
-- **Kokku name/EAP/outcomes muutus: 148 kirjet** (eelkõige õpiväljundite muutuse tõttu).
+- **Kokku FAKTIDE muutus (name/EAP/keel): 11 kirjet** (3 nime + 8 EAP; keel kattub).
+  Õpiväljundeid ei loeta „muutuseks" — neid ei asendatud, vaid lisati ametlik EHIS-vaade
+  kõrvale.
 - **Ametlik õppekavarühm (EHIS)** lisati klassifikatsioonina kõigile 148 sobitatud
   kirjele; kureeritud `field` jäi navigatsioonis kehtima.
 
