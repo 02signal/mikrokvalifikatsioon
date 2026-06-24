@@ -5,6 +5,15 @@ import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import { careers, type Career } from "../../data/careers";
 import { fieldsWithSlug, catalogCheckedAt } from "../../data/catalog";
+import LaborDemandStats from "../../components/LaborDemandStats.astro";
+
+// Map each career to its ISCO major group (the Töötukassa open-data granularity).
+// All current careers are professional roles → group 2 (Tippspetsialistid); the map
+// allows differentiation later (e.g. a trades role → 7).
+const CAREER_ISCO: Record<string, string> = {
+  andmeanaluutik: "2", tarkvaraarendaja: "2", projektijuht: "2", raamatupidaja: "2",
+  turundusspetsialist: "2", personalijuht: "2", kuberturve: "2", "ux-disainer": "2",
+};
 
 export function getStaticPaths() {
   return careers.map((c) => ({ params: { slug: c.slug }, props: { career: c } }));
@@ -12,6 +21,7 @@ export function getStaticPaths() {
 
 const { career } = Astro.props as { career: Career };
 const { entries, portfolio } = career;
+const careerIsco = CAREER_ISCO[career.slug] ?? "2";
 const roleLower = career.role.replace(/\s*\(.*?\)\s*/g, "").toLowerCase();
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
 const otherEntries = entries.filter((e) => !portfolio.includes(e));
@@ -154,15 +164,7 @@ const schema = {
         </section>
       )}
 
-      <section class="ice">
-        <div class="section-inner narrow">
-          <div class="section-head compact-head">
-            <span class="kicker">Tööturg</span>
-            <h2>Kui palju on {roleLower} kohti ja mida makstakse?</h2>
-            <p class="muted">Lisame siia peagi värsked tööturu-andmed selle rolli kohta — mitu kohta on hetkel avatud ja milline on palgavahemik. Praegu vaata rolli ja õppe sobivust ülalt; rahastuse kohta vaata „Kes maksab?".</p>
-          </div>
-        </div>
-      </section>
+      <LaborDemandStats iscoGroup={careerIsco} />
 
       <section class="navy">
         <div class="section-inner contact">
