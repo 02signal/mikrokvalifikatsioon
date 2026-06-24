@@ -1,0 +1,615 @@
+{
+  "version": "amos.mkval.intake_dates/v1",
+  "fetched_at": "2026-06-24T18:52:37.000Z",
+  "dates": [
+    {
+      "url": "https://www.ebs.ee/taiendusope/mikrokraadid/digitaalse-toote-disain-ja-arendus",
+      "provider": "EBS",
+      "registration_deadline": "2026-10-08",
+      "start_date": "2026-10-17",
+      "intake_text": "Registreerimine kuni 08.10.2026, algus 17.10.2026"
+    },
+    {
+      "url": "https://www.ebs.ee/taiendusope/mikrokraadid/digitaalse-tootejuhtimise-strateegia-ja-valideerimine",
+      "provider": "EBS",
+      "registration_deadline": "2026-08-17",
+      "start_date": "2026-09-04",
+      "intake_text": "Registreerimine kuni 17.08.2026, algus 04.09.2026"
+    },
+    {
+      "url": "https://www.ebs.ee/taiendusope/mikrokraadid/digitaalsete-toodete-protsesside-ja-operatsioonide-juhtimine",
+      "provider": "EBS",
+      "registration_deadline": "2027-01-14",
+      "start_date": "2027-01-22",
+      "intake_text": "Registreerimine kuni 14.01.2027, algus 22.01.2027"
+    },
+    {
+      "url": "https://www.ebs.ee/taiendusope/mikrokraadid/digitoodete-eestvedamine-ja-muudatuste-juhtimine",
+      "provider": "EBS",
+      "registration_deadline": "2027-03-10",
+      "start_date": "2027-03-20",
+      "intake_text": "Registreerimine kuni 10.03.2027, algus 20.03.2027"
+    },
+    {
+      "url": "https://www.ebs.ee/taiendusope/mikrokraadid/finantsaruandlus-ja-finantsalane-kommunikatsioon",
+      "provider": "EBS",
+      "registration_deadline": "2026-08-19",
+      "start_date": "2026-08-31",
+      "intake_text": "Registreerimine kuni 19.08.2026, algus 31.08.2026"
+    },
+    {
+      "url": "https://www.ebs.ee/taiendusope/mikrokraadid/investeeringud-ja-ettevotte-rahandus",
+      "provider": "EBS",
+      "registration_deadline": "2026-08-18",
+      "start_date": "2026-09-01",
+      "intake_text": "Registreerimine kuni 18.08.2026, algus 01.09.2026"
+    },
+    {
+      "url": "https://www.ebs.ee/taiendusope/mikrokraadid/jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine",
+      "provider": "EBS",
+      "registration_deadline": "2026-08-17",
+      "start_date": "2026-08-21",
+      "intake_text": "Registreerimine kuni 17.08.2026, algus 21.08.2026"
+    },
+    {
+      "url": "https://www.ebs.ee/taiendusope/mikrokraadid/juhtimine-ja-turundus-rahvusvahelises-arikeskkonnas",
+      "provider": "EBS",
+      "registration_deadline": "2026-08-18",
+      "start_date": "2026-09-01",
+      "intake_text": "Registreerimine kuni 18.08.2026, algus 01.09.2026"
+    },
+    {
+      "url": "https://www.ebs.ee/taiendusope/mikrokraadid/juhtimise-ja-eestvedamise-abc",
+      "provider": "EBS",
+      "registration_deadline": "2026-08-18",
+      "start_date": "2026-09-01",
+      "intake_text": "Registreerimine kuni 18.08.2026, algus 01.09.2026"
+    },
+    {
+      "url": "https://www.ebs.ee/taiendusope/mikrokraadid/strateegiline-finantsjuhtimine-tooriistad-analuus-ja-otsuste-tegemine",
+      "provider": "EBS",
+      "registration_deadline": "2026-10-13",
+      "start_date": "2026-10-17",
+      "intake_text": "Registreerimine kuni 13.10.2026, algus 17.10.2026"
+    },
+    {
+      "url": "https://www.ebs.ee/taiendusope/mikrokraadid/teenusedisain-turunduses",
+      "provider": "EBS",
+      "registration_deadline": "2026-08-25",
+      "start_date": "2026-08-31",
+      "intake_text": "Registreerimine kuni 25.08.2026, algus 31.08.2026"
+    },
+    {
+      "url": "https://koolitus.edu.ee/training/14015",
+      "provider": "Tallinna Tehnikakõrgkool",
+      "registration_deadline": "2025-08-12",
+      "start_date": "2025-09-01",
+      "intake_text": "Registreerimine kuni 12.08.2025, algus 01.09.2025"
+    },
+    {
+      "url": "https://koolitus.edu.ee/training/16680",
+      "provider": "Tallinna Tehnikakõrgkool",
+      "registration_deadline": "2025-08-12",
+      "start_date": "2025-09-01",
+      "intake_text": "Registreerimine kuni 12.08.2025, algus 01.09.2025"
+    },
+    {
+      "url": "https://koolitus.edu.ee/training/16732",
+      "provider": "Tallinna Tehnikakõrgkool",
+      "registration_deadline": "2025-08-12",
+      "start_date": "2025-09-01",
+      "intake_text": "Registreerimine kuni 12.08.2025, algus 01.09.2025"
+    },
+    {
+      "url": "https://koolitus.edu.ee/training/16733",
+      "provider": "Tallinna Tehnikakõrgkool",
+      "registration_deadline": "2025-08-12",
+      "start_date": "2025-09-01",
+      "intake_text": "Registreerimine kuni 12.08.2025, algus 01.09.2025"
+    },
+    {
+      "url": "https://koolitus.edu.ee/training/16738",
+      "provider": "Tallinna Tehnikakõrgkool",
+      "registration_deadline": "2025-08-12",
+      "start_date": "2025-09-01",
+      "intake_text": "Registreerimine kuni 12.08.2025, algus 01.09.2025"
+    },
+    {
+      "url": "https://koolitus.edu.ee/training/16740",
+      "provider": "Tallinna Tehnikakõrgkool",
+      "registration_deadline": "2025-08-12",
+      "start_date": "2025-09-01",
+      "intake_text": "Registreerimine kuni 12.08.2025, algus 01.09.2025"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55284",
+      "provider": "TalTech",
+      "registration_deadline": "2026-09-14",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 14.09.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55424",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55444",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55464",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55484",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55524",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55544",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55564",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55584",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55586",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55604",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55624",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55625",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55626",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55627",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55644",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55645",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55646",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55664",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55685",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55686",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55687",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55688",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55884",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/55944",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56004",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56005",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56024",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56025",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56044",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56064",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56066",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56104",
+      "provider": "TalTech",
+      "registration_deadline": "2026-09-30",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 30.09.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56106",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56107",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56127",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56130",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56133",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56144",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56285",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56384",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56404",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://taltech.ee/kursus/56564",
+      "provider": "TalTech",
+      "registration_deadline": "2026-08-21",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 21.08.2026"
+    },
+    {
+      "url": "https://cs.ut.ee/et/digitoote-innovatsioon",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": null,
+      "start_date": "2026-08-31",
+      "intake_text": "Õppe algus 31.08.2026"
+    },
+    {
+      "url": "https://cs.ut.ee/et/sisu/andmeteaduse-mikrokraad",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": null,
+      "start_date": "2026-08-31",
+      "intake_text": "Õppe algus 31.08.2026"
+    },
+    {
+      "url": "https://cs.ut.ee/et/sisu/informaatika-didaktika",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": null,
+      "start_date": "2026-08-31",
+      "intake_text": "Õppe algus 31.08.2026"
+    },
+    {
+      "url": "https://cs.ut.ee/et/sisu/infotehnoloogia-alused",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": null,
+      "start_date": "2026-08-31",
+      "intake_text": "Õppe algus 31.08.2026"
+    },
+    {
+      "url": "https://cs.ut.ee/et/sisu/programmeerimine",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": null,
+      "start_date": "2026-08-31",
+      "intake_text": "Õppe algus 31.08.2026"
+    },
+    {
+      "url": "https://cs.ut.ee/et/sisu/susteemianaluus",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": null,
+      "start_date": "2026-08-31",
+      "intake_text": "Õppe algus 31.08.2026"
+    },
+    {
+      "url": "https://cs.ut.ee/et/tehisaru-meetodid",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": null,
+      "start_date": "2026-08-31",
+      "intake_text": "Õppe algus 31.08.2026"
+    },
+    {
+      "url": "https://geograafia.ut.ee/et/sisu/mikrokraadiprogramm-ruumiline-planeerimine-ja-keskkond",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-08-23",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 23.08.2026"
+    },
+    {
+      "url": "https://haridus.ut.ee/et/sisu/mikrokraadiprogramm-tehnoloogia-transformatiivne-kasutamine-haridustuleviku-kujundamiseks",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-06-15",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 15.06.2026"
+    },
+    {
+      "url": "https://majandus.ut.ee/et/sisu/andmepohine-riskijuhtimine",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-08-23",
+      "start_date": "2026-11-01",
+      "intake_text": "Registreerimine kuni 23.08.2026, algus 01.11.2026"
+    },
+    {
+      "url": "https://majandus.ut.ee/et/sisu/innovatsiooni-mikrokraad",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-08-23",
+      "start_date": "2026-09-01",
+      "intake_text": "Registreerimine kuni 23.08.2026, algus 01.09.2026"
+    },
+    {
+      "url": "https://majandus.ut.ee/et/sisu/majanduspoliitika-kujundamine-digiajastul",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-08-23",
+      "start_date": "2026-09-01",
+      "intake_text": "Registreerimine kuni 23.08.2026, algus 01.09.2026"
+    },
+    {
+      "url": "https://math.ut.ee/et/sisu/mikrokraadiprogramm-andmeanaluus",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": null,
+      "start_date": "2026-08-31",
+      "intake_text": "Õppe algus 31.08.2026"
+    },
+    {
+      "url": "https://meditsiiniteadused.ut.ee/et/sisu/histoloogia-histoloogilise-tehnika-alustega",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": null,
+      "start_date": "2026-08-31",
+      "intake_text": "Õppe algus 31.08.2026"
+    },
+    {
+      "url": "https://omi.ut.ee/et/uudis/mikrokraadiprogramm-okoloogia-ja-looduskaitse-globaalmuutuste-tingimustes",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-08-23",
+      "start_date": "2026-10-19",
+      "intake_text": "Registreerimine kuni 23.08.2026, algus 19.10.2026"
+    },
+    {
+      "url": "https://pedagogicum.ut.ee/et/op-akadeemia-mikrokraadid",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-08-31",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 31.08.2026"
+    },
+    {
+      "url": "https://psuhholoogia.ut.ee/et/sisu/mikrokraad-soorituspsuhholoogias",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-08-28",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 28.08.2026"
+    },
+    {
+      "url": "https://skytte.ut.ee/et/uudis/mikrokraadiprogramm-riigihangete-korraldamine",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": null,
+      "start_date": "2026-09-17",
+      "intake_text": "Õppe algus 17.09.2026"
+    },
+    {
+      "url": "https://ut.ee/et/koolitused/haldusoigus-praktikutele",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-08-23",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 23.08.2026"
+    },
+    {
+      "url": "https://ut.ee/et/koolitused/informaatikaopetaja-erialaained-0",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-08-23",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 23.08.2026"
+    },
+    {
+      "url": "https://ut.ee/et/koolitused/soome-keele-opetamine",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-06-26",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 26.06.2026"
+    },
+    {
+      "url": "https://ut.ee/et/koolitused/tanapaevane-haridusjuhtimine-eestvedamine-strateegia-ja-organisatsioonikultuur",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-08-23",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 23.08.2026"
+    },
+    {
+      "url": "https://ut.ee/et/koolitused/tolketehnoloogia",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-08-23",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 23.08.2026"
+    },
+    {
+      "url": "https://ut.ee/et/koolitused/videomangude-narratiivid",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-08-23",
+      "start_date": null,
+      "intake_text": "Registreerimine kuni 23.08.2026"
+    },
+    {
+      "url": "https://viljandi.ut.ee/et/loovettevotja-mikrokraad",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-08-23",
+      "start_date": "2026-09-03",
+      "intake_text": "Registreerimine kuni 23.08.2026, algus 03.09.2026"
+    },
+    {
+      "url": "https://viljandi.ut.ee/et/loovettevotluse-projektijuhtimine",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-06-01",
+      "start_date": "2026-11-05",
+      "intake_text": "Registreerimine kuni 01.06.2026, algus 05.11.2026"
+    },
+    {
+      "url": "https://viljandi.ut.ee/et/loovus-ja-eneseareng",
+      "provider": "Tartu Ülikool",
+      "registration_deadline": "2026-06-01",
+      "start_date": "2026-09-10",
+      "intake_text": "Registreerimine kuni 01.06.2026, algus 10.09.2026"
+    }
+  ]
+}
