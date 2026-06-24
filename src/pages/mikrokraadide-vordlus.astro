@@ -5,6 +5,7 @@ import Footer from "../components/Footer.astro";
 import Faq from "../components/Faq.astro";
 import "../styles/global.css";
 import { catalog, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
+import { fieldStats, ectsRangeText, priceRangeText } from "../lib/fieldComparison";
 
 // Ülikoolide mikrokraadid = providerType "ülikool". Mikrokraad on ülikooli
 // pakutav mikrokvalifikatsioon, annab tüüpiliselt EAP-sid.
@@ -12,6 +13,21 @@ const universityEntries = catalog.filter((entry) => entry.providerType === "üli
 const universityProviders = [...new Set(universityEntries.map((entry) => entry.provider))];
 const withEcts = universityEntries.filter((entry) => entry.ects != null);
 const withPrice = universityEntries.filter((entry) => entry.priceText);
+
+// Valdkonnapõhine võrdlus: päris andmetest tuletatud programmide arv, EAP-vahemik,
+// hinnavahemik ja näiteprogrammid valdkonna kohta (ilma "muu"-ta), top valdkonnad.
+const fieldComparison = fieldStats(universityEntries);
+const topFields = fieldComparison.slice(0, 6);
+const biggestField = fieldComparison[0] ?? null;
+const uniEcts = universityEntries.map((e) => e.ects).filter((n): n is number => n != null);
+const ectsLo = uniEcts.length ? Math.min(...uniEcts) : null;
+const ectsHi = uniEcts.length ? Math.max(...uniEcts) : null;
+const ectsTypicalText =
+  ectsLo != null && ectsHi != null
+    ? ectsLo === ectsHi
+      ? `${ectsLo} EAP`
+      : `${ectsLo}–${ectsHi} EAP`
+    : "12–24 EAP";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
 const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
@@ -61,6 +77,21 @@ const faqItems = [
     question: "Kas mikrokraadi õpe võib olla osaliselt rahastatud?",
     answer:
       "Sageli jah. Kulu võib katta tööandja koolituseelarve, Töötukassa toetus (kui oled töötu või su oskused vajavad uuendamist) või osa programme on kindlale sihtrühmale soodsamad EL-i kaasrahastusel. Iga kirje hind on kataloogis; rahastusradadest räägib leht „Kes maksab?“."
+  },
+  {
+    question: "Millises valdkonnas on kõige rohkem mikrokraade?",
+    answer: biggestField
+      ? `Ülikoolide mikrokraadide seas on kõige laiem valik valdkonnas „${biggestField.field}“ — ${biggestField.count} mikrokraadi. Allpool olev valdkonnapõhine võrdlus näitab iga valdkonna programmide arvu, EAP-mahu ja hinnavahemiku; täisnimekirja näeb lehel /valdkond/.`
+      : "Valdkonnapõhine jaotus koos mikrokraadide arvuga on allpool olevas võrdluses ja lehel /valdkond/."
+  },
+  {
+    question: "Kui suur on tüüpiline mikrokraadi maht (EAP)?",
+    answer: `Maht antakse Euroopa ainepunktides (EAP) ja 1 EAP vastab umbes 26 tunnile õppija tööd. Registris avaldatud ülikoolide mikrokraadide mahud jäävad vahemikku ${ectsTypicalText}; sagedasim koormus on ühe kuni kahe semestri jagu töö kõrvalt. Täpne EAP-maht on iga programmi juures kataloogis.`
+  },
+  {
+    question: "Kui kaua mikrokraadi õpe kestab?",
+    answer:
+      "Tavaliselt paarist nädalast kuni kahe semestrini töö kõrvalt — kestus käib käsikäes EAP-mahuga. Väiksem maht mahub kiiremini graafikusse, suurem 24–30 EAP programm venib kahe semestrini. Iga kirje kestus on kataloogis nii, nagu ülikool selle avaldab; lõplik ajakava on ülikooli enda lehel."
   }
 ];
 
@@ -113,6 +144,18 @@ const schema = {
         position: index + 1,
         name: `${entry.name} — ${entry.provider}`,
         url: `https://mikrokvalifikatsioon.ee/kataloog/${entry.slug}/`
+      }))
+    },
+    {
+      "@type": "ItemList",
+      name: "Ülikoolide mikrokraadide võrdlus valdkonniti",
+      itemListOrder: "https://schema.org/ItemListOrderDescending",
+      numberOfItems: topFields.length,
+      itemListElement: topFields.map((stat, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: `${stat.field} — ${stat.count} mikrokraadi`,
+        url: `https://mikrokvalifikatsioon.ee/valdkond/${stat.slug}/`
       }))
     },
     {
@@ -263,7 +306,59 @@ const schema = {
         </div>
       </section>
 
+      <!-- Valdkonnapõhine võrdlus — GEO: per-field, extractable table -->
       <section class="white">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Valdkonna järgi</span>
+            <h2>Ülikoolide mikrokraadide võrdlus valdkonniti.</h2>
+            <p>
+              Iga valdkonna kohta on toodud mikrokraadide arv, mahuvahemik (EAP), hinnavahemik ja
+              paar näiteprogrammi — kõik päris registriandmetest. Klõpsa valdkonnal, et näha selle
+              kõiki mikrokraade ja mikrokvalifikatsioone.
+            </p>
+          </div>
+          <div class="mkr-wrap">
+            <table class="mkr-table">
+              <caption>Programmide arv, EAP-vahemik ja hinnavahemik on tuletatud koolide avaldatud andmetest (kontrollitud {checkedAtText}). „Vaata kataloogist“ tähendab, et valdkonnas pole ühtki avalikku hinda.</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Valdkond</th>
+                  <th scope="col">Mikrokraade</th>
+                  <th scope="col">Maht (EAP)</th>
+                  <th scope="col">Hinnavahemik</th>
+                  <th scope="col">Näited</th>
+                </tr>
+              </thead>
+              <tbody>
+                {topFields.map((stat) => (
+                  <tr>
+                    <th scope="row"><a href={`/valdkond/${stat.slug}/`}>{stat.field}</a></th>
+                    <td>{stat.count}</td>
+                    <td>{ectsRangeText(stat)}</td>
+                    <td>{priceRangeText(stat)}</td>
+                    <td>
+                      {stat.examples.map((ex, i) => (
+                        <>
+                          {i > 0 && ", "}
+                          <a href={`/kataloog/${ex.slug}/`}>{ex.name}</a>
+                        </>
+                      ))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="notice">
+            Hinnavahemik koondab valdkonna ülikoolide avaldatud hinnad; osa kulust võib katta
+            tööandja või Töötukassa (<a href="/kes-maksab/">kes maksab?</a>). Lõplik ja ametlik
+            hind on alati ülikooli enda lehel — metoodika on lehel <a href="/andmed/">Andmed</a>.
+          </p>
+        </div>
+      </section>
+
+      <section class="ice">
         <div class="section-inner narrow">
           <div class="section-head compact-head">
             <span class="kicker">Kuidas valida?</span>
@@ -281,7 +376,7 @@ const schema = {
         </div>
       </section>
 
-      <section class="ice">
+      <section class="white">
         <div class="section-inner narrow">
           <div class="section-head compact-head">
             <span class="kicker">Korduvad küsimused</span>
@@ -291,7 +386,7 @@ const schema = {
         </div>
       </section>
 
-      <section class="white">
+      <section class="ice">
         <div class="section-inner narrow">
           <div class="section-head compact-head">
             <span class="kicker">Seotud</span>
