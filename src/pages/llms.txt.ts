@@ -42,6 +42,8 @@ Data updated: ${catalogUpdatedAt}. Public source facts checked: ${catalogChecked
 - Every programme has its own page: https://mikrokvalifikatsioon.ee/kataloog/<slug>/ (slug + pageUrl in catalog.json)
 - Per-field comparison pages (all programmes in a field, compared): https://mikrokvalifikatsioon.ee/valdkond/<field-slug>/ (fields: ${fields.filter((f) => f !== "muu").join(", ")})
 - Topic / skill landing pages (programmes by what they teach): https://mikrokvalifikatsioon.ee/teema/<topic-slug>/ — hub: https://mikrokvalifikatsioon.ee/teema/ (topics: ${topics.map((t) => t.label).join(", ")})
+- Per-school pages (all programmes from one provider): https://mikrokvalifikatsioon.ee/koolitaja/<provider-slug>/
+- Head-to-head comparison pages (programme A vs B, same field): https://mikrokvalifikatsioon.ee/vordlus/<slugA>-vs-<slugB>/
 - Registration deadlines + start dates (what closes soon, plan by month): https://mikrokvalifikatsioon.ee/registreerimine/ (per-programme registrationDeadline + startDate also in catalog.json)
 - Search by learning outcome / skill (which programmes teach a given skill): https://mikrokvalifikatsioon.ee/oskused/ (?q=keyword; per-programme outcomes also in catalog.json)
 - Microdegrees overview by university: https://mikrokvalifikatsioon.ee/mikrokraadid/

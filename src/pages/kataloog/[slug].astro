@@ -3,14 +3,17 @@ import Seo from "../../components/Seo.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
-import { catalog, type CatalogEntryWithSlug } from "../../data/catalog";
+import { catalog, providersWithSlug, type CatalogEntryWithSlug } from "../../data/catalog";
 import { toCourse, outboundUrl } from "../../data/courseSchema";
+import { comparisonsFor } from "../../data/comparisons";
 
 export function getStaticPaths() {
   return catalog.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
 }
 
 const { entry } = Astro.props as { entry: CatalogEntryWithSlug };
+const providerSlug = providersWithSlug.find((p) => p.provider === entry.provider)?.slug;
+const relatedComparisons = comparisonsFor(entry.slug).slice(0, 4);
 
 const canonicalPath = `/kataloog/${entry.slug}/`;
 const checkedAtText = entry.sourceCheckedAt.split("-").reverse().join(".");
@@ -141,6 +144,24 @@ const schema = {
         </div>
       </section>
 
+      {(providerSlug || relatedComparisons.length > 0) && (
+        <section class="ice">
+          <div class="section-inner narrow">
+            <div class="section-head compact-head">
+              <span class="kicker">Seotud</span>
+              <h2>Võrdle ja vaata edasi</h2>
+            </div>
+            <p class="rel-chips">
+              {providerSlug && <a class="chip" href={`/koolitaja/${providerSlug}/`} data-track-event="cta_click" data-track-label="detail_to_provider">Kõik {entry.provider} programmid →</a>}
+              {relatedComparisons.map((c) => {
+                const other = c.a.slug === entry.slug ? c.b : c.a;
+                return <a class="chip chip-alt" href={`/vordlus/${c.pair}/`} data-track-event="cta_click" data-track-label="detail_to_comparison">vs {other.name} →</a>;
+              })}
+            </p>
+          </div>
+        </section>
+      )}
+
       <section class="navy">
         <div class="section-inner contact">
           <div>
@@ -165,6 +186,9 @@ const schema = {
     <Footer label={entry.field} />
 
     <style>
+      .rel-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+      .chip { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 0.9rem; color: var(--teal); font-weight: 700; }
+      .chip-alt { color: #212121; background: #f3f6f3; font-weight: 400; }
       .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
       .crumbs a { color: #5a6b80; }
       .crumbs span { color: #212121; }

@@ -1,5 +1,5 @@
 import { OGImageRoute } from "astro-og-canvas";
-import { catalog } from "../../data/catalog";
+import { catalog, providersWithSlug } from "../../data/catalog";
 import { topics } from "../../data/topics";
 
 // Sisulehed: võti = canonical-tee viimane segment (Seo.astro tuletab sama võtme).
@@ -87,9 +87,17 @@ const topicPages = Object.fromEntries(
   topics.map((t) => [t.slug, { title: `${t.label} — mikrokraadid`, description: `${t.entries.length} programmi · õpiväljundid, maht ja hind` }])
 );
 
+// Koolilehed: võti = pakkuja slug.
+const providerPages = Object.fromEntries(
+  providersWithSlug.map((p) => {
+    const n = catalog.filter((e) => e.provider === p.provider).length;
+    return [p.slug, { title: `${p.provider} — mikrokraadid`, description: `${n} programmi · maht, hind, õpiväljundid` }];
+  })
+);
+
 export const { getStaticPaths, GET } = await OGImageRoute({
   param: "route",
-  pages: { ...contentPages, ...programmePages, ...topicPages },
+  pages: { ...contentPages, ...programmePages, ...topicPages, ...providerPages },
   getImageOptions: (_path, page) => ({
     title: page.title,
     description: page.description,

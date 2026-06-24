@@ -3,7 +3,7 @@ import Seo from "../../components/Seo.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
-import { catalog, providers, fields, fieldsWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
+import { catalog, providers, fields, fieldsWithSlug, providersWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 import { outboundUrl } from "../../data/courseSchema";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
@@ -97,6 +97,12 @@ const schema = {
             <span>Võrdle valdkonniti:</span>
             {fieldsWithSlug.map((f) => (
               <a href={`/valdkond/${f.slug}/`} data-track-event="cta_click" data-track-label="catalog_field_link">{f.field} <b>{catalog.filter((e) => e.field === f.field).length}</b></a>
+            ))}
+          </nav>
+          <nav class="field-links" aria-label="Sirvi koolide kaupa">
+            <span>Koolide kaupa:</span>
+            {providersWithSlug.map((p) => (
+              <a href={`/koolitaja/${p.slug}/`} data-track-event="cta_click" data-track-label="catalog_provider_link">{p.provider} <b>{catalog.filter((e) => e.provider === p.provider).length}</b></a>
             ))}
           </nav>
           <p class="field-help">

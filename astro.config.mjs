@@ -8,8 +8,9 @@ export default defineConfig({
   output: "static",
   integrations: [
     sitemap({
-      // /vordlus/ on noindex utiliit (sõltub ?p= parameetritest) — sitemapis pole kohta.
-      filter: (page) => !page.includes("/vordlus/"),
+      // /vordlus/ (indeks) on noindex utiliit (sõltub ?p= parameetritest) — sitemapist väljas.
+      // AGA /vordlus/<a>-vs-<b>/ võrduslehed on indekseeritavad → need jäävad sitemapi.
+      filter: (page) => !page.endsWith("/vordlus/"),
       changefreq: "weekly",
       // NB: hoia kuupäev kataloogi kontrollkuupäevaga kooskõlas (src/data/catalog/index.ts).
       lastmod: new Date("2026-06-12"),

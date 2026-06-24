@@ -86,3 +86,7 @@ export const fieldsWithSlug = fields
   .filter((field) => field !== "muu")
   .map((field) => ({ field, slug: slugify(field) }));
 export const fieldBySlug = new Map(fieldsWithSlug.map((f) => [f.slug, f.field]));
+
+/** Pakkujad koos slugiga (/koolitaja/<slug>/). */
+export const providersWithSlug = providers.map((provider) => ({ provider, slug: slugify(provider) }));
+export const providerBySlug = new Map(providersWithSlug.map((p) => [p.slug, p.provider]));

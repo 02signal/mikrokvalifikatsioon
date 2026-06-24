@@ -1,0 +1,214 @@
+---
+import Seo from "../../components/Seo.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { comparisons, type Comparison } from "../../data/comparisons";
+import { fieldsWithSlug, providersWithSlug, catalogCheckedAt } from "../../data/catalog";
+
+export function getStaticPaths() {
+  return comparisons.map((c) => ({ params: { pair: c.pair }, props: { cmp: c } }));
+}
+
+const { cmp } = Astro.props as { cmp: Comparison };
+const { a, b } = cmp;
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const clip = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1).trimEnd() + "…" : s);
+
+const fieldSlug = fieldsWithSlug.find((f) => f.field === a.field)?.slug;
+const aProvSlug = providersWithSlug.find((p) => p.provider === a.provider)?.slug;
+const bProvSlug = providersWithSlug.find((p) => p.provider === b.provider)?.slug;
+
+const SITE = "https://mikrokvalifikatsioon.ee";
+const canonicalPath = `/vordlus/${cmp.pair}/`;
+const title = `${clip(a.name, 27)} vs ${clip(b.name, 27)} – võrdlus`;
+const description = `${a.name} (${a.provider}) vs ${b.name} (${b.provider}) — võrdle õpiväljundeid, mahtu, hinda ja õppevormi kõrvuti. Kumb mikrokraad sulle sobib?`;
+
+const facts: { label: string; a: string; b: string }[] = [
+  { label: "Kool", a: a.provider, b: b.provider },
+  { label: "Valdkond", a: a.field, b: b.field },
+  { label: "Maht", a: a.ects != null ? `${a.ects} EAP` : "—", b: b.ects != null ? `${b.ects} EAP` : "—" },
+  { label: "Hind", a: a.priceText || "kooli lehel", b: b.priceText || "kooli lehel" },
+  { label: "Kestus", a: a.durationText || "—", b: b.durationText || "—" },
+  { label: "Õppevorm", a: a.format || "—", b: b.format || "—" },
+  { label: "Keel", a: a.language || "—", b: b.language || "—" },
+  { label: "Vastuvõtt", a: a.intakeText || "—", b: b.intakeText || "—" }
+];
+
+const faq = [
+  { q: `Mille poolest ${a.name} ja ${b.name} erinevad?`,
+    a: `Mõlemad on ${a.field} valdkonna programmid. ${a.name} pakub ${a.provider}, ${b.name} ${b.provider}. ${cmp.shared.length ? `${cmp.shared.length} õpiväljundit kattuvad; ülejäänud erinevad (vt allpool).` : "Õpiväljundid on erineva rõhuasetusega (vt allpool)."} Maht ja hind: ${a.ects ?? "?"} EAP / ${a.priceText || "—"} vs ${b.ects ?? "?"} EAP / ${b.priceText || "—"}.` },
+  { q: `Kumb valida?`,
+    a: `See sõltub sinu eesmärgist, ajast ja sellest, kes maksab. Vaata, kumma õpiväljundid on sinu soovitud oskusele lähemal, ja arvesta mahtu, hinda ja õppevormi. Rahastuse kohta vaata „Kes maksab?".` }
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": `${SITE}/#organization`, name: "Mikrokvalifikatsioon.ee", legalName: "Ettevõtluskeskus OÜ", url: `${SITE}/` },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Kataloog", item: `${SITE}/kataloog/` },
+        { "@type": "ListItem", position: 3, name: `${a.name} vs ${b.name}`, item: `${SITE}${canonicalPath}` }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      name: `${a.name} vs ${b.name}`,
+      numberOfItems: 2,
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: a.name, url: `${SITE}/kataloog/${a.slug}/` },
+        { "@type": "ListItem", position: 2, name: b.name, url: `${SITE}/kataloog/${b.slug}/` }
+      ]
+    },
+    { "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title={title}
+      description={description}
+      canonicalPath={canonicalPath}
+      ogTitle={`${clip(a.name, 24)} vs ${clip(b.name, 24)}`}
+      ogDescription={`Võrdle ${a.field} mikrokraade kõrvuti: õpiväljundid, maht, hind, õppevorm.`}
+      ogImage="/og-default.png"
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report" data-pair={cmp.pair}>
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <a href="/kataloog/">Kataloog</a> ›
+            {fieldSlug && <><a href={`/valdkond/${fieldSlug}/`}>{a.field}</a> › </>}
+            <span>Võrdlus</span>
+          </nav>
+          <span class="eyebrow">Võrdlus</span>
+          <h1>{a.name} vs {b.name}: kumb valida?</h1>
+          <p>
+            Kaks {a.field} valdkonna mikrokraadi kõrvuti — {a.provider} ja {b.provider}.
+            Võrdle õpiväljundeid, mahtu, hinda ja õppevormi ning vali, kumb sinu eesmärgile sobib.
+          </p>
+          <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <div class="compare-wrap">
+            <table class="vs-table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th><a href={`/kataloog/${a.slug}/`} data-track-event="cta_click" data-track-label="vs_to_detail_a">{a.name}</a></th>
+                  <th><a href={`/kataloog/${b.slug}/`} data-track-event="cta_click" data-track-label="vs_to_detail_b">{b.name}</a></th>
+                </tr>
+              </thead>
+              <tbody>
+                {facts.map((f) => (
+                  <tr><th scope="row">{f.label}</th><td>{f.a}</td><td>{f.b}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {cmp.shared.length > 0 && (
+        <section class="ice">
+          <div class="section-inner narrow">
+            <div class="section-head compact-head">
+              <span class="kicker">Ühised õpiväljundid</span>
+              <h2>Mida mõlemad õpetavad</h2>
+            </div>
+            <ul class="check">{cmp.shared.slice(0, 6).map((o) => <li>{o}</li>)}</ul>
+          </div>
+        </section>
+      )}
+
+      <section class="white">
+        <div class="section-inner">
+          <div class="vs-grid">
+            <div>
+              <h2 class="vs-h">Ainult {a.name}</h2>
+              <ul class="check">{cmp.aOnly.slice(0, 6).map((o) => <li>{o}</li>)}{cmp.aOnly.length === 0 && <li class="muted">—</li>}</ul>
+            </div>
+            <div>
+              <h2 class="vs-h">Ainult {b.name}</h2>
+              <ul class="check">{cmp.bOnly.slice(0, 6).map((o) => <li>{o}</li>)}{cmp.bOnly.length === 0 && <li class="muted">—</li>}</ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head"><span class="kicker">Kuidas valida</span><h2>Kumb sobib sulle?</h2></div>
+          <div class="faq">
+            {faq.map((f) => (<details><summary>{f.q}</summary><p>{f.a}</p></details>))}
+          </div>
+          <p class="chips">
+            <a class="chip" href={`/kataloog/${a.slug}/`}>{clip(a.name, 30)} →</a>
+            <a class="chip" href={`/kataloog/${b.slug}/`}>{clip(b.name, 30)} →</a>
+            {fieldSlug && <a class="chip chip-alt" href={`/valdkond/${fieldSlug}/`}>Kõik {a.field} programmid →</a>}
+            {aProvSlug && <a class="chip chip-alt" href={`/koolitaja/${aProvSlug}/`}>{a.provider} →</a>}
+            {bProvSlug && a.provider !== b.provider && <a class="chip chip-alt" href={`/koolitaja/${bProvSlug}/`}>{b.provider} →</a>}
+          </p>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Ikka kahtled? Tee suunatest või vaata, kes maksab.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="vs_suunatest">Tee suunatest</a>
+              <a class="btn btn-secondary" href="/kes-maksab/" data-track-event="cta_click" data-track-label="vs_kesmaksab">Kes maksab?</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="vs_email">info@mikrokvalifikatsioon.ee</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Programmide võrdlus" />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .compare-wrap { overflow-x: auto; }
+      .vs-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); border-radius: 10px; min-width: 640px; }
+      .vs-table th, .vs-table td { border-bottom: 1px solid var(--line); padding: 12px 14px; text-align: left; vertical-align: top; font-size: 0.95rem; }
+      .vs-table thead th { background: #212121; color: #fff; }
+      .vs-table thead th a { color: #fff; }
+      .vs-table tbody th { background: #f3f6f3; width: 130px; font-weight: 700; }
+      .vs-table tbody tr:last-child td, .vs-table tbody tr:last-child th { border-bottom: 0; }
+      .vs-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+      .vs-h { font-size: 1.05rem; margin: 0 0 8px; }
+      .muted { color: var(--muted); }
+      .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
+      .chip { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 0.9rem; color: var(--teal); font-weight: 700; }
+      .chip-alt { color: #212121; background: #f3f6f3; font-weight: 400; }
+    </style>
+
+    <script>
+      const el = document.querySelector("[data-pair]") as HTMLElement | null;
+      (window as any).digiteekaartTrack?.("comparison_view", { pair: el?.getAttribute("data-pair") || "" });
+    </script>
+  </body>
+</html>

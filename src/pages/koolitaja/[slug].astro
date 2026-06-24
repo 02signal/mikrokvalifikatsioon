@@ -1,0 +1,177 @@
+---
+import Seo from "../../components/Seo.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { catalog, providersWithSlug, fieldsWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
+import { parsePriceEur } from "../../data/courseSchema";
+
+export function getStaticPaths() {
+  return providersWithSlug.map((p) => ({ params: { slug: p.slug }, props: { provider: p.provider } }));
+}
+
+const { provider } = Astro.props as { provider: string };
+const entries = catalog.filter((e) => e.provider === provider);
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
+const providerType = entries.find((e) => e.providerType)?.providerType ?? null;
+
+const fieldsCovered = fieldsWithSlug.filter((f) => entries.some((e) => e.field === f.field));
+const prices = entries.map((e) => parsePriceEur(e.priceText)).filter((p): p is number => p != null && p > 0);
+const minPrice = prices.length ? Math.min(...prices) : null;
+const maxPrice = prices.length ? Math.max(...prices) : null;
+const freeCount = entries.filter((e) => parsePriceEur(e.priceText) === 0).length;
+const ectsVals = entries.map((e) => e.ects).filter((n): n is number => n != null);
+const minEcts = ectsVals.length ? Math.min(...ectsVals) : null;
+const maxEcts = ectsVals.length ? Math.max(...ectsVals) : null;
+
+const SITE = "https://mikrokvalifikatsioon.ee";
+const slug = providersWithSlug.find((p) => p.provider === provider)?.slug as string;
+const canonicalPath = `/koolitaja/${slug}/`;
+
+const fullTitle = `${provider} mikrokraadid ja mikrokvalifikatsioonid`;
+const title = fullTitle.length <= 66 ? fullTitle : `${provider} — mikrokraadid`;
+const description = `Kõik ${entries.length} ${provider} mikrokvalifikatsiooni ja mikrokraadi ühes kohas — maht, hind, õppevorm ja õpiväljundid. Võrdle ja leia sobiv.`;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": `${SITE}/#organization`, name: "Mikrokvalifikatsioon.ee", legalName: "Ettevõtluskeskus OÜ", url: `${SITE}/` },
+    { "@type": "EducationalOrganization", name: provider, url: entries[0]?.url ?? `${SITE}${canonicalPath}` },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Kataloog", item: `${SITE}/kataloog/` },
+        { "@type": "ListItem", position: 3, name: provider, item: `${SITE}${canonicalPath}` }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      name: `${provider} mikrokvalifikatsioonid ja mikrokraadid`,
+      numberOfItems: entries.length,
+      itemListElement: entries.map((entry, index) => ({
+        "@type": "ListItem", position: index + 1, name: entry.name, url: `${SITE}/kataloog/${entry.slug}/`
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title={title}
+      description={description}
+      canonicalPath={canonicalPath}
+      ogTitle={`${provider} — mikrokraadid`}
+      ogDescription={`${entries.length} programmi: maht, hind, õppevorm ja õpiväljundid ühes kohas.`}
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report" data-provider={provider}>
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <a href="/kataloog/">Kataloog</a> › <span>{provider}</span>
+          </nav>
+          <span class="eyebrow">Kool</span>
+          <h1>{provider}: mikrokraadid ja mikrokvalifikatsioonid</h1>
+          <p>
+            {entries.length} programmi{providerType ? ` (${providerType})` : ""}.
+            {minEcts != null && maxEcts != null && <> Maht {minEcts}–{maxEcts} EAP.</>}
+            {minPrice != null && maxPrice != null && <> Hind {minPrice}–{maxPrice} €{freeCount > 0 && <>, {freeCount} tasuta sihtrühmale</>}.</>}
+            {" "}Andmed pärinevad kooli avalikelt lehtedelt.
+          </p>
+          <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <div class="compare-wrap">
+            <table class="field-table">
+              <thead>
+                <tr><th>Programm</th><th>Valdkond</th><th>Maht</th><th>Hind</th><th>Õppevorm</th><th>Vastuvõtt</th></tr>
+              </thead>
+              <tbody>
+                {entries.map((entry) => (
+                  <tr>
+                    <td><a href={`/kataloog/${entry.slug}/`} data-track-event="cta_click" data-track-label="provider_to_detail">{entry.name}</a></td>
+                    <td>{entry.field}</td>
+                    <td>{entry.ects != null ? `${entry.ects} EAP` : "—"}</td>
+                    <td>{entry.priceText || "kooli lehel"}</td>
+                    <td>{entry.format || "—"}</td>
+                    <td>{entry.intakeText || "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="field-help">Iga programmi nimi viib selle lehele, kus on eesmärk, õpiväljundid, hindamine ja link kooli ametlikule lehele.</p>
+        </div>
+      </section>
+
+      {fieldsCovered.length > 0 && (
+        <section class="ice">
+          <div class="section-inner narrow">
+            <div class="section-head compact-head">
+              <span class="kicker">Valdkonnad</span>
+              <h2>{provider} programmid valdkonniti</h2>
+              <p>Võrdle kõigi koolide programme samas valdkonnas:</p>
+            </div>
+            <p class="chips">
+              {fieldsCovered.map((f) => <a class="chip" href={`/valdkond/${f.slug}/`}>{f.field} <b>{entries.filter((e) => e.field === f.field).length}</b></a>)}
+            </p>
+          </div>
+        </section>
+      )}
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Kahtled valikus? Tee suunatest või võrdle koole.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="provider_suunatest">Tee suunatest</a>
+              <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="provider_kataloog">Ava kogu kataloog</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="provider_email">info@mikrokvalifikatsioon.ee</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="provider_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label={`${provider} mikrokraadid`} />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .compare-wrap { overflow-x: auto; }
+      .field-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); border-radius: 10px; min-width: 720px; }
+      .field-table th, .field-table td { border-bottom: 1px solid var(--line); padding: 12px 14px; text-align: left; vertical-align: top; font-size: 0.95rem; }
+      .field-table thead th { background: #212121; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.02em; }
+      .field-table tbody tr:last-child td { border-bottom: 0; }
+      .field-table td a { color: var(--teal); font-weight: 700; }
+      .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 0; }
+      .chip { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 0.9rem; color: #212121; }
+      .chip b { color: var(--teal); }
+    </style>
+
+    <script>
+      const el = document.querySelector("[data-provider]") as HTMLElement | null;
+      const provider = el?.getAttribute("data-provider") || "";
+      (window as any).digiteekaartTrack?.("provider_page_view", { provider });
+    </script>
+  </body>
+</html>
