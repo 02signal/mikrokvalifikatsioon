@@ -7,6 +7,8 @@ import { catalog, providersWithSlug, type CatalogEntryWithSlug } from "../../dat
 import { toCourse, outboundUrl } from "../../data/courseSchema";
 import { comparisonsFor } from "../../data/comparisons";
 import { ehisAttribution } from "../../data/ehisFacts";
+import { intakeDatesFor, intakeDatesFetchedAt } from "../../data/intakeDates";
+import { formatEt } from "../../data/dates";
 
 export function getStaticPaths() {
   return catalog.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
@@ -53,6 +55,20 @@ const languageText = entry.language === "en" ? "inglise" : entry.language === "e
 // (nimi/EAP/õppekavarühm/õpiväljundid) jäävad alles.
 const robotsBlockedProviders = new Set(["Eesti Ettevõtluskõrgkool Mainor", "Tallinna Ülikool"]);
 const isRobotsBlocked = robotsBlockedProviders.has(entry.provider);
+
+// Värsked vastuvõtu/registreerimise kuupäevad — kogutud kooli ENDA programmilehelt
+// (AMOS robots/ToS-järgiv allika-värskendus). Kuvame ainult AVALIKKE fakte: kuupäev +
+// lühike silt. Robotitõkkega koolidel värsket kuupäeva pole → senine kataloog jääb.
+const fresh = !isRobotsBlocked ? intakeDatesFor(entry.url) : null;
+const freshDeadline = fresh?.registration_deadline ?? null;
+const freshStart = fresh?.start_date ?? null;
+const hasFreshDates = !!(freshDeadline || freshStart);
+// "kontrollitud" = millal kuupäevad kooli lehelt korjati (ISO-instant → DD.MM.YYYY).
+const freshCheckedAt = hasFreshDates ? formatEt(intakeDatesFetchedAt.slice(0, 10)) : null;
+// Kui registreerimise tähtaeg on `fetched_at` suhtes juba möödas, kuvame neutraalselt
+// ("Viimane teadaolev vastuvõtt …"), mitte avatuna.
+const fetchedDay = intakeDatesFetchedAt.slice(0, 10);
+const deadlinePast = !!(freshDeadline && freshDeadline < fetchedDay);
 
 const facts = [
   displayEcts != null ? { label: "Maht", value: `${displayEcts} EAP` } : null,
@@ -156,6 +172,24 @@ const schema = {
                 <div><dt>{fact.label}</dt><dd>{fact.value}</dd></div>
               ))}
             </dl>
+          )}
+
+          {hasFreshDates && (
+            <div class={`intake-fresh${deadlinePast ? " intake-fresh-past" : ""}`}>
+              {deadlinePast ? (
+                <p class="intake-fresh-line">
+                  Viimane teadaolev vastuvõtt: <strong>{formatEt(freshDeadline as string)}</strong> —
+                  <a href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_intake_school_${entry.provider}`}>vaata uut vastuvõttu kooli lehelt ↗</a>
+                </p>
+              ) : (
+                <p class="intake-fresh-line">
+                  {freshDeadline && <span class="intake-pill">Registreerimine kuni {formatEt(freshDeadline)}</span>}
+                  {freshStart && <span class="intake-pill intake-pill-start">Algus: {formatEt(freshStart)}</span>}
+                  <a class="intake-fresh-cta" href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_intake_school_${entry.provider}`}>Registreeru kooli lehel ↗</a>
+                </p>
+              )}
+              <p class="intake-fresh-sub">Kuupäevad kontrollitud kooli enda lehelt {freshCheckedAt}.</p>
+            </div>
           )}
 
           {isOfficial ? (
@@ -316,6 +350,13 @@ const schema = {
       .src-credit { margin: 10px 0 0; font-size: 0.82rem; color: #5a6b80; }
       .notice-official { border-left-color: var(--teal); background: #eef5f4; margin-bottom: 16px; }
       .notice-school-check { border-left-color: var(--teal); background: #eef5f4; margin: 0 0 24px; }
+      .intake-fresh { margin: 0 0 28px; padding: 16px 18px; background: #eef5f4; border: 1px solid #cfe1de; border-left: 4px solid var(--teal); border-radius: 12px; }
+      .intake-fresh-past { background: #f6f7f6; border-left-color: #c9d2c9; }
+      .intake-fresh-line { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+      .intake-pill { display: inline-block; background: #fff; border: 1px solid #cfe1de; border-radius: 999px; padding: 5px 13px; font-weight: 700; color: var(--teal); font-size: 0.95rem; }
+      .intake-pill-start { color: #212121; background: #fbfbf9; border-color: #d9e3ea; }
+      .intake-fresh-cta { font-weight: 700; color: var(--teal); }
+      .intake-fresh-sub { margin: 8px 0 0; font-size: 0.82rem; color: #5a6b80; }
       .school-check-line { margin: 0; }
       .school-check-line a { font-size: 1.08rem; font-weight: 700; color: var(--teal); }
       .school-check-sub { margin: 8px 0 0; font-size: 0.92rem; color: #5a6b80; }
