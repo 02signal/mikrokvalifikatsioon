@@ -139,7 +139,16 @@ export default async function handler(req, res) {
   let fundingRoute = null;
   if (kind === 'outcome_package' || ACCOUNT_KINDS.has(kind)) {
     topic = 'mikrokvalifikatsioon'; // package/account live on the mikrokvalifikatsioon register
-    outcomes = cleanOutcomes(body.outcomes);
+    // PBI-04: the /konto/ faces send the demand value under semantic keys the AMOS ingress
+    // does NOT allow-list (combo_waitlist→`combo`, reminder_subscribed→`slugs`) — those keys
+    // are dropped at the hop, losing the highest-value build-next signal (the unmet
+    // combination) and which programmes a reminder is for. AMOS allow-lists only `outcomes`
+    // for the bounded context array, so fold them in there (combo IS a set of outcomes).
+    outcomes = cleanOutcomes([
+      ...(Array.isArray(body.outcomes) ? body.outcomes : []),
+      ...(kind === 'combo_waitlist' && Array.isArray(body.combo) ? body.combo : []),
+      ...(kind === 'reminder_subscribed' && Array.isArray(body.slugs) ? body.slugs : []),
+    ]);
     if (kind === 'outcome_package' && !outcomes.length) { res.status(400).json({ message: 'Lisa vähemalt üks õpiväljund paketti.' }); return; }
     if (kind === 'funding_profile_set') { fundingRoute = ALLOWED_FUNDING_ROUTES.has(body.funding_route) ? body.funding_route : null; }
   } else {
