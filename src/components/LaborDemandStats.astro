@@ -5,7 +5,7 @@
 // Banded + attributed (CC BY-NC 3.0). Renders nothing if there is no data.
 import {
   laborSignals, demandFor, openingsBandText, trendInfo, regionLabel, iscoLabel,
-  asOfText, laborAttribution, laborCheckedAt,
+  asOfText, laborCheckedAt, laborGeneratedAt,
 } from "../data/labor";
 
 interface Props { iscoGroup: string; }
@@ -21,7 +21,11 @@ const regional = laborSignals
   .slice(0, 6);
 const ref = national ?? regional[0] ?? null;
 const trend = ref ? trendInfo(ref.trend) : null;
-const checked = laborCheckedAt.split("-").reverse().join(".");
+function dateText(value: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(value || "");
+  return m ? `${m[3]}.${m[2]}.${m[1]}` : value;
+}
+const updated = dateText(laborGeneratedAt || laborCheckedAt);
 ---
 
 {ref && (
@@ -59,7 +63,8 @@ const checked = laborCheckedAt.split("-").reverse().join(".");
 
       <p class="demand-source">
         Allikas: <a href="https://andmed.eesti.ee/datasets/eesti-tootukassa-poolt-vahendatud-vabade-tookohtade-statistika" rel="noopener" target="_blank">Eesti Töötukassa avaandmed</a>,
-        litsents <a href="https://creativecommons.org/licenses/by-nc/3.0/" rel="noopener" target="_blank">CC BY-NC 3.0</a>. Kontrollitud {checked}.
+        litsents <a href="https://creativecommons.org/licenses/by-nc/3.0/" rel="noopener" target="_blank">CC BY-NC 3.0</a>.
+        Andmeseis {asOfText(ref.as_of)}; AMOS feed uuendatud {updated}.
         Arvud on toodud vahemikena (ametirühma tasemel).
       </p>
     </div>
