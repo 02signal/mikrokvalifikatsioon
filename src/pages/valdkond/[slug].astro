@@ -25,42 +25,103 @@ const ectsVals = entries.map((e) => e.ects).filter((n): n is number => n != null
 const minEcts = ectsVals.length ? Math.min(...ectsVals) : null;
 const maxEcts = ectsVals.length ? Math.max(...ectsVals) : null;
 
-const title = `${fieldCap} mikrokraadid – võrdlus ja hinnad`;
-const description = `${entries.length} ${field} mikrokvalifikatsiooni ja mikrokraadi ${providersInField.length} koolist — võrdle mahtu (EAP), hinda ja õppevormi ühes tabelis ja leia parim valik.`;
+// Tasemejaotus: ülikooli mikrokraad (EAP, tasemeõppes arvestatav) vs
+// koolitusettevõtte/rakenduskõrgkooli mikrokvalifikatsioon. Päris andmetest.
+const degreeEntries = entries.filter((e) => e.providerType === "ülikool");
+const qualEntries = entries.filter((e) => e.providerType !== "ülikool");
+const degreeCount = degreeEntries.length;
+const qualCount = qualEntries.length;
+const ectsRangeText =
+  minEcts != null && maxEcts != null
+    ? minEcts === maxEcts
+      ? `${minEcts} EAP`
+      : `${minEcts}–${maxEcts} EAP`
+    : null;
+const priceRangeText =
+  minPrice != null && maxPrice != null
+    ? minPrice === maxPrice
+      ? `${minPrice} €`
+      : `${minPrice}–${maxPrice} €`
+    : null;
+
+const title = `${fieldCap} mikrokraadid ja mikrokvalifikatsioonid`;
+const description = `${entries.length} ${field} mikrokraadi ja mikrokvalifikatsiooni ${providersInField.length} koolist${ectsRangeText ? `, maht ${ectsRangeText}` : ""}${priceRangeText ? `, hind ${priceRangeText}` : ""}. Võrdle mahtu (EAP), hinda ja õppevormi ühes tabelis ja leia parim valik.`;
 
 const SITE = "https://mikrokvalifikatsioon.ee";
 const canonicalPath = `/valdkond/${fieldsWithSlug.find((f) => f.field === field)?.slug}/`;
 
-const schema = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": `${SITE}/#organization`,
-      name: "Mikrokvalifikatsioon.ee",
-      legalName: "Ettevõtluskeskus OÜ",
-      url: `${SITE}/`
-    },
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
-        { "@type": "ListItem", position: 2, name: "Kataloog", item: `${SITE}/kataloog/` },
-        { "@type": "ListItem", position: 3, name: fieldCap, item: `${SITE}${canonicalPath}` }
-      ]
-    },
-    {
-      "@type": "ItemList",
-      name: `${fieldCap} mikrokvalifikatsioonid ja mikrokraadid`,
-      numberOfItems: entries.length,
-      itemListElement: entries.map((entry, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        item: toCourse(entry)
-      }))
-    }
-  ]
-};
+// Extractable intent intro (1–2 lauset) — kuvatud lehel JA WebPage.description'is,
+// et AI-assistendid ja otsing saaksid valdkonna kokkuvõtte kohe kätte.
+const introText =
+  `${fieldCap} valdkonnas on ${entries.length} mikrokraadi ja mikrokvalifikatsiooni ${providersInField.length} koolist` +
+  `${degreeCount > 0 && qualCount > 0 ? ` — ${degreeCount} ülikooli mikrokraadi (EAP, tasemeõppes arvestatav) ja ${qualCount} koolitusettevõtte mikrokvalifikatsiooni` : ""}` +
+  `${ectsRangeText ? `. Maht ${ectsRangeText}` : ""}${priceRangeText ? `, hind ${priceRangeText}` : ""}.`;
+
+// KKK — ainult päris vastustega. Tühje/sisutühje küsimusi me ei emiteeri.
+const faq: { q: string; a: string }[] = [
+  {
+    q: `Millised ${field} mikrokraadid ja mikrokvalifikatsioonid on?`,
+    a: `Registris on ${entries.length} ${field} programmi ${providersInField.length} koolist: ${providersInField.slice(0, 6).join(", ")}${providersInField.length > 6 ? " jt" : ""}. Kõik on allpool tabelis koos mahu, hinna ja õppevormiga.`
+  }
+];
+if (priceRangeText) {
+  faq.push({
+    q: `Kui palju ${field} mikrokraad maksab?`,
+    a: `Selle valdkonna programmid maksavad ${priceRangeText}${freeCount > 0 ? `, neist ${freeCount} on mõnele sihtrühmale rahastatud` : ""}. Täpne hind on iga programmi juures ja kooli lehel. Kes kulu katab, vaata lehelt „Kes maksab?“.`
+  });
+}
+if (degreeCount > 0 && qualCount > 0) {
+  faq.push({
+    q: `Mikrokraad või mikrokvalifikatsioon — mille ${field} valdkonnas valida?`,
+    a: `Selles valdkonnas on ${degreeCount} ülikooli mikrokraadi (annavad EAP-sid, mida saab sageli hiljem tasemeõppes arvestada) ja ${qualCount} koolitusettevõtte või rakenduskõrgkooli mikrokvalifikatsiooni (kiirem praktiline oskus). Vali eesmärgi järgi: ainepunktid ja kõrgharidustase vs kohe rakendatav oskus.`
+  });
+}
+
+const wantedSchema: Record<string, unknown>[] = [
+  {
+    "@type": "Organization",
+    "@id": `${SITE}/#organization`,
+    name: "Mikrokvalifikatsioon.ee",
+    legalName: "Ettevõtluskeskus OÜ",
+    url: `${SITE}/`
+  },
+  {
+    "@type": "WebPage",
+    "@id": `${SITE}${canonicalPath}#webpage`,
+    url: `${SITE}${canonicalPath}`,
+    name: title,
+    description: introText,
+    inLanguage: "et",
+    isPartOf: { "@id": `${SITE}/#organization` }
+  },
+  {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+      { "@type": "ListItem", position: 2, name: "Kataloog", item: `${SITE}/kataloog/` },
+      { "@type": "ListItem", position: 3, name: fieldCap, item: `${SITE}${canonicalPath}` }
+    ]
+  },
+  {
+    "@type": "ItemList",
+    name: `${fieldCap} mikrokvalifikatsioonid ja mikrokraadid`,
+    numberOfItems: entries.length,
+    itemListElement: entries.map((entry, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: toCourse(entry)
+    }))
+  }
+];
+// FAQPage emiteeritakse ainult kui sisulisi vastuseid on (vähemalt 2) — väldib õhukest märgistust.
+if (faq.length >= 2) {
+  wantedSchema.push({
+    "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } }))
+  });
+}
+
+const schema = { "@context": "https://schema.org", "@graph": wantedSchema };
 ---
 
 <!doctype html>
@@ -85,13 +146,8 @@ const schema = {
             <a href="/">Avaleht</a> › <a href="/kataloog/">Kataloog</a> › <span>{fieldCap}</span>
           </nav>
           <span class="eyebrow">Valdkonna võrdlus</span>
-          <h1>{fieldCap}: mikrokvalifikatsioonid ja mikrokraadid</h1>
-          <p>
-            {entries.length} programmi {providersInField.length} koolist valdkonnas „{field}".
-            {minEcts != null && maxEcts != null && <> Maht {minEcts}–{maxEcts} EAP.</>}
-            {minPrice != null && maxPrice != null && <> Hind {minPrice}–{maxPrice} €{freeCount > 0 && <>, {freeCount} sihtrühmale rahastatud</>}.</>}
-            {" "}Võrdle kõiki allolevas tabelis.
-          </p>
+          <h1>{fieldCap} mikrokraadid ja mikrokvalifikatsioonid</h1>
+          <p>{introText} Võrdle kõiki allolevas tabelis.</p>
           <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
         </div>
       </section>
@@ -130,7 +186,47 @@ const schema = {
         </div>
       </section>
 
-      <section class="ice">
+      {(degreeCount > 0 || qualCount > 0) && (
+        <section class="ice">
+          <div class="section-inner narrow">
+            <div class="section-head compact-head">
+              <span class="kicker">Tasemejaotus</span>
+              <h2>{degreeCount} mikrokraadi ja {qualCount} mikrokvalifikatsiooni</h2>
+              <p>
+                „Mikrokvalifikatsioon" on katusmõiste igale lühikesele tunnustatud õppele; „mikrokraad" on
+                selle ülikooli versioon, mis annab EAP-sid, mida saab sageli hiljem tasemeõppes arvestada.
+                Valdkonnas „{field}" jagunevad programmid nii:
+              </p>
+            </div>
+            <div class="level-grid">
+              {degreeCount > 0 && (
+                <div class="level-card">
+                  <p class="level-num">{degreeCount}</p>
+                  <p class="level-lbl">ülikooli mikrokraadi</p>
+                  <p class="level-desc">Annavad EAP-sid, sageli tasemeõppes arvestatavad. Kõrgharidustasemel õpe.</p>
+                  <p class="level-links">
+                    <a href="/mikrokraadi-valimine/" data-track-event="cta_click" data-track-label="field_to_degree_valimine">Kuidas mikrokraadi valida →</a>
+                    <a href="/mikrokraadide-vordlus/" data-track-event="cta_click" data-track-label="field_to_degree_vordlus">Mikrokraadide võrdlus →</a>
+                  </p>
+                </div>
+              )}
+              {qualCount > 0 && (
+                <div class="level-card">
+                  <p class="level-num">{qualCount}</p>
+                  <p class="level-lbl">mikrokvalifikatsiooni</p>
+                  <p class="level-desc">Koolitusettevõtete ja rakenduskõrgkoolide lühiõpe — kiire praktiline oskus.</p>
+                  <p class="level-links">
+                    <a href="/mikrokvalifikatsiooni-valimine/" data-track-event="cta_click" data-track-label="field_to_qual_valimine">Kuidas mikrokvalifikatsiooni valida →</a>
+                    <a href="/mikrokvalifikatsioonide-vordlus/" data-track-event="cta_click" data-track-label="field_to_qual_vordlus">Mikrokvalifikatsioonide võrdlus →</a>
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section class="white">
         <div class="section-inner narrow">
           <div class="section-head compact-head">
             <span class="kicker">Kuidas valida</span>
@@ -146,8 +242,31 @@ const schema = {
             <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="field_suunatest">Tee 2 minuti suunatest</a>
             <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="field_kataloog">Ava kogu kataloog</a>
           </div>
+          <p class="field-help">
+            Otsid kindlat oskust? <a href="/teema/" data-track-event="cta_click" data-track-label="field_to_teema">Sirvi teemade kaupa</a> või
+            <a href="/oskused/" data-track-event="cta_click" data-track-label="field_to_oskused"> otsi õpiväljundi (mida pärast oskad) järgi</a>.
+          </p>
         </div>
       </section>
+
+      {faq.length >= 2 && (
+        <section class="ice">
+          <div class="section-inner narrow">
+            <div class="section-head compact-head">
+              <span class="kicker">KKK</span>
+              <h2>{fieldCap} mikrokraadid — korduvad küsimused</h2>
+            </div>
+            <div class="faq">
+              {faq.map((f) => (
+                <details>
+                  <summary>{f.q}</summary>
+                  <p>{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section class="white">
         <div class="section-inner narrow">
@@ -201,6 +320,20 @@ const schema = {
       .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
       .crumbs a { color: #5a6b80; }
       .crumbs span { color: #212121; }
+      .level-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+      .level-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+      .level-num { margin: 0; font-size: 2rem; font-weight: 800; color: var(--teal); line-height: 1; }
+      .level-lbl { margin: 4px 0 8px; font-weight: 700; color: #212121; }
+      .level-desc { margin: 0 0 12px; color: #5f6569; font-size: 0.92rem; }
+      .level-links { margin: 0; display: grid; gap: 4px; font-size: 0.92rem; }
+      .level-links a { color: var(--teal); font-weight: 700; }
+      .faq { display: grid; gap: 8px; }
+      .faq details { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 4px 16px; }
+      .faq summary { cursor: pointer; font-weight: 700; color: #212121; padding: 12px 0; list-style: none; }
+      .faq summary::-webkit-details-marker { display: none; }
+      .faq summary::before { content: "+ "; color: var(--teal); font-weight: 800; }
+      .faq details[open] summary::before { content: "– "; }
+      .faq details p { margin: 0 0 14px; color: #5f6569; }
       .compare-wrap { overflow-x: auto; }
       .field-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); border-radius: 10px; min-width: 720px; }
       .field-table th, .field-table td { border-bottom: 1px solid var(--line); padding: 12px 14px; text-align: left; vertical-align: top; font-size: 0.95rem; }
