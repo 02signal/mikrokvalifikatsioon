@@ -1,5 +1,6 @@
 ---
 import Seo from "../../components/Seo.astro";
+import { organization } from "../../data/organizationSchema";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
@@ -15,13 +16,7 @@ const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://mikrokvalifikatsioon.ee/#organization",
-      name: "Mikrokvalifikatsioon.ee",
-      legalName: "Ettevõtluskeskus OÜ",
-      url: "https://mikrokvalifikatsioon.ee/"
-    },
+    organization,
     {
       "@type": "BreadcrumbList",
       itemListElement: [
@@ -31,6 +26,7 @@ const schema = {
     },
     {
       "@type": "Article",
+      image: "https://mikrokvalifikatsioon.ee/og/mikrokraadid.png",
       headline: "Mikrokraadid Eestis: mis need on ja kust neid leida",
       description: "Mikrokraad on ülikooli pakutav mikrokvalifikatsioon. Ülevaade Eesti ülikoolide mikrokraadidest koolide kaupa.",
       inLanguage: "et",

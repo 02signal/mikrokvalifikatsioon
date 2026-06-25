@@ -1,5 +1,6 @@
 ---
 import Seo from "../../components/Seo.astro";
+import { organization } from "../../data/organizationSchema";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
@@ -52,9 +53,10 @@ const description = `Andmeülevaade: ${total} mikrokvalifikatsiooni ja mikrokraa
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
-    { "@type": "Organization", "@id": `${SITE}/#organization`, name: "Mikrokvalifikatsioon.ee", legalName: "Ettevõtluskeskus OÜ", url: `${SITE}/` },
+    organization,
     {
       "@type": "Article",
+      image: "https://mikrokvalifikatsioon.ee/og/aastaraport.png",
       headline: title,
       description,
       datePublished: catalogUpdatedAt,

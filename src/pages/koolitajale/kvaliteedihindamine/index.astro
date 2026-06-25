@@ -1,5 +1,6 @@
 ---
 import Seo from "../../../components/Seo.astro";
+import { organization } from "../../../data/organizationSchema";
 import Footer from "../../../components/Footer.astro";
 import "../../../styles/global.css";
 import Nav from "../../../components/Nav.astro";
@@ -95,13 +96,7 @@ const faqItems = [
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://mikrokvalifikatsioon.ee/#organization",
-      name: "Mikrokvalifikatsioon.ee",
-      legalName: "Ettevõtluskeskus OÜ",
-      url: "https://mikrokvalifikatsioon.ee/"
-    },
+    organization,
     {
       "@type": "BreadcrumbList",
       itemListElement: [
@@ -112,6 +107,7 @@ const schema = {
     },
     {
       "@type": "Article",
+      image: "https://mikrokvalifikatsioon.ee/og/kvaliteedihindamine.png",
       headline: "Mikrokvalifikatsiooni kvaliteedihindamine: 8 valdkonda ja kuidas valmistuda",
       description: "Praktiline kokkuvõte mikrokvalifikatsiooni õppekavarühma kvaliteedihindamise 8 valdkonnast ja 27 kriteeriumist: mida hindaja vaatab, tüüpvead ja kuidas valmistuda.",
       inLanguage: "et",

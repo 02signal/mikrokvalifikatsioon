@@ -77,7 +77,10 @@ const schema = {
       inLanguage: "et",
       dateModified: catalogUpdatedAt,
       license: "https://creativecommons.org/licenses/by/4.0/",
-      creator: { "@id": "https://mikrokvalifikatsioon.ee/#organization" }
+      creator: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      isAccessibleForFree: true,
+      distribution: { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: "https://mikrokvalifikatsioon.ee/catalog.json" }
     },
     {
       "@type": "FAQPage",
