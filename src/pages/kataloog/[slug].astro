@@ -9,6 +9,7 @@ import { comparisonsFor } from "../../data/comparisons";
 import { ehisAttribution } from "../../data/ehisFacts";
 import { intakeDatesFor, intakeDatesFetchedAt } from "../../data/intakeDates";
 import { formatEt } from "../../data/dates";
+import { fundingInfoFor, hasFundingInfo } from "../../data/funding";
 
 export function getStaticPaths() {
   return catalog.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
@@ -80,6 +81,14 @@ const facts = [
   ehisNameEn ? { label: "Nimi (EN)", value: ehisNameEn } : null,
   ehisFieldName ? { label: "Ametlik õppekavarühm (EHIS)", value: ehisFieldName } : null
 ].filter((fact): fact is { label: string; value: string } => fact !== null);
+
+// Rahastus ja sihtrühm — KOOLI faktiline pakkumine, struktureeritud + atribueeritud.
+// Omaniku otsus 2026-06-25: meie enda keeles ei kasuta "tasuta", AGA kooli enda
+// "sihtrühmale tasuta" tüüpi pakkumine kuvatakse siin lubatud kontekstis — koos
+// sihtrühma ja rahastuse selgitusega — sest kasutaja peab teadma, kas TEMA
+// kvalifitseerub rahastusele. Rahastus/tingimused võivad muutuda → kinnita kooli lehel.
+const funding = fundingInfoFor(entry);
+const showFunding = hasFundingInfo(funding);
 
 const metaTail = [
   entry.ects != null ? `${entry.ects} EAP` : null,
@@ -172,6 +181,40 @@ const schema = {
                 <div><dt>{fact.label}</dt><dd>{fact.value}</dd></div>
               ))}
             </dl>
+          )}
+
+          {showFunding && (
+            <div class="funding-box">
+              <h2>Rahastus ja sihtrühm</h2>
+              <dl class="funding-table">
+                {funding.basePrice && (
+                  <div><dt>Hind (üldine)</dt><dd>{funding.basePrice}</dd></div>
+                )}
+                <div>
+                  <dt>Sihtrühmale rahastatud</dt>
+                  <dd>
+                    {funding.targetGroupFunded ? (
+                      <>jah{funding.fundingSource && <> — {funding.fundingSource}</>}</>
+                    ) : (
+                      "ei"
+                    )}
+                  </dd>
+                </div>
+                {funding.eligibleGroup && (
+                  <div><dt>Sihtrühm</dt><dd>{funding.eligibleGroup}</dd></div>
+                )}
+                {funding.schoolWording && (
+                  <div class="funding-wording">
+                    <dt>Kooli enda sõnastus</dt>
+                    <dd>„{funding.schoolWording}"</dd>
+                  </div>
+                )}
+              </dl>
+              <p class="funding-note">
+                Rahastus ja sihtrühm võivad muutuda — sõnastus on kooli enda info.
+                <a href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_funding_check_${entry.provider}`}>kinnita kooli lehel ↗</a>
+              </p>
+            </div>
           )}
 
           {hasFreshDates && (
@@ -342,6 +385,25 @@ const schema = {
       .detail-facts div { min-width: 0; }
       .detail-facts dt { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; color: #5a6b80; }
       .detail-facts dd { margin: 3px 0 0; font-weight: 700; color: #212121; overflow-wrap: anywhere; }
+      .funding-box {
+        margin: 0 0 28px;
+        padding: 18px 20px;
+        background: #fbfbf9;
+        border: 1px solid #d9e3ea;
+        border-left: 4px solid var(--teal);
+        border-radius: 12px;
+      }
+      .funding-box h2 { font-size: 1.1rem; margin: 0 0 12px; }
+      .funding-table { display: grid; gap: 12px; margin: 0; }
+      .funding-table div { display: grid; grid-template-columns: minmax(140px, 0.5fr) 1fr; gap: 10px; align-items: baseline; }
+      .funding-table dt { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.03em; color: #5a6b80; margin: 0; }
+      .funding-table dd { margin: 0; font-weight: 700; color: #212121; overflow-wrap: anywhere; }
+      .funding-table .funding-wording dd { font-weight: 400; color: #3a4a5a; font-style: italic; }
+      .funding-note { margin: 14px 0 0; font-size: 0.85rem; color: #5a6b80; }
+      .funding-note a { color: var(--teal); font-weight: 700; margin-left: 6px; }
+      @media (max-width: 520px) {
+        .funding-table div { grid-template-columns: 1fr; gap: 2px; }
+      }
       .detail-block { margin-bottom: 24px; }
       .detail-block h2 { font-size: 1.15rem; margin-bottom: 8px; }
       .detail-block-official, .detail-block-school { padding: 16px 18px; border-radius: 12px; border: 1px solid #d9e3ea; }
