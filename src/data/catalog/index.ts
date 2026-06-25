@@ -1,58 +1,147 @@
 import type { CatalogEntry } from "../catalogSchema";
-import taltech from "./taltech.json";
-import tartuYlikool from "./tartu-ylikool.json";
-import muudKoolid from "./muud-koolid.json";
-import { assignSlugs, slugify } from "../slug";
-import { parseIntakeDates } from "../dates";
-import { ehisOverrideFor, type EhisAuthoritative } from "../ehisFacts";
+import taltech from "./taltech.json" with { type: "json" };
+import tartuYlikool from "./tartu-ylikool.json" with { type: "json" };
+import muudKoolid from "./muud-koolid.json" with { type: "json" };
+import { assignSlugs, slugify } from "../slug.ts";
+import { parseIntakeDates } from "../dates.ts";
+import { ehisOverrideFor, type EhisAuthoritative } from "../ehisFacts/index.ts";
 
-/** Kohalik snapshot — fallback, kui AMOS feedi pole seatud või see ei vasta. */
+/**
+ * KOMMITITUD SNAPSHOT = AUTORITEETNE TÕEALLIKAS.
+ *
+ * Kataloogi sisu maandub repo PR-idega (nt EHIS-i ülekirjutused), seega repos
+ * kommititud `*.json` on alati VÄRSKEIM ja õige. Vaikimisi ehitame saidi just
+ * sellest. AMOS-i avaldatud feedi (`PUBLIC_CATALOG_FEED_URL`) kasutame AINULT
+ * siis, kui see on EKSPLITSIITSELT usaldatud (`PUBLIC_CATALOG_FEED_TRUSTED=1`)
+ * JA läbib valideerimise ega kaota ühtegi kirjet (mitte-regressioon). Nii ei saa
+ * vananenud feed enam vaikselt saiti halvendada. Vt docs/data-pipeline.md.
+ */
 const LOCAL_CHECKED_AT = "2026-06-12";
-const localEntries: CatalogEntry[] = [
+const committedEntries: CatalogEntry[] = [
   ...(taltech as unknown as CatalogEntry[]),
   ...(tartuYlikool as unknown as CatalogEntry[]),
   ...(muudKoolid as unknown as CatalogEntry[])
 ];
 
-/**
- * Andmeallikas. Kui PUBLIC_CATALOG_FEED_URL on seatud, tarbime AMOS-i avaldatud
- * public-safe feedi build-ajal; muidu kasutame kohalikku snapshotti (resilientne).
- * Feedi kuju: { checkedAt, generatedAt, contentHash, programs: CatalogEntry[] } VÕI lihtsalt CatalogEntry[].
- * Ainult `status: "active"` (või staatuseta) kirjed lähevad avalikku saiti.
- * Vt docs/data-pipeline.md.
- */
-const FEED_URL = import.meta.env.PUBLIC_CATALOG_FEED_URL as string | undefined;
+/** Avalikule saidile lähevad ainult `status: "active"` (või staatuseta) kirjed. */
+function activeOnly<T extends { status?: string }>(entries: T[]): T[] {
+  return entries.filter((p) => !p.status || p.status === "active");
+}
+
+const committedActive: CatalogEntry[] = activeOnly(committedEntries as Array<CatalogEntry & { status?: string }>);
+
+/** Mitu kirjet on kommititud snapshotis (aktiivsed) — feedi mitte-regressiooni alus. */
+export const committedActiveCount = committedActive.length;
+
+// `import.meta.env` puudub mõnes kontekstis (nt `node --test` floor-gate'is);
+// loeme turvaliselt (?.), et moodulit saaks importida ka väljaspool Astro buildi.
+const env = (import.meta as ImportMeta).env as Record<string, string | undefined> | undefined;
+const FEED_URL = env?.PUBLIC_CATALOG_FEED_URL;
+const FEED_TRUSTED = env?.PUBLIC_CATALOG_FEED_TRUSTED === "1";
 
 function isoDate(value: unknown): string | null {
   return typeof value === "string" && /^\d{4}-\d{2}-\d{2}/.test(value) ? value.slice(0, 10) : null;
 }
 
-async function loadFeed(): Promise<{ entries: CatalogEntry[]; checkedAt: string; updatedAt: string; contentHash: string | null }> {
-  if (FEED_URL) {
-    try {
-      const res = await fetch(FEED_URL);
-      if (res.ok) {
-        const data = await res.json();
-        const raw = (Array.isArray(data) ? data : data?.programs) as Array<CatalogEntry & { status?: string }> | undefined;
-        if (Array.isArray(raw) && raw.length) {
-          const entries = raw.filter((p) => !p.status || p.status === "active");
-          const checkedAt = !Array.isArray(data) ? (isoDate(data?.checkedAt) ?? LOCAL_CHECKED_AT) : LOCAL_CHECKED_AT;
-          const updatedAt = !Array.isArray(data) ? (isoDate(data?.generatedAt) ?? isoDate(data?.updatedAt) ?? checkedAt) : checkedAt;
-          const contentHash = !Array.isArray(data) && typeof data?.contentHash === "string" ? data.contentHash : null;
-          console.log(`[catalog] AMOS feed: ${entries.length} programmi (${FEED_URL})`);
-          return { entries, checkedAt, updatedAt, contentHash };
-        }
-      }
-      console.warn(`[catalog] feed ei vasta (HTTP ${res.status}); kasutan kohalikku snapshotti`);
-    } catch (e) {
-      console.warn(`[catalog] feedi laadimine ebaõnnestus; kasutan kohalikku snapshotti: ${(e as Error).message}`);
-    }
-  }
-  return { entries: localEntries, checkedAt: LOCAL_CHECKED_AT, updatedAt: LOCAL_CHECKED_AT, contentHash: null };
+export type CatalogSourceName = "committed" | "feed";
+type FeedResult = { entries: CatalogEntry[]; checkedAt: string; updatedAt: string; contentHash: string | null; source: CatalogSourceName };
+
+/** Kommititud snapshot — autoriteetne vaikeallikas. */
+function committedResult(): FeedResult {
+  return { entries: committedActive, checkedAt: LOCAL_CHECKED_AT, updatedAt: LOCAL_CHECKED_AT, contentHash: null, source: "committed" };
 }
 
-const feed = await loadFeed();
+/** Allika-valiku otsus: kas KASUTA feedi (koos põhjusega) või kommititud snapshotti. */
+export type CatalogSourceDecision =
+  | { use: "feed"; entries: CatalogEntry[]; checkedAt: string; updatedAt: string; contentHash: string | null }
+  | { use: "committed"; reason: string };
 
+/**
+ * PUHAS otsustusloogika (ilma fetchita) — testitav deterministlikult.
+ * Kommititud snapshot on AUTORITEETNE. Usaldatud feedi tohib kasutada AINULT, kui:
+ *   1) `feedUrl` on seatud, JA
+ *   2) `trusted === true` (PUBLIC_CATALOG_FEED_TRUSTED=1, eksplitsiitne opt-in), JA
+ *   3) feed on oodatud kujul (massiiv VÕI { programs: [...] } mitte-tühi), JA
+ *   4) feedi aktiivsete kirjete arv >= kommititud snapshoti oma (MITTE-REGRESSIOON).
+ * Iga muu juhul → kommititud snapshot, koos selge põhjusega.
+ * `data` on juba parsitud JSON (massiiv VÕI objekt feedist), `null` kui fetch ebaõnnestus.
+ */
+export function chooseCatalogSource(opts: {
+  feedUrl: string | undefined;
+  trusted: boolean;
+  data: unknown;
+  committedCount: number;
+}): CatalogSourceDecision {
+  const { feedUrl, trusted, data, committedCount } = opts;
+  if (!feedUrl) {
+    return { use: "committed", reason: "feed URL pole seatud" };
+  }
+  if (!trusted) {
+    return {
+      use: "committed",
+      reason: `feed URL on seatud, kuid PUBLIC_CATALOG_FEED_TRUSTED!=1 → kasutan kommititud snapshotti (autoriteetne, ${committedCount} programmi)`
+    };
+  }
+  if (data == null) {
+    return { use: "committed", reason: "usaldatud feedi laadimine/parsimine ebaõnnestus" };
+  }
+  const raw = (Array.isArray(data) ? data : (data as { programs?: unknown }).programs) as
+    | Array<CatalogEntry & { status?: string }>
+    | undefined;
+  if (!Array.isArray(raw) || !raw.length) {
+    return { use: "committed", reason: "usaldatud feed on vigase kujuga (puuduvad programs[])" };
+  }
+  const entries = activeOnly(raw);
+  // MITTE-REGRESSIOON: usaldatud feed ei tohi kunagi kaotada kirjeid.
+  if (entries.length < committedCount) {
+    return {
+      use: "committed",
+      reason: `usaldatud feed kaotaks kirjeid (${entries.length} < kommititud ${committedCount}) → keeldun`
+    };
+  }
+  const obj = Array.isArray(data) ? null : (data as Record<string, unknown>);
+  const checkedAt = obj ? (isoDate(obj.checkedAt) ?? LOCAL_CHECKED_AT) : LOCAL_CHECKED_AT;
+  const updatedAt = obj ? (isoDate(obj.generatedAt) ?? isoDate(obj.updatedAt) ?? checkedAt) : checkedAt;
+  const contentHash = obj && typeof obj.contentHash === "string" ? (obj.contentHash as string) : null;
+  return { use: "feed", entries, checkedAt, updatedAt, contentHash };
+}
+
+/**
+ * Vali andmeallikas build-ajal. Teeb fetchi AINULT siis, kui feed on seatud JA
+ * usaldatud, ja annab otsuse `chooseCatalogSource`-le (kogu otsustusloogika seal,
+ * testitav). Iga keeldumise korral logime SELGELT, miks langesime tagasi
+ * kommititud snapshotile (autoriteetne).
+ */
+async function loadCatalogSource(): Promise<FeedResult> {
+  if (!FEED_URL || !FEED_TRUSTED) {
+    const decision = chooseCatalogSource({ feedUrl: FEED_URL, trusted: FEED_TRUSTED, data: null, committedCount: committedActiveCount });
+    if (decision.use === "committed") console.warn(`[catalog] ${decision.reason}`);
+    return committedResult();
+  }
+  let data: unknown = null;
+  try {
+    const res = await fetch(FEED_URL);
+    if (res.ok) {
+      data = await res.json();
+    } else {
+      console.warn(`[catalog] usaldatud feed ei vasta (HTTP ${res.status})`);
+    }
+  } catch (e) {
+    console.warn(`[catalog] usaldatud feedi laadimine ebaõnnestus: ${(e as Error).message}`);
+  }
+  const decision = chooseCatalogSource({ feedUrl: FEED_URL, trusted: FEED_TRUSTED, data, committedCount: committedActiveCount });
+  if (decision.use === "feed") {
+    console.log(`[catalog] usaldatud AMOS feed (mitte-regresseeruv): ${decision.entries.length} programmi (${FEED_URL})`);
+    return { entries: decision.entries, checkedAt: decision.checkedAt, updatedAt: decision.updatedAt, contentHash: decision.contentHash, source: "feed" };
+  }
+  console.warn(`[catalog] ${decision.reason} → kasutan kommititud snapshotti (autoriteetne)`);
+  return committedResult();
+}
+
+const feed = await loadCatalogSource();
+
+/** Kumb allikas reaalselt kasutusele läks ("committed" | "feed") — diagnostikaks. */
+export const catalogSource = feed.source;
 export const catalogCheckedAt = feed.checkedAt;
 export const catalogUpdatedAt = feed.updatedAt;
 export const catalogContentHash = feed.contentHash;

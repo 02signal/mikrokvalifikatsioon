@@ -8,7 +8,7 @@
 // identical shape (amos.ehis.curriculum_facts/v1), so the feed and the snapshot are
 // interchangeable.
 
-import snapshot from "./snapshot.json";
+import snapshot from "./snapshot.json" with { type: "json" };
 import type { CatalogEntry } from "../catalogSchema";
 
 export interface EhisCurriculum {
@@ -43,7 +43,9 @@ export interface EhisFactsSnapshot {
   curricula: EhisCurriculum[];
 }
 
-const FEED_URL = import.meta.env.PUBLIC_EHIS_FACTS_FEED_URL as string | undefined;
+// `import.meta.env` puudub mõnes kontekstis (nt `node --test` floor-gate'is);
+// loeme turvaliselt (?.), et moodulit saaks importida ka väljaspool Astro buildi.
+const FEED_URL = (import.meta as ImportMeta).env?.PUBLIC_EHIS_FACTS_FEED_URL as string | undefined;
 
 /** v1 contract: official_pdf_url is an http(s) URL or null. The live EHIS field can be
  * a placeholder ("Hetkel puudub") or a bare code ("AYC0439"); coerce non-URLs to null so
