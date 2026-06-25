@@ -134,22 +134,50 @@ const questionPages = Object.fromEntries(
   questions.map((q) => [q.slug, { title: q.question, description: `${q.shortAnswer.split(". ")[0]}.` }])
 );
 
+// Per-lehetüüp aktsentvärv — kaart eristub tüübi kaupa (register/programm/teema/…),
+// jäädes brändi-perekonda. Aktsent värvib nii alaserva kui gradiendi põhja.
+const ACCENT: Record<string, [number, number, number]> = {
+  content: [84, 194, 71],     // brändi-roheline — register / sisu
+  programme: [56, 178, 172],  // teal — üks programm
+  topic: [66, 153, 225],      // sinine — teema / oskus
+  field: [128, 90, 213],      // violett — valdkond
+  career: [221, 158, 55],     // merevaik — karjäär
+  provider: [120, 134, 156],  // slate — koolitaja
+  comparison: [214, 98, 140], // roosa — võrdlus
+  question: [72, 187, 205]    // tsüaan — vastus (GEO)
+};
+// Gradiendi tume põhi: aktsendist tuletatud, et kaart oleks ühtne.
+const tint = ([r, g, b]: [number, number, number]): [number, number, number] =>
+  [Math.round(r * 0.2) + 12, Math.round(g * 0.2) + 12, Math.round(b * 0.2) + 10];
+// Lisa igale lehe-kirjele tüübi-märgend (kind), ilma iga kirjet eraldi muutmata.
+const tag = <T extends Record<string, { title: string; description: string }>>(map: T, kind: string) =>
+  Object.fromEntries(Object.entries(map).map(([k, v]) => [k, { ...v, kind }]));
+
 export const { getStaticPaths, GET } = await OGImageRoute({
   param: "route",
-  pages: { ...contentPages, ...programmePages, ...topicPages, ...providerPages, ...careerPages, ...fieldPages, ...comparisonPages, ...questionPages },
-  getImageOptions: (_path, page) => ({
-    title: page.title,
-    description: page.description,
-    logo: { path: "./public/mk-logo-white.png", size: [300] },
-    bgGradient: [
-      [27, 27, 27],
-      [33, 51, 26]
-    ],
-    border: { color: [84, 194, 71], width: 16, side: "block-end" },
-    padding: 80,
-    font: {
-      title: { color: [255, 255, 255], weight: "Bold", size: 58, lineHeight: 1.25 },
-      description: { color: [205, 215, 200], size: 30, lineHeight: 1.4 }
-    }
-  })
+  pages: {
+    ...tag(contentPages, "content"),
+    ...tag(programmePages, "programme"),
+    ...tag(topicPages, "topic"),
+    ...tag(providerPages, "provider"),
+    ...tag(careerPages, "career"),
+    ...tag(fieldPages, "field"),
+    ...tag(comparisonPages, "comparison"),
+    ...tag(questionPages, "question")
+  },
+  getImageOptions: (_path: string, page: { title: string; description: string; kind?: string }) => {
+    const accent = ACCENT[page.kind ?? "content"] ?? ACCENT.content;
+    return {
+      title: page.title,
+      description: page.description,
+      logo: { path: "./public/mk-logo-white.png", size: [264] },
+      bgGradient: [[18, 20, 24], tint(accent)] as [number, number, number][],
+      border: { color: accent, width: 18, side: "block-end" as const },
+      padding: 84,
+      font: {
+        title: { color: [255, 255, 255] as [number, number, number], weight: "Bold" as const, size: 60, lineHeight: 1.2 },
+        description: { color: [206, 214, 206] as [number, number, number], size: 30, lineHeight: 1.42 }
+      }
+    };
+  }
 });

@@ -1,5 +1,6 @@
 ---
 import Seo from "../../components/Seo.astro";
+import { organization } from "../../data/organizationSchema";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
@@ -7,13 +8,7 @@ import Nav from "../../components/Nav.astro";
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://mikrokvalifikatsioon.ee/#organization",
-      name: "Mikrokvalifikatsioon.ee",
-      legalName: "Ettevõtluskeskus OÜ",
-      url: "https://mikrokvalifikatsioon.ee/"
-    },
+    organization,
     {
       "@type": "BreadcrumbList",
       itemListElement: [
@@ -23,6 +18,7 @@ const schema = {
     },
     {
       "@type": "Article",
+      image: "https://mikrokvalifikatsioon.ee/og/kes-maksab.png",
       headline: "Kes maksab mikrokvalifikatsiooni eest? Töötukassa, tööandja või ise",
       description: "Kolm rada mikrokvalifikatsiooni või mikrokraadi rahastamiseks: Töötukassa toetused, tööandja koolituseelarve ja ise makstes. Kuidas igaüht küsida.",
       inLanguage: "et",

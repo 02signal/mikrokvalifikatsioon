@@ -1,5 +1,6 @@
 ---
 import Seo from "../../components/Seo.astro";
+import { organization } from "../../data/organizationSchema";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
@@ -34,13 +35,7 @@ const faqItems = [
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://mikrokvalifikatsioon.ee/#organization",
-      name: "Mikrokvalifikatsioon.ee",
-      legalName: "Ettevõtluskeskus OÜ",
-      url: "https://mikrokvalifikatsioon.ee/"
-    },
+    organization,
     {
       "@type": "BreadcrumbList",
       itemListElement: [
@@ -50,6 +45,7 @@ const schema = {
     },
     {
       "@type": "Article",
+      image: "https://mikrokvalifikatsioon.ee/og/koolitajale.png",
       headline: "Kuidas saada mikrokvalifikatsiooni pakkujaks Eestis",
       description: "Mikrokvalifikatsiooni ametlik raamistik (Täiskasvanute koolituse seadus), maht 5–30 EAP, HAKA kvaliteedihindamine ja registreerimine EHIS-es — sammud koolitajale.",
       inLanguage: "et",
