@@ -3,6 +3,7 @@ import { catalog, providersWithSlug, fieldsWithSlug } from "../../data/catalog";
 import { topics } from "../../data/topics";
 import { careers } from "../../data/careers";
 import { comparisons } from "../../data/comparisons";
+import { questions } from "../../data/questions";
 
 // Sisulehed: võti = canonical-tee viimane segment (Seo.astro tuletab sama võtme).
 const contentPages: Record<string, { title: string; description: string }> = {
@@ -77,6 +78,10 @@ const contentPages: Record<string, { title: string; description: string }> = {
   privaatsus: {
     title: "Privaatsus ja küpsised",
     description: "Mis andmeid kogume, milleks ja millised on sinu õigused."
+  },
+  vastused: {
+    title: "Vastused mikrokraadi ja mikrokvalifikatsiooni kohta",
+    description: "Lühikesed faktivastused: kestus, hind, EAP, pakkujad ja kandideerimine."
   }
 };
 
@@ -124,9 +129,14 @@ const comparisonPages = Object.fromEntries(
   comparisons.map((c) => [c.pair, { title: `${c.a.name} vs ${c.b.name}`, description: `${c.a.field} · ${c.a.provider} vs ${c.b.provider}` }])
 );
 
+// Vastuselehed (GEO): võti = küsimuse slug; pealkiri = küsimus, kirjeldus = lühivastuse esimene lause.
+const questionPages = Object.fromEntries(
+  questions.map((q) => [q.slug, { title: q.question, description: `${q.shortAnswer.split(". ")[0]}.` }])
+);
+
 export const { getStaticPaths, GET } = await OGImageRoute({
   param: "route",
-  pages: { ...contentPages, ...programmePages, ...topicPages, ...providerPages, ...careerPages, ...fieldPages, ...comparisonPages },
+  pages: { ...contentPages, ...programmePages, ...topicPages, ...providerPages, ...careerPages, ...fieldPages, ...comparisonPages, ...questionPages },
   getImageOptions: (_path, page) => ({
     title: page.title,
     description: page.description,

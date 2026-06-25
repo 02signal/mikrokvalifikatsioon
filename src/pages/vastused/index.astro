@@ -1,0 +1,192 @@
+---
+import Seo from "../../components/Seo.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import Nav from "../../components/Nav.astro";
+import { questions, questionStats } from "../../data/questions";
+import { catalogUpdatedAt } from "../../data/catalog";
+
+const SITE = "https://mikrokvalifikatsioon.ee";
+const PATH = "/vastused/";
+
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
+
+// Hub: FAQPage (kõik küsimused+lühivastused) + WebPage + BreadcrumbList + ItemList.
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE}/#organization`,
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: `${SITE}/`
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${SITE}${PATH}#webpage`,
+      url: `${SITE}${PATH}`,
+      name: "Vastused: mikrokraadi ja mikrokvalifikatsiooni küsimused",
+      description:
+        "Lühikesed faktipõhised vastused kõige otsitumatele mikrokraadi ja mikrokvalifikatsiooni küsimustele — kestus, hind, EAP, pakkujad ja kandideerimine, päris registriandmetega.",
+      inLanguage: "et",
+      isPartOf: { "@id": `${SITE}/#organization` },
+      dateModified: catalogUpdatedAt,
+      mainEntityOfPage: `${SITE}${PATH}`
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Vastused", item: `${SITE}${PATH}` }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      name: "Mikrokraadi ja mikrokvalifikatsiooni küsimused",
+      numberOfItems: questions.length,
+      itemListElement: questions.map((q, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: q.question,
+        url: `${SITE}/vastused/${q.slug}/`
+      }))
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: questions.map((q) => ({
+        "@type": "Question",
+        name: q.question,
+        acceptedAnswer: { "@type": "Answer", text: q.shortAnswer }
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Vastused: mikrokraadi ja mikrokvalifikatsiooni küsimused | Mikrokvalifikatsioon.ee"
+      description="Lühikesed faktipõhised vastused kõige otsitumatele küsimustele: kui kaua mikrokraad kestab, kui palju maksab, mitu EAP-d on, kus õppida ja kuidas kandideerida. Päris registriandmed."
+      canonicalPath={PATH}
+      ogTitle="Vastused mikrokraadi ja mikrokvalifikatsiooni kohta"
+      ogDescription="Kestus, hind, EAP, pakkujad ja kandideerimine — lühikesed faktivastused päris registriandmetega."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <span class="eyebrow">Vastused</span>
+          <h1>Lühikesed faktivastused mikrokraadi ja mikrokvalifikatsiooni kohta.</h1>
+          <p>
+            Kui kaua kestab, kui palju maksab, mitu EAP-d, kus õppida ja kuidas kandideerida —
+            iga küsimus saab ühe selge, väljavõetava vastuse, mis tugineb
+            <strong>{questionStats.programmeCount} programmi</strong> ja
+            <strong>{questionStats.providerCount} pakkuja</strong> päris registriandmetele.
+          </p>
+          <p class="report-date">Andmestik uuendatud: {updatedAtText}.</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Kõik vastused</span>
+            <h2>Vali küsimus.</h2>
+          </div>
+          <div class="vastused-grid">
+            {questions.map((q) => (
+              <a class="vastused-card" href={`/vastused/${q.slug}/`}>
+                <h3>{q.question}</h3>
+                <p>{q.shortAnswer.split(". ")[0]}.</p>
+                <span class="vastused-more">Loe vastust →</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Seotud teejuhid</span>
+            <h2>Pikemad selgitused ja tööriistad.</h2>
+          </div>
+          <ul class="check">
+            <li><a href="/mis-on-mikrokvalifikatsioon/">Mis on mikrokvalifikatsioon?</a> — täisselgitus ja võrdlus mikrokraadi, kutsetunnistuse ja sertifikaadiga.</li>
+            <li><a href="/kes-maksab/">Kes maksab?</a> — kolm rahastusrada: tööandja, Töötukassa või ise.</li>
+            <li><a href="/kkk/">Korduma kippuvad küsimused</a> — laiem KKK kogum ühes kohas.</li>
+            <li><a href="/mikrokraadi-valimine/">Mikrokraadi valimine</a> ja <a href="/kataloog/">filtreeritav kataloog</a> — vali ja võrdle programme.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Leia endale sobiv programm.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="vastused_hub_suunatest">Tee suunatest</a>
+              <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="vastused_hub_kataloog">Ava kataloog</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="vastused_hub_email">info@mikrokvalifikatsioon.ee</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="vastused_hub_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Vastused" />
+
+    <style>
+      .vastused-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
+      }
+      .vastused-card {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 20px;
+        background: #fff;
+        text-decoration: none;
+        transition: border-color 0.15s ease, transform 0.15s ease;
+      }
+      .vastused-card:hover {
+        border-color: var(--teal);
+        transform: translateY(-2px);
+      }
+      .vastused-card h3 {
+        margin: 0;
+        font-size: 1.08rem;
+        color: var(--ink);
+      }
+      .vastused-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.55;
+      }
+      .vastused-more {
+        margin-top: auto;
+        color: var(--teal);
+        font-weight: 800;
+        font-size: 0.92rem;
+      }
+    </style>
+  </body>
+</html>
