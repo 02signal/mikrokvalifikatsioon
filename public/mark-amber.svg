@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none">
+  <!-- Minimalist career progression path -->
+  <path d="M40,200 L96,150 L144,166 L216,70" stroke="#dd9e37" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <circle cx="40" cy="200" r="10" fill="#dd9e37" />
+  <circle cx="96" cy="150" r="10" fill="#dd9e37" />
+  <circle cx="144" cy="166" r="10" fill="#dd9e37" />
+  <circle cx="216" cy="70" r="14" fill="#dd9e37" />
+  
+  <!-- Trend projection dashed line -->
+  <line x1="216" y1="70" x2="216" y2="170" stroke="#dd9e37" stroke-width="2" stroke-dasharray="4,4" opacity="0.5" />
+  <line x1="40" y1="200" x2="216" y2="200" stroke="#dd9e37" stroke-width="2" stroke-dasharray="2,2" opacity="0.3" />
+</svg>

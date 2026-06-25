@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Background near-black -->
+  <rect width="1200" height="630" fill="#121418" />
+
+  <!-- Subtle Radial Gradient Glow on the right side to add depth -->
+  <radialGradient id="glow" cx="80%" cy="60%" r="60%">
+    <stop offset="0%" stop-color="#1b212a" stop-opacity="0.6"/>
+    <stop offset="100%" stop-color="#121418" stop-opacity="0"/>
+  </radialGradient>
+  <rect width="1200" height="630" fill="url(#glow)" />
+
+  <!-- Very faint grid lines -->
+  <g stroke="#1b212a" stroke-width="1" opacity="0.45">
+    <!-- Horizontal lines every 60px -->
+    <line x1="0" y1="60" x2="1200" y2="60" />
+    <line x1="0" y1="120" x2="1200" y2="120" />
+    <line x1="0" y1="180" x2="1200" y2="180" />
+    <line x1="0" y1="240" x2="1200" y2="240" />
+    <line x1="0" y1="300" x2="1200" y2="300" />
+    <line x1="0" y1="360" x2="1200" y2="360" />
+    <line x1="0" y1="420" x2="1200" y2="420" />
+    <line x1="0" y1="480" x2="1200" y2="480" />
+    <line x1="0" y1="540" x2="1200" y2="540" />
+    <line x1="0" y1="600" x2="1200" y2="600" />
+
+    <!-- Vertical lines every 60px -->
+    <line x1="60" y1="0" x2="60" y2="630" />
+    <line x1="120" y1="0" x2="120" y2="630" />
+    <line x1="180" y1="0" x2="180" y2="630" />
+    <line x1="240" y1="0" x2="240" y2="630" />
+    <line x1="300" y1="0" x2="300" y2="630" />
+    <line x1="360" y1="0" x2="360" y2="630" />
+    <line x1="420" y1="0" x2="420" y2="630" />
+    <line x1="480" y1="0" x2="480" y2="630" />
+    <line x1="540" y1="0" x2="540" y2="630" />
+    <line x1="600" y1="0" x2="600" y2="630" />
+    <line x1="660" y1="0" x2="660" y2="630" />
+    <line x1="720" y1="0" x2="720" y2="630" />
+    <line x1="780" y1="0" x2="780" y2="630" />
+    <line x1="840" y1="0" x2="840" y2="630" />
+    <line x1="900" y1="0" x2="900" y2="630" />
+    <line x1="960" y1="0" x2="960" y2="630" />
+    <line x1="1020" y1="0" x2="1020" y2="630" />
+    <line x1="1080" y1="0" x2="1080" y2="630" />
+    <line x1="1140" y1="0" x2="1140" y2="630" />
+  </g>
+
+  <!-- Skills Network Graph Motif in the bottom-right (calm, faint) -->
+  <g stroke="#262f3a" stroke-width="1.5" fill="none" opacity="0.35">
+    <circle cx="960" cy="420" r="140" />
+    <circle cx="960" cy="420" r="80" />
+    <circle cx="1080" cy="300" r="60" />
+    <circle cx="840" cy="480" r="100" />
+    
+    <!-- Connection lines -->
+    <line x1="960" y1="420" x2="1080" y2="300" />
+    <line x1="960" y1="420" x2="840" y2="480" />
+    <line x1="840" y1="480" x2="1080" y2="300" stroke-dasharray="4,4" />
+    <line x1="960" y1="420" x2="960" y2="180" stroke-dasharray="2,6" />
+    <line x1="1080" y1="300" x2="1200" y2="300" />
+    <line x1="840" y1="480" x2="840" y2="630" />
+  </g>
+
+  <!-- Small tech/register ticks/dots to emphasize official register feel -->
+  <g fill="#333f4c" opacity="0.4">
+    <!-- Tiny crosshairs or corner marks -->
+    <rect x="30" y="30" width="10" height="2" />
+    <rect x="30" y="30" width="2" height="10" />
+    <rect x="1160" y="30" width="10" height="2" />
+    <rect x="1168" y="30" width="2" height="10" />
+    <rect x="30" y="598" width="10" height="2" />
+    <rect x="30" y="590" width="2" height="10" />
+    <rect x="1160" y="598" width="10" height="2" />
+    <rect x="1168" y="590" width="2" height="10" />
+
+    <!-- Technical measurement ticks -->
+    <circle cx="960" cy="420" r="4" fill="#54c247" opacity="0.3" />
+    <circle cx="1080" cy="300" r="3" fill="#54c247" opacity="0.3" />
+    <circle cx="840" cy="480" r="3" fill="#54c247" opacity="0.3" />
+  </g>
+</svg>

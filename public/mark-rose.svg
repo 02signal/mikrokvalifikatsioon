@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none">
+  <!-- Minimalist comparison scale -->
+  <line x1="60" y1="128" x2="196" y2="128" stroke="#d6628c" stroke-width="6" stroke-linecap="round" />
+  <line x1="128" y1="60" x2="128" y2="196" stroke="#d6628c" stroke-width="4" />
+  <path d="M100,196 L156,196" stroke="#d6628c" stroke-width="6" stroke-linecap="round" />
+  
+  <!-- Left pan -->
+  <path d="M40,150 L60,128 L80,150" stroke="#d6628c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="44" y="150" width="32" height="12" rx="4" fill="#d6628c" />
+  
+  <!-- Right pan -->
+  <path d="M176,110 L196,128 L216,110" stroke="#d6628c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  <rect x="180" y="100" width="32" height="12" rx="4" fill="#d6628c" stroke="#d6628c" stroke-width="2" />
+</svg>

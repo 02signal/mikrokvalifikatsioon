@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none">
+  <!-- Minimalist registry/checkmark icon -->
+  <rect x="32" y="32" width="192" height="192" rx="24" stroke="#54c247" stroke-width="4" opacity="0.3" />
+  <path d="M48,80 L208,80" stroke="#54c247" stroke-width="4" stroke-linecap="round" opacity="0.4" />
+  <path d="M48,128 L120,128" stroke="#54c247" stroke-width="4" stroke-linecap="round" opacity="0.4" />
+  <path d="M48,176 L100,176" stroke="#54c247" stroke-width="4" stroke-linecap="round" opacity="0.4" />
+  
+  <circle cx="176" cy="156" r="44" stroke="#54c247" stroke-width="4" />
+  <path d="M164,154 L172,163 L190,147" stroke="#54c247" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

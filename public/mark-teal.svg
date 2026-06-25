@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none">
+  <!-- Program steps/blocks -->
+  <rect x="40" y="160" width="50" height="56" rx="8" stroke="#38b2ac" stroke-width="4" />
+  <rect x="103" y="100" width="50" height="116" rx="8" stroke="#38b2ac" stroke-width="4" />
+  <rect x="166" y="40" width="50" height="176" rx="8" fill="#38b2ac" stroke="#38b2ac" stroke-width="4" />
+  
+  <path d="M65,160 C65,120 100,100 128,100 C150,100 191,60 191,40" stroke="#38b2ac" stroke-width="3" stroke-dasharray="4,4" stroke-linecap="round" />
+</svg>
