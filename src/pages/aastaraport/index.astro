@@ -117,7 +117,7 @@ const schema = {
             <li><b>{totalOutcomes}</b><span>õpiväljundit</span></li>
             {medPrice != null && <li><b>{medPrice} €</b><span>mediaanhind</span></li>}
             {medEcts != null && <li><b>{medEcts} EAP</b><span>mediaanmaht</span></li>}
-            {freeCount > 0 && <li><b>{freeCount}</b><span>tasuta sihtrühmale</span></li>}
+            {freeCount > 0 && <li><b>{freeCount}</b><span>sihtrühmale rahastatud</span></li>}
             <li><b>{withDeadline}</b><span>lähiajal tähtajaga</span></li>
           </ul>
         </div>
@@ -149,7 +149,7 @@ const schema = {
         <div class="section-inner narrow">
           <div class="section-head compact-head"><span class="kicker">Hind ja maht</span><h2>Mida õpe maksab ja kui mahukas on</h2></div>
           <ul class="check">
-            {minPrice != null && maxPrice != null && <li><strong>Hind</strong> {minPrice}–{maxPrice} €, mediaan {medPrice} €. {freeCount > 0 && <>{freeCount} programmi on mõnele sihtrühmale tasuta. </>}{noPriceCount > 0 && <>{noPriceCount} programmil hind ainult kooli lehel.</>}</li>}
+            {minPrice != null && maxPrice != null && <li><strong>Hind</strong> {minPrice}–{maxPrice} €, mediaan {medPrice} €. {freeCount > 0 && <>{freeCount} programmi on mõnele sihtrühmale rahastatud. </>}{noPriceCount > 0 && <>{noPriceCount} programmil hind ainult kooli lehel.</>}</li>}
             {minEcts != null && maxEcts != null && <li><strong>Maht</strong> {minEcts}–{maxEcts} EAP, mediaan {medEcts} EAP.</li>}
             <li><strong>Õppevorm</strong> {online} veebis/kaugõppes{blended > 0 && <>, {blended} põimitud</>}{onsite > 0 && <>, {onsite} kohapeal</>} (kus kool on vormi avaldanud).</li>
             {inEnglish > 0 && <li><strong>Keel</strong> {inEnglish} programmi inglise keeles, ülejäänud eesti keeles.</li>}

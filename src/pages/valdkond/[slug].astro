@@ -89,7 +89,7 @@ const schema = {
           <p>
             {entries.length} programmi {providersInField.length} koolist valdkonnas „{field}".
             {minEcts != null && maxEcts != null && <> Maht {minEcts}–{maxEcts} EAP.</>}
-            {minPrice != null && maxPrice != null && <> Hind {minPrice}–{maxPrice} €{freeCount > 0 && <>, {freeCount} tasuta sihtrühmale</>}.</>}
+            {minPrice != null && maxPrice != null && <> Hind {minPrice}–{maxPrice} €{freeCount > 0 && <>, {freeCount} sihtrühmale rahastatud</>}.</>}
             {" "}Võrdle kõiki allolevas tabelis.
           </p>
           <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
