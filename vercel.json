@@ -2,57 +2,57 @@
   "redirects": [
     {
       "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid/",
-      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid/",
+      "destination": "/valdkond/haridus/",
       "permanent": true
     },
     {
       "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-2/",
-      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-2/",
+      "destination": "/valdkond/haridus/",
       "permanent": true
     },
     {
       "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-3/",
-      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-3/",
+      "destination": "/valdkond/haridus/",
       "permanent": true
     },
     {
       "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-4/",
-      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-4/",
+      "destination": "/valdkond/haridus/",
       "permanent": true
     },
     {
       "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-5/",
-      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-5/",
+      "destination": "/valdkond/haridus/",
       "permanent": true
     },
     {
       "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-6/",
-      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-6/",
+      "destination": "/valdkond/haridus/",
       "permanent": true
     },
     {
       "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-7/",
-      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-7/",
+      "destination": "/valdkond/haridus/",
       "permanent": true
     },
     {
       "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-8/",
-      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-8/",
+      "destination": "/valdkond/haridus/",
       "permanent": true
     },
     {
       "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-9/",
-      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-9/",
+      "destination": "/valdkond/haridus/",
       "permanent": true
     },
     {
       "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-10/",
-      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-10/",
+      "destination": "/valdkond/haridus/",
       "permanent": true
     },
     {
       "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-11/",
-      "destination": "/kataloog/tartu-ulikool-opetajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid-11/",
+      "destination": "/valdkond/haridus/",
       "permanent": true
     },
     {
@@ -62,32 +62,462 @@
     },
     {
       "source": "/kataloog/tartu-ulikool-loovettev-otilde-tja-mikrokraadiprogramm/",
-      "destination": "/kataloog/tartu-ulikool-loovettevotja-mikrokraadiprogramm/",
+      "destination": "/kataloog/tartu-ulikool-loovettevotja/",
       "permanent": true
     },
     {
       "source": "/kataloog/tartu-ulikool-loovettev-otilde-tluse-projektijuhtimise-mikrokraadiprogramm/",
-      "destination": "/kataloog/tartu-ulikool-loovettevotluse-projektijuhtimise-mikrokraadiprogramm/",
+      "destination": "/kataloog/tartu-ulikool-loovettevotluse-projektijuhtimine/",
       "permanent": true
     },
     {
       "source": "/kataloog/tartu-ulikool-mikrokraadiprogramm-ouml-koloogia-ja-looduskaitse-globaalmuutuste-tingimustes/",
-      "destination": "/kataloog/tartu-ulikool-mikrokraadiprogramm-okoloogia-ja-looduskaitse-globaalmuutuste-tingimustes/",
+      "destination": "/kataloog/tartu-ulikool-okoloogia-ja-looduskaitse-globaalmuutuste-tingimustes/",
       "permanent": true
     },
     {
       "source": "/kataloog/tartu-ulikool-mikrokraadiprogramm-bdquo-andmeanal-uuml-uuml-s-ldquo/",
-      "destination": "/kataloog/tartu-ulikool-mikrokraadiprogramm-andmeanaluus/",
+      "destination": "/kataloog/tartu-ulikool-andmeanaluus/",
       "permanent": true
     },
     {
       "source": "/kataloog/tartu-ulikool-mikrokraadiprogramm-bdquo-riigihangete-korraldamine-ldquo/",
-      "destination": "/kataloog/tartu-ulikool-mikrokraadiprogramm-riigihangete-korraldamine/",
+      "destination": "/kataloog/tartu-ulikool-riigihangete-korraldamine/",
       "permanent": true
     },
     {
       "source": "/kataloog/tartu-ulikool-s-uuml-steemianal-uuml-uuml-s/",
       "destination": "/kataloog/tartu-ulikool-susteemianaluus/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/ebs-digitoodete-uurimine-anal-uuml-uuml-simine-ja-strateegia/",
+      "destination": "/kataloog/ebs-digitoodete-uurimine-analuusimine-ja-strateegia/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/ebs-investeeringud-ja-ettev-otilde-tte-rahandus/",
+      "destination": "/kataloog/ebs-investeeringud-ja-ettevotte-rahandus/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/ebs-juhtimine-ja-turundus-rahvusvahelises-auml-rikeskkonnas/",
+      "destination": "/kataloog/ebs-juhtimine-ja-turundus-rahvusvahelises-arikeskkonnas/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/ebs-j-auml-tkusuutlik-ja-roheline-uuml-leminek-strateegiad-praktikad-ja-ressursside-juhtimine/",
+      "destination": "/kataloog/ebs-jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/ebs-strateegiline-finantsjuhtimine-t-ouml-ouml-riistad-anal-uuml-uuml-s-ja-otsuste-tegemine/",
+      "destination": "/kataloog/ebs-strateegiline-finantsjuhtimine-tooriistad-analuus-ja-otsuste-tegemine/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/eesti-ettevotluskorgkool-mainor-ettev-otilde-tluse-mikrokraad-tallinnas/",
+      "destination": "/kataloog/eesti-ettevotluskorgkool-mainor-ettevotluse-mikrokraad-tallinnas/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/eesti-ettevotluskorgkool-mainor-ettev-otilde-tluse-mikrokraad-tartus/",
+      "destination": "/kataloog/eesti-ettevotluskorgkool-mainor-ettevotluse-mikrokraad-tartus/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/eesti-kunstiakadeemia-baltisaksa-kultuurip-auml-rand/",
+      "destination": "/kataloog/eesti-kunstiakadeemia-baltisaksa-kultuuriparand/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/eesti-maaulikool-ergonoomikaline-hindamine-ja-sekkumine-t-ouml-ouml-kohtadel/",
+      "destination": "/kataloog/eesti-maaulikool-ergonoomikaline-hindamine-ja-sekkumine-tookohtadel/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/eesti-maaulikool-keskkonnas-auml-auml-stlik-taimekasvatus-ja-mahetootmine/",
+      "destination": "/kataloog/eesti-maaulikool-keskkonnasaastlik-taimekasvatus-ja-mahetootmine/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/eesti-maaulikool-taimekahjustajad-ja-nende-t-otilde-rje/",
+      "destination": "/kataloog/eesti-maaulikool-taimekahjustajad-ja-nende-torje/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/eesti-maaulikool-taimsete-toiduainete-tehnoloogia-p-otilde-hialused/",
+      "destination": "/kataloog/eesti-maaulikool-taimsete-toiduainete-tehnoloogia-pohialused/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/eesti-maaulikool-toiduainete-v-auml-ikek-auml-itlemise-p-otilde-hialused/",
+      "destination": "/kataloog/eesti-maaulikool-toiduainete-vaikekaitlemise-pohialused/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/eesti-muusika-ja-teatriakadeemia-muusikaps-uuml-hholoogia/",
+      "destination": "/kataloog/eesti-muusika-ja-teatriakadeemia-muusikapsuhholoogia/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-tehnikakorgkool-finantsaruandlus-ja-juhtimine-ettev-otilde-ttes/",
+      "destination": "/kataloog/tallinna-tehnikakorgkool-finantsaruandlus-ja-juhtimine-ettevottes/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-tehnikakorgkool-riskide-ja-k-uuml-berturvalisuse-juhtimine-logistikas/",
+      "destination": "/kataloog/tallinna-tehnikakorgkool-riskide-ja-kuberturvalisuse-juhtimine-logistikas/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-tehnikakorgkool-v-otilde-otilde-rkeeled-inseneerias/",
+      "destination": "/kataloog/tallinna-tehnikakorgkool-voorkeeled-inseneerias/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-andmep-otilde-hine-projektijuhtimine/",
+      "destination": "/kataloog/tallinna-ulikool-andmepohine-projektijuhtimine/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-digivahendid-otilde-ppeprotsessis/",
+      "destination": "/kataloog/tallinna-ulikool-digivahendid-oppeprotsessis/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-eesti-uuml-hiskond-poliitika-ja-sotsiaalne-kihistumine/",
+      "destination": "/kataloog/tallinna-ulikool-eesti-uhiskond-poliitika-ja-sotsiaalne-kihistumine/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-haridusps-uuml-hholoogia-klassiruumis/",
+      "destination": "/kataloog/tallinna-ulikool-hariduspsuhholoogia-klassiruumis/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-heaolu-kujundamine-ja-ennetav-ps-uuml-hhosotsiaalne-praktika/",
+      "destination": "/kataloog/tallinna-ulikool-heaolu-kujundamine-ja-ennetav-psuhhosotsiaalne-praktika/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-lastekaitse-p-otilde-hialused/",
+      "destination": "/kataloog/tallinna-ulikool-lastekaitse-pohialused/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-lepingu-ja-haldus-otilde-igus/",
+      "destination": "/kataloog/tallinna-ulikool-lepingu-ja-haldusoigus/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-motivatsiooni-olemus-hindamine-ja-toetamine-haridusps-uuml-hholoogia-vaatest/",
+      "destination": "/kataloog/tallinna-ulikool-motivatsiooni-olemus-hindamine-ja-toetamine-hariduspsuhholoogia-vaatest/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-riigikaitse-otilde-petus/",
+      "destination": "/kataloog/tallinna-ulikool-riigikaitseopetus/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-sooritus-ja-spordips-uuml-hholoogia/",
+      "destination": "/kataloog/tallinna-ulikool-sooritus-ja-spordipsuhholoogia/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-sotsiaalt-ouml-ouml-ja-sotsiaalpoliitika/",
+      "destination": "/kataloog/tallinna-ulikool-sotsiaaltoo-ja-sotsiaalpoliitika/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-tehisintellekt-t-auml-ienduskoolituse-arendamisel-ja-karj-auml-auml-rin-otilde-ustamises/",
+      "destination": "/kataloog/tallinna-ulikool-tehisintellekt-taienduskoolituse-arendamisel-ja-karjaarinoustamises/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-tervisen-otilde-ustamine/",
+      "destination": "/kataloog/tallinna-ulikool-tervisenoustamine/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-t-auml-iskasvanute-koolitamine/",
+      "destination": "/kataloog/tallinna-ulikool-taiskasvanute-koolitamine/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-t-auml-iskasvanute-koolituste-korraldus/",
+      "destination": "/kataloog/tallinna-ulikool-taiskasvanute-koolituste-korraldus/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-t-ouml-ouml-elu-kvaliteedi-v-otilde-tmetegurid-organisatsioonis/",
+      "destination": "/kataloog/tallinna-ulikool-tooelu-kvaliteedi-votmetegurid-organisatsioonis/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-vaimne-ja-f-uuml-uuml-siline-tervis-ning-tervises-otilde-numite-disain/",
+      "destination": "/kataloog/tallinna-ulikool-vaimne-ja-fuusiline-tervis-ning-tervisesonumite-disain/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-otilde-ppimine-ja-otilde-petamine-tervishoiuasutuses/",
+      "destination": "/kataloog/tallinna-ulikool-oppimine-ja-opetamine-tervishoiuasutuses/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tallinna-ulikool-auml-rikorraldus/",
+      "destination": "/kataloog/tallinna-ulikool-arikorraldus/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-avalik-haldus-ja-kaasaegne-andmep-otilde-hine-valitsemine/",
+      "destination": "/kataloog/taltech-avalik-haldus-ja-kaasaegne-andmepohine-valitsemine/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-energeetika-auml-rikeskkond-ja-ettev-otilde-tlus/",
+      "destination": "/kataloog/taltech-energeetika-arikeskkond-ja-ettevotlus/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-ettev-otilde-tlus/",
+      "destination": "/kataloog/taltech-ettevotlus/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-finants-ja-investeeringute-anal-uuml-uuml-s/",
+      "destination": "/kataloog/taltech-finants-ja-investeeringute-analuus/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-hooneautomaatika-ja-tehnos-uuml-steemid/",
+      "destination": "/kataloog/taltech-hooneautomaatika-ja-tehnosusteemid/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-hoonete-energiat-otilde-hususe-modelleerimine/",
+      "destination": "/kataloog/taltech-hoonete-energiatohususe-modelleerimine/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-inimeste-ja-v-otilde-rgustike-juhtimine-avalikus-sektoris/",
+      "destination": "/kataloog/taltech-inimeste-ja-vorgustike-juhtimine-avalikus-sektoris/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-intellektuaalomandi-otilde-igus-euroopa-liidu-digitaalsel-uuml-htsel-turul/",
+      "destination": "/kataloog/taltech-intellektuaalomandioigus-euroopa-liidu-digitaalsel-uhtsel-turul/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-it-juhtimine-ja-auml-riarhitektuur/",
+      "destination": "/kataloog/taltech-it-juhtimine-ja-ariarhitektuur/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-k-uuml-berohud-tehisintellekt-ja-pahavara/",
+      "destination": "/kataloog/taltech-kuberohud-tehisintellekt-ja-pahavara/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-materjalide-taaskasutus-ja-ouml-kodisain/",
+      "destination": "/kataloog/taltech-materjalide-taaskasutus-ja-okodisain/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-mehitamata-s-uuml-steemid/",
+      "destination": "/kataloog/taltech-mehitamata-susteemid/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-personali-v-auml-rbamine/",
+      "destination": "/kataloog/taltech-personali-varbamine/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-raamatupidamise-ja-rahanduse-kaasaegsed-teemad-l-auml-bi-esg-ja-finantsinnovatsiooni-prisma/",
+      "destination": "/kataloog/taltech-raamatupidamise-ja-rahanduse-kaasaegsed-teemad-labi-esg-ja-finantsinnovatsiooni-prisma/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-strateegiline-juhtimine-ja-poliitikaanal-uuml-uuml-s-avalikus-sektoris/",
+      "destination": "/kataloog/taltech-strateegiline-juhtimine-ja-poliitikaanaluus-avalikus-sektoris/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-tehisintellekt-andmekaeve-ja-masin-otilde-pe/",
+      "destination": "/kataloog/taltech-tehisintellekt-andmekaeve-ja-masinope/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-tehnoloogia-otilde-igus/",
+      "destination": "/kataloog/taltech-tehnoloogiaoigus/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-t-ouml-ouml-keskkonna-kvaliteedi-juhtimine/",
+      "destination": "/kataloog/taltech-tookeskkonna-kvaliteedi-juhtimine/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-auml-rijuhtimine-digitaalse-ja-kestliku-tuleviku-jaoks/",
+      "destination": "/kataloog/taltech-arijuhtimine-digitaalse-ja-kestliku-tuleviku-jaoks/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-auml-rilogistika/",
+      "destination": "/kataloog/taltech-arilogistika/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-auml-riprotsessid-digi-uuml-hiskonnas/",
+      "destination": "/kataloog/taltech-ariprotsessid-digiuhiskonnas/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-auml-riprotsesside-juhtimine-tehisintellekti-abil/",
+      "destination": "/kataloog/taltech-ariprotsesside-juhtimine-tehisintellekti-abil/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-auml-ritegevuse-j-auml-rjepidevus-h-uuml-briids-otilde-jas/",
+      "destination": "/kataloog/taltech-aritegevuse-jarjepidevus-hubriidsojas/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/taltech-auml-ri-uuml-hingu-omaniku-meistriklass/",
+      "destination": "/kataloog/taltech-ariuhingu-omaniku-meistriklass/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-andmeanal-uuml-uuml-s/",
+      "destination": "/kataloog/tartu-ulikool-andmeanaluus/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-bioloogia-otilde-petamine-g-uuml-mnaasiumis/",
+      "destination": "/kataloog/tartu-ulikool-bioloogia-opetamine-gumnaasiumis/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-bioloogia-otilde-petamine-iii-kooliastmes/",
+      "destination": "/kataloog/tartu-ulikool-bioloogia-opetamine-iii-kooliastmes/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-f-uuml-uuml-sika-otilde-petamine-p-otilde-hikoolis-8-klassi-kursused-p-auml-rnus/",
+      "destination": "/kataloog/tartu-ulikool-fuusika-opetamine-pohikoolis-8-klassi-kursused-parnus/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-f-uuml-uuml-sika-otilde-petamine-p-otilde-hikoolis-9-klassi-kursused/",
+      "destination": "/kataloog/tartu-ulikool-fuusika-opetamine-pohikoolis-9-klassi-kursused/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-geograafia-otilde-petamine-g-uuml-mnaasiumis/",
+      "destination": "/kataloog/tartu-ulikool-geograafia-opetamine-gumnaasiumis/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-haldus-otilde-igus-praktikutele/",
+      "destination": "/kataloog/tartu-ulikool-haldusoigus-praktikutele/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-heaolu-m-otilde-otilde-tmine-ja-m-otilde-jutamine/",
+      "destination": "/kataloog/tartu-ulikool-heaolu-mootmine-ja-mojutamine/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-informaatika-otilde-petaja-erialaained/",
+      "destination": "/kataloog/tartu-ulikool-informaatikaopetaja-erialaained/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-islam-t-auml-na-kultuurist-konfliktideni/",
+      "destination": "/kataloog/tartu-ulikool-islam-tana-kultuurist-konfliktideni/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-kaasaegne-teatri-otilde-petus/",
+      "destination": "/kataloog/tartu-ulikool-kaasaegne-teatriopetus/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-keemia-otilde-petamine-g-uuml-mnaasiumis/",
+      "destination": "/kataloog/tartu-ulikool-keemia-opetamine-gumnaasiumis/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-keemia-otilde-petamine-p-otilde-hikoolis/",
+      "destination": "/kataloog/tartu-ulikool-keemia-opetamine-pohikoolis/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-kinnisvaraturg-ja-auml-ri/",
+      "destination": "/kataloog/tartu-ulikool-kinnisvaraturg-ja-ari/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-loovettev-otilde-tja/",
+      "destination": "/kataloog/tartu-ulikool-loovettevotja/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-loovettev-otilde-tluse-projektijuhtimine/",
+      "destination": "/kataloog/tartu-ulikool-loovettevotluse-projektijuhtimine/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-matemaatika-otilde-petaja-erialaained/",
+      "destination": "/kataloog/tartu-ulikool-matemaatikaopetaja-erialaained/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-matemaatika-otilde-petaja-erialaained-ida-virumaa-otilde-petajatele-narvas/",
+      "destination": "/kataloog/tartu-ulikool-matemaatikaopetaja-erialaained-ida-virumaa-opetajatele-narvas/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-soome-keele-otilde-petamine/",
+      "destination": "/kataloog/tartu-ulikool-soome-keele-opetamine/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-sooritusps-uuml-hholoogia-praktikule/",
+      "destination": "/kataloog/tartu-ulikool-soorituspsuhholoogia-praktikule/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-turundus-sotsiaalmeedias-ja-br-auml-ndijuhtimine-mikroettev-otilde-tetele/",
+      "destination": "/kataloog/tartu-ulikool-turundus-sotsiaalmeedias-ja-brandijuhtimine-mikroettevotetele/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-t-otilde-lketehnoloogia/",
+      "destination": "/kataloog/tartu-ulikool-tolketehnoloogia/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-t-auml-nap-auml-evane-haridusjuhtimine-eestvedamine-strateegia-ja-organisatsioonikultuur/",
+      "destination": "/kataloog/tartu-ulikool-tanapaevane-haridusjuhtimine-eestvedamine-strateegia-ja-organisatsioonikultuur/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-usundid-kultuuri-ja-m-otilde-tteloos/",
+      "destination": "/kataloog/tartu-ulikool-usundid-kultuuri-ja-motteloos/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-videom-auml-ngude-narratiivid/",
+      "destination": "/kataloog/tartu-ulikool-videomangude-narratiivid/",
+      "permanent": true
+    },
+    {
+      "source": "/kataloog/tartu-ulikool-ouml-koloogia-ja-looduskaitse-globaalmuutuste-tingimustes/",
+      "destination": "/kataloog/tartu-ulikool-okoloogia-ja-looduskaitse-globaalmuutuste-tingimustes/",
       "permanent": true
     },
     {
