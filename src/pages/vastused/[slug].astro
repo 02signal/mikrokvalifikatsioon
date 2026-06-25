@@ -173,13 +173,15 @@ const metaDescription =
       .vastused-crumb {
         margin: 0 0 8px;
         font-size: 0.9rem;
-        color: var(--muted);
+        /* Tumeda kangelastausta peal — hele eraldaja (›); link jääb teal-iks. */
+        color: rgba(255, 255, 255, 0.7);
       }
       .vastused-crumb a { color: var(--teal); font-weight: 700; }
       .vastused-short {
         font-size: 1.18rem;
         line-height: 1.55;
-        color: var(--ink);
+        /* Lühivastus istub TUMEDA kangelastausta (.report-hero) peal — hele tekst loetavuse jaoks. */
+        color: var(--white);
         margin-top: 14px;
       }
       .vastused-body {
