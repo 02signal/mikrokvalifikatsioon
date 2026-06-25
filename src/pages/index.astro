@@ -5,8 +5,17 @@ import "../styles/global.css";
 import Nav from "../components/Nav.astro";
 import Faq from "../components/Faq.astro";
 import { catalog, providers, catalogUpdatedAt } from "../data/catalog";
+import { matchForCatalogEntry } from "../data/ehisFacts";
 
 const emailHref = "mailto:info@mikrokvalifikatsioon.ee?subject=Mikrokvalifikatsioonide%20uudised";
+
+// EHIS-i autoriteet: arvuta build-ajal, kui mitme kataloogi programmi faktid on
+// ametliku EHIS-i registriga sobitatud (exact | strong — st mitte "none"). Number
+// EI ole kõvasti sisse kirjutatud, vaid tuleb andmetest, et püsiks alati täpne.
+const ehisVerifiedCount = catalog.filter(
+  (entry) => matchForCatalogEntry(entry).confidence !== "none"
+).length;
+const catalogTotalCount = catalog.length;
 const homeFaq = [
   {
     question: "Mis on mikrokvalifikatsioon?",
@@ -156,6 +165,16 @@ const schema = {
             <div><strong>{catalog.length}</strong><span>programmi registris</span></div>
             <div><strong>{providers.length}</strong><span>kooli ja koolitajat</span></div>
             <div><strong>kuud, mitte aastad</strong><span>tüüpiline õppeaeg</span></div>
+          </div>
+          <div class="hero-authority">
+            <p class="hero-authority-stat">
+              <strong>{ehisVerifiedCount} programmi</strong>
+              <span>{catalogTotalCount}-st ametlikult EHIS-iga kontrollitud</span>
+            </p>
+            <p class="hero-authority-source">
+              Andmed pärinevad EHIS-ist — Eesti Hariduse Infosüsteem
+              (Haridus- ja Teadusministeerium).
+            </p>
           </div>
           </div>
           <div class="hero-art">
