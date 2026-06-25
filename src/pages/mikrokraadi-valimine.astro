@@ -1,0 +1,427 @@
+---
+import Seo from "../components/Seo.astro";
+import Footer from "../components/Footer.astro";
+import Faq from "../components/Faq.astro";
+import "../styles/global.css";
+import Nav from "../components/Nav.astro";
+import { catalog, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
+import { slugify } from "../data/slug";
+import { fieldStats, ectsRangeText, priceRangeText } from "../lib/fieldComparison";
+
+const SITE = "https://mikrokvalifikatsioon.ee";
+const PATH = "/mikrokraadi-valimine/";
+
+// "Valimine" intent-leht ülikoolide mikrokraadidele (providerType "ülikool").
+// Mikrokvalifikatsiooni (mitte-ülikool) valimisel on eraldi /mikrokvalifikatsiooni-valimine/.
+// Üks tugev leht katab valimine/valik/valikud (ainsus + mitmus).
+const universityEntries = catalog.filter((e) => e.providerType === "ülikool");
+const universityProviders = [...new Set(universityEntries.map((e) => e.provider))];
+
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
+
+// "Sinu valikud" — valdkonnapõhine ülevaade päris registriandmetest.
+const fieldComparison = fieldStats(universityEntries);
+const optionFields = fieldComparison.slice(0, 8);
+const biggestField = fieldComparison[0] ?? null;
+
+// Tüüpiline maht — päris andmetest.
+const uniEcts = universityEntries.map((e) => e.ects).filter((n): n is number => n != null);
+const ectsLo = uniEcts.length ? Math.min(...uniEcts) : null;
+const ectsHi = uniEcts.length ? Math.max(...uniEcts) : null;
+const ectsTypicalText =
+  ectsLo != null && ectsHi != null
+    ? ectsLo === ectsHi
+      ? `${ectsLo} EAP`
+      : `${ectsLo}–${ectsHi} EAP`
+    : "12–24 EAP";
+
+// Otsustusraja sammud — kuvatud nummerdatud loendina JA HowTo JSON-LD-s.
+const decisionSteps = [
+  {
+    name: "Alusta eesmärgist",
+    text: "Sõnasta üks konkreetne oskus või teadmine, mida tahad tõendada, ja küsi, kas soovid hiljem ainepunkte tasemeõppes arvestada. Eesmärk otsustab, kas sulle sobib ülikooli mikrokraad või koolitusettevõtte mikrokvalifikatsioon."
+  },
+  {
+    name: "Vaata mahtu (EAP) ja kestust",
+    text: `Kontrolli mahtu ja kestust koos. Registris avaldatud ülikoolide mikrokraadide mahud jäävad vahemikku ${ectsTypicalText}. 24 EAP kahe semestriga on tuntav koormus töö kõrvalt; lühem 12–15 EAP programm mahub kiiremini graafikusse.`
+  },
+  {
+    name: "Kontrolli rahastust ja sihtrühma",
+    text: "Vaata, kes kulu katab: tööandja koolituseelarve, Töötukassa toetus või sina ise. Osa mikrokraade on kindlale sihtrühmale rahastatud EL-i kaasrahastusel — kontrolli, kas sina kvalifitseerud. Rahastusradadest räägib leht „Kes maksab?“."
+  },
+  {
+    name: "Vali valdkond",
+    text: "Kitsenda otsing valdkonna järgi — näiteks IT ja andmed, majandus ja juhtimine või haridus. Iga valdkonna lehel näed kõiki selle ülikoolide mikrokraade korraga."
+  },
+  {
+    name: "Kontrolli eeldusi ja võrdle kõrvuti",
+    text: "Osa mikrokraade nõuab varasemat kõrgharidust — kontrolli iga programmi eeldusi. Seejärel märgi kataloogis kuni kolm programmi ja vaata need ühes tabelis: ülikool, EAP, hind, kestus ja õppevorm kõrvuti."
+  },
+  {
+    name: "Vali ja registreeru ülikooli lehel",
+    text: "Kui üks mikrokraad sobib eesmärgi, mahu, eelduste ja rahastusega, mine ülikooli enda lehele ja registreeru. Lõplik ja siduv info on alati ülikooli registreerimislehel."
+  }
+];
+
+// Valdkonnalingid, mida ülikoolide mikrokraadid katavad (ilma "muu"-ta).
+const uniFields = [...new Set(universityEntries.map((e) => e.field))]
+  .filter((f) => f !== "muu")
+  .map((field) => ({ field, slug: slugify(field) }));
+
+const faqItems = [
+  {
+    question: "Kuidas valida mikrokraadi?",
+    answer:
+      "Liigu kuues sammus: alusta eesmärgist (oskus + kas soovid ainepunkte tasemeõppes arvestada), vaata mahtu (EAP) ja kestust koos, kontrolli rahastust ja sihtrühma, kitsenda valdkonna järgi, kontrolli eeldusi ja võrdle kuni kolme mikrokraadi kõrvuti, siis registreeru ülikooli lehel."
+  },
+  {
+    question: "Millised on mikrokraadide valikud?",
+    answer: biggestField
+      ? `Registris on praegu ${universityEntries.length} ülikooli mikrokraadi ${universityProviders.length} ülikoolist mitmes valdkonnas. Kõige laiem valik on valdkonnas „${biggestField.field}“ — ${biggestField.count} mikrokraadi. Kõik valdkonnad koos mikrokraadide arvuga on allpool „Sinu valikud“ ülevaates ja lehel /valdkond/.`
+      : `Registris on praegu ${universityEntries.length} ülikooli mikrokraadi ${universityProviders.length} ülikoolist mitmes valdkonnas. Kõik valdkonnad on allpool „Sinu valikud“ ülevaates ja lehel /valdkond/.`
+  },
+  {
+    question: "Mille järgi mikrokraadi valida?",
+    answer:
+      "Viie tunnuse järgi: ülikool ja sihtrühm, maht (EAP), hind, kestus ja õppevorm (veebis, hübriid või kohapeal). Lisaks kontrolli eeldusi — osa mikrokraade nõuab varasemat kõrgharidust. Esimese sõela teeb aga eesmärk: milline oskus su tööd või karjääri kõige rohkem aitab ja kas soovid ainepunkte hiljem arvestada."
+  },
+  {
+    question: "Mikrokvalifikatsioon vs mikrokraad — kumba valida?",
+    answer:
+      "Mikrokvalifikatsioon on katusmõiste igale lühikesele tunnustatud õppele; mikrokraad on selle ülikooli versioon, mis annab EAP-sid, mida saab sageli hiljem tasemeõppes arvestada. Vali ülikooli mikrokraad, kui tahad ainepunkte ja kõrgharidustasemel õpet; vali koolitusettevõtte mikrokvalifikatsioon, kui tahad kiiret praktilist oskust. Mitte-ülikooli oma valimisel aitab leht /mikrokvalifikatsiooni-valimine/."
+  },
+  {
+    question: "Kas mikrokraad annab EAP-d (ainepunkte)?",
+    answer:
+      "Tavaliselt jah. EAP on Euroopa ainepunkt ja 1 EAP vastab umbes 26 tunnile õppija tööd. Ülikooli mikrokraadi EAP-d on ECTS-ainepunktid, mida saab sageli hiljem tasemeõppes arvestada. Täpne EAP-maht on iga programmi juures kataloogis; kui ülikool pole seda avaldanud, jätame välja, mitte ei leiuta."
+  },
+  {
+    question: "Kas mikrokraadi õpe võib olla rahastatud?",
+    answer:
+      "Sageli jah. Kulu võib katta tööandja koolituseelarve, Töötukassa toetus (kui oled töötu või su oskused vajavad uuendamist) või osa programme on kindlale sihtrühmale rahastatud EL-i kaasrahastusel. Iga kirje hind on kataloogis; kontrolli kooli lehelt, kas sina kvalifitseerud. Rahastusradadest räägib leht /kes-maksab/."
+  },
+  {
+    question: "Kust pärinevad valikulehe andmed?",
+    answer:
+      "Mikrokraadide arv, maht, hind ja valdkond pärinevad ülikoolide avalikelt lehtedelt ja need on kontrollitud kuupäeval, mis on iga kirje juures kataloogis. Andmemetoodika on lehel /andmed/. Lõplik ja siduv info on alati ülikooli enda registreerimislehel."
+  }
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE}/#organization`,
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: `${SITE}/`
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${SITE}${PATH}#webpage`,
+      url: `${SITE}${PATH}`,
+      name: "Mikrokraadi valimine: kuidas valida õige?",
+      description:
+        "Mikrokraadi valimine sammhaaval: kuidas valida õige ülikooli mikrokraad eesmärgi, mahu (EAP), eelduste, rahastuse ja valdkonna järgi. Reaalsed valikud Eesti ülikoolidest.",
+      inLanguage: "et",
+      isPartOf: { "@id": `${SITE}/#organization` },
+      dateModified: catalogUpdatedAt,
+      mainEntityOfPage: `${SITE}${PATH}`
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Mikrokraadid", item: `${SITE}/mikrokraadid/` },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: "Mikrokraadi valimine",
+          item: `${SITE}${PATH}`
+        }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      name: "Kuidas valida õige mikrokraad?",
+      description:
+        "Kuues sammus sobiva ülikooli mikrokraadini: eesmärk, maht (EAP) ja kestus, rahastus ja sihtrühm, valdkond, eeldused ja võrdlus, valik.",
+      inLanguage: "et",
+      totalTime: "PT15M",
+      step: decisionSteps.map((s, index) => ({
+        "@type": "HowToStep",
+        position: index + 1,
+        name: s.name,
+        text: s.text,
+        url: `${SITE}${PATH}#samm-${index + 1}`
+      }))
+    },
+    {
+      "@type": "ItemList",
+      name: "Mikrokraadi valikud valdkonniti",
+      itemListOrder: "https://schema.org/ItemListOrderDescending",
+      numberOfItems: optionFields.length,
+      itemListElement: optionFields.map((stat, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: `${stat.field} — ${stat.count} mikrokraadi`,
+        url: `${SITE}/valdkond/${stat.slug}/`
+      }))
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer }
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Mikrokraadi valimine — kuidas valida õige? Sinu valikud | Mikrokvalifikatsioon.ee"
+      description="Mikrokraadi valimine sammhaaval: kuidas valida õige ülikooli mikrokraad eesmärgi, mahu (EAP), eelduste, rahastuse ja valdkonna järgi. Vaata kõiki valikuid Eesti ülikoolidest."
+      canonicalPath={PATH}
+      ogType="article"
+      ogTitle="Mikrokraadi valimine: kuidas valida õige?"
+      ogDescription="Otsustusraamistik ja kõik valikud valdkonniti — kuidas valida õige ülikooli mikrokraad, päris Eesti andmetega."
+      jsonLd={schema}
+    />
+    <style is:global>
+      .mkr-options-wrap { overflow-x: auto; }
+      .mkr-options {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        min-width: 760px;
+      }
+      .mkr-options th, .mkr-options td {
+        border: 1px solid var(--line);
+        padding: 12px 14px;
+        text-align: left;
+        vertical-align: top;
+        font-size: 0.95rem;
+      }
+      .mkr-options thead th { background: var(--navy); color: #fff; font-size: 0.9rem; }
+      .mkr-options tbody th[scope="row"] { font-weight: 800; background: var(--ice); }
+      .mkr-options tbody th[scope="row"] a { color: var(--teal); font-weight: 900; }
+      .mkr-steps { display: grid; gap: 14px; counter-reset: step; padding-left: 0; list-style: none; }
+      .mkr-steps li {
+        position: relative;
+        padding: 14px 16px 14px 58px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fff;
+      }
+      .mkr-steps li::before {
+        counter-increment: step;
+        content: counter(step);
+        position: absolute;
+        left: 14px;
+        top: 14px;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: var(--teal);
+        color: #fff;
+        font-weight: 900;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .mkr-steps li strong { color: var(--ink); display: block; margin-bottom: 4px; }
+      .mkr-steps li p { margin: 0; color: var(--muted); }
+    </style>
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <span class="eyebrow">Kuidas valida</span>
+          <h1>Mikrokraadi valimine: kuidas valida õige?</h1>
+          <p>
+            Mikrokraad on ülikooli pakutav mikrokvalifikatsioon, mis annab tavaliselt EAP-sid.
+            Õige mikrokraadi valid eesmärgi, mitte ülikooli nime järgi:
+            <strong>alusta oskusest, mida tahad tõendada, ja küsi, kas soovid ainepunkte hiljem
+            tasemeõppes arvestada</strong>. Siin on selge otsustusraamistik ja kõik su valikud —
+            reaalsed andmed {universityProviders.length} ülikoolist.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="mkr_valimine_hero_kataloog">Ava filtreeritav kataloog</a>
+            <a class="btn btn-secondary" href="/mikrokraadid/" data-track-event="cta_click" data-track-label="mkr_valimine_hero_mikrokraadid">Kõik mikrokraadid</a>
+          </div>
+          <p class="report-date">
+            Registris on praegu {universityEntries.length} ülikooli mikrokraadi {universityProviders.length} ülikoolist.
+            Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud koolide lehtedelt: {checkedAtText}.
+          </p>
+        </div>
+      </section>
+
+      <!-- Lühivastus — GEO: extractable, otse intentile -->
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Lühidalt</span>
+            <h2>Kuidas valida õige mikrokraad?</h2>
+          </div>
+          <p>
+            <strong>Vali mikrokraad kuues sammus: eesmärk → maht (EAP) ja kestus → rahastus ja
+            sihtrühm → valdkond → eeldused ja võrdlus → vali.</strong> Esmalt sõnasta oskus, mida
+            tahad tõendada, ja otsusta, kas soovid ainepunkte tasemeõppes arvestada; seejärel
+            kitsenda valik valdkonna järgi, kontrolli eeldusi ja võrdle kuni kolme mikrokraadi
+            kõrvuti. Lõplik info on alati ülikooli enda lehel.
+          </p>
+          <ul class="check">
+            <li><strong>{universityEntries.length}</strong> ülikooli mikrokraadi {universityProviders.length} ülikoolist registris.</li>
+            <li>Mikrokraad annab tavaliselt <strong>EAP-sid</strong> (ECTS), mida saab sageli tasemeõppes arvestada.</li>
+            <li>Koolitusettevõtte või rakenduskõrgkooli lühiõppe valimisel aitab <a href="/mikrokvalifikatsiooni-valimine/">mikrokvalifikatsiooni valimine</a>.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Otsustusraamistik — GEO: HowTo, nummerdatud sammud -->
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Otsustusraamistik</span>
+            <h2>Kuus sammu sobiva mikrokraadini.</h2>
+            <p>Järgi neid samme järjekorras — eesmärk ja ainepunktide vajadus teevad esimese sõela, eeldused ja hind viimase.</p>
+          </div>
+          <ol class="mkr-steps">
+            {decisionSteps.map((step, i) => (
+              <li id={`samm-${i + 1}`}>
+                <strong>{step.name}</strong>
+                <p>{step.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <!-- Sinu valikud — GEO: per-field options overview, extractable table -->
+      <section class="white">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Sinu valikud</span>
+            <h2>Mikrokraadide valikud valdkonniti.</h2>
+            <p>
+              Iga valdkonna kohta on toodud mikrokraadide arv, mahuvahemik (EAP), hinnavahemik ja
+              paar näiteprogrammi — kõik päris registriandmetest. Klõpsa valdkonnal, et näha selle
+              kõiki mikrokraade ja teha valik.
+            </p>
+          </div>
+          <div class="mkr-options-wrap">
+            <table class="mkr-options">
+              <thead>
+                <tr>
+                  <th scope="col">Valdkond</th>
+                  <th scope="col">Mikrokraade</th>
+                  <th scope="col">Maht (EAP)</th>
+                  <th scope="col">Hinnavahemik</th>
+                  <th scope="col">Näited</th>
+                </tr>
+              </thead>
+              <tbody>
+                {optionFields.map((stat) => (
+                  <tr>
+                    <th scope="row"><a href={`/valdkond/${stat.slug}/`}>{stat.field}</a></th>
+                    <td>{stat.count}</td>
+                    <td>{ectsRangeText(stat)}</td>
+                    <td>{priceRangeText(stat)}</td>
+                    <td>
+                      {stat.examples.map((ex, i) => (
+                        <>
+                          {i > 0 && ", "}
+                          <a href={`/kataloog/${ex.slug}/`}>{ex.name}</a>
+                        </>
+                      ))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="notice">
+            Hinnavahemik koondab valdkonna ülikoolide avaldatud hinnad (kontrollitud {checkedAtText}); kui
+            valdkonnas pole ühtki avalikku hinda, on märge „vaata kataloogist“. Osa kulust võib katta
+            tööandja või Töötukassa (<a href="/kes-maksab/">kes maksab?</a>). Lõplik ja ametlik hind on
+            alati ülikooli enda lehel — metoodika on lehel <a href="/andmed/">Andmed</a>.
+          </p>
+          <p>
+            Kõik valdkonnad eraldi lehtedena:
+            {uniFields.map((f, i) => (
+              <>
+                {i > 0 && " · "}
+                <a href={`/valdkond/${f.slug}/`}>{f.field}</a>
+              </>
+            ))}.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="/mikrokraadide-vordlus/" data-track-event="cta_click" data-track-label="mkr_valimine_vordlus">Vaata mikrokraadide võrdlust</a>
+            <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="mkr_valimine_kataloog">Ava kogu kataloog</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Seotud — cross-links -->
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Seotud</span>
+            <h2>Vaata edasi.</h2>
+          </div>
+          <ul class="check">
+            <li><a href="/mikrokvalifikatsiooni-valimine/">Mikrokvalifikatsiooni valimine</a> — kuidas valida õige koolitusettevõtte või rakenduskõrgkooli lühiõpe.</li>
+            <li><a href="/mikrokraadide-vordlus/">Mikrokraadide võrdlus</a> — ülikoolide mikrokraadid ühes tabelis (EAP, hind, kestus).</li>
+            <li><a href="/mikrokvalifikatsioonide-vordlus/">Mikrokvalifikatsioonide võrdlus</a> — laiem võrdlus, sh koolitusettevõtete lühiõpe.</li>
+            <li><a href="/mikrokraadid/">Mikrokraadid Eestis</a> — kõik ülikoolide mikrokraadid koolide kaupa.</li>
+            <li><a href="/kataloog/">Filtreeritav kataloog</a> ja <a href="/vordlus/">võrdlustööriist</a> — kõrvuta kuni kolm programmi.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- KKK — GEO: FAQPage, katab valimine/valik/valikud cluster -->
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Korduvad küsimused</span>
+            <h2>Valimine, valikud ja võrdlemine — lühivastused.</h2>
+          </div>
+          <Faq items={faqItems} openFirst={3} />
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Tee valik kindlamaks — filtreeri kataloog või tee suunatest.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="mkr_valimine_bottom_kataloog">Ava kataloog</a>
+              <a class="btn btn-secondary" href="/#suunatest" data-track-event="cta_click" data-track-label="mkr_valimine_bottom_suunatest">Tee suunatest</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="mkr_valimine_email">info@mikrokvalifikatsioon.ee</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="mkr_valimine_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Mikrokraadi valimine" />
+  </body>
+</html>
