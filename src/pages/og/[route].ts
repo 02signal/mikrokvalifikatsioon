@@ -171,7 +171,11 @@ export const { getStaticPaths, GET } = await OGImageRoute({
       title: page.title,
       description: page.description,
       logo: { path: "./public/mk-logo-white.png", size: [264] },
-      bgGradient: [[18, 20, 24], tint(accent)] as [number, number, number][],
+      bgImage: {
+        path: "./public/og-bg.png",
+        fit: "cover" as const,
+        position: "center" as const
+      },
       border: { color: accent, width: 18, side: "block-end" as const },
       padding: 84,
       font: {
