@@ -50,7 +50,7 @@ const faq = [
     a: `${providersInTopic.length} kooli: ${providersInTopic.join(", ")}. Kõik ${entries.length} programmi on allpool koos õpiväljundite, mahu ja hinnaga.` },
   { q: `Kui palju maksab ${labelLower} mikrokraad?`,
     a: minPrice != null && maxPrice != null
-      ? `Selle teema programmid maksavad umbes ${minPrice}–${maxPrice} €${freeCount ? `, ${freeCount} on mõnele sihtrühmale tasuta` : ""}. Täpne hind on iga programmi juures.`
+      ? `Selle teema programmid maksavad umbes ${minPrice}–${maxPrice} €${freeCount ? `, ${freeCount} on mõnele sihtrühmale rahastatud` : ""}. Täpne hind on iga programmi juures.`
       : `Hind on iga programmi juures ja kooli lehel.` },
   { q: `Kes maksab ${labelLower} õppe eest?`,
     a: `Sageli ei maksa õppija kõike ise: Töötukassa, tööandja koolituseelarve või õppija ise. Vaata lähemalt lehelt „Kes maksab?".` }
@@ -109,7 +109,7 @@ const schema = {
           <h1>{topic.label}: mikrokraadid ja õpiväljundid</h1>
           <p>
             {entries.length} mikrokvalifikatsiooni ja mikrokraadi {providersInTopic.length} koolist teemal „{labelLower}".
-            {minPrice != null && maxPrice != null && <> Hind {minPrice}–{maxPrice} €{freeCount > 0 && <>, {freeCount} tasuta sihtrühmale</>}.</>}
+            {minPrice != null && maxPrice != null && <> Hind {minPrice}–{maxPrice} €{freeCount > 0 && <>, {freeCount} sihtrühmale rahastatud</>}.</>}
             {" "}Võrdle õpiväljundeid, mahtu ja hinda — või <a href={`/oskused/?q=${encodeURIComponent(labelLower)}`} data-track-event="cta_click" data-track-label="topic_to_oskused">otsi õpiväljundi järgi</a>.
           </p>
           {topic.synonyms.length > 0 && (
