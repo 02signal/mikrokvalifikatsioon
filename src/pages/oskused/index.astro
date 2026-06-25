@@ -113,6 +113,7 @@ const schema = {
             </div>
           </div>
           <p class="field-help" data-outcome-count>{outcomes.length} õpiväljundit</p>
+          <p class="field-help syn-hint" data-outcome-synonyms hidden></p>
 
           <ul class="outcome-list" data-outcome-list>
             {outcomes.map((o) => {
@@ -144,6 +145,7 @@ const schema = {
               allpool, milline <strong>programm või kombinatsioon</strong> su valitud oskustele kõige
               lähemal on. Jäta e-mail, siis teavitame, kui veelgi sobivam lahendus lisandub.
             </p>
+            <p class="pkg-hint" data-pkg-hint hidden></p>
           </div>
           <ul class="pkg-list" data-pkg-list></ul>
           <div class="pkg-match" data-pkg-match hidden></div>
@@ -195,7 +197,7 @@ const schema = {
     <Footer label="Oskused ja õpiväljundid" />
 
     <div class="pkg-bar" data-pkg-bar hidden>
-      <span data-pkg-bar-count>0 õpiväljundit paketis</span>
+      <span data-pkg-bar-count>0 / ≈5 õpiväljundit</span>
       <a class="btn btn-primary" href="#minu-pakett" data-pkg-open data-track-event="cta_click" data-track-label="pkg_open">Vaata paketti</a>
       <button type="button" class="btn btn-secondary" data-pkg-clear>Tühjenda</button>
     </div>
@@ -214,6 +216,8 @@ const schema = {
       .outcome-progs a { color: var(--teal); font-weight: 700; }
       .outcome-prov { color: var(--muted); font-weight: 400; }
       .syn { color: var(--muted); font-size: 0.95rem; margin-top: 4px; }
+      .syn-hint { margin-top: 2px; font-style: italic; }
+      .syn-hint[hidden] { display: none; }
       .pkg-add { margin-top: 10px; background: #fff; border: 1px solid var(--teal); color: var(--teal); border-radius: 999px; padding: 5px 12px; font-size: 0.82rem; font-weight: 700; cursor: pointer; }
       .pkg-add.is-added { background: var(--teal); color: #fff; }
       .pkg-list { list-style: none; padding: 0; margin: 0 0 16px; display: grid; gap: 8px; }
@@ -235,18 +239,28 @@ const schema = {
       .pm-combo { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
       .pm-note { margin: 12px 0 0; font-size: 0.9rem; color: var(--muted); }
       .pm-good { color: #2f6b2c; font-weight: 700; }
+      .pkg-hint { margin: 8px 0 0; font-size: 0.9rem; font-weight: 600; }
+      .pkg-hint[hidden] { display: none; }
+      .pkg-hint--low { color: var(--muted); }
+      .pkg-hint--good { color: #2f6b2c; }
+      .pkg-hint--large { color: #8a5a2b; }
     </style>
 
     <script>
       import { computeFit, type CoverageRow } from "../../lib/outcome-fit";
+      import { expandQuery } from "../../lib/skill-match";
+      import { skillSynonyms } from "../../data/skillSynonyms";
       const search = document.querySelector("[data-outcome-search]") as HTMLInputElement | null;
       const fieldSel = document.querySelector("[data-outcome-field]") as HTMLSelectElement | null;
       const count = document.querySelector("[data-outcome-count]");
+      const synHint = document.querySelector("[data-outcome-synonyms]") as HTMLElement | null;
       const empty = document.querySelector("[data-outcome-empty]") as HTMLElement | null;
+      const escHint = (s: string) => s.replace(/[&<>"]/g, (c) => (({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }) as Record<string, string>)[c] || c);
       const items = [...document.querySelectorAll<HTMLElement>("[data-outcome]")];
       const track = (n: string, p: Record<string, unknown>) => (window as any).digiteekaartTrack?.(n, p);
       let lastTracked = "";
       let visibleNow = items.length;
+      let lastExpanded = false;
       let searchTimer: ReturnType<typeof setTimeout> | undefined;
 
       // Salvesta alles kirjutamise vaibumisel: oma `outcome_search` (tulemustega, sh 0 = auk)
@@ -255,22 +269,39 @@ const schema = {
         const term = (search?.value || "").trim().toLowerCase();
         if (!term || term.length < 3 || term === lastTracked) return;
         lastTracked = term;
-        track("outcome_search", { term: term.slice(0, 60), results: visibleNow });
+        track("outcome_search", { term: term.slice(0, 60), results: visibleNow, expanded: lastExpanded });
         track("view_search_results", { search_term: term.slice(0, 80), results: visibleNow, source: "oskused" });
       };
 
       const apply = (): void => {
         const term = (search?.value || "").trim().toLowerCase();
         const f = fieldSel?.value || "";
+        // Laienda otsingusõna lähedasteks mõisteteks (sünonüümid/käänded). Tühi sõna
+        // näitab kõike; vaste = data-text sisaldab MÕNDA laiendatud terminit (alamsõne).
+        const { terms, clusters } = term ? expandQuery(term, skillSynonyms) : { terms: [] as string[], clusters: [] as string[] };
+        lastExpanded = clusters.length > 0;
         let visible = 0;
         for (const it of items) {
-          const show = (!term || (it.dataset.text || "").includes(term)) &&
+          const text = it.dataset.text || "";
+          const matchesTerm = !term || terms.some((t) => text.includes(t));
+          const show = matchesTerm &&
             (!f || (it.dataset.fields || "").split("|").includes(f));
           it.hidden = !show;
           if (show) visible += 1;
         }
         visibleNow = visible;
         if (count) count.textContent = `${visible} õpiväljundit`;
+        if (synHint) {
+          // Ainult siis, kui lähedasi mõisteid leiti JA midagi on näha — muidu
+          // satuks vihje vastuollu "ei leitud" tühisõnumiga.
+          if (term && clusters.length && visible > 0) {
+            synHint.innerHTML = `Näitan ka lähedasi: ${clusters.map(escHint).join(", ")}`;
+            synHint.hidden = false;
+          } else {
+            synHint.textContent = "";
+            synHint.hidden = true;
+          }
+        }
         if (empty) empty.hidden = visible !== 0;
         clearTimeout(searchTimer);
         searchTimer = setTimeout(trackSearch, 600);
@@ -290,6 +321,7 @@ const schema = {
       const pkgBarCount = document.querySelector("[data-pkg-bar-count]");
       const pkgSection = document.querySelector("[data-pkg-section]") as HTMLElement | null;
       const pkgCount = document.querySelector("[data-pkg-count]");
+      const pkgHint = document.querySelector("[data-pkg-hint]") as HTMLElement | null;
       const pkgList = document.querySelector("[data-pkg-list]") as HTMLElement | null;
       const pkgForm = document.querySelector("[data-pkg-form]") as HTMLFormElement | null;
       const pkgNote = document.querySelector("[data-pkg-note]");
@@ -311,6 +343,16 @@ const schema = {
 
       const readPkg = (): PkgItem[] => { try { return JSON.parse(localStorage.getItem(PKG_KEY) || "[]"); } catch { return []; } };
       const writePkg = (arr: PkgItem[]): void => { try { localStorage.setItem(PKG_KEY, JSON.stringify(arr)); } catch { /* pakett elab lehe piires */ } };
+
+      // Hea pakett on umbes 5 õpiväljundit (mikrokvalifikatsiooni hea toon). Puhas
+      // abifunktsioon: ainult soovituslik juhis, ei piira ega blokeeri lisamist.
+      const PKG_TARGET = 5;
+      const packageSizeHint = (n: number): { label: string; tone: "low" | "good" | "large" } | null => {
+        if (n <= 0) return null;
+        if (n <= 4) return { label: "Lisa veel — hea pakett on umbes 5 õpiväljundit.", tone: "low" };
+        if (n <= 6) return { label: "✓ Hea suurus — umbes 5 õpiväljundit on mikrokvalifikatsioonis hea toon.", tone: "good" };
+        return { label: "Päris suur pakett. Kõige selgemad paketid on umbes 5 oskust — võid soovi korral teha ka mitu väiksemat.", tone: "large" };
+      };
 
       // Parim üksik programm + parim kombinatsioon (greedy set-cover) valitud õpiväljunditele.
       const renderMatch = (arr: PkgItem[]): void => {
@@ -394,9 +436,15 @@ const schema = {
           b.textContent = inPkg ? "✓ Paketis" : "+ Lisa paketti";
         });
         if (pkgBar) pkgBar.hidden = arr.length === 0;
-        if (pkgBarCount) pkgBarCount.textContent = `${arr.length} õpiväljundit paketis`;
+        if (pkgBarCount) pkgBarCount.textContent = `${arr.length} / ≈${PKG_TARGET} õpiväljundit`;
         if (pkgSection) pkgSection.hidden = arr.length === 0;
         if (pkgCount) pkgCount.textContent = String(arr.length);
+        if (pkgHint) {
+          const hint = packageSizeHint(arr.length);
+          pkgHint.hidden = !hint;
+          pkgHint.textContent = hint ? hint.label : "";
+          pkgHint.className = "pkg-hint" + (hint ? ` pkg-hint--${hint.tone}` : "");
+        }
         if (pkgList) {
           pkgList.innerHTML = "";
           for (const it of arr) {
