@@ -22,6 +22,18 @@ const prices = entries.map((e) => parsePriceEur(e.priceText)).filter((p): p is n
 const minPrice = prices.length ? Math.min(...prices) : null;
 const maxPrice = prices.length ? Math.max(...prices) : null;
 const freeCount = entries.filter((e) => parsePriceEur(e.priceText) === 0).length;
+const ectsVals = entries.map((e) => e.ects).filter((n): n is number => n != null);
+const minEcts = ectsVals.length ? Math.min(...ectsVals) : null;
+const maxEcts = ectsVals.length ? Math.max(...ectsVals) : null;
+const ectsRangeText =
+  minEcts != null && maxEcts != null ? (minEcts === maxEcts ? `${minEcts} EAP` : `${minEcts}–${maxEcts} EAP`) : null;
+const priceRangeText =
+  minPrice != null && maxPrice != null ? (minPrice === maxPrice ? `${minPrice} €` : `${minPrice}–${maxPrice} €`) : null;
+
+// Tasemejaotus selle oskuse/teema all: ülikooli mikrokraad vs koolitusettevõtte
+// mikrokvalifikatsioon — päris andmetest, sama mõistepiir kui valdkonnalehel.
+const degreeCount = entries.filter((e) => e.providerType === "ülikool").length;
+const qualCount = entries.length - degreeCount;
 
 // Valdkonnad, mida see teema katab → lingid valdkonnalehtedele.
 const topicFields = fieldsWithSlug.filter((f) => entries.some((e) => e.field === f.field));
@@ -41,17 +53,28 @@ const outcomes = topicOutcomes(topic).slice(0, 14);
 const SITE = "https://mikrokvalifikatsioon.ee";
 const canonicalPath = `/teema/${topic.slug}/`;
 
-const fullTitle = `${topic.label} mikrokraadid ja õpiväljundid`;
+const fullTitle = `${topic.label} mikrokraad ja mikrokvalifikatsioon`;
 const title = fullTitle.length <= 66 ? fullTitle : `${topic.label} – mikrokraadid`;
-const description = `${entries.length} ${labelLower} mikrokvalifikatsiooni ja mikrokraadi ${providersInTopic.length} koolist — võrdle õpiväljundeid, mahtu ja hinda. Seotud: ${topic.synonyms.join(", ")}.`;
+const description = `${entries.length} ${labelLower} mikrokraadi ja mikrokvalifikatsiooni ${providersInTopic.length} koolist${ectsRangeText ? `, maht ${ectsRangeText}` : ""}${priceRangeText ? `, hind ${priceRangeText}` : ""} — võrdle õpiväljundeid, mahtu ja hinda. Seotud: ${topic.synonyms.join(", ")}.`;
+
+// Extractable intent intro (1–2 lauset) — kuvatud lehel JA WebPage.description'is,
+// nii et AI-assistendid saavad oskuse/teema kokkuvõtte kohe kätte.
+const introText =
+  `${topic.label} (${labelLower}) õppeks on registris ${entries.length} mikrokraadi ja mikrokvalifikatsiooni ${providersInTopic.length} koolist` +
+  `${degreeCount > 0 && qualCount > 0 ? ` — ${degreeCount} ülikooli mikrokraadi ja ${qualCount} koolitusettevõtte mikrokvalifikatsiooni` : ""}` +
+  `${ectsRangeText ? `. Maht ${ectsRangeText}` : ""}${priceRangeText ? `, hind ${priceRangeText}` : ""}.`;
 
 const faq = [
-  { q: `Millised koolid pakuvad ${labelLower} mikrokraadi või mikrokvalifikatsiooni?`,
-    a: `${providersInTopic.length} kooli: ${providersInTopic.join(", ")}. Kõik ${entries.length} programmi on allpool koos õpiväljundite, mahu ja hinnaga.` },
+  { q: `Kust leiab ${labelLower} mikrokraadi?`,
+    a: `${labelLower} mikrokraadi ja mikrokvalifikatsiooni pakub ${providersInTopic.length} kooli: ${providersInTopic.join(", ")}. Kõik ${entries.length} programmi on allpool koos õpiväljundite, mahu ja hinnaga.` },
   { q: `Kui palju maksab ${labelLower} mikrokraad?`,
-    a: minPrice != null && maxPrice != null
-      ? `Selle teema programmid maksavad umbes ${minPrice}–${maxPrice} €${freeCount ? `, ${freeCount} on mõnele sihtrühmale rahastatud` : ""}. Täpne hind on iga programmi juures.`
+    a: priceRangeText
+      ? `Selle teema programmid maksavad umbes ${priceRangeText}${freeCount ? `, ${freeCount} on mõnele sihtrühmale rahastatud` : ""}. Täpne hind on iga programmi juures.`
       : `Hind on iga programmi juures ja kooli lehel.` },
+  ...(degreeCount > 0 && qualCount > 0
+    ? [{ q: `${topic.label}: mikrokraad või mikrokvalifikatsioon?`,
+        a: `Sellel teemal on ${degreeCount} ülikooli mikrokraadi (annavad EAP-sid, sageli tasemeõppes arvestatavad) ja ${qualCount} koolitusettevõtte või rakenduskõrgkooli mikrokvalifikatsiooni (kiirem praktiline oskus). Vali eesmärgi järgi.` }]
+    : []),
   { q: `Kes maksab ${labelLower} õppe eest?`,
     a: `Sageli ei maksa õppija kõike ise: Töötukassa, tööandja koolituseelarve või õppija ise. Vaata lähemalt lehelt „Kes maksab?".` }
 ];
@@ -60,6 +83,16 @@ const schema = {
   "@context": "https://schema.org",
   "@graph": [
     { "@type": "Organization", "@id": `${SITE}/#organization`, name: "Mikrokvalifikatsioon.ee", legalName: "Ettevõtluskeskus OÜ", url: `${SITE}/` },
+    {
+      "@type": "WebPage",
+      "@id": `${SITE}${canonicalPath}#webpage`,
+      url: `${SITE}${canonicalPath}`,
+      name: title,
+      description: introText,
+      inLanguage: "et",
+      isPartOf: { "@id": `${SITE}/#organization` },
+      about: { "@type": "DefinedTerm", name: topic.label, alternateName: topic.synonyms }
+    },
     {
       "@type": "BreadcrumbList",
       itemListElement: [
@@ -105,11 +138,10 @@ const schema = {
           <nav class="crumbs" aria-label="Asukoht">
             <a href="/">Avaleht</a> › <a href="/teema/">Teemad</a> › <span>{topic.label}</span>
           </nav>
-          <span class="eyebrow">Teema</span>
-          <h1>{topic.label}: mikrokraadid ja õpiväljundid</h1>
+          <span class="eyebrow">Oskus / teema</span>
+          <h1>{topic.label}: mikrokraad ja mikrokvalifikatsioon</h1>
           <p>
-            {entries.length} mikrokvalifikatsiooni ja mikrokraadi {providersInTopic.length} koolist teemal „{labelLower}".
-            {minPrice != null && maxPrice != null && <> Hind {minPrice}–{maxPrice} €{freeCount > 0 && <>, {freeCount} sihtrühmale rahastatud</>}.</>}
+            {introText}
             {" "}Võrdle õpiväljundeid, mahtu ja hinda — või <a href={`/oskused/?q=${encodeURIComponent(labelLower)}`} data-track-event="cta_click" data-track-label="topic_to_oskused">otsi õpiväljundi järgi</a>.
           </p>
           {topic.synonyms.length > 0 && (
@@ -118,6 +150,40 @@ const schema = {
           <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
         </div>
       </section>
+
+      {degreeCount > 0 && qualCount > 0 && (
+        <section class="ice">
+          <div class="section-inner narrow">
+            <div class="section-head compact-head">
+              <span class="kicker">Tasemejaotus</span>
+              <h2>{degreeCount} mikrokraadi ja {qualCount} mikrokvalifikatsiooni</h2>
+              <p>
+                „Mikrokraad" on ülikooli lühiõpe, mis annab EAP-sid (sageli tasemeõppes arvestatavad);
+                „mikrokvalifikatsioon" on koolitusettevõtte või rakenduskõrgkooli lühiõpe kiireks praktiliseks oskuseks.
+                Teemal „{labelLower}" jagunevad programmid nii:
+              </p>
+            </div>
+            <div class="level-grid">
+              <div class="level-card">
+                <p class="level-num">{degreeCount}</p>
+                <p class="level-lbl">ülikooli mikrokraadi</p>
+                <p class="level-links">
+                  <a href="/mikrokraadi-valimine/" data-track-event="cta_click" data-track-label="topic_to_degree_valimine">Kuidas mikrokraadi valida →</a>
+                  <a href="/mikrokraadide-vordlus/" data-track-event="cta_click" data-track-label="topic_to_degree_vordlus">Mikrokraadide võrdlus →</a>
+                </p>
+              </div>
+              <div class="level-card">
+                <p class="level-num">{qualCount}</p>
+                <p class="level-lbl">mikrokvalifikatsiooni</p>
+                <p class="level-links">
+                  <a href="/mikrokvalifikatsiooni-valimine/" data-track-event="cta_click" data-track-label="topic_to_qual_valimine">Kuidas mikrokvalifikatsiooni valida →</a>
+                  <a href="/mikrokvalifikatsioonide-vordlus/" data-track-event="cta_click" data-track-label="topic_to_qual_vordlus">Mikrokvalifikatsioonide võrdlus →</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section class="white">
         <div class="section-inner">
@@ -240,6 +306,19 @@ const schema = {
       .crumbs a { color: #5a6b80; }
       .crumbs span { color: #212121; }
       .syn { color: var(--muted); font-size: 0.92rem; margin-top: 4px; }
+      .level-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+      .level-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+      .level-num { margin: 0; font-size: 2rem; font-weight: 800; color: var(--teal); line-height: 1; }
+      .level-lbl { margin: 4px 0 10px; font-weight: 700; color: #212121; }
+      .level-links { margin: 0; display: grid; gap: 4px; font-size: 0.92rem; }
+      .level-links a { color: var(--teal); font-weight: 700; }
+      .faq { display: grid; gap: 8px; }
+      .faq details { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 4px 16px; }
+      .faq summary { cursor: pointer; font-weight: 700; color: #212121; padding: 12px 0; list-style: none; }
+      .faq summary::-webkit-details-marker { display: none; }
+      .faq summary::before { content: "+ "; color: var(--teal); font-weight: 800; }
+      .faq details[open] summary::before { content: "– "; }
+      .faq details p { margin: 0 0 14px; color: #5f6569; }
       .block-title { margin: 0 0 16px; }
       .prog-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
       .prog-card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
