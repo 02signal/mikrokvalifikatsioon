@@ -1,0 +1,196 @@
+---
+import Seo from "../../components/Seo.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import Nav from "../../components/Nav.astro";
+import { questions, questionBySlug } from "../../data/questions";
+import { catalogUpdatedAt } from "../../data/catalog";
+
+const SITE = "https://mikrokvalifikatsioon.ee";
+
+export function getStaticPaths() {
+  return questions.map((q) => ({ params: { slug: q.slug } }));
+}
+
+const { slug } = Astro.params;
+const q = questionBySlug.get(slug as string);
+if (!q) {
+  return Astro.redirect("/vastused/", 404);
+}
+
+const path = `/vastused/${q.slug}/`;
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
+
+// Lühivastus on 1–3 lauset; lõpeta kindlalt punktiga JSON-LD jaoks.
+const acceptedAnswerText = q.shortAnswer;
+
+// JSON-LD: QAPage (üks selge küsimus+vastus) + WebPage + BreadcrumbList.
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE}/#organization`,
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: `${SITE}/`
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${SITE}${path}#webpage`,
+      url: `${SITE}${path}`,
+      name: q.question,
+      description: acceptedAnswerText,
+      inLanguage: "et",
+      isPartOf: { "@id": `${SITE}/#organization` },
+      dateModified: catalogUpdatedAt,
+      mainEntityOfPage: `${SITE}${path}`
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Vastused", item: `${SITE}/vastused/` },
+        { "@type": "ListItem", position: 3, name: q.question, item: `${SITE}${path}` }
+      ]
+    },
+    {
+      "@type": "QAPage",
+      mainEntity: {
+        "@type": "Question",
+        name: q.question,
+        text: q.question,
+        answerCount: 1,
+        inLanguage: "et",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: acceptedAnswerText,
+          inLanguage: "et",
+          url: `${SITE}${path}`
+        }
+      }
+    }
+  ]
+};
+
+// Lehekülgede vaheline navigatsioon (eelmine/järgmine küsimus).
+const idx = questions.findIndex((x) => x.slug === q.slug);
+const prev = idx > 0 ? questions[idx - 1] : null;
+const next = idx < questions.length - 1 ? questions[idx + 1] : null;
+
+// SEO meta: pealkiri = küsimus + bränd; kirjeldus = lühivastus (lõika ~155 märgini).
+const metaDescription =
+  acceptedAnswerText.length > 155 ? `${acceptedAnswerText.slice(0, 152).trimEnd()}…` : acceptedAnswerText;
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title={`${q.question} | Mikrokvalifikatsioon.ee`}
+      description={metaDescription}
+      canonicalPath={path}
+      ogType="article"
+      ogTitle={q.question}
+      ogDescription={metaDescription}
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner narrow">
+          <p class="vastused-crumb">
+            <a href="/vastused/">Vastused</a> ›
+          </p>
+          <h1>{q.question}</h1>
+          <!-- Väljavõetav lühivastus ENNE muud teksti — AI-mootorid ja Google AI Overviews saavad seda tsiteerida -->
+          <p class="vastused-short"><strong>{q.shortAnswer}</strong></p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          {q.body.map((para) => (
+            <p class="vastused-body">{para}</p>
+          ))}
+          <p class="report-date">
+            Andmed pärinevad koolide avalikelt lehtedelt ja Eesti Hariduse Infosüsteemist (EHIS);
+            arvud on arvutatud registri andmetest, uuendatud {updatedAtText}. Lõplik ja siduv info on
+            alati kooli enda lehel. Metoodika: <a href="/andmed/">Andmed</a>.
+          </p>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Seotud</span>
+            <h2>Vaata edasi.</h2>
+          </div>
+          <ul class="check">
+            {q.relatedLinks.map((link) => (
+              <li><a href={link.href}>{link.label}</a></li>
+            ))}
+          </ul>
+          {(prev || next) && (
+            <p class="vastused-nav">
+              {prev && <a href={`/vastused/${prev.slug}/`}>‹ {prev.question}</a>}
+              {prev && next && <span class="vastused-nav-sep"> · </span>}
+              {next && <a href={`/vastused/${next.slug}/`}>{next.question} ›</a>}
+            </p>
+          )}
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Leia endale sobiv programm või vaata kõiki vastuseid.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="vastused_slug_kataloog">Ava kataloog</a>
+              <a class="btn btn-secondary" href="/vastused/" data-track-event="cta_click" data-track-label="vastused_slug_hub">Kõik vastused</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="vastused_slug_email">info@mikrokvalifikatsioon.ee</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="vastused_slug_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label={q.question} />
+
+    <style>
+      .vastused-crumb {
+        margin: 0 0 8px;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+      .vastused-crumb a { color: var(--teal); font-weight: 700; }
+      .vastused-short {
+        font-size: 1.18rem;
+        line-height: 1.55;
+        color: var(--ink);
+        margin-top: 14px;
+      }
+      .vastused-body {
+        color: var(--muted);
+        line-height: 1.65;
+        margin-bottom: 14px;
+      }
+      .vastused-nav {
+        margin-top: 18px;
+        font-size: 0.95rem;
+      }
+      .vastused-nav a { color: var(--teal); font-weight: 700; }
+      .vastused-nav-sep { color: var(--muted); }
+    </style>
+  </body>
+</html>
