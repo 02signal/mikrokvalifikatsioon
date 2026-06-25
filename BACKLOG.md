@@ -28,6 +28,47 @@
   + a privacy-page section (owner-gated). Apex stays static; embargo intact.
 - **Growth program:** `docs/mkval-growth-plan.md` — public moat (SEO/GEO, always cutting-edge) vs account-gated personalization, the AMOS demand×supply speed loop (build/publish faster than universities), instrumentation per layer, sequenced build roadmap (Phase A public-first → B retention → C accounts → D ecosystem), and the marketing/value-prop plan per persona.
 
+## Active workstream — Skill-match core loop (the account value)
+
+> **Status: PLANNED, starting on the mkval-half (CL-1/CL-2 first).** Owner direction
+> 2026-06-25. This is the registered-user value, stated by the owner as the right *order*:
+> get the **core loop flawless** before any virality. The account's worth is not (yet)
+> "invite others" — it is **"see mõistab mu sõnu ja jälgib mu eest"** (it understands how I
+> phrase things, and watches for me). Invitation / "küsi koos" is a downstream consequence
+> (CL-6 / growth Phase 2), not the start.
+
+**The loop the owner described (in order):**
+1. Login works **veatult ja arusaadavalt** → lands on "see huvitab sind", not an empty dashboard.
+2. Skill phrased **omal moel → sarnased õpiväljundid** (proximity, not the literal word).
+3. **~5 õpiväljundit → pakett** (the microcredential "good form" norm; sometimes more, not much).
+4. **Mitu erinevat "programmi"** (several saved target profiles) per person.
+5. **We track continuously and notify when the match changes.**
+
+**Freeze split (CLAUDE.md):** the matching engine, saved-package store, match-diff and notify
+live in **AMOS** (brain); mkval is a **thin face** — synonym search UI, builder frame,
+multi-package UI, token-gated passthrough. No scoring/PII storage in this repo. Warehouse stays
+PII-free (refs/hashes; synonym map carries no PII). All notify wording **neutral** ("su paketile
+lisandus lähedasem programm / parem kate") — never "EVK ehitab"; that same neutral message is
+also the launch-cohort email when the embargo lifts. Magic-link auth, no PII in any URL.
+
+| PBI | Where | What | Depends |
+|---|---|---|---|
+| **CL-1** Synonym/proximity skill search | mkval (logged-out, PII-free) | **The heart.** `/oskused/` search is today a literal substring (`text.includes(term)`) — "graafikud Excelis" finds nothing though "andmete visualiseerimine" exists. Add a curated et plain-language **synonym/alias map** (`src/data/skillSynonyms.ts`, extends the `topics.ts` idea); the query expands through it before matching, still client-side. **Embeddings are explicitly NOT step 1.** | — (do now) |
+| **CL-2** Builder ~5-outcome target frame | mkval (logged-out) | Encode the norm: builder **suggests ~5** as the target, shows progress ("3/≈5"), softly notes when a package grows large — **never a hard cap**. Makes each package a clean, comparable demand atom (≈ a buildable unit). | — (with CL-1) |
+| **CL-3** Continuous match-diff + change notification | **AMOS** | Today match is a one-shot client compute. Add a recurring job: on catalog change (new/changed programme) re-run `amos.outcome.fit/v1` over each saved package; if coverage improves or a closer programme appears, queue **exactly one** neutral, consented notification. The retention engine + the launch-cohort channel. | CL-4 store + consent ledger (live) |
+| **CL-4** Multiple named saved packages | mkval face + **AMOS** store | Today one `mkval:pakett`. Allow several **named** packages (each ~5 outcomes), synced on login via the lossless union-merge in `docs/amos-account-layer-plan.md`. AMOS `amos_learner_package` holds N packages/person (outcome refs, non-PII). | account spine |
+| **CL-5** Flawless login → "Sind huvitab" landing | konto face (cross-repo, on the spine) | Magic-link login end-to-end (no PII in URL); first view = plain-Estonian "Sind huvitab" (your packages + current best match + any pending notice), **not** an empty dashboard. Logged-out site 100% functional; apex stays static. Owner-gated publish (privacy section + embargo check). | CL-3 + CL-4 + shared spine |
+| **CL-6** Invitation / "küsi koos" (Phase 2) | mkval face + AMOS | **Later — explicitly not started now.** Once a person has a package they care about and the match actually changes, the share / collective-demand mechanic (invite others who want the same combo → faster build + shared launch cohort) gains real pull. The identity/consent spine (AMOS #1169) can carry referral attribution; the user-facing referral *value* is this slice. | CL-1..CL-5 |
+
+**Sequence:** **CL-1 + CL-2 now** (mkval, logged-out, PII-free, improves the public moat
+immediately) → **CL-4** then **CL-3** (AMOS store, then the diff that needs it) → **CL-5** (konto
+face, owner-gated publish) → **CL-6** later. **GA4:** reuse `outcome_search`/`view_search_results`
+(now synonym-expanded), `outcome_add`/`package_view`/`package_match` (`combo_size>1` = build-next),
+the `lead_capture/v1` account kinds (`package_saved`/`reminder_subscribed`/`combo_waitlist`); add
+`match_changed` when CL-3's notice renders. **Verify each slice:** logged-out fully functional,
+apex static, build green, no own-programme implication, warehouse PII-free by construction.
+Cross-refs: `docs/amos-account-layer-plan.md`, `docs/mkval-growth-plan.md` (Phase C).
+
 ## Done
 
 - 2026-06-24: **SEO/GEO structured-data + OG hardening (#17)** — from a team audit of all 24 page types vs Google rich-results + schema.org. Fixed a **sitewide Course rich-result bug** (`toCourse()` emitted an empty `CourseInstance` when format+startDate were both missing → Google flags incomplete → can disqualify the whole Course; now always non-empty from real data) + sharpened typing (provider `EducationalOrganization`, credentialCategory `DefinedTerm`, `teaches`←outcomes, `Offer.availabilityEnds`←deadline); nested `toCourse()` into the 6 list pages that emitted bare `name+url` ListItems (Course Carousel eligibility). Fixed the **broken `/valdkond/` OG** (field slugs were unregistered → 404 og:image) via a `fieldPages` map; gave each pSEO X-vs-Y page a **unique** card via `comparisonPages`. Fixed the EN homepage's **invalid cross-language BreadcrumbList** + added the missing WebSite `SearchAction`. New shared `src/data/organizationSchema.ts` (EducationalOrganization + logo). Build green (427 pages), verified in `dist`; no invented data.

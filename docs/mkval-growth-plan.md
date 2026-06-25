@@ -116,6 +116,13 @@ trainings (per the curriculum architecture).
    GDPR-safe in AMOS restricted zone; double-opt-in. Capture identified demand.
 9. **Personalized recommendations** from history (extends package match).
 
+> **Concrete sequencing → BACKLOG.md "Active workstream — Skill-match core loop".** Owner
+> direction 2026-06-25: the core loop comes before virality. CL-1 synonym/proximity skill
+> search + CL-2 ~5-outcome builder frame (mkval, logged-out) → CL-4 multi-package + CL-3
+> continuous match-diff & change notification (AMOS) → CL-5 flawless login + "Sind huvitab"
+> landing → CL-6 invitation/"küsi koos" (Phase 2). Account value = "see mõistab mu sõnu ja
+> jälgib mu eest", not "invite others" — invitation is the downstream consequence.
+
 **Phase D — ecosystem / leader (AMOS feed + history):**
 10. **Trends over time** (price/growth) — needs AMOS history. **Public dataset/API +
     attribution.** **Provider self-service portal.** **AMOS v2 feed live** (instances,
