@@ -12,6 +12,41 @@ Today: catalog = hand-curated JSON in this repo (`src/data/catalog/*.json`), reb
 manually. Target: AMOS owns the data and automation; this site consumes a feed and
 rebuilds on change.
 
+## Catalog source of truth (authoritative committed snapshot)
+
+The catalog content lands via **repo PRs** (e.g. the EHIS facts override #25), so the
+**committed snapshot `src/data/catalog/*.json` is the AUTHORITATIVE source of truth**.
+The site builds from it by default.
+
+The AMOS-published feed (`PUBLIC_CATALOG_FEED_URL`) is **opt-in only**. It is used for a
+build **only when ALL** of the following hold:
+
+1. `PUBLIC_CATALOG_FEED_URL` is set, **and**
+2. `PUBLIC_CATALOG_FEED_TRUSTED=1` is set (explicit opt-in flag), **and**
+3. the fetched feed parses and is the expected shape (`programs[]` non-empty, or a bare
+   array), **and**
+4. its active-entry count is **≥ the committed snapshot's active count** — a feed that
+   would **drop entries is rejected** (non-regression guard).
+
+If any of those fail (flag absent, validation/regression fails, fetch errors), the build
+**falls back to the committed snapshot** and logs a clear `console.warn` saying which
+source it used and why. The Vercel env var **`PUBLIC_CATALOG_FEED_URL` can stay set** — it
+is now **harmless**: ignored unless `PUBLIC_CATALOG_FEED_TRUSTED=1` is also set.
+
+**Why:** a stale AMOS feed once shipped older programme *names*, which broke EHIS
+name-matching (122 matches instead of 148) and shrank the hero "X programmi" count. With
+the committed snapshot authoritative, production self-corrects to the right number with no
+Vercel change. When the AMOS feed is fixed and known-good, set
+`PUBLIC_CATALOG_FEED_TRUSTED=1` to re-enable it (the non-regression guard still protects).
+
+**Floor gate:** `scripts/catalog-floor.test.mjs` runs as the first step of `npm run build`
+(`node --test scripts/*.test.mjs`). Using the SAME modules the site renders from, it
+recomputes the committed `count` + EHIS-`matches` from the JSON and asserts the built
+`catalog` never regresses below them (plus an absolute backstop: count ≥ 150, matches
+≥ 140). It is self-adjusting (no hardcoded 148/169). Any future change — a bad feed, or a
+data edit that breaks EHIS matching — **fails the build before deploy**, so the live site
+never silently degrades.
+
 ## 0. Delivery goal
 
 Make the data pipeline production-ready without turning this repository into the
@@ -140,9 +175,11 @@ Feed validation gate:
 ## 4. Consumption by this site
 
 Keep the site fully static (fast, SEO-friendly) but auto-refreshing:
-- **Build-time fetch:** `src/data/catalog/index.ts` fetches the feed when
-  `PUBLIC_CATALOG_FEED_URL` is set; otherwise falls back to the committed JSON snapshot
-  (resilience if the feed is down). Astro then generates all pages from it as today.
+- **Build-time source selection:** `src/data/catalog/index.ts` builds from the
+  **committed snapshot by default** (authoritative). It uses the feed only when
+  `PUBLIC_CATALOG_FEED_URL` **and** `PUBLIC_CATALOG_FEED_TRUSTED=1` are both set **and** the
+  feed validates and does not drop entries — see *Catalog source of truth* above. Astro
+  then generates all pages from the chosen source as today.
 - **Auto-rebuild on change:** AMOS n8n calls a **Vercel Deploy Hook** after a data update
   → the static site rebuilds with fresh data within minutes. (Plus a daily safety rebuild.)
 - Result: AMOS edits data → site updates itself; no manual repo edits.
