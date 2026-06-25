@@ -140,8 +140,16 @@ const schema = {
           <div class="section-head compact-head">
             <span class="kicker">Minu pakett</span>
             <h2>Sinu õpiväljundite pakett (<span data-pkg-count>0</span>)</h2>
+            <div class="pkg-switch" data-pkg-switch-row hidden>
+              <label class="pkg-switch-label" for="pkgSwitch">Pakett:</label>
+              <select id="pkgSwitch" class="pkg-switch-sel" data-pkg-switch aria-label="Vali pakett"></select>
+              <button type="button" class="pkg-switch-btn" data-pkg-new title="Loo uus pakett">➕ Uus pakett</button>
+              <button type="button" class="pkg-switch-btn" data-pkg-rename title="Muuda paketi nime">Nimeta ümber</button>
+              <button type="button" class="pkg-switch-btn pkg-switch-del" data-pkg-delete title="Kustuta see pakett">Kustuta pakett</button>
+            </div>
+            <p class="pkg-switch-help" data-pkg-switch-help hidden>Saad hoida mitut erinevat paketti — nt eri töökohtade või inimeste jaoks. Vali ülalt, millist praegu täidad.</p>
             <p>
-              Korjasid kokku oskused, mida tahad õppida. Hoiame paketi sinu brauseris ja näitame
+              Korjasid kokku oskused, mida tahad õppida. Hoiame paketid sinu brauseris ja näitame
               allpool, milline <strong>programm või kombinatsioon</strong> su valitud oskustele kõige
               lähemal on. Jäta e-mail, siis teavitame, kui veelgi sobivam lahendus lisandub.
             </p>
@@ -157,13 +165,14 @@ const schema = {
               </div>
             </div>
             <div class="inline-actions">
-              <a class="btn btn-primary" href="/konto/" data-pkg-account data-track-event="cta_click" data-track-label="pkg_to_account">Salvesta pakett ja loo konto</a>
+              <a class="btn btn-primary" href="/konto/" data-pkg-account data-track-event="cta_click" data-track-label="pkg_to_account">Salvesta see pakett ja loo konto</a>
               <button class="btn btn-secondary" type="submit">Teavita mind sobivast</button>
-              <button type="button" class="btn btn-secondary" data-pkg-clear>Tühjenda pakett</button>
+              <button type="button" class="btn btn-secondary" data-pkg-clear>Tühjenda see pakett</button>
             </div>
             <p class="form-note" data-pkg-account-help>
-              Loo konto, siis hoiame su paketi alles ja anname märku, kui sobiv programm,
-              kombinatsioon või tähtaeg lisandub. Saad konto igal ajal kustutada.
+              Loo konto, siis hoiame su valitud paketi alles ja anname märku, kui sobiv programm,
+              kombinatsioon või tähtaeg lisandub. Mitme paketi sünkroonimine kontole on tulekul.
+              Saad konto igal ajal kustutada.
             </p>
             <p class="form-note" data-pkg-note>
               Kogume ainult sinu valitud õpiväljundid ja e-maili, et saata teade sobivast programmist või kombinatsioonist.
@@ -199,7 +208,7 @@ const schema = {
     <div class="pkg-bar" data-pkg-bar hidden>
       <span data-pkg-bar-count>0 / ≈5 õpiväljundit</span>
       <a class="btn btn-primary" href="#minu-pakett" data-pkg-open data-track-event="cta_click" data-track-label="pkg_open">Vaata paketti</a>
-      <button type="button" class="btn btn-secondary" data-pkg-clear>Tühjenda</button>
+      <button type="button" class="btn btn-secondary" data-pkg-clear>Tühjenda see pakett</button>
     </div>
 
     <script type="application/json" id="pkg-data" is:inline set:html={matchJson} />
@@ -244,12 +253,28 @@ const schema = {
       .pkg-hint--low { color: var(--muted); }
       .pkg-hint--good { color: #2f6b2c; }
       .pkg-hint--large { color: #8a5a2b; }
+      .pkg-switch { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 4px 0 6px; }
+      .pkg-switch[hidden] { display: none; }
+      .pkg-switch-label { font-size: 0.9rem; font-weight: 700; color: #212121; }
+      .pkg-switch-sel { font-size: 0.92rem; font-weight: 600; color: #212121; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; max-width: 16rem; }
+      .pkg-switch-btn { background: #fff; border: 1px solid var(--line); color: #212121; border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+      .pkg-switch-btn:hover { border-color: var(--teal); color: var(--teal); }
+      .pkg-switch-del:hover { border-color: #e2574c; color: #e2574c; }
+      .pkg-switch-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+      .pkg-switch-btn:disabled:hover { border-color: var(--line); color: #212121; }
+      .pkg-switch-help { margin: 0 0 8px; font-size: 0.88rem; color: var(--muted); }
+      .pkg-switch-help[hidden] { display: none; }
     </style>
 
     <script>
       import { computeFit, type CoverageRow } from "../../lib/outcome-fit";
       import { expandQuery } from "../../lib/skill-match";
       import { skillSynonyms } from "../../data/skillSynonyms";
+      import {
+        emptyState, migrateLegacy, activePackage, ensureActive,
+        createPackage, renamePackage, deletePackage, setActive,
+        addItem, removeItem, type PkgItem, type PackagesState,
+      } from "../../lib/packages";
       const search = document.querySelector("[data-outcome-search]") as HTMLInputElement | null;
       const fieldSel = document.querySelector("[data-outcome-field]") as HTMLSelectElement | null;
       const count = document.querySelector("[data-outcome-count]");
@@ -315,8 +340,8 @@ const schema = {
       if (q && search) { search.value = q; apply(); }
 
       // ---- Õpiväljundite pakett (kogu oskused → jäta e-mail; match tuleb järgmisena) ----
-      type PkgItem = { key: string; text: string; progs?: string[] };
-      const PKG_KEY = "mkval:pakett";
+      const PKG_KEY = "mkval:pakett";          // legacy: AKTIIVSE paketi kirjed (taasloetavus)
+      const PKGS_KEY = "mkval:paketid";        // tõeallikas: kogu PackagesState
       const pkgBar = document.querySelector("[data-pkg-bar]") as HTMLElement | null;
       const pkgBarCount = document.querySelector("[data-pkg-bar-count]");
       const pkgSection = document.querySelector("[data-pkg-section]") as HTMLElement | null;
@@ -327,6 +352,13 @@ const schema = {
       const pkgNote = document.querySelector("[data-pkg-note]");
       const addBtns = [...document.querySelectorAll<HTMLButtonElement>("[data-pkg-add]")];
       const matchBox = document.querySelector("[data-pkg-match]") as HTMLElement | null;
+      // Mitme-paketi vahetaja (paneeli päises)
+      const pkgSwitchRow = document.querySelector("[data-pkg-switch-row]") as HTMLElement | null;
+      const pkgSwitchHelp = document.querySelector("[data-pkg-switch-help]") as HTMLElement | null;
+      const pkgSwitch = document.querySelector("[data-pkg-switch]") as HTMLSelectElement | null;
+      const pkgNewBtn = document.querySelector("[data-pkg-new]") as HTMLButtonElement | null;
+      const pkgRenameBtn = document.querySelector("[data-pkg-rename]") as HTMLButtonElement | null;
+      const pkgDeleteBtn = document.querySelector("[data-pkg-delete]") as HTMLButtonElement | null;
       const pkgDataEl = document.getElementById("pkg-data");
       let PROG: Record<string, { name: string; provider: string; ects: number | null; price: string | null }> = {};
       try { if (pkgDataEl) PROG = JSON.parse(pkgDataEl.textContent || "{}"); } catch { PROG = {}; }
@@ -341,8 +373,50 @@ const schema = {
       };
       let lastMatchSig = "";
 
-      const readPkg = (): PkgItem[] => { try { return JSON.parse(localStorage.getItem(PKG_KEY) || "[]"); } catch { return []; } };
-      const writePkg = (arr: PkgItem[]): void => { try { localStorage.setItem(PKG_KEY, JSON.stringify(arr)); } catch { /* pakett elab lehe piires */ } };
+      // Brauseripoolne id + ajatempel; seeme mooduli puhastele fn-idele (nimi kaasas).
+      const newId = (): string => {
+        try { return crypto.randomUUID(); } catch { return "p_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+      };
+      const seed = (name: string) => ({ id: newId(), name, createdAt: Date.now() });
+      // Järgmine vaikenimi: suurim olemasolev "Minu pakett N" + 1 (väldib korduvaid
+      // nimesid pärast kustutamist). Varuvariant: pakettide arv + 1.
+      const nextName = (): string => {
+        let n = 0;
+        for (const p of state.packages) { const m = /(\d+)\s*$/.exec(p.name); if (m) n = Math.max(n, Number(m[1])); }
+        return `Minu pakett ${Math.max(n, state.packages.length) + 1}`;
+      };
+
+      // Laadi tõeallikas; kui puudub, migreeri legacy üksik-pakett (mkval:pakett).
+      // - olemasolev MITTETÜHI olek võidab (ka v>2 — ei klobberda uuemat formaati);
+      // - tühi olek + legacy kirjed → migreeri legacy (existing=null, et päriselt migreeriks);
+      // - muidu tühi olek.
+      const loadState = (): PackagesState => {
+        let stored: PackagesState | null = null;
+        try {
+          const raw = localStorage.getItem(PKGS_KEY);
+          if (raw) {
+            const s = JSON.parse(raw);
+            if (s && typeof s.v === "number" && s.v >= 2 && Array.isArray(s.packages)) stored = s as PackagesState;
+          }
+        } catch { stored = null; }
+        let legacy: PkgItem[] = [];
+        try { legacy = JSON.parse(localStorage.getItem(PKG_KEY) || "[]"); } catch { legacy = []; }
+        if (stored && stored.packages.length) return stored;
+        if (Array.isArray(legacy) && legacy.length) return migrateLegacy(legacy, null, seed("Minu pakett"));
+        return stored ?? emptyState();
+      };
+
+      let state: PackagesState = loadState();
+
+      // Kirjuta tõeallikas + peegelda AKTIIVSE paketi kirjed legacy võtmesse,
+      // et olemasolevad lugejad (sh /konto/) töötaksid edasi.
+      const persist = (): void => {
+        try { localStorage.setItem(PKGS_KEY, JSON.stringify(state)); } catch { /* paketid elavad lehe piires */ }
+        try { localStorage.setItem(PKG_KEY, JSON.stringify(activePackage(state)?.items ?? [])); } catch { /* sama */ }
+      };
+
+      // Aktiivse paketi kirjed (asendab vana readPkg()).
+      const items_ = (): PkgItem[] => activePackage(state)?.items ?? [];
 
       // Hea pakett on umbes 5 õpiväljundit (mikrokvalifikatsiooni hea toon). Puhas
       // abifunktsioon: ainult soovituslik juhis, ei piira ega blokeeri lisamist.
@@ -423,12 +497,30 @@ const schema = {
         try { return !!localStorage.getItem("mkval:account"); } catch { return false; }
       };
       if (accountBtn && hasAccountSession()) {
-        accountBtn.textContent = "Salvesta minu kontole";
+        accountBtn.textContent = "Salvesta see pakett kontole";
       }
+
+      // Vahetaja: täida <select> pakettide nimedega, aktiivne valitud. Nimed jäävad
+      // AINULT siia/localStorage'i — neid ei saadeta kunagi GA4-le ega /api/subscribe'ile.
+      const renderSwitch = (): void => {
+        if (pkgSwitchRow) pkgSwitchRow.hidden = state.packages.length === 0;
+        if (pkgSwitchHelp) pkgSwitchHelp.hidden = state.packages.length < 2;
+        if (pkgDeleteBtn) pkgDeleteBtn.disabled = state.packages.length <= 1;
+        if (!pkgSwitch) return;
+        pkgSwitch.innerHTML = "";
+        for (const p of state.packages) {
+          const opt = document.createElement("option");
+          opt.value = p.id;
+          opt.textContent = `${p.name} (${p.items.length})`;
+          if (p.id === state.activeId) opt.selected = true;
+          pkgSwitch.appendChild(opt);
+        }
+      };
 
       let pkgViewed = false;
       const renderPkg = (): void => {
-        const arr = readPkg();
+        renderSwitch();
+        const arr = items_();
         const keys = new Set(arr.map((i) => i.key));
         addBtns.forEach((b) => {
           const inPkg = keys.has(b.dataset.key || "");
@@ -463,16 +555,19 @@ const schema = {
           }
         }
         renderMatch(arr);
-        if (arr.length && !pkgViewed) { pkgViewed = true; track("package_view", { count: arr.length }); }
+        if (arr.length && !pkgViewed) { pkgViewed = true; track("package_view", { count: arr.length, package_count: state.packages.length }); }
       };
 
       addBtns.forEach((b) => b.addEventListener("click", () => {
         const key = b.dataset.key || "";
         const text = b.dataset.text || "";
         if (!key) return;
-        let arr = readPkg();
-        if (arr.some((i) => i.key === key)) {
-          arr = arr.filter((i) => i.key !== key);
+        // Värske külastaja: esimene "Lisa paketti" loob vaikepaketi ("Minu pakett 1").
+        // ensureActive on idempotentne — olemasoleva aktiivse korral ei muuda midagi.
+        state = ensureActive(state, seed(nextName()));
+        const cur = items_();
+        if (cur.some((i) => i.key === key)) {
+          state = removeItem(state, key);
         } else {
           const li = b.closest("[data-outcome]");
           const progs = li
@@ -480,10 +575,10 @@ const schema = {
                 .map((a) => (a.getAttribute("href") || "").split("/").filter(Boolean).pop() || "")
                 .filter(Boolean)
             : [];
-          arr.push({ key, text: text.slice(0, 200), progs });
-          track("outcome_add", { outcome: text.slice(0, 80), package_size: arr.length });
+          state = addItem(state, { key, text: text.slice(0, 200), progs });
+          track("outcome_add", { outcome: text.slice(0, 80), package_size: items_().length, package_count: state.packages.length });
         }
-        writePkg(arr);
+        persist();
         renderPkg();
       }));
 
@@ -491,21 +586,66 @@ const schema = {
         const t = e.target as HTMLElement;
         const k = t.getAttribute?.("data-pkg-remove");
         if (!k) return;
-        writePkg(readPkg().filter((i) => i.key !== k));
+        state = removeItem(state, k);
+        persist();
         renderPkg();
       });
 
+      // "Tühjenda see pakett" — tühjendab AINULT aktiivse paketi kirjed, mitte teisi pakette.
       [...document.querySelectorAll("[data-pkg-clear]")].forEach((b) =>
-        b.addEventListener("click", () => { writePkg([]); renderPkg(); })
+        b.addEventListener("click", () => {
+          for (const it of [...items_()]) state = removeItem(state, it.key);
+          persist();
+          renderPkg();
+        })
       );
+
+      // ---- Mitme paketi haldus: vali / loo / nimeta / kustuta ----
+      pkgSwitch?.addEventListener("change", () => {
+        state = setActive(state, pkgSwitch.value);
+        persist();
+        renderPkg();
+        track("package_switch", { package_count: state.packages.length });
+      });
+
+      pkgNewBtn?.addEventListener("click", () => {
+        state = createPackage(state, seed(nextName()));
+        persist();
+        renderPkg();
+        track("package_create", { package_count: state.packages.length });
+      });
+
+      pkgRenameBtn?.addEventListener("click", () => {
+        const active = activePackage(state);
+        if (!active) return;
+        const name = window.prompt("Anna sellele paketile nimi (nt „Müügiinimese pakett“):", active.name);
+        if (name == null) return;            // tühistati
+        const trimmed = name.trim().slice(0, 60);
+        if (!trimmed) return;                // tühi nimi → jäta vanaks
+        state = renamePackage(state, active.id, trimmed);
+        persist();
+        renderPkg();
+        // NB: nime EI saadeta kunagi analüütikasse — jääb ainult localStorage'i.
+      });
+
+      pkgDeleteBtn?.addEventListener("click", () => {
+        if (state.packages.length <= 1) return; // viimast paketti ei kustuta (nupp ka disabled)
+        const active = activePackage(state);
+        if (!active) return;
+        if (!window.confirm(`Kustutan paketi „${active.name}“? Selle valitud oskused kaovad.`)) return;
+        state = deletePackage(state, active.id);
+        persist();
+        renderPkg();
+        track("package_delete", { package_count: state.packages.length });
+      });
 
       pkgForm?.addEventListener("submit", async (e) => {
         e.preventDefault();
         if (!pkgForm.reportValidity()) return;
-        const arr = readPkg();
+        const arr = items_();
         if (!arr.length) { if (pkgNote) pkgNote.textContent = "Lisa esmalt mõni õpiväljund paketti."; return; }
         const email = String(new FormData(pkgForm).get("email") || "");
-        track("lead_form_submit_attempt", { form_name: "outcome_package", count: arr.length });
+        track("lead_form_submit_attempt", { form_name: "outcome_package", count: arr.length, package_count: state.packages.length });
         // Suuname AMOS-i sissevoolu (api/subscribe → double-opt-in). Kuni backend pole
         // main'is / env seadmata, vastab see 404/503 → mailto varuvariant (leadi ei kaota).
         let sent = false;
@@ -521,7 +661,7 @@ const schema = {
           const body = encodeURIComponent("Soovitud õpiväljundid:\n- " + arr.map((i) => i.text).join("\n- ") + "\n\nE-mail: " + email);
           window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Õpiväljundite pakett")}&body=${body}`;
         }
-        track("lead_form_submit", { form_name: "outcome_package", count: arr.length, delivery: sent ? "webhook" : "mailto" });
+        track("lead_form_submit", { form_name: "outcome_package", count: arr.length, delivery: sent ? "webhook" : "mailto", package_count: state.packages.length });
         if (pkgNote) pkgNote.textContent = sent
           ? "Aitäh! Teavitame sind, kui sobiv programm või kombinatsioon lisandub."
           : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
