@@ -1,5 +1,6 @@
 ---
 import Seo from "../../components/Seo.astro";
+import CategoryMark from "../../components/CategoryMark.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
@@ -138,6 +139,7 @@ const schema = {
           <nav class="crumbs" aria-label="Asukoht">
             <a href="/">Avaleht</a> › <a href="/teema/">Teemad</a> › <span>{topic.label}</span>
           </nav>
+          <CategoryMark kind="topic" />
           <span class="eyebrow">Oskus / teema</span>
           <h1>{topic.label}: mikrokraad ja mikrokvalifikatsioon</h1>
           <p>

@@ -1,5 +1,6 @@
 ---
 import Seo from "../../components/Seo.astro";
+import CategoryMark from "../../components/CategoryMark.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
@@ -140,6 +141,7 @@ const schema = {
           <nav class="crumbs" aria-label="Asukoht">
             <a href="/">Avaleht</a> › <a href="/kataloog/">Kataloog</a> › <span>{entry.name}</span>
           </nav>
+          <CategoryMark kind="programme" />
           <span class="eyebrow">{entry.field}</span>
           <h1>{entry.name}</h1>
           <p class="detail-provider">{entry.provider}</p>
