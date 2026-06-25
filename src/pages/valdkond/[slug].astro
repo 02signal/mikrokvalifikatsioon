@@ -1,5 +1,6 @@
 ---
 import Seo from "../../components/Seo.astro";
+import CategoryMark from "../../components/CategoryMark.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
@@ -145,6 +146,7 @@ const schema = { "@context": "https://schema.org", "@graph": wantedSchema };
           <nav class="crumbs" aria-label="Asukoht">
             <a href="/">Avaleht</a> › <a href="/kataloog/">Kataloog</a> › <span>{fieldCap}</span>
           </nav>
+          <CategoryMark kind="field" />
           <span class="eyebrow">Valdkonna võrdlus</span>
           <h1>{fieldCap} mikrokraadid ja mikrokvalifikatsioonid</h1>
           <p>{introText} Võrdle kõiki allolevas tabelis.</p>

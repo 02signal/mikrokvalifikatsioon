@@ -1,0 +1,36 @@
+---
+// Kategooria-aktsentmärk lehe päises. Värv vastab OG-kaartide aktsentloogikale
+// (vt src/pages/og/[route].ts ACCENT) — sama mõisteperekond (valdkond/teema/
+// karjäär/kool/võrdlus/vastus/programm/sisu), igaüks oma värviga. Puhtalt
+// dekoratiivne: aria-hidden + tühi alt, ei lisa ekraanilugejale müra.
+type Kind =
+  | "content"
+  | "programme"
+  | "topic"
+  | "field"
+  | "career"
+  | "provider"
+  | "comparison"
+  | "question";
+
+interface Props { kind: Kind }
+const { kind } = Astro.props;
+
+const MARK: Record<Kind, string> = {
+  content: "/mark-green.svg",     // sisu / register
+  programme: "/mark-teal.svg",    // üks programm
+  topic: "/mark-blue.svg",        // teema / oskus
+  field: "/mark-violet.svg",      // valdkond
+  career: "/mark-amber.svg",      // karjäär
+  provider: "/mark-slate.svg",    // koolitaja
+  comparison: "/mark-rose.svg",   // võrdlus
+  question: "/mark-cyan.svg",     // vastus (GEO)
+};
+const src = MARK[kind] ?? MARK.content;
+---
+
+<img class="category-mark" src={src} width="48" height="48" alt="" aria-hidden="true" loading="lazy" />
+
+<style>
+  .category-mark { display: block; width: 48px; height: 48px; margin: 0 0 8px; }
+</style>

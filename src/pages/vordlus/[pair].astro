@@ -1,5 +1,6 @@
 ---
 import Seo from "../../components/Seo.astro";
+import CategoryMark from "../../components/CategoryMark.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
@@ -92,6 +93,7 @@ const schema = {
             {fieldSlug && <><a href={`/valdkond/${fieldSlug}/`}>{a.field}</a> › </>}
             <span>Võrdlus</span>
           </nav>
+          <CategoryMark kind="comparison" />
           <span class="eyebrow">Võrdlus</span>
           <h1>{a.name} vs {b.name}: kumb valida?</h1>
           <p>
