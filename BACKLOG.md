@@ -30,15 +30,18 @@
 
 ## Active workstream — Skill-match core loop (the account value)
 
-> **Status: IN PROGRESS — CL-1, CL-2 and CL-4 (mkval-half) SHIPPED 2026-06-25**
-> (synonym/proximity search + ~5-outcome frame + multiple named packages, logged-out
-> & PII-free). Next: CL-3 + CL-5 (spine-gated: AMOS store/match-diff + konto sync).
-> Owner direction
-> 2026-06-25. This is the registered-user value, stated by the owner as the right *order*:
-> get the **core loop flawless** before any virality. The account's worth is not (yet)
-> "invite others" — it is **"see mõistab mu sõnu ja jälgib mu eest"** (it understands how I
-> phrase things, and watches for me). Invitation / "küsi koos" is a downstream consequence
-> (CL-6 / growth Phase 2), not the start.
+> **Status: LIVE 2026-06-26 — CL-1…CL-5 SHIPPED; the retention loop (CL-3 incl. send) is CODE-COMPLETE.**
+> The konto account is in production (API at `liitu.mikrokvalifikatsioon.ee`, face on the apex, send-mode
+> live): phrase a skill your way → ~5-outcome packages → several named packages → magic-link login →
+> server-computed match ("Sind huvitab") → delete (full GDPR erasure). Hardened (single-use + latest-link
+> magic-link, `/state` rate-limit, POST-only verify); the delta-notify worker now **detects → queues →
+> advances → SENDS** (gated, consent-respecting) the "your match improved" email.
+> **Remaining = owner config to turn the send ON** (Listmonk template + cron + `OUTREACH_SEND_MODE`) +
+> **CL-6** (invitation) + the bigger non-package features (P4) and the owner build-next surface (P5).
+> Full map: `docs/account-system-status-and-todo.md` + the AMOS ADR
+> `docs/architecture/amos-outcome-package-and-learner-identity-adr.md` (Implementation status).
+> Owner direction 2026-06-25: get the **core loop flawless** before any virality — the account's worth is
+> **"see mõistab mu sõnu ja jälgib mu eest"**, not (yet) "invite others" (CL-6 / growth Phase 2).
 
 **The loop the owner described (in order):**
 1. Login works **veatult ja arusaadavalt** → lands on "see huvitab sind", not an empty dashboard.
@@ -72,8 +75,30 @@ the `lead_capture/v1` account kinds (`package_saved`/`reminder_subscribed`/`comb
 apex static, build green, no own-programme implication, warehouse PII-free by construction.
 Cross-refs: `docs/amos-account-layer-plan.md`, `docs/mkval-growth-plan.md` (Phase C).
 
+**Implementation status (2026-06-26):** ✅ **CL-1, CL-2** (mkval) · ✅ **CL-4** (mkval + AMOS store, incl.
+the multi-package union into the account) · ✅ **CL-5** (konto spine + face, live) · ✅ **CL-3** (AMOS
+delta-notify: detect → queue → advance → gated consent-respecting **send**, code-complete — owner turns
+the send on via the Listmonk template + cron + send-mode). ⬜ **CL-6** (invitation / "küsi koos") — not
+started, by design. AMOS PRs: #1190/#1197/#1200/#1205/#1209/#1225/#1226/#1232. mkval: #42/#43/#44/#46.
+
 ## Done
 
+- 2026-06-26: **Konto account LIVE + the retention loop code-complete.** The account went to production
+  (login API `liitu.mikrokvalifikatsioon.ee`, face on the apex, `OUTREACH_SEND_MODE` live) and this round
+  finished the remaining slices, each built by a team of agents + adversarially reviewed + gated.
+  **CL-5 spine + face** (#1197/#43): magic-link login/verify/state/sync + the konto face (real path behind
+  `PUBLIC_KONTO_API_BASE`, demo fallback). **Live MATCH** (#1209/#46): konto computes + shows each package's
+  server-side fit ("Sind huvitab"). **Security hardening** (#1225): single-use + latest-link-only magic-link
+  (new `amos_crm.konto_login_nonce`), `/state` rate-limit, POST-only verify. **Full-PII delete cascade**
+  (#1225): account-delete erases the PII zone too (person_ref → email_hmac → suppression-first erasure).
+  **CL-3 delta-notify** (#1226 + #1232): a scheduled worker detects a genuine match improvement → queues a
+  PII-free `konto_match_improved` job → advances the baseline (idempotent) → **sends** a gated,
+  consent-respecting email (token-free link; address resolved transiently from a confirmed, non-erased
+  envelope; copy in the owner's Listmonk template). Plus the GSC Q&A fix (QAPage → FAQPage, #47) and the
+  build-unbreak (browser-safe pure-JS sha256 outcome-ref, #44). Warehouse PII-free by construction (SQL
+  CHECK on every text column). Status maps: `docs/account-system-status-and-todo.md`,
+  AMOS `KONTO-LIVE-OPS.md` + the learner-identity ADR (Implementation status). **Remaining = owner config**
+  (turn the send on) + CL-6 + P4/P5.
 - 2026-06-25: **CL-4 (mkval-half) — multiple named packages on `/oskused/`.** Built by a team of agents (pure data module + tests · UI wiring · cross-page audit), adversarially reviewed (one blocker caught + fixed), integrated by hand. New pure `src/lib/packages.ts` (`PackagesState` v2: N named packages, one active; non-mutating, ids/timestamps injected) + `scripts/packages.test.mjs` (26 tests). `/oskused/` now keeps several named target profiles in localStorage — `mkval:paketid` is the source of truth; the **active** package is mirrored to legacy `mkval:pakett` so `/konto/` keeps working unchanged. Plain-Estonian switcher (Uus pakett / Nimeta ümber / Kustuta pakett). **Lossless** migration from the old single package (the `migrateLegacy(legacy, null, …)` path); first add auto-creates "Minu pakett 1"; "Tühjenda see pakett" empties only the active package; delete disabled at the last package; future-version store not clobbered. Package **NAMES stay local** — never sent to GA4 or `/api/subscribe` (additive count-only params `package_count` + new `package_switch`/`package_create`/`package_delete`). Account CTA scoped honestly to the active package; full multi-package→account **union sync deferred to CL-5**. Build green (440 pages, 41/41 tests). Logged-out, PII-free, embargo-safe.
 - 2026-06-25: **CL-1 + CL-2 — synonym/proximity skill search + ~5-outcome builder frame (account-value core loop, mkval-half).** Built by a team of agents (grounded data authoring + matching logic/test + builder UX), adversarially reviewed (no blockers), integrated by hand. **CL-1:** `/oskused/` search was a literal substring — a skill phrased in the owner's own words ("graafikud excelis") found nothing though the outcome "andmete visualiseerimine" exists. New curated Estonian concept map `src/data/skillSynonyms.ts` (46 grounded clusters) + pure `src/lib/skill-match.ts` `expandQuery()` (substring-both-directions, MIN_LEN 3, data injected so it's node-testable) expand the query to the words that actually appear in real outcomes, with a "Näitan ka lähedasi: …" hint (shown only when there are results). Verified against the real 656-outcome catalog: "graafikud excelis" 0→6, "arvepidamine" 0→8, "küberturve" 0→8, "värbamine" 0→5, "koolitamine" 0→13; **0 ungrounded clusters**. Backward-compatible (raw query always included → literal search unchanged). **CL-2:** the package builder shows progress toward ~5 outcomes ("N / ≈5") + a warm tone-coloured hint (encourage <5 / affirm 5-6 / soft note 7+) — the microcredential good-form norm — **never a hard cap, never blocks adding.** GA4: `outcome_search` gains `expanded` (additive; names unchanged). Tests: `scripts/skill-match.test.mjs` (15 cases — fixture-driven logic + real-data integrity/PII + a permanent **grounding** guard that fails the build if any cluster drifts off the catalog), gated into `npm run build`. Build green (440 pages, 15/15 tests). Embargo-safe (no own-programme implication); all copy plain Estonian. Logged-out & PII-free — no AMOS dependency.
 - 2026-06-24: **SEO/GEO structured-data + OG hardening (#17)** — from a team audit of all 24 page types vs Google rich-results + schema.org. Fixed a **sitewide Course rich-result bug** (`toCourse()` emitted an empty `CourseInstance` when format+startDate were both missing → Google flags incomplete → can disqualify the whole Course; now always non-empty from real data) + sharpened typing (provider `EducationalOrganization`, credentialCategory `DefinedTerm`, `teaches`←outcomes, `Offer.availabilityEnds`←deadline); nested `toCourse()` into the 6 list pages that emitted bare `name+url` ListItems (Course Carousel eligibility). Fixed the **broken `/valdkond/` OG** (field slugs were unregistered → 404 og:image) via a `fieldPages` map; gave each pSEO X-vs-Y page a **unique** card via `comparisonPages`. Fixed the EN homepage's **invalid cross-language BreadcrumbList** + added the missing WebSite `SearchAction`. New shared `src/data/organizationSchema.ts` (EducationalOrganization + logo). Build green (427 pages), verified in `dist`; no invented data.
@@ -154,6 +179,18 @@ Cross-refs: `docs/amos-account-layer-plan.md`, `docs/mkval-growth-plan.md` (Phas
 
 ## Next
 
+- **Konto — turn the match-improved send ON (owner config, no code).** Create the Listmonk template +
+  set `LISTMONK_KONTO_MATCH_IMPROVED_TEMPLATE_ID` (embargo-safe/neutral copy — "lisandus sobiv programm/
+  kombinatsioon", never EVK's own; the code passes only `konto_url` + bounded counts); schedule
+  `node infra/scripts/konto-delta-notify.mjs` (after each projection rebuild / daily) with the Listmonk
+  creds + `OUTREACH_KONTO_COVERAGE_PROJECTION_PATH` + `OUTREACH_CAPTURE_PUBLIC_BASE_URL`; then
+  `OUTREACH_SEND_MODE` allowlist → live. See AMOS `KONTO-LIVE-OPS.md`.
+- **Konto — possible developments** (see the ADR Implementation status + `docs/account-system-status-and-todo.md`):
+  dedicated `OUTREACH_KONTO_TOKEN_SECRET` (key separation, cheapest now at ≈0 sessions); a *separate*
+  explicit "match-notify" opt-in (today the gate is "confirmed subscriber"); **P4** non-package features
+  (reminders, notify-lists incl. the **combination** "küsi koos" seed, funding-profile — server-backed);
+  **P5** owner build-next intelligence surface (rev-web); **CL-6** invitation. A real end-to-end login
+  smoke (owner's email) to seed `learner_package`; remove the stray Vercel project `mkval-konto-prod-deploy`.
 - Verify and complete the first data wave — **substantially done 2026-06-24 (#14, source-verified pass)**: 162 fields filled across 86 records, 77 programmes now have a registration deadline. Residual: assessmentText (70, mostly genuinely unstated), outcomes (34), durationText (26), format (16). Next pass: re-fetch the records the finder didn't propose a price for (some pages state a price that wasn't captured), and consider a "Maht (tunnid)" field for the contact/self-study hour-load.
 - Töötukassa facts: their site is JS-rendered and unverifiable by fetch — verify koolituskaart/toetuste amounts manually and add concrete numbers to /kes-maksab/ with a checked-date stamp.
 - **SEO/GEO audit follow-ups** (deferred from #17; the team audit's exact specs are captured — high→low): (1) **Article `publisher.logo` + `image`** on the 6 Article pages (mis-on, kes-maksab, aastaraport, mikrokraadid, koolitajale, kvaliteedihindamine) — swap their inline bare Organization node for the shared `organizationSchema.ts` (logo'd) + add `image` (the generated `/og/<key>.png`); makes them Article-rich-result eligible. (2) **Dataset `DataDownload` distribution** on the homepage Dataset (→ `/catalog.json`), a new `kuidas-koostame` Dataset (→ `/site-profile.json` + `/llms-full.txt`), and the karjaar labour Dataset (real `andmed.eesti.ee` URL or drop) + ISO-interval `temporalCoverage`. (3) **Hub ItemLists**: `mikrokraadid` directory + `oskused` `CollectionPage.mainEntity`. (4) **WebSite+SearchAction** on the homepage (add `@id`) + `kataloog` (canonical search page). (5) Low: `privaatsus` JSON-LD graph; `CollectionPage`/`DataCatalog` typing + `spatialCoverage`/`keywords` on data pages; GEO `speakable`/`DefinedTermSet` on definitional pages. (OG is otherwise fully wired — the old "none exist" note was stale.)
