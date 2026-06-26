@@ -1229,10 +1229,88 @@ const schema = {
       type ServerPackage = {
         package_ref: string;
         outcome_refs?: string[];
+        fit?: {
+          fit_version?: string;
+          package_size?: number;
+          best_single?: {
+            variant_ref?: string;
+            covered_count?: number;
+            fully_covers?: boolean;
+            title?: string | null;
+            school?: string | null;
+            eap?: number | null;
+          } | null;
+          combination?: {
+            variants?: {
+              variant_ref?: string;
+              adds_refs?: string[];
+              title?: string | null;
+              school?: string | null;
+              eap?: number | null;
+            }[];
+            covered_refs?: string[];
+            uncovered_refs?: string[];
+            fully_covered?: boolean;
+            program_count?: number;
+          };
+        } | null;
+        last_best_single_covered_count?: number | null;
         last_covered_count?: number | null;
         last_program_count?: number | null;
         last_fully_covered?: boolean | null;
         last_best_variant_ref?: string | null;
+      };
+
+      const slugLike = (ref: string): boolean => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(ref);
+      const serverVariantLine = (v: { variant_ref?: string; title?: string | null; school?: string | null; eap?: number | null }, covered: number | null, total: number): string => {
+        const ref = typeof v.variant_ref === "string" ? v.variant_ref : "";
+        const title = (typeof v.title === "string" && v.title.trim()) ? v.title.trim() : (ref || "Sobiv programm");
+        const label = slugLike(ref)
+          ? `<a href="/kataloog/${escHtml(ref)}/">${escHtml(title)}</a>`
+          : escHtml(title);
+        const meta = [
+          typeof v.school === "string" && v.school.trim() ? escHtml(v.school.trim()) : "",
+          typeof v.eap === "number" && Number.isFinite(v.eap) ? `${v.eap} EAP` : "",
+          covered != null && total > 0 ? `katab ${covered}/${total}` : "",
+        ].filter(Boolean).join(" · ");
+        return `${label}${meta ? ` <span class="reminder-meta">${meta}</span>` : ""}`;
+      };
+
+      const realFitHtml = (pkg: ServerPackage, total: number): string => {
+        const fit = pkg.fit;
+        const best = fit?.best_single || null;
+        const combo = fit?.combination || null;
+        if (fit && best) {
+          const bestCovered = typeof best.covered_count === "number" ? best.covered_count : null;
+          let html = `<div class="pm-match"><h4 class="pm-h2">Sobivaim sinu paketile</h4>`;
+          html += `<p class="pm-best">${serverVariantLine(best, bestCovered, total)}</p>`;
+          if (best.fully_covers === true) {
+            html += `<p class="pm-note pm-good">See üks programm katab kogu su paketi.</p>`;
+          } else if (combo && Array.isArray(combo.variants) && combo.variants.length) {
+            const covered = Array.isArray(combo.covered_refs) ? combo.covered_refs.length : null;
+            html += `<p class="pm-h2">Täielikuks katteks sobib kombinatsioon${covered != null ? ` (${covered}/${total})` : ""}:</p>`;
+            html += `<ol class="pm-combo">${combo.variants.map((v) => {
+              const adds = Array.isArray(v.adds_refs) ? v.adds_refs.length : null;
+              return `<li>${serverVariantLine(v, adds, total)}</li>`;
+            }).join("")}</ol>`;
+            if (combo.fully_covered === true) {
+              html += `<p class="pm-note">Üksik programm ei kata veel kõike, aga kombinatsioon annab täiskatte.</p>`;
+            } else {
+              html += `<p class="pm-note">Praegune kataloog ei kata veel kõiki valitud oskusi. Anname märku, kui parem vaste lisandub.</p>`;
+            }
+          }
+          return `${html}</div>`;
+        }
+
+        const covered = pkg.last_covered_count ?? null;
+        const bestSingle = pkg.last_best_single_covered_count ?? null;
+        const progN = pkg.last_program_count ?? null;
+        const full = pkg.last_fully_covered === true;
+        if (covered == null || progN == null) return "";
+        const coverLine = full
+          ? `Parim kate: ${bestSingle ?? covered}/${total} oskust ühest programmist.`
+          : `Parim kate: ${covered}/${total} oskust ${progN} programmiga.`;
+        return `<p class="pm-note">${escHtml(coverLine)}</p>`;
       };
 
       const renderRealAccount = (packages: ServerPackage[]): void => {
@@ -1250,24 +1328,16 @@ const schema = {
         for (const pkg of packages) {
           const name = getNamesFor(pkg.package_ref) || "Pakett";   // ainult kliendipoolne nimi
           const size = pkg.outcome_refs?.length ?? 0;
-          const covered = pkg.last_covered_count ?? null;
-          const progN = pkg.last_program_count ?? null;
-          const full = pkg.last_fully_covered === true;
-          let coverLine = "";
-          if (covered != null && progN != null) {
-            coverLine = full
-              ? `Parim kate: ${covered}/${size} oskust ühest programmist.`
-              : `Parim kate: ${covered}/${size} oskust ${progN} programmiga.`;
-          }
           const card = document.createElement("div");
           card.className = "pkg-card";
           card.dataset.pkgRef = pkg.package_ref;
+          const match = realFitHtml(pkg, size);
           card.innerHTML = `
             <div class="pkg-card-head">
               <p class="pkg-card-name">${escHtml(name)}</p>
               <span class="cov">${size} oskust</span>
             </div>
-            ${coverLine ? `<p class="pm-note">${escHtml(coverLine)}</p>` : ""}`;
+            ${match}`;
           body.appendChild(card);
         }
         track("package_view", { count: packages.reduce((s, p) => s + (p.outcome_refs?.length ?? 0), 0) });
