@@ -6,11 +6,13 @@ Companion: `docs/konto-go-live-runbook.md` (the exact go-live commands).
 
 ---
 
-## 1. DONE — built, tested, merged (code-complete v1)
+## 1. DONE — built, tested, merged (LIVE as of 2026-06-26)
 
-A learner can: phrase a skill in their own words → build ~5-outcome packages → keep
-several named packages → (with the flag on) log in by magic-link → their packages persist
-server-side, cross-device → see "Sind huvitab" → delete the account. Logged-out is untouched.
+The konto account is **live** (login API at `liitu.mikrokvalifikatsioon.ee`, face on the apex,
+`OUTREACH_SEND_MODE` live). A learner can: phrase a skill in their own words → build ~5-outcome
+packages → keep several named packages → log in by magic-link → their packages persist
+server-side, cross-device → see "Sind huvitab" with the **server-computed match** → delete the
+account (full GDPR erasure). Logged-out is untouched.
 
 **mkval** (`mikrokvalifikatsioon`):
 - CL-1 synonym/proximity skill search + CL-2 ~5-outcome builder frame (#36)
@@ -19,59 +21,62 @@ server-side, cross-device → see "Sind huvitab" → delete the account. Logged-
 - **OPK-S4** deterministic `out_` refs + skillTags for every catalog outcome (#42)
 - **Konto face** wired to the real API behind `PUBLIC_KONTO_API_BASE`, demo fallback (#43)
 - Browser-safe `outcome-ref` (pure-JS sha256, pinned to AMOS) + **account-delete** (#44)
+- **Server-computed package fit** shown in /konto/ (#46); editorial Q&A → FAQPage GSC fix (#47)
 
 **AMOS** (`02S-AMOS`):
 - **CL-3** `amos_learner_package` PII-free store + identity keystone reuse (#1190)
 - **CL-5** konto spine: magic-link login + session + state + sync (#1197)
 - Gated magic-link **email send** + dedicated konto token secret (#1200)
 - Konto **account-delete** endpoint (#1205)
+- **Live MATCH**: konto computes each package's fit vs the coverage projection (#1209)
+- **LIVE hardening**: single-use + latest-link-only magic-link, `/state` rate-limit,
+  POST-only verify, + **full-PII delete cascade** (person_ref→email_hmac→consent erasure) (#1225)
+- **CL-3 delta-notify worker**: rescans saved packages, queues a PII-free `konto_match_improved`
+  job on a genuine match improvement, idempotent + a cron entry + `KONTO-LIVE-OPS.md` (#1226)
 
 PII posture (by construction): the warehouse holds only opaque refs + banded coverage; the
 face sends only `email` (to login) + `out_`/`package_ref` + the session — **names and outcome
-text stay in the browser**, never sent. Cross-person package overwrite (IDOR) is fixed +
-regression-tested. The magic-link **send is gated** (`OUTREACH_SEND_MODE=disabled`) — nothing
-is emailed until the owner flips it.
+text stay in the browser**, never sent. Cross-person overwrite (IDOR) fixed + regression-tested;
+every warehouse text column has a SQL CHECK; the single-use nonce + match-notify jobs are all refs/hashes only.
 
 ---
 
-## 2. OWNER — go live (config + deploy, no code; see the runbook)
-1. Apply `infra/sql/2026-06-25-learner-package.sql` on the prod Postgres (idempotent).
-2. Secrets: `OUTREACH_SUPPRESSION_PEPPER`, `OUTREACH_CONFIRM_TOKEN_SECRET`, `OUTREACH_KONTO_TOKEN_SECRET`.
-3. Create the konto magic-link Listmonk template → `LISTMONK_KONTO_MAGIC_LINK_TEMPLATE_ID`.
-4. Deploy the AMOS outreach-capture service; expose `/api/konto/*` via Caddy at a public host.
-5. `OUTREACH_SEND_MODE`: `disabled` → `allowlist` (test) → `live`.
-6. Set mkval `PUBLIC_KONTO_API_BASE` to that host; deploy mkval → the real path replaces the demo.
-7. Verify (runbook curls + a full login round-trip). Rollback = unset the flag / set send-mode disabled.
+## 2. OWNER — go live ✅ DONE (2026-06-26)
+The original go-live (DB migration, secrets, Caddy `/api/konto/*`, `OUTREACH_SEND_MODE` live,
+`PUBLIC_KONTO_API_BASE=https://liitu.mikrokvalifikatsioon.ee`, mkval deploy) is complete and
+verified (/konto/ 200, state 401, CORS 204, projection mounted, container healthy). Runbook:
+`docs/konto-go-live-runbook.md`. Rollback = unset `PUBLIC_KONTO_API_BASE` / set send-mode disabled.
+
+**Residual owner steps:**
+- Apply `infra/sql/2026-06-26-konto-login-nonce.sql` (the single-use table; idempotent) on prod —
+  required for the #1225 hardening. *(In-flight pre-hardening links become invalid → users re-request; impact ~nil at 0 rows.)*
+- Schedule the CL-3 delta-notify cron (see P-NOW) once the match-improved send is wired.
+- A real end-to-end login smoke (your own email, since send is live) to fill `learner_package`.
+- Optional: remove the stray Vercel project `mkval-konto-prod-deploy` (dashboard → Delete Project).
 
 ---
 
-## 3. CODEX / dev — next code work (prioritised)
+## 3. CODEX / dev — next code work
 
-### P1 — The live MATCH + notify (the core user value + the moat) — **biggest, do first**
-Today "Sind huvitab" lists the packages but not the *best programme* (the match), and the
-delta-notify isn't running. OPK-S4 removed the only data block (refs + skillTags exist).
-- **mkval**: publish an outcome-coverage feed — each programme (variant) → its `out_` refs
-  (reuse `src/data/outcomeRefs.ts` + the catalog's per-programme outcomes). A static JSON/endpoint.
-- **AMOS**: feed it through `infra/scripts/build-outcome-coverage-projection.mjs` (OPK-S3, now
-  unblocked) → the `amos.outcome.coverage_projection/v1` (programmes → covered refs). In the
-  konto **sync** handler, compute each package's coverage via `computeFit(package.outcome_refs,
-  projection)` and store it (the `last_*` columns). `state` then returns the real "parim kate".
-- **AMOS CL-3 live**: the delta worker — on a catalog change, recompute only the packages whose
-  refs intersect the changed variant (`evaluateFitImprovement`, already built) → queue a neutral
-  notification via the topic-notify chain. Schedule it (cron/n8n).
-Deps: none new (refs done). Effort: medium-large (cross-repo + a scheduled worker).
+### ✅ Shipped 2026-06-26 (was P1/P2/P3/P6 + CL-3)
+- **P1 live MATCH** — DONE: konto computes each package's fit vs the projection and /konto/ shows
+  it (#1209/#46). The coverage projection is built + mounted live.
+- **CL-3 delta-notify** — DONE (detection + queue + idempotent baseline): the worker queues a
+  PII-free `konto_match_improved` job on a genuine improvement (#1226). *(Send wiring = P-NOW below.)*
+- **P2 security hardening** — DONE: single-use + latest-link-only magic-link, `/state` rate-limit,
+  POST-only verify (#1225).
+- **P3 full-PII delete cascade** — DONE: account/delete erases the PII zone too (#1225).
+- **P6 observability** — DONE (first cut): `KONTO-LIVE-OPS.md` (audit events, outbox, red flags,
+  health). Dashboards/alerts on top of it remain ops.
 
-### P2 — Security hardening before full `live` (from the CL-5 security review)
-- **S2** rate-limit the GET surfaces (`/api/konto/v1/state`, GET `/login/verify`).
-- **S3** single-use magic-link (consume the login token's jti on first verify) — today short-TTL reuse.
-- **N1** make `/login/verify` POST-only for session issuance (no session bearer in a GET URL/history).
-Effort: small. **Gate full go-live on these.**
-
-### P3 — Full-PII erasure from account-delete
-`POST /api/konto/v1/account/delete` today erases the **package** zone. For a complete GDPR delete,
-also cascade the PII zone: resolve `person_ref → email_hmac` (add a reverse lookup on
-`person_identity`) → `eraseByEmailHmac` (consent ledger suppression-first). Today the email/consent
-erasure is the separate by-email `/api/outreach/v1/erasure`. Effort: small-medium.
+### P-NOW — wire the `konto_match_improved` SEND + schedule the worker — **the one gap to finish CL-3**
+The delta worker QUEUES the notify; nothing emails it yet. Mirror `sendKontoMagicLink`:
+- **AMOS**: a Listmonk template for "your saved package now has a better match" (neutral, embargo-safe:
+  "lisandus sobiv programm/kombinatsioon" — never implies EVK's own programme) + an outbox→send
+  dispatch for `kind:"konto_match_improved"` (resolve person_ref→email in the PII zone, gated by
+  `OUTREACH_SEND_MODE`). + a deep link back to /konto/.
+- **Owner**: schedule `node infra/scripts/konto-delta-notify.mjs` (after each projection rebuild /
+  daily) via n8n-ops/cron, with `OUTREACH_KONTO_COVERAGE_PROJECTION_PATH` set. Effort: small-medium.
 
 ### P4 — Non-package account features, server-backed
 Reminders, notify-lists (field / skill / **combination**), funding-profile are today demo/`/api/subscribe`
@@ -84,9 +89,10 @@ A ranked "build next" view over the accumulated `amos_learner_package` data: unm
 magnitude × conviction (named waitlist count) × fundability × supply gap × labor pull. Lands in the
 AMOS/rev-web worklist (per the ratified account ADR), not this repo. Needs post-live data. Effort: large.
 
-### P6 — Observability
-Dashboards/alerts for: login requests + sends (outbox depth, send failures), sync errors, session
-verify failures, consent/erasure events. Mostly reads the existing audit + outbox. Effort: small-medium.
+### Monitoring (ops, on top of P6)
+Dashboards/alerts over the audit + outbox per `KONTO-LIVE-OPS.md`: login requests + sends (outbox
+depth, send failures), `link_already_used`/`rate_limited` spikes, sync errors, consent/erasure,
+`learner_package` growth (adoption), delta-notify run summaries.
 
 ---
 
@@ -99,6 +105,10 @@ verify failures, consent/erasure events. Mostly reads the existing audit + outbo
   byte-for-byte to AMOS `amos.outcome.registry/v1` by `scripts/outcome-ref.test.mjs`. Keep them in
   lockstep; never edit one side's `deriveOutcomeRef`/`normalizeOutcomeText` without the other.
 - **Apex stays static**; konto is a client island calling the AMOS API. The session token lives in
-  `localStorage` (the S1/N1 hardening reduces the XSS-theft surface; a dedicated konto secret is wired).
+  `localStorage`; a dedicated konto token secret is wired, the magic link is single-use +
+  latest-link-only, verify is POST-only, and `/state` is rate-limited (#1225).
+- **Single-use is face-safe**: the magic link lands on `/konto/kinnita/` (static), whose JS POSTs the
+  token to verify — email scanners that only GET the link can't consume it; only the real click does.
+  A consumed/superseded link shows "aegus või on juba kasutatud. Telli uus link."
 - **Flag discipline**: `PUBLIC_KONTO_API_BASE` unset == the demo, byte-for-byte. All real-path code is
   `if (kontoEnabled()) … else <demo>`. Unset the flag to roll back instantly.
