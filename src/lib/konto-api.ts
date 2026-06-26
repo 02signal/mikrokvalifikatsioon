@@ -28,8 +28,21 @@
 /**
  * AMOS konto API baas-URL. TÜHI string = lipp maas (päris-tee välja lülitatud).
  * Astro asendab `import.meta.env.PUBLIC_KONTO_API_BASE` build-ajal.
+ *
+ * NB: `import.meta.env` on Astro/Vite all ALATI olemas. Optionaalse ahelaga
+ * (`?.`) loeme selle ka siis, kui moodul laaditakse väljaspool Vite'i (nt
+ * Node'i wire-test, mis type-strip'ib .ts otse) — siis jääb baas tühjaks ja
+ * päris-tee on maas, täpselt nagu lipp maas oleks.
+ *
+ * TEST-SEAM: kui Vite-keskkonda pole (Node wire-test), saab baasi anda
+ * `globalThis.__MKVAL_KONTO_BASE__`-iga, et päris-tee POST-i kuju testida
+ * DOM-/Vite-vabalt. Tootmises on `import.meta.env` alati olemas, nii et see
+ * tagavara on `undefined` ega mõjuta midagi.
  */
-export const KONTO_API_BASE: string = import.meta.env.PUBLIC_KONTO_API_BASE ?? "";
+export const KONTO_API_BASE: string =
+  (import.meta as any).env?.PUBLIC_KONTO_API_BASE ??
+  (globalThis as any).__MKVAL_KONTO_BASE__ ??
+  "";
 
 /** localStorage võtmed (uued — ei kattu vana sillaga). */
 export const SESSION_KEY = "mkval:konto_session";
@@ -41,7 +54,31 @@ const PATH = {
   loginVerify: "/api/konto/v1/login/verify",
   state: "/api/konto/v1/state",
   sync: "/api/konto/v1/packages/sync",
+  accountDelete: "/api/konto/v1/account/delete",
 } as const;
+
+/** localStorage võti: `package_ref` -> nimi kaart (vt allpool). Ainult kliendi pool. */
+const PKGREF_MAP_KEY = "mkval:pkgrefs";
+
+/**
+ * Kustuta KÕIK kohalik konto-olek (sessioon + nimekaart + pkgref-kaart).
+ * Kasutame siis, kui server on konto kustutanud (või sessioon on kehtetu) —
+ * brauserisse ei tohi midagi maha jääda. Iga pöördus on omaette vaikne,
+ * et üks tõrge (privaatrežiim) ei jätaks teisi võtmeid alles.
+ */
+function clearAllLocalAccount(): void {
+  clearSession();
+  try {
+    localStorage.removeItem(NAMES_KEY);
+  } catch {
+    /* private mode / quota — ignoreeri */
+  }
+  try {
+    localStorage.removeItem(PKGREF_MAP_KEY);
+  } catch {
+    /* private mode / quota — ignoreeri */
+  }
+}
 
 /**
  * Kas päris konto-tee on sees? AINULT siis, kui lipp (baas-URL) on seatud.
@@ -180,6 +217,49 @@ export async function syncPackages(
   const data = await postJson(PATH.sync, { packages: payload }, session);
   if (!data || !Array.isArray(data.packages)) return null;
   return { packages: data.packages };
+}
+
+// ── Konto kustutamine (Bearer) ─────────────────────────────────────────────
+
+/**
+ * Kustuta konto serverist (Bearer) ja PÜHI KÕIK kohalik konto-olek.
+ *
+ * Server kustutab õppija salvestatud paketid ja vastab `{ deleted: number }`.
+ * Saadame AINULT `Authorization: Bearer <session>` — EI mingit keha, EI PII
+ * (e-post, nimed, õpiväljundi tekst ei lahku kunagi brauserist siin).
+ *
+ * KOHALIK PUHASTUS: õnnestumisel (2xx) JA ka siis, kui server ütleb sessiooni
+ * lõplikult kehtetuks (401 — konto on juba läinud), kustutame sessioonipide,
+ * nimekaardi (NAMES_KEY) ja pkgref-kaardi (`mkval:pkgrefs`), et brauserisse
+ * ei jääks orvuks jäänud konto-olekut.
+ *
+ * VASTUPIDAVUS: võrgu-/parse-tõrge EI VISKA lehe poole — tagastab `null`,
+ * ilma kohalikku olekut puutumata (õppija saab uuesti proovida).
+ *
+ * @returns `{ deleted }` õnnestumisel; `null` kui lipp maas / sessioon puudub /
+ *          võrgutõrge (leht otsustab nähtava käitumise).
+ */
+export async function deleteAccount(): Promise<{ deleted: number } | null> {
+  if (!kontoEnabled()) return null;
+  const session = getSession();
+  if (!session) return null;
+  try {
+    const res = await fetch(url(PATH.accountDelete), {
+      method: "POST",
+      headers: { Authorization: `Bearer ${session}` },
+    });
+    // 401 = sessioon/konto on serveris juba läinud → kohalik olek tuleb ikka pühkida.
+    if (res.status === 401) {
+      clearAllLocalAccount();
+      return null;
+    }
+    if (!res.ok) return null;
+    const data = await res.json();
+    clearAllLocalAccount();
+    return { deleted: typeof data?.deleted === "number" ? data.deleted : 0 };
+  } catch {
+    return null;
+  }
 }
 
 // ── Nimekaart (package_ref -> nimi) — AINULT kliendi pool ───────────────────

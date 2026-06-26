@@ -456,7 +456,7 @@ const schema = {
       // REAL-PATH libs (built concurrently). Demo path never calls these (flag OFF).
       import {
         kontoEnabled, requestLogin, getSession, clearSession, getNamesFor, setName,
-        fetchState, syncPackages,
+        fetchState, syncPackages, deleteAccount,
       } from "../../lib/konto-api";
       import { buildSyncPayload, namesFromSync, packagesUnsyncable } from "../../lib/konto-sync";
       import { outcomeRefForText } from "../../data/outcomeRefs";
@@ -1185,6 +1185,21 @@ const schema = {
           "Kustutame su paketid, teavituslehed, meeldetuletused ja profiili. Seda ei saa tagasi võtta. Su e-post pannakse loobumisnimekirja, et sulle enam ei kirjutataks.",
           "Jah, kustuta konto");
         if (!ok) return;
+        if (kontoEnabled()) {
+          // REAL PATH (flag ON): AMOS kustutab paketid serverist; deleteAccount()
+          // pühib KOGU kohaliku konto-oleku (sessioon + nimekaart + pkgref-kaart).
+          // EI kutsu postSubscribe — see on DEMO-tee. PII ei lähe analüütikasse.
+          await deleteAccount();
+          track("cta_click", { cta_label: "account_delete" });
+          CURRENT = null;
+          if (emailInput) emailInput.value = "";
+          if (consentInput) consentInput.checked = false;
+          renderAnonBanner();
+          showScreen("auth");
+          toast("Konto ja paketid kustutatud.");
+          return;
+        }
+        // DEMO PATH (flag OFF): puutumata — sild AMOS-i erasure-kujuga.
         track("cta_click", { cta_label: "account_delete" });
         // LIVE-bridge: AMOS-i kustutus käib erasure-kujuga (suppression → deletion).
         await postSubscribe({ kind: "account_delete", email: CURRENT.email });
