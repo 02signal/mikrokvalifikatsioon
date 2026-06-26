@@ -56,6 +56,9 @@ import "../../../styles/global.css";
     <Footer label="Minu konto" />
 
     <script>
+      // REAL-PATH lib (built concurrently). Demo path never calls these (flag OFF).
+      import { kontoEnabled, verifyLogin } from "../../../lib/konto-api";
+
       // BRIDGE: sama migratsioon nagu /konto/ — token-valideerimine elab AMOS-is.
       type PkgItem = { key: string; text: string; progs?: string[] };
       type AccountPackage = { id: string; name: string; items: PkgItem[] };
@@ -132,6 +135,28 @@ import "../../../styles/global.css";
       const run = (): void => {
         const params = new URLSearchParams(window.location.search);
         const token = params.get("token");
+
+        // ===== REAL PATH (flag ON): valideeri token, lib seab seansi, suuna /konto/ =====
+        if (kontoEnabled()) {
+          if (!token) {
+            fail("Sisselogimine vajab linki", "See sisselogimislink on aegunud või juba kasutatud. Telli uus link.");
+            return;
+          }
+          void (async () => {
+            let ok: { session: string; person_ref: string } | null = null;
+            try { ok = await verifyLogin(token); } catch { ok = null; }
+            if (!ok) {
+              fail("Link aegus", "See sisselogimislink aegus või on juba kasutatud. Telli uus link.");
+              return;
+            }
+            track("tool_completed", { tool_name: "account_login" });
+            // Seansi seab lib (verifyLogin). /konto/ boot() sünkib + renderdab.
+            window.location.replace("/konto/");
+          })();
+          return; // ÄRA jookse demo-silda
+        }
+        // ===== DEMO PATH (flag OFF): muutmata allpool =====
+
         // SILD: päris token-valideerimist pole. Kasutame pending_email'i, mille
         // /konto/ Ekraan B salvestas. Tootmises asendab selle AMOS-i /konto/state.
         const pendingEmail = sessionStorage.getItem("mkval:pending_email") || "";

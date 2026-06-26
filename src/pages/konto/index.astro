@@ -453,6 +453,17 @@ const schema = {
     <script>
       import { computeFit, type CoverageRow } from "../../lib/outcome-fit";
       import { formatEt } from "../../data/dates";
+      // REAL-PATH libs (built concurrently). Demo path never calls these (flag OFF).
+      import {
+        kontoEnabled, requestLogin, getSession, clearSession, getNamesFor, setName,
+        fetchState, syncPackages,
+      } from "../../lib/konto-api";
+      import { buildSyncPayload, namesFromSync, packagesUnsyncable } from "../../lib/konto-sync";
+      import { outcomeRefForText } from "../../data/outcomeRefs";
+      import {
+        migrateLegacy, emptyState,
+        type PackagesState, type PkgItem as StatePkgItem,
+      } from "../../lib/packages";
 
       // ====================================================================
       // KONTO STATE-MACHINE (kliendipoolne; üks <script>).
@@ -519,6 +530,39 @@ const schema = {
         try { localStorage.setItem(ACCOUNT_KEY, JSON.stringify(s)); } catch { /* private mode */ }
       };
       const clearAccount = (): void => { try { localStorage.removeItem(ACCOUNT_KEY); } catch { /* ignore */ } };
+
+      // ---- REAL-PATH source: mkval:paketid v2 PackagesState (/oskused/ source) ----
+      // Used ONLY by the sync path (kontoEnabled). Mirrors /oskused/ loadState:
+      // stored v2 wins; else migrate legacy mkval:pakett; else empty.
+      const PKGS_KEY = "mkval:paketid";
+      const loadLocalState = (): PackagesState => {
+        let stored: PackagesState | null = null;
+        try {
+          const raw = localStorage.getItem(PKGS_KEY);
+          if (raw) {
+            const s = JSON.parse(raw);
+            if (s && typeof s.v === "number" && s.v >= 2 && Array.isArray(s.packages)) stored = s as PackagesState;
+          }
+        } catch { stored = null; }
+        let legacy: StatePkgItem[] = [];
+        try { legacy = JSON.parse(localStorage.getItem(PKG_KEY) || "[]"); } catch { legacy = []; }
+        if (stored && stored.packages.length) return stored;
+        if (Array.isArray(legacy) && legacy.length) {
+          return migrateLegacy(legacy, null, { id: "p_seed", name: "Minu pakett", createdAt: 0 });
+        }
+        return stored ?? emptyState();
+      };
+
+      // ---- REAL-PATH: client_id -> package_ref map (stable, local-only) ----
+      // Keeps syncPackages idempotent: on re-sync we pass the known package_ref
+      // per item so the server reuses it instead of minting a duplicate.
+      const PKGREF_MAP_KEY = "mkval:pkgrefs";   // local-only; NEVER sent wholesale
+      const readPkgRefMap = (): Record<string, string> => {
+        try { return JSON.parse(localStorage.getItem(PKGREF_MAP_KEY) || "{}") || {}; } catch { return {}; }
+      };
+      const writePkgRefMap = (m: Record<string, string>): void => {
+        try { localStorage.setItem(PKGREF_MAP_KEY, JSON.stringify(m)); } catch { /* private mode */ }
+      };
 
       // ---- LIVE pipe: e-postide korje AMOS-i (api/subscribe) -------------
       // outcome_package on AMOS-i lepingus OLEMAS → jõuab päriselt kohale
@@ -613,6 +657,25 @@ const schema = {
           return;
         }
 
+        // ===== REAL PATH (flag ON): magic-link request, no demo bridge =====
+        if (kontoEnabled()) {
+          const btn = $("[data-auth-submit]") as HTMLButtonElement;
+          const origLabel = btn?.textContent ?? "";
+          if (btn) { btn.disabled = true; btn.textContent = "Saadan linki…"; }
+          if (emailInput) emailInput.disabled = true;
+          track("lead_form_submit_attempt", { form_name: "account" });
+          track("account_login_request", {}); // no PII
+          try { await requestLogin(email); } catch { /* näita kontrolli-e-posti niikuinii; saab uue tellida */ }
+          track("lead_form_submit", { form_name: "account", delivery: "magic_link" });
+          if (btn) { btn.disabled = false; btn.textContent = origLabel; }
+          if (emailInput) emailInput.disabled = false;
+          const checkEmailEl = $("[data-check-email]");
+          if (checkEmailEl) checkEmailEl.textContent = email;
+          showScreen("check");
+          return; // ÄRA jätka demo-sillaga
+        }
+        // ===== DEMO PATH (flag OFF): muutmata allpool =====
+
         const submitBtn = $("[data-auth-submit]") as HTMLButtonElement;
         submitBtn.disabled = true;
         const origLabel = submitBtn.textContent;
@@ -684,17 +747,29 @@ const schema = {
         showScreen("auth");
       });
 
-      // BRIDGE: demo-login asendab magic-link'i klõpsu. TOOTMISES jõuab kasutaja
-      // siia /konto/kinnita?token=… kaudu, kus AMOS kinnitab double-opt-in'i.
-      $("[data-demo-login]")?.addEventListener("click", () => {
-        const email = sessionStorage.getItem("mkval:pending_email") || "";
-        const consent = sessionStorage.getItem("mkval:pending_consent") === "1";
-        if (!email) { showScreen("auth"); return; }
-        const isNew = !readAccount();
-        loginAndMigrate(email, consent);
-        track("tool_completed", { tool_name: "account_login" });
-        if (isNew) track("result_high_intent", { result_route: "account_create", form_name: "account_create" });
-      });
+      // REAL PATH (flag ON): peida demo-login nupp + selle demo-sild ja lülita
+      // kontrolli-ekraani tekst magic-link'i sõnumiks. Staatiline leht → runtime-toggle.
+      if (kontoEnabled()) {
+        const demoBtn = $("[data-demo-login]");
+        if (demoBtn) {
+          const demoWrap = demoBtn.closest(".inline-actions") as HTMLElement | null;
+          (demoWrap ?? demoBtn).setAttribute("hidden", "");
+        }
+        const bridgeNote = document.querySelector(".bridge-note");
+        if (bridgeNote) bridgeNote.setAttribute("hidden", "");
+      } else {
+        // BRIDGE: demo-login asendab magic-link'i klõpsu. TOOTMISES jõuab kasutaja
+        // siia /konto/kinnita?token=… kaudu, kus AMOS kinnitab double-opt-in'i.
+        $("[data-demo-login]")?.addEventListener("click", () => {
+          const email = sessionStorage.getItem("mkval:pending_email") || "";
+          const consent = sessionStorage.getItem("mkval:pending_consent") === "1";
+          if (!email) { showScreen("auth"); return; }
+          const isNew = !readAccount();
+          loginAndMigrate(email, consent);
+          track("tool_completed", { tool_name: "account_login" });
+          if (isNew) track("result_high_intent", { result_route: "account_create", form_name: "account_create" });
+        });
+      }
 
       // ====================================================================
       // EKRAAN D-loogika (sild): login + lossless union-merge migratsioon.
@@ -1125,17 +1200,105 @@ const schema = {
 
       // ---- Logi välja ----
       $("[data-logout]")?.addEventListener("click", () => {
-        // BRIDGE: tootmises tühistab see ainult seansi (konto jääb AMOS-i alles).
+        // REAL PATH: lõpeta seanss (kustuta token). DEMO: tühista ainult sild.
+        if (kontoEnabled()) clearSession();
         CURRENT = null;
         renderAnonBanner();
         showScreen("auth");
       });
 
       // ====================================================================
-      // ALGSEISUND — kui konto on juba selles brauseris (sild), näita kontot.
+      // REAL PATH (flag ON): renderda konto-ekraan SERVERI pakettidest.
+      // Nimed + nimekaart jäävad localStorage'i; serverisse EI saadeta kunagi.
+      // ====================================================================
+      type ServerPackage = {
+        package_ref: string;
+        outcome_refs?: string[];
+        last_covered_count?: number | null;
+        last_program_count?: number | null;
+        last_fully_covered?: boolean | null;
+        last_best_variant_ref?: string | null;
+      };
+
+      const renderRealAccount = (packages: ServerPackage[]): void => {
+        const body = $("[data-packages-body]");
+        const emptyActions = $("[data-packages-empty-actions]");
+        if (!body) return;
+        if (!packages.length) {
+          body.innerHTML = `<p class="acc-empty">Sul pole veel salvestatud paketti. Mine oskuste lehele, korja sobivad oskused ja vajuta „Salvesta kontole".</p>`;
+          if (emptyActions) emptyActions.hidden = false;
+          showScreen("account");
+          return;
+        }
+        if (emptyActions) emptyActions.hidden = true;
+        body.innerHTML = "";
+        for (const pkg of packages) {
+          const name = getNamesFor(pkg.package_ref) || "Pakett";   // ainult kliendipoolne nimi
+          const size = pkg.outcome_refs?.length ?? 0;
+          const covered = pkg.last_covered_count ?? null;
+          const progN = pkg.last_program_count ?? null;
+          const full = pkg.last_fully_covered === true;
+          let coverLine = "";
+          if (covered != null && progN != null) {
+            coverLine = full
+              ? `Parim kate: ${covered}/${size} oskust ühest programmist.`
+              : `Parim kate: ${covered}/${size} oskust ${progN} programmiga.`;
+          }
+          const card = document.createElement("div");
+          card.className = "pkg-card";
+          card.dataset.pkgRef = pkg.package_ref;
+          card.innerHTML = `
+            <div class="pkg-card-head">
+              <p class="pkg-card-name">${escHtml(name)}</p>
+              <span class="cov">${size} oskust</span>
+            </div>
+            ${coverLine ? `<p class="pm-note">${escHtml(coverLine)}</p>` : ""}`;
+          body.appendChild(card);
+        }
+        track("package_view", { count: packages.reduce((s, p) => s + (p.outcome_refs?.length ?? 0), 0) });
+        showScreen("account");
+      };
+
+      // Sünki kohalikud paketid üles (idempotentne) ja renderda serveri seisust.
+      const syncAndRenderReal = async (): Promise<void> => {
+        try {
+          const local = loadLocalState();
+          if (local.packages.length) {
+            const knownMap = readPkgRefMap();
+            const payload = buildSyncPayload(local, outcomeRefForText, (clientId: string) => knownMap[clientId]);
+            if (payload && payload.length) {
+              const synced = await syncPackages(payload);
+              if (synced && synced.packages) {
+                const nextMap = { ...knownMap };
+                for (const row of synced.packages) nextMap[row.client_id] = row.package_ref;
+                writePkgRefMap(nextMap);
+                const names = namesFromSync(local, synced.packages);
+                for (const ref of Object.keys(names)) setName(ref, names[ref]);
+                if (packagesUnsyncable(local, outcomeRefForText) > 0) {
+                  toast("Mõnda paketti ei saanud veel sünkroonida.");
+                }
+              }
+            }
+          }
+        } catch { /* sünk parima võimaliku; renderda ikkagi serveri seis */ }
+        const srv = await fetchState();
+        renderRealAccount((srv?.packages as ServerPackage[]) ?? []);
+      };
+
+      // ====================================================================
+      // ALGSEISUND
+      //   REAL (flag ON) + seanss   -> sünki kohalikud paketid, renderda serverist.
+      //   REAL (flag ON) + seanssita -> väljalogitud hero (e-posti vorm).
+      //   DEMO (flag OFF)            -> olemasolev mkval:account sild (MUUTMATA).
       // ====================================================================
       const boot = (): void => {
         renderAnonBanner();
+        if (kontoEnabled()) {
+          if (getSession()) { void syncAndRenderReal(); }
+          else { showScreen("auth"); }
+          return;
+        }
+        // ===== DEMO PATH (flag OFF): MUUTMATA =====
         const existing = readAccount();
         if (existing && existing.email) {
           renderAccount(existing);
