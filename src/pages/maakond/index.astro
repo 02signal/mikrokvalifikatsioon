@@ -1,0 +1,176 @@
+---
+import Seo from "../../components/Seo.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { REGIONS, programmeCount } from "../../data/regions";
+import { groupsForRegion, openingsBandText, asOfText, laborCheckedAt, laborGeneratedAt } from "../../data/labor";
+import { catalogCheckedAt } from "../../data/catalog";
+
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const SITE = "https://mikrokvalifikatsioon.ee";
+const canonicalPath = "/maakond/";
+
+// Kõrgeima nõudlusega ametirühma lühisignaal maakonnale (üks lause hubi kaardil).
+const BAND_ORDER = ["none", "band_1_5", "band_6_20", "band_21_50", "band_gt_50"];
+function topDemand(regionKey: string | null): string | null {
+  if (!regionKey) return null;
+  const groups = groupsForRegion(regionKey).filter((s) => s.openings_now_band !== "none");
+  if (!groups.length) return null;
+  const top = groups.slice().sort((a, b) => BAND_ORDER.indexOf(b.openings_now_band) - BAND_ORDER.indexOf(a.openings_now_band))[0];
+  return openingsBandText(top.openings_now_band);
+}
+
+const rows = REGIONS.map((r) => {
+  const counts = programmeCount(r.slug);
+  return { region: r, counts, demand: topDemand(r.laborRegionKey) };
+});
+
+// Töötukassa andmeseis (ühtne kõigis maakondades — snapshoti as_of).
+const anyKey = REGIONS.find((r) => r.laborRegionKey)?.laborRegionKey ?? null;
+const anySignal = anyKey ? groupsForRegion(anyKey)[0] : null;
+const laborAsOf = anySignal ? asOfText(anySignal.as_of) : "";
+function dmy(iso: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || "");
+  return m ? `${m[3]}.${m[2]}.${m[1]}` : iso;
+}
+const laborUpdated = dmy(laborGeneratedAt || laborCheckedAt);
+
+const title = "Mikrokvalifikatsioonid maakonniti: õpe, töökohad ja palk";
+const description = `Mida saab igas Eesti maakonnas õppida, millised tööd on nõutud ja kui palju makstakse — õpe, Töötukassa tööturunõudlus (${laborAsOf}) ja Statistikaameti palk koos. Kõik 15 maakonda.`;
+const introText = "Vali maakond ja näe ühes kohas: milliseid mikrokvalifikatsioone ja mikrokraade saab seal õppida (kohapeal või veebis), millised ametirühmad on Töötukassa andmetel nõutud ja milline on piirkondlik palgakontekst.";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": `${SITE}/#organization`, name: "Mikrokvalifikatsioon.ee", legalName: "Ettevõtluskeskus OÜ", url: `${SITE}/` },
+    {
+      "@type": "WebPage",
+      "@id": `${SITE}${canonicalPath}#webpage`,
+      url: `${SITE}${canonicalPath}`,
+      name: title,
+      description: introText,
+      inLanguage: "et",
+      isPartOf: { "@id": `${SITE}/#organization` }
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Maakonnad", item: `${SITE}${canonicalPath}` }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      name: "Eesti maakonnad — õpe, töökohad ja palk",
+      numberOfItems: REGIONS.length,
+      itemListElement: REGIONS.map((r, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: r.formalName,
+        url: `${SITE}/maakond/${r.slug}/`
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title={title}
+      description={description}
+      canonicalPath={canonicalPath}
+      ogTitle="Mikrokvalifikatsioonid maakonniti"
+      ogDescription="Õpe, Töötukassa tööturunõudlus ja palk — kõik 15 Eesti maakonda ühes vaates."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <span>Maakonnad</span>
+          </nav>
+          <span class="eyebrow">Maakonniti</span>
+          <h1>Õpe, töökohad ja palk — maakonniti</h1>
+          <p>{introText}</p>
+          <p class="report-date">Kataloog kontrollitud: {checkedAtText}. Tööturu andmeseis: {laborAsOf} (Töötukassa feed uuendatud {laborUpdated}).</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <ul class="region-grid">
+            {rows.map(({ region, counts, demand }) => (
+              <li class="region-card">
+                <a href={`/maakond/${region.slug}/`} data-track-event="cta_click" data-track-label="region_hub_to_county">
+                  <span class="region-name">{region.name}</span>
+                  <span class="region-count">{counts.total} programmi</span>
+                </a>
+                <p class="region-signal">
+                  {region.seat} · {counts.local > 0 ? `${counts.local} kohapeal, ` : ""}{counts.online} veebis
+                </p>
+                <p class="region-demand">
+                  {demand
+                    ? <>Töötukassa: kõrgeim nõudlus <strong>{demand}</strong> (ametirühma kohti, {laborAsOf}).</>
+                    : <span class="muted">Eraldi tööturu andmeid napib.</span>}
+                </p>
+              </li>
+            ))}
+          </ul>
+          <p class="region-help">
+            Iga maakonna leht koondab kohapealse ja veebis kättesaadava õppe, Töötukassa nõudluse maakonniti
+            (ametirühma tasemel) ja piirkondliku palgakonteksti.
+          </p>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Ei tea, kust alustada?</span>
+            <h2>Sirvi kogu kataloogi või tee suunatest.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="region_hub_suunatest">Tee suunatest</a>
+              <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="region_hub_kataloog">Ava kataloog</a>
+            </div>
+            <p class="chips">
+              <a class="chip" href="/karjaar/" data-track-event="cta_click" data-track-label="region_hub_karjaar">Karjäärirajad →</a>
+              <a class="chip chip-alt" href="/andmed/">Andmete päritolu →</a>
+            </p>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="region_hub_email">info@mikrokvalifikatsioon.ee</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Maakonnad" />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .region-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+      .region-card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+      .region-card > a { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+      .region-name { color: #212121; font-weight: 700; }
+      .region-count { color: var(--teal); font-weight: 700; font-size: 0.85rem; white-space: nowrap; }
+      .region-signal { margin: 6px 0 4px; color: var(--muted); font-size: 0.86rem; }
+      .region-demand { margin: 0; color: #5f6569; font-size: 0.86rem; }
+      .region-demand .muted { color: var(--muted); }
+      .region-help { margin: 16px 0 0; color: var(--muted); font-size: 0.85rem; }
+      .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
+      .chip { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 0.9rem; color: var(--teal); font-weight: 700; }
+      .chip-alt { color: #212121; background: #f3f6f3; font-weight: 400; }
+    </style>
+  </body>
+</html>
