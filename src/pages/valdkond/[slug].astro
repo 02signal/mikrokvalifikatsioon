@@ -270,6 +270,20 @@ const schema = { "@context": "https://schema.org", "@graph": wantedSchema };
         </section>
       )}
 
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Seotud vaated</span>
+            <h2>Vaata {field} valdkonda ka teise nurga alt</h2>
+          </div>
+          <p class="related-views">
+            <a href="/ametiruhm/" data-track-event="cta_click" data-track-label="field_to_ametiruhm">Ametirühmad ja tööturu nõudlus →</a>
+            <a href="/maakond/" data-track-event="cta_click" data-track-label="field_to_maakond">Õpe maakonna järgi →</a>
+            <a href="/kataloog/" data-track-event="cta_click" data-track-label="field_to_kataloog_related">Kogu kataloog →</a>
+          </p>
+        </div>
+      </section>
+
       <section class="white">
         <div class="section-inner narrow">
           <div class="section-head compact-head">
@@ -322,6 +336,8 @@ const schema = { "@context": "https://schema.org", "@graph": wantedSchema };
       .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
       .crumbs a { color: #5a6b80; }
       .crumbs span { color: #212121; }
+      .related-views { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 0; }
+      .related-views a { color: var(--teal); font-weight: 700; }
       .level-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
       .level-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
       .level-num { margin: 0; font-size: 2rem; font-weight: 800; color: var(--teal); line-height: 1; }
