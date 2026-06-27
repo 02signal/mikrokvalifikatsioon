@@ -1,0 +1,221 @@
+---
+import Seo from "../../components/Seo.astro";
+import CategoryMark from "../../components/CategoryMark.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import {
+  buildableGroups,
+  nationalDemandFor,
+  trendLabel,
+  trendArrow,
+  VALDKOND_LABEL,
+  KARJAAR_LABEL,
+} from "../../data/occupations";
+import {
+  openingsBandText,
+  asOfText,
+  laborCheckedAt,
+} from "../../data/labor";
+
+const checkedAtText = laborCheckedAt.split("-").reverse().join(".");
+const SITE = "https://mikrokvalifikatsioon.ee";
+const canonicalPath = "/ametiruhm/";
+
+// Üks õpitee-rida ühe rühma kohta (esimene valdkond + esimene karjäär, loomulik tekst).
+function studyLine(g: (typeof buildableGroups)[number]): string {
+  const parts: string[] = [];
+  if (g.studyValdkonnad[0]) parts.push(VALDKOND_LABEL[g.studyValdkonnad[0]] ?? g.studyValdkonnad[0]);
+  if (g.studyKarjaarid[0]) parts.push((KARJAAR_LABEL[g.studyKarjaarid[0]] ?? g.studyKarjaarid[0]) + " karjäärirada");
+  return parts.join(" · ");
+}
+
+const title = "Ametirühmad: tööturu nõudlus ja sobiv õpe";
+const description =
+  "Millised ametid on Eestis nõutud? Vali ametirühm ja näe Töötukassa nõudlust, " +
+  "palgakonteksti (Statistikaamet) ning käsitsi kontrollitud õpiteed sobivate " +
+  "mikrokvalifikatsioonide ja mikrokraadideni.";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE}/#organization`,
+      name: "Mikrokvalifikatsioon.ee",
+      legalName: "Ettevõtluskeskus OÜ",
+      url: `${SITE}/`,
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Ametirühmad", item: `${SITE}/ametiruhm/` },
+      ],
+    },
+    {
+      "@type": "ItemList",
+      name: "Ametirühmad — tööturu nõudlus ja õpe",
+      numberOfItems: buildableGroups.length,
+      itemListElement: buildableGroups.map((g, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: g.label,
+        url: `${SITE}/ametiruhm/${g.slug}/`,
+      })),
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title={title}
+      description={description}
+      canonicalPath={canonicalPath}
+      ogTitle="Ametirühmad: tööturu nõudlus ja õpe"
+      ogDescription="Vali ametirühm — näe Eesti nõudlust, palgakonteksti ja sobivat õpet."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <span>Ametirühmad</span>
+          </nav>
+          <CategoryMark kind="career" />
+          <span class="eyebrow">Ametirühmad</span>
+          <h1>Millised ametid on Eestis nõutud?</h1>
+          <p>
+            Iga ametirühm on sild <strong>tööturu</strong> ja <strong>õppe</strong> vahel:
+            näed ametliku Töötukassa nõudlust ja palgakonteksti ning käsitsi kontrollitud
+            õpiteed sobivate mikrokvalifikatsioonide ja mikrokraadideni. Numbreid me välja
+            ei mõtle — nõudlus ja palk tulevad otse avaandmetest.
+          </p>
+          <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <ul class="group-grid">
+            {buildableGroups.map((g) => {
+              const d = nationalDemandFor(g.iscoMajor);
+              return (
+                <li class="group-card">
+                  <a
+                    href={`/ametiruhm/${g.slug}/`}
+                    data-track-event="cta_click"
+                    data-track-label="ametiruhm_hub_to_group"
+                  >
+                    <span class="group-name">{g.label}</span>
+                  </a>
+                  <p class="group-blurb">{g.blurb}</p>
+                  {d && (
+                    <p class="group-demand">
+                      <span class="dem-kicker">Tööturg</span>
+                      Nõudlus kuni <strong>{openingsBandText(d.topBand)}</strong>
+                      <em data-dir={d.trend} title={trendLabel(d.trend)}>{trendArrow(d.trend)}</em>
+                      · vabu kohti {d.activeRegions}/{d.regionCount} maakonnas ({asOfText(d.asOf)})
+                    </p>
+                  )}
+                  <p class="group-study">
+                    <span class="dem-kicker">Õpitee</span>
+                    {studyLine(g)}
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Aus piir</span>
+            <h2>Miks ainult osa ametirühmadest?</h2>
+            <p class="muted">
+              Mikrokvalifikatsioonid ja mikrokraadid katavad täna eelkõige juhtimise,
+              tippspetsialisti, keskastme ja kontoritöö rolle. Käsi- ja oskustöö ning
+              mitme teeninduse rühma jaoks puudub praegu päriselt sobiv õpitee, seega me
+              neile õhukest lehte ei tee — pigem oleme ausad selle kohta, mida register katab.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Ei tea, kuhu liikuda?</span>
+            <h2>Tee suunatest või sirvi karjäärirajad läbi.</h2>
+            <div class="inline-actions">
+              <a
+                class="btn btn-primary"
+                href="/#suunatest"
+                data-track-event="cta_click"
+                data-track-label="ametiruhm_hub_suunatest"
+                >Tee suunatest</a
+              >
+              <a
+                class="btn btn-secondary"
+                href="/karjaar/"
+                data-track-event="cta_click"
+                data-track-label="ametiruhm_hub_karjaar"
+                >Vaata karjäärirajad</a
+              >
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p>
+              <a
+                href="mailto:info@mikrokvalifikatsioon.ee"
+                data-track-event="email_click"
+                data-track-label="ametiruhm_hub_email"
+                >info@mikrokvalifikatsioon.ee</a
+              >
+            </p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Ametirühmad" />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .group-grid {
+        list-style: none; padding: 0; margin: 0; display: grid; gap: 14px;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+      .group-card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+      .group-card > a { display: block; }
+      .group-name { color: var(--teal); font-weight: 700; font-size: 1.08rem; }
+      .group-blurb { margin: 8px 0 10px; color: var(--muted); font-size: 0.9rem; }
+      .group-demand, .group-study {
+        margin: 6px 0 0; font-size: 0.9rem; color: var(--navy);
+        display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px;
+      }
+      .group-demand strong { color: var(--teal); }
+      .group-demand em { font-style: normal; color: var(--muted); }
+      .group-demand em[data-dir="up"] { color: #2e7d22; }
+      .group-demand em[data-dir="down"] { color: #b3541e; }
+      .dem-kicker {
+        font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em;
+        color: var(--muted); background: #f3f6f3; border-radius: 999px; padding: 2px 8px;
+        flex: 0 0 auto;
+      }
+    </style>
+  </body>
+</html>
