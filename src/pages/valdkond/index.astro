@@ -1,0 +1,126 @@
+---
+import Seo from "../../components/Seo.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { catalog, fieldsWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
+
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
+const SITE = "https://mikrokvalifikatsioon.ee";
+
+// Valdkonnad päris kataloogist: `fieldsWithSlug` (juba ilma koondkategooriata "muu"),
+// programmide arv loetakse katalogist sama loogikaga kui /valdkond/[slug] lehel
+// (catalog.filter((e) => e.field === field)). Suurim valik eespool.
+const fieldList = fieldsWithSlug
+  .map((f) => ({
+    field: f.field,
+    slug: f.slug,
+    label: f.field.charAt(0).toUpperCase() + f.field.slice(1),
+    count: catalog.filter((e) => e.field === f.field).length
+  }))
+  .sort((a, b) => b.count - a.count || a.field.localeCompare(b.field, "et"));
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": `${SITE}/#organization`, name: "Mikrokvalifikatsioon.ee", legalName: "Ettevõtluskeskus OÜ", url: `${SITE}/` },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Valdkonnad", item: `${SITE}/valdkond/` }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      name: "Mikrokvalifikatsioonide ja mikrokraadide valdkonnad",
+      numberOfItems: fieldList.length,
+      itemListElement: fieldList.map((f, i) => ({
+        "@type": "ListItem", position: i + 1, name: f.label, url: `${SITE}/valdkond/${f.slug}/`
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Mikrokraadid valdkondade kaupa"
+      description={`Sirvi Eesti mikrokvalifikatsioone ja mikrokraade ${fieldList.length} valdkonna järgi — IT ja andmed, majandus ja juhtimine, tehnika, haridus ja palju muud. Iga valdkonna all vastavad programmid koos mahu, hinna ja õppevormiga.`}
+      canonicalPath="/valdkond/"
+      ogTitle="Mikrokraadid valdkondade kaupa"
+      ogDescription="Leia mikrokvalifikatsioon valdkonna järgi — IT, majandus, tehnika, haridus ja muu."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <span>Valdkonnad</span>
+          </nav>
+          <span class="eyebrow">Valdkonnad</span>
+          <h1>Mikrokraadid ja mikrokvalifikatsioonid valdkondade kaupa</h1>
+          <p>
+            Tead, mis valdkonda tahad? Vali valdkond ja näe kohe kõik vastavad mikrokvalifikatsioonid ja
+            mikrokraadid koos mahu (EAP), hinna ja õppevormiga. Või <a href="/teema/">sirvi teemade ja oskuste kaupa</a>.
+          </p>
+          <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <ul class="topic-grid">
+            {fieldList.map((f) => (
+              <li class="topic-card">
+                <a href={`/valdkond/${f.slug}/`} data-track-event="cta_click" data-track-label="hub_to_field">
+                  <span class="topic-name">{f.label}</span>
+                  <span class="topic-count">{f.count} programmi</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Ei leidnud oma valdkonda?</span>
+            <h2>Sirvi oskuste järgi või ava kogu kataloog.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/teema/" data-track-event="cta_click" data-track-label="field_hub_teema">Sirvi teemade kaupa</a>
+              <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="field_hub_kataloog">Ava kogu kataloog</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="field_hub_email">info@mikrokvalifikatsioon.ee</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="field_hub_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Valdkonnad" />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .topic-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+      .topic-card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+      .topic-card > a { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+      .topic-name { color: #212121; font-weight: 700; }
+      .topic-count { color: var(--teal); font-weight: 700; font-size: 0.85rem; white-space: nowrap; }
+    </style>
+  </body>
+</html>

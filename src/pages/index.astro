@@ -220,6 +220,81 @@ const schema = {
         </div>
       </section>
 
+      <section id="sirvi" class="white">
+        <div class="section-inner">
+          <div class="section-head">
+            <span class="kicker">Sirvi</span>
+            <h2>Leia oma suund — sirvi teemade, oskuste ja telgede kaupa.</h2>
+            <p>
+              Iga vaade viib sind sama registri juurde eri nurga alt: valdkond, oskus, karjäär,
+              ametirühm või maakond. Vali see, mis sinu mõttega kõige paremini haakub.
+            </p>
+          </div>
+          <ul class="hub-grid">
+            <li class="hub-card">
+              <a href="/kataloog/" data-track-event="cta_click" data-track-label="home_hub_kataloog">
+                <span class="hub-name">Kataloog</span>
+                <span class="hub-desc">Kõik programmid ühes filtreeritavas nimekirjas.</span>
+              </a>
+            </li>
+            <li class="hub-card">
+              <a href="/valdkond/" data-track-event="cta_click" data-track-label="home_hub_valdkond">
+                <span class="hub-name">Valdkonnad</span>
+                <span class="hub-desc">Sirvi IT, majanduse, tehnika ja muude valdkondade kaupa.</span>
+              </a>
+            </li>
+            <li class="hub-card">
+              <a href="/teema/" data-track-event="cta_click" data-track-label="home_hub_teema">
+                <span class="hub-name">Teemad</span>
+                <span class="hub-desc">Leia programmid kindla teema ja oskuse järgi.</span>
+              </a>
+            </li>
+            <li class="hub-card">
+              <a href="/oskused/" data-track-event="cta_click" data-track-label="home_hub_oskused">
+                <span class="hub-name">Oskused</span>
+                <span class="hub-desc">Otsi õpiväljundi järgi — mida sa pärast päriselt oskad.</span>
+              </a>
+            </li>
+            <li class="hub-card">
+              <a href="/karjaar/" data-track-event="cta_click" data-track-label="home_hub_karjaar">
+                <span class="hub-name">Karjäärid</span>
+                <span class="hub-desc">Vali roll ja näe, kuidas alustada ja läbi lüüa.</span>
+              </a>
+            </li>
+            <li class="hub-card">
+              <a href="/ametiruhm/" data-track-event="cta_click" data-track-label="home_hub_ametiruhm">
+                <span class="hub-name">Ametirühmad</span>
+                <span class="hub-desc">Vaata tööturu nõudlust ametirühma kaupa.</span>
+              </a>
+            </li>
+            <li class="hub-card">
+              <a href="/maakond/" data-track-event="cta_click" data-track-label="home_hub_maakond">
+                <span class="hub-name">Maakonnad</span>
+                <span class="hub-desc">Vaata õpet ja õppevorme maakonna järgi.</span>
+              </a>
+            </li>
+            <li class="hub-card">
+              <a href="/vastused/" data-track-event="cta_click" data-track-label="home_hub_vastused">
+                <span class="hub-name">Vastused</span>
+                <span class="hub-desc">Lühikesed faktivastused: kestus, hind, EAP ja muu.</span>
+              </a>
+            </li>
+            <li class="hub-card">
+              <a href="/mikrokvalifikatsioonide-vordlus/" data-track-event="cta_click" data-track-label="home_hub_vordlus">
+                <span class="hub-name">Võrdlused</span>
+                <span class="hub-desc">Pane sarnased programmid kõrvuti ja võrdle.</span>
+              </a>
+            </li>
+            <li class="hub-card">
+              <a href="/kes-maksab/" data-track-event="cta_click" data-track-label="home_hub_kesmaksab">
+                <span class="hub-name">Kes maksab</span>
+                <span class="hub-desc">Töötukassa, tööandja või ise — leia rahastuse rada.</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+
       <section id="kes-maksab" class="ice">
         <div class="section-inner">
           <div class="section-head">
@@ -404,6 +479,14 @@ const schema = {
     </main>
 
     <Footer />
+
+    <style>
+      .hub-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+      .hub-card { background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: 0; box-shadow: var(--shadow); }
+      .hub-card > a { display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; height: 100%; }
+      .hub-name { color: var(--teal); font-weight: 700; }
+      .hub-desc { color: var(--muted); font-size: 0.9rem; }
+    </style>
 
     <script>
       type Program = {
