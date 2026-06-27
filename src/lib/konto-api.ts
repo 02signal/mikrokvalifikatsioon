@@ -39,10 +39,20 @@
  * DOM-/Vite-vabalt. Tootmises on `import.meta.env` alati olemas, nii et see
  * tagavara on `undefined` ega mõjuta midagi.
  */
+// LIVE konto API host. Used as the default ONLY inside a Vite/Astro build context
+// (where `import.meta.env` exists) so production is real-mode even if the
+// PUBLIC_KONTO_API_BASE env / .env.production is not picked up by the build host
+// (Vercel git redeploys kept reverting konto to the demo bridge). This is a PUBLIC
+// URL, not a secret — already in the client bundle + every network call. The env
+// var still OVERRIDES it (the ?? chain). In a NON-Vite context (node tests, where
+// `import.meta.env` is undefined) the default stays "" so the demo/flag-off contract
+// the tests assert is preserved; tests inject __MKVAL_KONTO_BASE__ for the on case.
+const KONTO_API_BASE_DEFAULT = "https://liitu.mikrokvalifikatsioon.ee";
+const VITE_ENV = (import.meta as any).env;
 export const KONTO_API_BASE: string =
-  (import.meta as any).env?.PUBLIC_KONTO_API_BASE ??
+  VITE_ENV?.PUBLIC_KONTO_API_BASE ??
   (globalThis as any).__MKVAL_KONTO_BASE__ ??
-  "";
+  (VITE_ENV ? KONTO_API_BASE_DEFAULT : "");
 
 /** localStorage võtmed (uued — ei kattu vana sillaga). */
 export const SESSION_KEY = "mkval:konto_session";
