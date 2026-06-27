@@ -1,0 +1,427 @@
+---
+import Seo from "../../components/Seo.astro";
+import CategoryMark from "../../components/CategoryMark.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { REGIONS, localProgrammes, onlineProgrammes, type Region } from "../../data/regions";
+import { catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
+import { toCourse } from "../../data/courseSchema";
+import {
+  groupsForRegion, openingsBandText, trendInfo, iscoLabel, asOfText,
+  laborCheckedAt, laborGeneratedAt,
+} from "../../data/labor";
+import { professionalsHourlyFor, nationalMedianMonthly, salaryRegionalYear, eur } from "../../data/salary";
+
+export function getStaticPaths() {
+  return REGIONS.map((r) => ({ params: { slug: r.slug }, props: { region: r } }));
+}
+
+const { region } = Astro.props as { region: Region };
+const SITE = "https://mikrokvalifikatsioon.ee";
+const canonicalPath = `/maakond/${region.slug}/`;
+
+// ── PROGRAMMID ──────────────────────────────────────────────────────────────
+// Kohapealsed = pakkuja asukoht maakonnas. Veebis = veebis/hübriid (kõigile).
+const local = localProgrammes(region.slug);
+const localSlugs = new Set(local.map((e) => e.slug));
+const online = onlineProgrammes().filter((e) => !localSlugs.has(e.slug));
+const allEntries = [...local, ...online];
+const localProviders = [...new Set(local.map((e) => e.provider))];
+
+// ── TÖÖTURG (Töötukassa, maakonniti, ametirühma kaupa) ─────────────────────────
+const BAND_ORDER = ["none", "band_1_5", "band_6_20", "band_21_50", "band_gt_50"];
+const regionKey = region.laborRegionKey;
+const demandRaw = regionKey ? groupsForRegion(regionKey).filter((s) => s.openings_now_band !== "none") : [];
+const demand = demandRaw.slice().sort(
+  (a, b) => BAND_ORDER.indexOf(b.openings_now_band) - BAND_ORDER.indexOf(a.openings_now_band)
+    || String(a.isco_major_group).localeCompare(String(b.isco_major_group))
+);
+const topDemand = demand[0] ?? null;
+const hasLabor = demand.length > 0;
+const laborAsOf = topDemand ? asOfText(topDemand.as_of) : "";
+function dmy(iso: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || "");
+  return m ? `${m[3]}.${m[2]}.${m[1]}` : iso;
+}
+const laborUpdated = dmy(laborGeneratedAt || laborCheckedAt);
+
+// ── PALK (Statistikaamet, piirkondlik) ─────────────────────────────────────────
+// PA625: tippspetsialistide (ISCO-1 rühm "2") brutotunnipalga mediaan maakonniti.
+const regionalHourly = regionKey ? professionalsHourlyFor(regionKey) : null;
+const nationalMonthly = nationalMedianMonthly();
+
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
+
+// ── INTRO + META (väljavõetav, päris arvudega) ─────────────────────────────────
+const introText =
+  `${region.formalName} (keskus ${region.seat}): ${allEntries.length} mikrokvalifikatsiooni ja mikrokraadi` +
+  `${local.length > 0 ? ` — ${local.length} kohapeal ${localProviders.length} koolist` : ""}` +
+  `${online.length > 0 ? `, ${online.length} veebis kättesaadav` : ""}.` +
+  (hasLabor ? ` Töötukassa andmetel on ${laborAsOf} kõrgeim nõudlus ametirühmas „${iscoLabel(topDemand!.isco_major_group)}".` : "");
+
+const title = `Õpe, töö ja palk ${region.name}l — mikrokvalifikatsioonid`;
+const description =
+  `Mida saab ${region.name}l õppida, millised tööd on nõutud ja kui palju makstakse. ` +
+  `${allEntries.length} mikrokvalifikatsiooni ja mikrokraadi${hasLabor ? `, Töötukassa tööturunõudlus (${laborAsOf})` : ""}` +
+  `${regionalHourly != null ? " ja piirkondlik palgakontekst" : ""}.`;
+
+// ── KKK — ainult päris vastustega ──────────────────────────────────────────────
+const faq: { q: string; a: string }[] = [
+  {
+    q: `Mida saab ${region.name}l õppida?`,
+    a: local.length > 0
+      ? `${region.name}l pakub ${localProviders.length} kooli (${localProviders.join(", ")}) kokku ${local.length} kohapealset mikrokvalifikatsiooni või mikrokraadi`
+        + `${online.length > 0 ? `; lisaks saab ${online.length} programmi läbida veebis või hübriidvormis kõikjalt Eestist` : ""}. `
+        + `Kõik on allpool koos mahu (EAP) ja õppevormiga.`
+      : `${region.name}l ei ole registris praegu kohapealset mikrokvalifikatsiooni- ega mikrokraadiõpet. `
+        + `Küll aga saab ${online.length} programmi läbida veebis või hübriidvormis kõikjalt Eestist, sealhulgas ${region.name}l. `
+        + `Kõik on allpool koos mahu (EAP) ja õppevormiga.`
+  }
+];
+if (hasLabor) {
+  faq.push({
+    q: `Millised tööd on ${region.name}l nõutud?`,
+    a: `Töötukassa avaandmetel on ${laborAsOf} ${region.name}l kõige rohkem avatud kohti ametirühmas `
+      + `„${iscoLabel(topDemand!.isco_major_group)}" (${openingsBandText(topDemand!.openings_now_band)}). `
+      + `Arvud on toodud vahemikena ametirühma tasemel — täpne nimekiri allpool. Üksikuid töökuulutusi me ei kuva.`
+  });
+}
+if (regionalHourly != null) {
+  faq.push({
+    q: `Kui palju ${region.name}l makstakse?`,
+    a: `Statistikaameti andmetel (${salaryRegionalYear}) oli ${region.name}l tippspetsialistide brutotunnipalga mediaan `
+      + `${eur(regionalHourly)} € tunnis. Mediaan tähendab, et pooltel jääb palk alla ja pooltel üle selle. `
+      + `See on piirkondlik kontekst, mitte konkreetse ameti palk.`
+  });
+}
+
+// ── JSON-LD ─────────────────────────────────────────────────────────────────
+const graph: Record<string, unknown>[] = [
+  { "@type": "Organization", "@id": `${SITE}/#organization`, name: "Mikrokvalifikatsioon.ee", legalName: "Ettevõtluskeskus OÜ", url: `${SITE}/` },
+  {
+    "@type": "WebPage",
+    "@id": `${SITE}${canonicalPath}#webpage`,
+    url: `${SITE}${canonicalPath}`,
+    name: title,
+    description: introText,
+    inLanguage: "et",
+    isPartOf: { "@id": `${SITE}/#organization` }
+  },
+  {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+      { "@type": "ListItem", position: 2, name: "Maakonnad", item: `${SITE}/maakond/` },
+      { "@type": "ListItem", position: 3, name: region.formalName, item: `${SITE}${canonicalPath}` }
+    ]
+  }
+];
+if (allEntries.length > 0) {
+  graph.push({
+    "@type": "ItemList",
+    name: `${region.formalName} — mikrokvalifikatsioonid ja mikrokraadid`,
+    numberOfItems: allEntries.length,
+    itemListElement: allEntries.map((entry, index) => ({
+      "@type": "ListItem", position: index + 1, item: toCourse(entry)
+    }))
+  });
+}
+if (hasLabor) {
+  graph.push({
+    "@type": "Dataset",
+    name: `${region.formalName} vabade töökohtade statistika (Töötukassa)`,
+    description: `${region.formalName} kuvatav tööturu nõudlus pärineb Töötukassa avaandmestikust ametirühma (ISCO) tasemel, banded vahemikena.`,
+    creator: { "@type": "Organization", name: "Eesti Töötukassa" },
+    license: "https://creativecommons.org/licenses/by-nc/3.0/",
+    spatialCoverage: { "@type": "AdministrativeArea", name: region.formalName },
+    temporalCoverage: topDemand!.as_of,
+    dateModified: laborGeneratedAt,
+    url: "https://andmed.eesti.ee/datasets/eesti-tootukassa-poolt-vahendatud-vabade-tookohtade-statistika"
+  });
+}
+if (regionalHourly != null) {
+  graph.push({
+    "@type": "Dataset",
+    name: `${region.formalName} tippspetsialistide palgastatistika (Statistikaamet)`,
+    description: `${region.formalName} tippspetsialistide brutotunnipalga mediaan, Statistikaameti tabel PA625 (${salaryRegionalYear}).`,
+    creator: { "@type": "Organization", name: "Statistikaamet" },
+    license: "https://creativecommons.org/licenses/by-sa/4.0/",
+    spatialCoverage: { "@type": "AdministrativeArea", name: region.formalName },
+    temporalCoverage: String(salaryRegionalYear),
+    url: "https://andmed.stat.ee/en/stat/PA625"
+  });
+}
+if (faq.length >= 2) {
+  graph.push({
+    "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } }))
+  });
+}
+const schema = { "@context": "https://schema.org", "@graph": graph };
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title={title}
+      description={description}
+      canonicalPath={canonicalPath}
+      ogTitle={`Õpe, töö ja palk ${region.name}l`}
+      ogDescription={`${allEntries.length} mikrokvalifikatsiooni ja mikrokraadi, Töötukassa tööturunõudlus ja palk — ${region.formalName}.`}
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report" data-region={region.slug}>
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <a href="/maakond/">Maakonnad</a> › <span>{region.name}</span>
+          </nav>
+          <CategoryMark kind="field" />
+          <span class="eyebrow">Maakond</span>
+          <h1>Õpe, töö ja palk {region.name}l</h1>
+          <p>{introText}</p>
+          <p class="report-date">Kataloog uuendatud: {updatedAtText}. Allikafaktid kontrollitud: {checkedAtText}.</p>
+        </div>
+      </section>
+
+      {/* ── PROGRAMMID ── */}
+      <section class="white">
+        <div class="section-inner">
+          {allEntries.length > 0 ? (
+            <>
+              <h2 class="block-title">Mida {region.name}l õppida ({allEntries.length})</h2>
+              {local.length > 0 && (
+                <div class="prog-block">
+                  <h3 class="prog-sub">Kohapeal {region.name}l ({local.length})</h3>
+                  <ul class="prog-grid">
+                    {local.map((entry) => (
+                      <li class="prog-card">
+                        <a class="prog-name" href={`/kataloog/${entry.slug}/`} data-track-event="cta_click" data-track-label="region_to_detail_local">{entry.name}</a>
+                        <p class="prog-prov">{entry.provider}</p>
+                        <p class="prog-facts">
+                          {entry.field && <span class="tag">{entry.field}</span>}
+                          {entry.ects != null && <span>{entry.ects} EAP</span>}
+                          {entry.format && <span class="fmt">{entry.format}</span>}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {online.length > 0 && (
+                <div class="prog-block">
+                  <h3 class="prog-sub">Veebis kättesaadav (kõikjalt Eestist, {online.length})</h3>
+                  <p class="prog-note">Need programmid toimuvad veebis või hübriidvormis — sa ei pea {region.name}l kohapeal käima.</p>
+                  <ul class="prog-grid">
+                    {online.map((entry) => (
+                      <li class="prog-card prog-online">
+                        <a class="prog-name" href={`/kataloog/${entry.slug}/`} data-track-event="cta_click" data-track-label="region_to_detail_online">{entry.name}</a>
+                        <p class="prog-prov">{entry.provider}</p>
+                        <p class="prog-facts">
+                          <span class="tag tag-online">veebis kättesaadav</span>
+                          {entry.ects != null && <span>{entry.ects} EAP</span>}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </>
+          ) : (
+            <div class="detail-block">
+              <h2>Mida {region.name}l õppida</h2>
+              <p class="muted">
+                Registris ei ole praegu ühtegi {region.name}l kohapeal toimuvat mikrokvalifikatsiooni ega mikrokraadi.
+                Vaata <a href="/kataloog/">kogu kataloogi</a> — paljud programmid on veebis kättesaadavad kõikjalt Eestist.
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ── TÖÖTURG ── */}
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Tööturg</span>
+            <h2>Millised tööd on {region.name}l nõutud?</h2>
+            {hasLabor ? (
+              <p class="muted">
+                Ametlik Töötukassa avaandmestik näitab vabu töökohti <strong>ametirühma</strong> kaupa
+                (mitte üksikrolli kaupa), {region.name}l, kuu seisuga {laborAsOf}. Arvud on vahemikena.
+              </p>
+            ) : (
+              <p class="muted">Selle maakonna kohta eraldi tööturu andmeid napib.</p>
+            )}
+          </div>
+
+          {hasLabor && (
+            <>
+              <div class="demand-card demand-card--lead">
+                <span class="demand-label">Kõrgeima nõudlusega ametirühm ({laborAsOf})</span>
+                <strong class="demand-value">{openingsBandText(topDemand!.openings_now_band)}</strong>
+                <span class="demand-top">{iscoLabel(topDemand!.isco_major_group)}</span>
+              </div>
+              <ul class="demand-regions">
+                {demand.map((s) => (
+                  <li>
+                    <span>{iscoLabel(s.isco_major_group)}</span>
+                    <span class="demand-band">{openingsBandText(s.openings_now_band)}
+                      <em data-dir={s.trend} title={trendInfo(s.trend).label}>{trendInfo(s.trend).arrow}</em></span>
+                  </li>
+                ))}
+              </ul>
+              <p class="demand-source">
+                Allikas: <a href="https://andmed.eesti.ee/datasets/eesti-tootukassa-poolt-vahendatud-vabade-tookohtade-statistika" rel="noopener" target="_blank">Eesti Töötukassa avaandmed</a>,
+                litsents <a href="https://creativecommons.org/licenses/by-nc/3.0/" rel="noopener" target="_blank">CC BY-NC 3.0</a>.
+                Andmeseis {laborAsOf}; AMOS feed uuendatud {laborUpdated}. Arvud on toodud vahemikena (ametirühma tasemel).
+              </p>
+            </>
+          )}
+        </div>
+      </section>
+
+      {/* ── PALK ── */}
+      {regionalHourly != null && (
+        <section class="white">
+          <div class="section-inner narrow">
+            <div class="section-head compact-head">
+              <span class="kicker">Palk</span>
+              <h2>Kui palju {region.name}l makstakse?</h2>
+              <p class="muted">
+                Ametlik <strong>tippspetsialistide brutotunnipalga mediaan</strong> {region.name}l
+                ({salaryRegionalYear}). Mediaan = poolte palgad jäävad alla, poolte üle selle.
+              </p>
+            </div>
+            <div class="salary-cards">
+              <div class="salary-card salary-card--lead">
+                <span class="salary-label">Tippspetsialistid (bruto, €/tunnis)</span>
+                <strong class="salary-value">{eur(regionalHourly)} €</strong>
+              </div>
+              {nationalMonthly != null && (
+                <div class="salary-card">
+                  <span class="salary-label">Eesti kõigi ametite mediaan (€/kuus)</span>
+                  <strong class="salary-value salary-value--muted">{eur(nationalMonthly)} €</strong>
+                </div>
+              )}
+            </div>
+            <p class="salary-source">
+              Allikas: <a href="https://andmed.stat.ee/en/stat/PA625" rel="noopener" target="_blank">Statistikaamet (tabel PA625, piirkondlik)</a>,
+              litsents <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" target="_blank">CC BY-SA 4.0</a>.
+              Tippspetsialistide (ISCO rühm 2) brutotunnipalga mediaan maakonniti; viimane avaldatud aasta {salaryRegionalYear}.
+              Kuupalga mediaan on riigi tasemel (tunni- ja kuunäitaja ei ole otse võrreldavad).
+            </p>
+          </div>
+        </section>
+      )}
+
+      {/* ── KKK ── */}
+      {faq.length >= 2 && (
+        <section class="ice">
+          <div class="section-inner narrow">
+            <div class="section-head compact-head">
+              <span class="kicker">KKK</span>
+              <h2>{region.name} — korduvad küsimused</h2>
+            </div>
+            <div class="faq">
+              {faq.map((f) => (
+                <details>
+                  <summary>{f.q}</summary>
+                  <p>{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Leia endale sobiv õpe ja vaata, kes maksab.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="region_suunatest">Tee suunatest</a>
+              <a class="btn btn-secondary" href="/kes-maksab/" data-track-event="cta_click" data-track-label="region_kesmaksab">Kes maksab?</a>
+            </div>
+            <p class="chips">
+              <a class="chip" href="/maakond/" data-track-event="cta_click" data-track-label="region_to_hub">Teised maakonnad →</a>
+              <a class="chip chip-alt" href="/karjaar/">Karjäärirajad →</a>
+            </p>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="region_email">info@mikrokvalifikatsioon.ee</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label={`${region.formalName} õpe`} />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .block-title { margin: 0 0 16px; }
+      .prog-block { margin: 0 0 22px; }
+      .prog-sub { margin: 0 0 6px; font-size: 1.05rem; color: var(--navy); }
+      .prog-note { margin: 0 0 12px; color: var(--muted); font-size: 0.88rem; }
+      .prog-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+      .prog-card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+      .prog-online { border-left: 3px solid var(--teal); }
+      .prog-name { color: var(--teal); font-weight: 700; }
+      .prog-prov { margin: 4px 0 8px; color: var(--muted); font-size: 0.9rem; }
+      .prog-facts { margin: 0; display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 0.85rem; color: #5f6569; }
+      .prog-facts .tag { background: #eef4ee; color: #2f6b2c; border-radius: 999px; padding: 1px 9px; }
+      .prog-facts .tag-online { background: #e6f2f1; color: #1a6f6a; }
+      .prog-facts .fmt { color: #5a6b80; }
+      .muted { color: var(--muted); }
+
+      .demand-card { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--green); border-radius: 10px; padding: 14px 16px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin-top: 6px; }
+      .demand-label { font-size: 0.85rem; color: var(--muted); flex: 1 1 100%; }
+      .demand-value { color: var(--teal); font-weight: 700; font-size: 1.5rem; }
+      .demand-top { font-size: 0.9rem; color: var(--muted); flex: 1 1 100%; }
+      .demand-regions { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 6px 16px; }
+      .demand-regions li { display: flex; justify-content: space-between; gap: 10px; font-size: 0.92rem; padding: 6px 0; border-bottom: 1px solid var(--line); }
+      .demand-band { font-weight: 600; color: var(--navy); white-space: nowrap; }
+      .demand-band em { font-style: normal; color: var(--muted); margin-left: 4px; }
+      .demand-band em[data-dir="up"] { color: #2e7d22; }
+      .demand-band em[data-dir="down"] { color: #b3541e; }
+      .demand-source { font-size: 0.8rem; color: var(--muted); margin: 12px 0 0; }
+
+      .salary-cards { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
+      .salary-card { background: var(--ice); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; display: grid; gap: 4px; min-width: 200px; flex: 1 1 200px; }
+      .salary-card--lead { border-left: 4px solid var(--green); }
+      .salary-label { font-size: 0.85rem; color: var(--muted); }
+      .salary-value { color: var(--teal); font-weight: 700; font-size: 1.6rem; }
+      .salary-value--muted { color: var(--navy); font-weight: 700; font-size: 1.3rem; }
+      .salary-source { font-size: 0.8rem; color: var(--muted); margin: 12px 0 0; }
+
+      .faq { display: grid; gap: 8px; }
+      .faq details { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 4px 16px; }
+      .faq summary { cursor: pointer; font-weight: 700; color: #212121; padding: 12px 0; list-style: none; }
+      .faq summary::-webkit-details-marker { display: none; }
+      .faq summary::before { content: "+ "; color: var(--teal); font-weight: 800; }
+      .faq details[open] summary::before { content: "– "; }
+      .faq details p { margin: 0 0 14px; color: #5f6569; }
+
+      .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
+      .chip { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 0.9rem; color: var(--teal); font-weight: 700; }
+      .chip-alt { color: #212121; background: #f3f6f3; font-weight: 400; }
+    </style>
+
+    <script>
+      const el = document.querySelector("[data-region]") as HTMLElement | null;
+      (window as any).digiteekaartTrack?.("region_page_view", { region: el?.getAttribute("data-region") || "" });
+    </script>
+  </body>
+</html>
