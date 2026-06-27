@@ -87,6 +87,28 @@ const priceTypicalText =
 const hoursLo = ectsMin != null ? ectsMin * 26 : null;
 const hoursHi = ectsMax != null ? ectsMax * 26 : null;
 
+// Valdkonnad programmide arvu järgi (väljavõetav "populaarseimad valdkonnad" loend).
+type FieldRow = { field: string; count: number };
+const fieldCounts = new Map<string, number>();
+for (const e of catalog) fieldCounts.set(e.field, (fieldCounts.get(e.field) ?? 0) + 1);
+// "muu" on koondkategooria, mitte sisuline valdkond — jäta populaarsuse loendist välja.
+const fieldRows: FieldRow[] = [...fieldCounts.entries()]
+  .filter(([field]) => field !== "muu")
+  .map(([field, count]) => ({ field, count }))
+  .sort((a, b) => b.count - a.count || a.field.localeCompare(b.field, "et"));
+const fieldCountExclMuu = fieldRows.length;
+const topFields = fieldRows.slice(0, 3);
+
+// Õppevorm: mitu programmi saab läbida veebis või hübriidõppes (töö kõrvalt).
+const onlineCount = catalog.filter((e) => e.format === "veebis").length;
+const blendedCount = catalog.filter((e) => e.format === "hübriid").length;
+const onlineOrBlendedCount = onlineCount + blendedCount;
+const onsiteCount = catalog.filter((e) => e.format === "kohapeal").length;
+
+// Õppekeel: eestikeelsed vs ingliskeelsed programmid.
+const estonianCount = catalog.filter((e) => e.language === "et").length;
+const englishCount = catalog.filter((e) => e.language === "en").length;
+
 // ---------------------------------------------------------------------------
 // Eksporditavad andmed lehtede jaoks (et /vastused/index ja [slug] saaks tabelid)
 // ---------------------------------------------------------------------------
@@ -101,6 +123,9 @@ export const questionStats = {
   ects: { min: ectsMin, max: ectsMax, median: ectsMedian, buckets: ectsBuckets, commonBucket: ectsCommonBucket },
   price: { min: priceMin, max: priceMax, median: priceMedian, p25: priceP25, p75: priceP75, withPrice: prices.length },
   hours: { lo: hoursLo, hi: hoursHi },
+  fields: { count: fieldCountExclMuu, rows: fieldRows, top: topFields },
+  format: { online: onlineCount, blended: blendedCount, onlineOrBlended: onlineOrBlendedCount, onsite: onsiteCount },
+  language: { estonian: estonianCount, english: englishCount },
   updatedAtText
 };
 
@@ -252,6 +277,168 @@ export const questions: QuestionEntry[] = [
       { label: "Registreerimine ja algusajad", href: "/registreerimine/" },
       { label: "Kuidas valida mikrokraadi?", href: "/mikrokraadi-valimine/" },
       { label: "Ava filtreeritav kataloog", href: "/kataloog/" }
+    ]
+  },
+  {
+    slug: "kas-mikrokvalifikatsioon-aitab-toold-leida",
+    question: "Kas mikrokvalifikatsioon aitab tööd leida või edutamisel?",
+    shortAnswer:
+      `Jah — mikrokvalifikatsioon on tööturul konkreetne, tõendatud signaal ühe oskuse kohta, mille saab panna CV-sse, Europassi ja LinkedIni profiilile. ` +
+      `See sobib eriti karjäärisammuks, ümberõppeks või edutamise toetamiseks, sest tõendab täpselt seda oskust, mida tööandja otsib — kiiremini kui terve kraadiõpe. ` +
+      `Mõju on suurim, kui valid oskuse, mille järele on sinu valdkonnas nõudlust.`,
+    body: [
+      `Mikrokvalifikatsiooni väärtus tööturul tuleneb selle täpsusest: see ei tõenda mitte üldist haridustaset, vaid ühte konkreetset, ajakohast oskust. Tööandja jaoks on see kergesti loetav — tunnistus ütleb otse, mida sa oskad ja millisel tasemel. Ülikooli mikrokraadi puhul on oskus lisaks kõrghariduse tasemel ja Euroopas ECTS-ainepunktidena mõistetav.`,
+      `Edutamisel ja palgaläbirääkimistel toimib mikrokvalifikatsioon tõendina, et oled võtnud initsiatiivi ja täiendanud end suunatult. Paljud valivad mikrokvalifikatsiooni just selleks, et liikuda kõrgemale rollile või laiendada vastutusala ilma tööd katkestamata — õpe käib enamasti töö kõrvalt.`,
+      `Suurim mõju tekib siis, kui oskus on valdkonnas nõutud. Vaata enne valikut, milliseid oskusi ja ameteid programm toetab — meie karjääri- ja oskuste lehed seovad programmid konkreetsete ametite ja tööturu signaalidega, et saaksid valida tõendatud nõudluse järgi.`
+    ],
+    relatedLinks: [
+      { label: "Karjäär ja ametid mikrokvalifikatsiooni järgi", href: "/karjaar/" },
+      { label: "Oskused, mida programmid annavad", href: "/oskused/" },
+      { label: "Kuidas valida mikrokvalifikatsiooni?", href: "/mikrokvalifikatsiooni-valimine/" }
+    ]
+  },
+  {
+    slug: "kas-tooandja-saab-mikrokvalifikatsiooni-rahastada",
+    question: "Kas tööandja saab mikrokvalifikatsiooni rahastada?",
+    shortAnswer:
+      `Jah — tööandja koolituseelarve on üks kolmest peamisest rahastusrajast (tööandja, Töötukassa või ise). ` +
+      `Paljud ettevõtted katavad töötaja mikrokvalifikatsiooni õppetasu täielikult või osaliselt, sest oskus jääb ettevõttesse ja õpe käib töö kõrvalt. ` +
+      `Lisaks pakub Töötukassa täiendusõppe toetusi nii töötavatele kui tööd otsivatele inimestele.`,
+    body: [
+      `Tööandja rahastus on tavaline rada: õppetasu tasub ettevõte koolituseelarvest ja töötaja saab oskuse, mida saab kohe töös rakendada. See on tööandjale sageli soodsam ja kiirem kui uue inimese värbamine — eriti mikrokvalifikatsiooni puhul, mis on kitsas ja praktiline. Kokkulepe õppe ja võimaliku siduvusaja kohta sõlmitakse tööandjaga.`,
+      `Töötukassa on teine avalik rada. Töötukassa toetab täiendus- ja ümberõpet erinevate teenuste kaudu — näiteks töötava inimese tasemeõppes osalemise toetus või koolituskaart tööd otsivale inimesele. Tingimused ja sihtrühm sõltuvad konkreetsest teenusest ja need on kirjas Töötukassa enda lehel.`,
+      `Kolmas rada on ise tasumine. Sõltumata rajast on lõplik ja siduv õppetasu ning maksetingimused alati kooli enda registreerimislehel. Mõned programmid on lisaks kindlale sihtrühmale eraldi rahastatud (näiteks Euroopa Liidu kaasrahastusel) — see on iga programmi juures kataloogis märgitud.`
+    ],
+    relatedLinks: [
+      { label: "Kes maksab mikrokvalifikatsiooni eest?", href: "/kes-maksab/" },
+      { label: "Kui palju mikrokraad maksab?", href: "/vastused/kui-palju-mikrokraad-maksab/" },
+      { label: "Ava kataloog ja vaata hindu", href: "/kataloog/" }
+    ]
+  },
+  {
+    slug: "kas-mitut-mikrokvalifikatsiooni-saab-korraga-teha",
+    question: "Kas mitut mikrokvalifikatsiooni saab korraga teha?",
+    shortAnswer:
+      `Jah — mikrokvalifikatsioonid on disainilt iseseisvad ja lühikesed, seega neid saab läbida ükshaaval või mitu kõrvuti, kui ajakulu jõuad. ` +
+      `Enamik programme on ${ectsRangeText} (mediaan ${ectsMedian} EAP ≈ ${ectsMedian != null ? ectsMedian * 26 : 390} tundi õppija tööd), nii et kahe väiksema kombineerimine on töö kõrvalt jõukohane. ` +
+      `Mitu mikrokvalifikatsiooni kokku võivad katta laiema oskuste komplekti kui üks üksik.`,
+    body: [
+      `Mikrokvalifikatsioon on tahtlikult moodulpõhine: iga programm tõendab ühe oskuse ega eelda teiste läbimist. See tähendab, et saad neid laduda nagu ehituskive — alustada ühest, lisada hiljem teise, või võtta kaks korraga, kui ajakava lubab. Koormust mõõda EAP-des: 1 EAP ≈ 26 tundi õppija tööd, nii saad enne otsust kokku liita, kui palju aega kulub.`,
+      `Mitme mikrokvalifikatsiooni kombineerimine sobib eriti siis, kui liigud uude valdkonda või tahad katta ühe rolli mitut oskust. Näiteks võib üks programm anda tehnilise oskuse ja teine juhtimise või andmete oskuse — koos moodustavad need tugevama profiili kui kumbki üksi.`,
+      `Ülikooli mikrokraadide puhul on lisaboonus: kogutud EAP-sid saab paljudes ülikoolides hiljem tasemeõppes arvestada, nii et mitu mikrokraadi võivad olla samm kraadiõppe suunas. Vaata kataloogist iga programmi maht ja algusaeg ning planeeri kombinatsioon nii, et ajakavad ei kattu üle jõu.`
+    ],
+    relatedLinks: [
+      { label: "Mitu EAP-d on mikrokraadil?", href: "/vastused/mitu-eap-d-on-mikrokraadil/" },
+      { label: "Võrdle programme kõrvuti", href: "/mikrokvalifikatsioonide-vordlus/" },
+      { label: "Ava filtreeritav kataloog", href: "/kataloog/" }
+    ]
+  },
+  {
+    slug: "kas-mikrokvalifikatsiooni-saab-labida-veebis",
+    question: "Kas mikrokvalifikatsiooni saab läbida veebis või töö kõrvalt?",
+    shortAnswer:
+      `Jah — paljud mikrokvalifikatsioonid on disainitud töötavale inimesele ja neid saab läbida veebis või hübriidõppes. ` +
+      `Registris on ${onlineOrBlendedCount} programmi ${programmeCount}-st veebi- või hübriidõppes (${onlineCount} täielikult veebis, ${blendedCount} hübriidis); enamik ülejäänutest toimub kohapeal. ` +
+      `Õpe käib enamasti töö kõrvalt, sest maht on tüüpiliselt ${ectsRangeText} ühe kuni kahe semestri jooksul.`,
+    body: [
+      `Õppevorm on iga programmi juures eraldi märgitud: veebis (kogu õpe internetis), hübriidõppes (osa veebis, osa kohapeal) või kohapeal. Meie registris on ${onlineCount} täielikult veebipõhist ja ${blendedCount} hübriidprogrammi — kokku ${onlineOrBlendedCount} programmi ${programmeCount}-st, mille saab läbida ilma iga kord kohale tulemata. Kohapeal toimub ${onsiteCount} programmi, sageli kompaktselt mõne sessioonina.`,
+      `Töö kõrvalt õppimine on mikrokvalifikatsiooni üks peamisi eeliseid. Maht on tüüpiliselt ${ectsRangeText} (mediaan ${ectsMedian} EAP ≈ ${ectsMedian != null ? ectsMedian * 26 : 390} tundi õppija tööd kokku), mis jaguneb ühe kuni kahe semestri peale. See tähendab paari- kuni mõnetunnist nädalakoormust, mitte täiskohaga õpet.`,
+      `Kui tahad just paindlikku õpet, filtreeri kataloogis õppevormi järgi ja vaata programmi lehelt täpne sessioonide rütm ning kas kohapealsed kohtumised on kohustuslikud. Lõplik info õppevormi ja ajakava kohta on alati kooli enda lehel.`
+    ],
+    relatedLinks: [
+      { label: "Ava kataloog ja filtreeri õppevormi järgi", href: "/kataloog/" },
+      { label: "Kui kaua mikrokraad kestab?", href: "/vastused/kui-kaua-mikrokraad-kestab/" },
+      { label: "Kuidas valida mikrokvalifikatsiooni?", href: "/mikrokvalifikatsiooni-valimine/" }
+    ]
+  },
+  {
+    slug: "kellele-mikrokvalifikatsioon-sobib",
+    question: "Kellele mikrokvalifikatsioon sobib?",
+    shortAnswer:
+      `Mikrokvalifikatsioon sobib töötavale inimesele, kes tahab tõendada ühe konkreetse oskuse ilma aastatepikkuse kraadiõppeta. ` +
+      `Tüüpilised sihtrühmad on karjääri täiendajad, valdkonnavahetajad, edutamist taotlevad spetsialistid ja tööandjad, kes täiendavad meeskonda. ` +
+      `Õpe käib töö kõrvalt ja maht on tüüpiliselt ${ectsRangeText}, seega see sobib ka kiire ajakavaga inimesele.`,
+    body: [
+      `Kõige selgemini sobib mikrokvalifikatsioon inimesele, kellel on juba töökogemus või haridus, aga vaja täiendada üht kindlat oskust — näiteks andmete, juhtimise, tehnoloogia või valdkonnaspetsiifilist oskust. Õpe on lühike, suunatud ja praktiline, mistõttu seda saab teha töö kõrvalt ühe kuni kahe semestriga.`,
+      `Teine selge sihtrühm on valdkonnavahetajad ja ümberõppijad: mikrokvalifikatsioon võimaldab uut suunda proovida väiksema riskiga kui terve kraadiõpe. Ülikooli mikrokraadi puhul saab kogutud EAP-sid hiljem tasemeõppes arvestada, nii et see võib olla esimene samm suurema muutuse poole.`,
+      `Sobib ka tööandjale, kes tahab meeskonda kiiresti ja tõendatult täiendada, ning spetsialistile, kes valmistub edutamiseks. Kui sa pole kindel, kas konkreetne programm sobib just sulle, tee avalehel lühike suunatest või vaata valimisteejuhti — need aitavad sobivuse valdkonna, taseme ja eesmärgi järgi kokku viia.`
+    ],
+    relatedLinks: [
+      { label: "Kuidas valida mikrokvalifikatsiooni?", href: "/mikrokvalifikatsiooni-valimine/" },
+      { label: "Karjäär ja ametid", href: "/karjaar/" },
+      { label: "Ava filtreeritav kataloog", href: "/kataloog/" }
+    ]
+  },
+  {
+    slug: "kas-mikrokvalifikatsioon-on-ehises-tunnustatud",
+    question: "Kas mikrokvalifikatsioon on EHIS-es ja ametlikult tunnustatud?",
+    shortAnswer:
+      `Jah — mikrokvalifikatsioonid on Eesti Hariduse Infosüsteemis (EHIS) registreeritud õppekavad ja seega ametlikult tunnustatud õpe. ` +
+      `EHIS-es on praegu ligi 450 mikrokvalifikatsiooni õppekava 30 koolitajalt; meie register koondab neist 169 aktiivset programmi ja kuvab nende ametlikud andmed (nimi, EAP, õppekeel, õpiväljundid) otse EHIS-ist. ` +
+      `EHIS-i peab Haridus- ja Teadusministeerium ning andmed on avaandmed.`,
+    body: [
+      `EHIS (Eesti Hariduse Infosüsteem) on riiklik haridusandmete register, mida peab Haridus- ja Teadusministeerium. Kui mikrokvalifikatsiooni õppekava on EHIS-es registreeritud, tähendab see, et see on ametlikult kinnitatud õpe ja sellel on ametlik õppekavakood, kinnitatud maht (EAP) ning õpiväljundid.`,
+      `Meie register kasutab EHIS-i ametliku tõeallikana: iga sobitatud programmi nimi, EAP-maht, õppekeel ja ametlikud õpiväljundid pärinevad otse EHIS-ist (avaandmed, taaskasutatav viitega allikale). Nii ei tugine andmed üksnes kooli turunduslehele, vaid riiklikule registrile — see on usaldusväärsuse alus. EHIS-es on praegu ligi 450 mikrokvalifikatsiooni õppekava 30 koolitajalt; meie register koondab neist ${programmeCount} aktiivset, peamiselt ülikoolide ja rakenduskõrgkoolide oma.`,
+      `Tunnustamine tööturul tuleneb just sellest ametlikust staatusest: tunnistus tõendab EHIS-es kinnitatud õppekava läbimist. Ülikooli mikrokraadi EAP-d on lisaks Euroopa ainepunktid (ECTS), mis on mõistetavad kogu Euroopas ja sageli hiljem kraadiõppes arvestatavad.`
+    ],
+    relatedLinks: [
+      { label: "Kuidas me andmeid koostame", href: "/andmed/" },
+      { label: "Mis on mikrokvalifikatsioon?", href: "/mis-on-mikrokvalifikatsioon/" },
+      { label: "Kas mikrokraad annab kõrghariduse?", href: "/vastused/kas-mikrokraad-annab-korghariduse/" }
+    ]
+  },
+  {
+    slug: "mikrokvalifikatsioon-vs-taiendkoolitus",
+    question: "Mille poolest erineb mikrokvalifikatsioon täiendkoolitusest?",
+    shortAnswer:
+      `Mikrokvalifikatsioon on EHIS-es registreeritud õppekava kinnitatud mahu (EAP), õpiväljundite ja tunnistusega; tavaline täiendkoolitus on vabamas vormis ega pruugi olla riiklikus registris ega anda ainepunkte. ` +
+      `Mikrokvalifikatsioon on seega tõendatum ja ülekantavam: ülikooli mikrokraadi EAP-sid saab sageli hiljem kraadiõppes arvestada. ` +
+      `Täiendkoolitus on tüüpiliselt lühem ja vähem formaalne, mikrokvalifikatsioon on struktureeritud ja ametlikult tunnustatud.`,
+    body: [
+      `Peamine vahe on formaalsuses ja tõendatuses. Mikrokvalifikatsioon on registreeritud õppekava: sellel on kinnitatud maht Euroopa ainepunktides (EAP/ECTS), määratletud õpiväljundid ja lõpus tunnistus, mis kinnitab nende saavutamist. Tavaline täiendkoolitus võib olla ühepäevane seminar või lühikursus, mille väljundid pole alati ametlikult kinnitatud.`,
+      `See teeb mikrokvalifikatsioonist tugevama signaali tööturul: tööandja näeb täpselt, millise oskuse ja millisel tasemel oled tõendanud, ja see on Euroopas ECTS-ina mõistetav. Ülikooli mikrokraadi EAP-sid saab lisaks paljudes ülikoolides hiljem tasemeõppes arvestada — täiendkoolitus seda võimalust üldjuhul ei anna.`,
+      `Vali mikrokvalifikatsioon, kui tahad struktureeritud, tõendatud ja ülekantavat õpet, mis CV-s selgelt loeb. Vali lühike täiendkoolitus, kui vajad kiiret sissejuhatust ilma formaalse tunnistuseta. Meie register koondab just mikrokvalifikatsioone ja mikrokraade koos nende ametlike andmetega.`
+    ],
+    relatedLinks: [
+      { label: "Mis on mikrokvalifikatsioon?", href: "/mis-on-mikrokvalifikatsioon/" },
+      { label: "Mis on EAP?", href: "/vastused/mis-on-eap/" },
+      { label: "Kas mikrokvalifikatsioon on EHIS-es tunnustatud?", href: "/vastused/kas-mikrokvalifikatsioon-on-ehises-tunnustatud/" }
+    ]
+  },
+  {
+    slug: "kuidas-valida-oiget-mikrokvalifikatsiooni",
+    question: "Kuidas valida õiget mikrokvalifikatsiooni?",
+    shortAnswer:
+      `Vali mikrokvalifikatsioon kolme küsimuse järgi: millist oskust tööturg sinu valdkonnas vajab, kui suur maht ja õppevorm sinu ajakavasse mahub ning kas vajad ülekantavaid ainepunkte (EAP). ` +
+      `Filtreeri ${programmeCount} programmi valdkonna, kooli, hinna ja mahu järgi ning võrdle kuni kolme kõrvuti. ` +
+      `Lõpliku otsuse tee programmi õpiväljundite ja algusaja põhjal kooli enda lehel.`,
+    body: [
+      `Alusta eesmärgist: kas tahad edutamist, valdkonnavahetust, kindla oskuse tõendamist või sammu kraadiõppe poole. Eesmärk määrab, kas vajad ülikooli mikrokraadi (annab ülekantavad EAP-d) või praktilisemat koolitusettevõtte mikrokvalifikatsiooni. Vaata programmi õpiväljundeid — need ütlevad täpselt, mida pärast õpet oskad.`,
+      `Seejärel kontrolli mahtu ja vormi. Registri programmid on tüüpiliselt ${ectsRangeText} (mediaan ${ectsMedian} EAP) ja saadaval veebis, hübriidis või kohapeal — vali see, mis sinu töö kõrvale mahub. Kasuta filtreeritavat kataloogi, et kitsendada valik valdkonna, kooli, hinna ja õppevormi järgi, ja võrdle kuni kolme programmi kõrvuti.`,
+      `Lõpuks vaata nõudlust ja tähtaegu. Meie valimisteejuht ja karjäärilehed seovad programmid ametite ja tööturu signaalidega, et saaksid valida tõendatud nõudluse järgi. Kontrolli registreerimise tähtaega ja õppe algust ning tee lõplik otsus kooli enda lehel, kus on siduv info.`
+    ],
+    relatedLinks: [
+      { label: "Mikrokvalifikatsiooni valimise teejuht", href: "/mikrokvalifikatsiooni-valimine/" },
+      { label: "Võrdle programme kõrvuti", href: "/mikrokvalifikatsioonide-vordlus/" },
+      { label: "Ava filtreeritav kataloog", href: "/kataloog/" }
+    ]
+  },
+  {
+    slug: "populaarseimad-mikrokvalifikatsiooni-valdkonnad",
+    question: "Millised on populaarseimad mikrokvalifikatsiooni valdkonnad?",
+    shortAnswer:
+      `Registri ${programmeCount} programmi jagunevad ${fieldCountExclMuu} valdkonna vahel ja enim pakutavad on ${etList(topFields.map((f) => `${f.field} (${f.count} programmi)`))}. ` +
+      `Need kolm katavad suure osa kogu valikust. ` +
+      `Iga valdkonna programme saab vaadata eraldi valdkonnalehel koos mahu, hinna ja koolidega.`,
+    body: [
+      `Valdkond näitab, mis teemal oskust õpetatakse. Meie registris on ${fieldCountExclMuu} sisulist valdkonda ja programmide arv jaguneb nende vahel ebaühtlaselt: ${etList(topFields.map((f) => `${f.field} on ${f.count} programmi`))}. Need on praegu kõige laiema valikuga teemad.`,
+      `Suur valik ühes valdkonnas tähendab tavaliselt suuremat tööturu nõudlust ja rohkem koole, kes seda pakuvad — see annab sulle rohkem võimalusi mahu, hinna ja õppevormi järgi valida. Väiksema valikuga valdkonnad (näiteks õigus või energeetika) on kitsamad, kuid sageli väga spetsiifilised ja sihitud.`,
+      `Vali valdkond, mis seostub sinu praeguse või soovitud rolliga, ja vaata selle valdkonnalehelt kõik programmid kõrvuti. Kui sa pole kindel, milline valdkond sobib, aitab avalehe suunatest või valimisteejuht oskuse ja eesmärgi järgi õige teema leida.`
+    ],
+    relatedLinks: [
+      { label: "Vaata kõiki valdkondi", href: "/valdkond/it-ja-andmed/" },
+      { label: "Ava filtreeritav kataloog", href: "/kataloog/" },
+      { label: "Kuidas valida mikrokvalifikatsiooni?", href: "/mikrokvalifikatsiooni-valimine/" }
     ]
   }
 ];
