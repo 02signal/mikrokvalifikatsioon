@@ -6,7 +6,7 @@ import PmStepper from "../../components/PmStepper.astro";
 import "../../styles/global.css";
 import "../../styles/pragmatic-momentum.css";
 import { catalog } from "../../data/catalog";
-import { fields } from "../../data/catalog";
+import { fieldsWithSlug } from "../../data/catalog";
 
 // ============================================================================
 // Minu konto — mkval ET face (account-MVP).
@@ -54,8 +54,11 @@ for (const e of catalog) {
 }
 const progJson = JSON.stringify(progIndex).replace(/</g, "\\u003c");
 
-// Tähtajad sildi-loogika jaoks (slug → registreerimistähtaeg ISO).
-const fieldList = fields.filter((f) => f !== "muu");
+// Valdkonna SLUG -> inimkeelne silt. Select saadab slugi (kanooniline target_ref);
+// demo-tee (flag maas) kuvab selle järgi siiski inimkeelse sildi.
+const fieldLabelBySlug: Record<string, string> = {};
+for (const { field, slug } of fieldsWithSlug) fieldLabelBySlug[slug] = field;
+const fieldLabelJson = JSON.stringify(fieldLabelBySlug).replace(/</g, "\\u003c");
 
 const schema = {
   "@context": "https://schema.org",
@@ -342,7 +345,9 @@ const schema = {
               <label for="notifyField">Valdkonna järgi</label>
               <select id="notifyField" class="pm-select" data-notify-field>
                 <option value="">Vali valdkond</option>
-                {fieldList.map((f) => <option value={f}>{f}</option>)}
+                {/* value = valdkonna SLUG (kanooniline target_ref, nt "it-ja-andmed"),
+                    nähtav tekst = inimkeelne silt. Slug saadetakse /subscriptions'ile. */}
+                {fieldsWithSlug.map(({ field, slug }) => <option value={slug}>{field}</option>)}
               </select>
             </div>
             <div class="pm-backrow" style="justify-content:flex-start;margin-top:12px">
@@ -450,6 +455,7 @@ const schema = {
     <div class="pm pm-toast" data-toast hidden></div>
 
     <script type="application/json" id="prog-data" is:inline set:html={progJson} />
+    <script type="application/json" id="field-label-data" is:inline set:html={fieldLabelJson} />
 
     <script>
       import { computeFit, type CoverageRow } from "../../lib/outcome-fit";
@@ -509,6 +515,9 @@ const schema = {
       // ---- Programmide indeks (slug → metaandmed) -----------------------
       let PROG: Record<string, { name: string; provider: string; ects: number | null; price: string | null; field: string; registrationDeadline: string | null }> = {};
       try { PROG = JSON.parse($("#prog-data")?.textContent || "{}"); } catch { PROG = {}; }
+      // Valdkonna slug -> inimkeelne silt (demo-tee kuvamiseks; select annab slugi).
+      let FIELD_LABEL: Record<string, string> = {};
+      try { FIELD_LABEL = JSON.parse($("#field-label-data")?.textContent || "{}"); } catch { FIELD_LABEL = {}; }
       const parsePriceEur = (priceText: string | null): number | null => {
         if (typeof priceText !== "string") return null;
         const m = priceText.replace(/ /g, " ").match(/\d[\d\s]*/);
@@ -639,9 +648,68 @@ const schema = {
       // POST /packages/delete {package_ref}
       const deletePackageRemote = (packageRef: string): Promise<WireResult> =>
         postKonto("/api/konto/v1/packages/delete", { package_ref: packageRef });
-      // POST /subscriptions {kind,target_ref}
-      const subscribeRemote = (kind: string, targetRef: string): Promise<WireResult> =>
-        postKonto("/api/konto/v1/subscriptions", { kind, target_ref: targetRef });
+
+      // ---- /subscriptions LEPINGU-PIIR: UI kind+väärtus -> kanooniline ------
+      // Backend (amos.crm.package_subscription/v1) lubab AINULT neid kinde:
+      //   field · skill · combination · programme_reminder · funding
+      // ja target_ref peab olema läbipaistmatu (PII-vaba) ja vastama grammatikale
+      //   ^[a-z][a-z0-9:_-]{1,96}$
+      // Meie SISEMINE UI hoiab oma kinde (valdkond/oskus/kombinatsioon/...) ja
+      // AccountState'i välju MUUTMATA - teisendus toimub AINULT siin, päringu
+      // piiril. Mida ei saa väljendada kanoonilise läbipaistmatu viitena (oskus
+      // ilma out_-viiteta, kombinatsioon ilma kanoonilise viiteta), jääb KLIENDI-
+      // POOLSEKS - tagastame null ja EI saada (ükski 400 ei teki).
+      const TARGET_REF_RE = /^[a-z][a-z0-9:_-]{1,96}$/;
+      const OUT_REF_RE = /^out_[0-9a-f]{24}$/;
+      type Canonical = { kind: string; target_ref: string };
+      const toCanonicalSubscription = (uiKind: string, rawValue: string): Canonical | null => {
+        const value = (rawValue || "").trim();
+        switch (uiKind) {
+          case "field":
+          case "valdkond": {
+            // value on juba valdkonna SLUG (select annab slugi). Pea grammatikast kinni.
+            return value && TARGET_REF_RE.test(value) ? { kind: "field", target_ref: value } : null;
+          }
+          case "skill":
+          case "oskus": {
+            // Oskus -> kanooniline out_<hex> viide. Kui teksti pole kataloogis
+            // (out_ viidet ei teki), JÄTA KLIENDI-POOLSEKS (null) - mitte saada.
+            const ref = outcomeRefForText(value);
+            return ref && OUT_REF_RE.test(ref) ? { kind: "skill", target_ref: ref } : null;
+          }
+          case "combination":
+          case "combo":
+          case "kombinatsioon": {
+            // Kanoonilist kombinatsiooni-viidet meil kliendi pool pole (võti on
+            // oskuste-tekstide liit, mis pole läbipaistmatu) -> KLIENDI-POOLNE.
+            return null;
+          }
+          case "programme_reminder":
+          case "deadline_reminder":
+          case "reminder": {
+            // Püsiv sentinel kõigi jälgitavate tähtaegade jaoks (backend lubab seda).
+            return { kind: "programme_reminder", target_ref: "reminder_all" };
+          }
+          case "funding":
+          case "funding_profile": {
+            // value = marsruut (ise/tootukassa/tooandja) -> rahastus_<route>.
+            const ref = `rahastus_${value}`;
+            return value && TARGET_REF_RE.test(ref) ? { kind: "funding", target_ref: ref } : null;
+          }
+          default:
+            return null;
+        }
+      };
+
+      // POST /subscriptions {kind,target_ref} — saadab KANOONILISE kuju.
+      // Tagastus "pending", kui väärtust ei saa kanooniliselt väljendada
+      // (kutsuja jätab siis kliendi-poolseks, ausa "tuleb peagi" seisuga) -
+      // me EI saada kunagi väärtust, mille backend tagasi lükkaks.
+      const subscribeRemote = (kind: string, targetRef: string): Promise<WireResult> => {
+        const canon = toCanonicalSubscription(kind, targetRef);
+        if (!canon) return Promise.resolve("pending");
+        return postKonto("/api/konto/v1/subscriptions", { kind: canon.kind, target_ref: canon.target_ref });
+      };
       // POST /subscriptions/unsubscribe {ref}
       const unsubscribeRemote = (ref: string): Promise<WireResult> =>
         postKonto("/api/konto/v1/subscriptions/unsubscribe", { ref });
@@ -1314,7 +1382,8 @@ const schema = {
       };
       $("[data-reminders-toggle]")?.addEventListener("change", async (e) => {
         const on = (e.target as HTMLInputElement).checked;
-        // REAL-PATH: meeldetuletus on serveri tellimus (kind "deadline_reminder").
+        // REAL-PATH: meeldetuletus on serveri tellimus (kanooniline kind
+        // "programme_reminder", target_ref "reminder_all" - teisendus piiril).
         // Sees → POST /subscriptions; väljas → leia serveri-tellimuse ref ja
         // POST /subscriptions/unsubscribe. Mõlemad degradeeruvad graatsiliselt.
         if (kontoEnabled()) {
@@ -1334,7 +1403,7 @@ const schema = {
                 res === "error");
             }
           } else {
-            const sub = (serverSubs || []).find((s) => s && (s.kind === "deadline_reminder" || s.kind === "reminder") && typeof s.ref === "string");
+            const sub = (serverSubs || []).find((s) => s && (s.kind === "programme_reminder" || s.kind === "deadline_reminder" || s.kind === "reminder") && typeof s.ref === "string");
             const res = sub?.ref ? await unsubscribeRemote(sub.ref) : "pending";
             if (res === "ok") {
               status("[data-reminders-status]", "Meeldetuletused välja lülitatud.");
@@ -1452,7 +1521,9 @@ const schema = {
           subscribeRealAndNote("field", field, "Lisatud - anname märku, kui sellesse valdkonda sobiv programm lisandub.");
           return;
         }
-        addNotify("valdkond", sel.value); sel.value = "";
+        // DEMO-tee (flag maas): salvesta inimkeelne silt (select annab slugi),
+        // et olemasolev demo-kuva jääks muutmata.
+        addNotify("valdkond", FIELD_LABEL[sel.value] || sel.value); sel.value = "";
       });
       $("[data-skill-chip-row]")?.addEventListener("click", (e) => {
         const s = (e.target as HTMLElement).getAttribute("data-skill");
@@ -1517,24 +1588,40 @@ const schema = {
       type ServerSub = { ref?: string; kind?: string; label_ref?: string; state?: string };
       // kind -> loetav eesliide (eesti, lühike). Tundmatu kind → "Tellimus".
       const SUB_KIND_LABEL: Record<string, string> = {
-        valdkond: "Valdkond",
+        // Kanoonilised backend-kinnid (amos.crm.package_subscription/v1).
         field: "Valdkond",
-        oskus: "Oskus",
         skill: "Oskus",
+        combination: "Kombinatsioon",
+        programme_reminder: "Tähtaja-meeldetuletus",
+        funding: "Toetuse profiil",
+        // Vanad/sisemised sildid - jätame ühilduvuseks.
+        valdkond: "Valdkond",
+        oskus: "Oskus",
         kombinatsioon: "Kombinatsioon",
         combo: "Kombinatsioon",
         combo_waitlist: "Kombinatsioon",
         reminder: "Tähtaja-meeldetuletus",
         deadline_reminder: "Tähtaja-meeldetuletus",
-        funding: "Toetuse profiil",
         funding_profile: "Toetuse profiil",
         notify_list: "Teavitus",
+      };
+      // Rahastus-marsruudi viide -> inimkeelne nimi (rahastus_ise -> "ise maksan").
+      const FUNDING_LABEL: Record<string, string> = {
+        rahastus_ise: "maksan ise",
+        rahastus_tootukassa: "Töötukassa kaudu",
+        rahastus_tooandja: "tööandja maksab",
       };
       const subLabel = (s: ServerSub): string => {
         const kind = typeof s.kind === "string" ? s.kind : "";
         const prefix = SUB_KIND_LABEL[kind] || "Tellimus";
         const ref = typeof s.label_ref === "string" && s.label_ref.trim() ? s.label_ref.trim() : "";
-        return ref ? `${prefix}: ${ref}` : prefix;
+        if (!ref) return prefix;
+        // Tee läbipaistmatu viide loetavaks, kus oskame (valdkonna slug, rahastus,
+        // tähtaja-sentinel); muidu kuva viide nii nagu on.
+        if (kind === "field" && FIELD_LABEL[ref]) return `${prefix}: ${FIELD_LABEL[ref]}`;
+        if (kind === "funding" && FUNDING_LABEL[ref]) return `${prefix}: ${FUNDING_LABEL[ref]}`;
+        if (kind === "programme_reminder" && ref === "reminder_all") return prefix;
+        return `${prefix}: ${ref}`;
       };
       const renderServerSubscriptions = (subs: ServerSub[] | null): void => {
         const list = $("[data-subs-list]");
@@ -1641,8 +1728,9 @@ const schema = {
       };
       $$("[data-funding]").forEach((el) => el.addEventListener("change", async (e) => {
         const route = (e.target as HTMLInputElement).value as "ise" | "tootukassa" | "tooandja";
-        // REAL-PATH: toetuse profiil on serveri tellimus (kind "funding_profile",
-        // target_ref = marsruut). POST /subscriptions; degradeerub graatsiliselt.
+        // REAL-PATH: toetuse profiil on serveri tellimus (kanooniline kind
+        // "funding", target_ref "rahastus_<route>" - teisendus piiril).
+        // POST /subscriptions; degradeerub graatsiliselt.
         if (kontoEnabled()) {
           track("tool_completed", { tool_name: "funding_profile", result_route: route });
           track("funding_profile_set", { result_route: route });
