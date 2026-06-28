@@ -1,0 +1,28 @@
+---
+// Pragmaatiline liikumine — bränd-märk (kolm tõusvat kriipsu + punkt).
+// CSS-variant: polished SVG logo tuleb eraldi töövoost (Logo.astro). See on
+// dekoratiivne, seega aria-hidden; vajadusel anna `label` saateteksti jaoks.
+interface Props {
+  /** Lisa kõrvale sõnamärk "mikrokvalifikatsioon" */
+  word?: boolean;
+  /** Saatetekst ümbritsevale lingile/nupule (komponent ise on aria-hidden) */
+  label?: string;
+}
+const { word = false } = Astro.props;
+---
+<span class="pm-mark" aria-hidden="true">
+  <i class="s1"></i><i class="s2"></i><i class="s3"></i><span class="pt"></span>
+</span>
+{word ? <span class="pm-word">mikrokvalifikatsioon</span> : null}
+
+<style>
+  .pm-word {
+    font-family: var(--pm-disp, "Sora", sans-serif);
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -0.03em;
+    color: var(--pm-ink, #17181a);
+    margin-left: 11px;
+    vertical-align: middle;
+  }
+</style>

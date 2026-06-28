@@ -1,0 +1,485 @@
+/* ============================================================================
+   Pragmaatiline liikumine — mikrokvalifikatsioon.ee disainisüsteem.
+
+   See on jagatav komponendikiht (tokenid + korduvad osad), mille võtab kasutusele
+   esmalt /konto/, hiljem ülejäänud sait. KÕIK on ulatatud `.pm` juurklassi alla,
+   et see ei segaks teiste lehtede olemasolevat global.css-i. Värv = roll:
+   roheline = edasiminek/salvesta/vaste · must = autoriteet · amber = "veel otsime".
+
+   Allikas: docs/style-tile-pragmatic-momentum.html + prototype-konto-onboarding-v3.html
+   ========================================================================== */
+
+.pm {
+  /* värv = roll, mitte kaunistus */
+  --pm-ink: #17181a;            /* autoriteet · register · sõnamärk */
+  --pm-ink-2: #33373a;
+  --pm-green: #3f9c30;          /* edasiminek · go · salvesta · vaste */
+  --pm-green-bright: #54c247;   /* liikumise esiletõst */
+  --pm-green-deep: #2e7d22;     /* roheline tekst/lingid heledal (AA) */
+  --pm-ground: #f5f7f4;         /* jahe-neutraalne register-taust (MITTE kreem) */
+  --pm-surface: #ffffff;        /* krõbedad valged tööriista-kaardid */
+  --pm-line: #e5e8e3;
+  --pm-muted: #5a615b;
+  --pm-amber: #9a7b22;
+  --pm-amber-bg: #fbf3df;       /* AINULT "veel otsime" seisundis */
+  --pm-blue: #1f5f8b;
+  --pm-blue-bg: #eef3fa;
+  --pm-shadow: 0 18px 40px rgba(23, 24, 26, 0.12);
+  --pm-shadow-sm: 0 2px 8px rgba(23, 24, 26, 0.05);
+  --pm-r: 16px;
+  --pm-disp: "Sora", system-ui, -apple-system, sans-serif;  /* geomeetriline grotesk — kajab sõnamärki */
+  --pm-body: "Atkinson Hyperlegible", system-ui, -apple-system, sans-serif; /* loetavuseks loodud */
+  --pm-focus: 0 0 0 4px rgba(63, 156, 48, 0.35);
+
+  font-family: var(--pm-body);
+  color: var(--pm-ink);
+  background: var(--pm-ground);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ligipääsetav fookus kogu konto-pinnal */
+.pm :focus-visible {
+  outline: 0;
+  box-shadow: var(--pm-focus);
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pm *,
+  .pm *::before,
+  .pm *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.pm-wrap {
+  width: min(1060px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.pm-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+/* ── tüpograafia ─────────────────────────────────────────────────────────── */
+.pm-eyebrow {
+  font-family: var(--pm-disp);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pm-green-deep);
+  margin-bottom: 13px;
+}
+.pm h1 {
+  font-family: var(--pm-disp);
+  font-weight: 800;
+  font-size: clamp(31px, 5vw, 50px);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  margin: 0 0 16px;
+  max-width: none;
+  color: var(--pm-ink);
+}
+.pm h1 em { font-style: normal; color: var(--pm-green); }
+.pm h2 {
+  font-family: var(--pm-disp);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--pm-ink);
+}
+.pm .pm-lede {
+  font-size: 21px;
+  color: var(--pm-muted);
+  max-width: 54ch;
+  margin: 0 0 30px;
+}
+.pm .pm-tiny { font-size: 14px; color: var(--pm-muted); }
+
+/* ── samm-mõõdik (stepper) ───────────────────────────────────────────────── */
+.pm-steps {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  padding: 28px 0 6px;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+}
+.pm-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--pm-muted);
+  font-family: var(--pm-disp);
+  font-weight: 600;
+}
+.pm-step .n {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--pm-line);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 14px;
+  background: var(--pm-surface);
+  transition: 0.3s;
+}
+.pm-step.done .n { background: var(--pm-green); border-color: var(--pm-green); color: #fff; }
+.pm-step.active .n { border-color: var(--pm-green); color: var(--pm-green); box-shadow: 0 0 0 5px rgba(63, 156, 48, 0.14); }
+.pm-step.active { color: var(--pm-ink); }
+.pm-step-bar { width: 24px; height: 2px; background: var(--pm-line); border-radius: 2px; }
+@media (max-width: 560px) {
+  .pm-step .lbl { display: none; }
+  .pm-step-bar { width: 12px; }
+}
+
+/* ── liikumine (ekraani sisenemine) ──────────────────────────────────────── */
+.pm-rise { animation: pm-rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes pm-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.pm-stagger > * { animation: pm-rise 0.5s both; }
+.pm-stagger > *:nth-child(2) { animation-delay: 0.06s; }
+.pm-stagger > *:nth-child(3) { animation-delay: 0.12s; }
+.pm-stagger > *:nth-child(4) { animation-delay: 0.18s; }
+.pm-stagger > *:nth-child(5) { animation-delay: 0.24s; }
+.pm-stagger > *:nth-child(6) { animation-delay: 0.3s; }
+
+/* ── mark (tõusvad kriipsud) — CSS-variant kuni polished SVG saabub ──────── */
+.pm-mark { display: inline-flex; align-items: flex-end; gap: 4px; height: 26px; }
+.pm-mark i { width: 7px; border-radius: 2px; transform: skewX(-13deg); display: block; }
+.pm-mark i.s1 { height: 55%; background: var(--pm-green-bright); }
+.pm-mark i.s2 { height: 78%; background: var(--pm-green); }
+.pm-mark i.s3 { height: 100%; background: var(--pm-ink); }
+.pm-mark .pt { width: 7px; height: 7px; border-radius: 50%; background: var(--pm-ink); }
+
+/* ── kaardid ─────────────────────────────────────────────────────────────── */
+.pm-card {
+  background: var(--pm-surface);
+  border: 1px solid var(--pm-line);
+  border-radius: var(--pm-r);
+  box-shadow: var(--pm-shadow);
+  padding: 30px;
+}
+.pm-grid2 {
+  display: grid;
+  grid-template-columns: 1.12fr 0.88fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 840px) { .pm-grid2 { grid-template-columns: 1fr; } }
+
+/* ── nupud ───────────────────────────────────────────────────────────────── */
+.pm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--pm-disp);
+  font-weight: 700;
+  font-size: 18px;
+  border: 0;
+  border-radius: 13px;
+  padding: 16px 26px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+  width: 100%;
+  text-decoration: none;
+  min-height: 52px;
+  text-align: center;
+}
+.pm-btn .arr { transition: transform 0.2s; }
+.pm-btn:hover .arr { transform: translateX(3px); }
+.pm-btn-primary { background: var(--pm-green); color: #fff; box-shadow: 0 12px 26px rgba(63, 156, 48, 0.3); }
+.pm-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 34px rgba(63, 156, 48, 0.4); }
+.pm-btn-ghost {
+  background: #fff;
+  color: var(--pm-ink);
+  border: 1.5px solid var(--pm-line);
+  box-shadow: none;
+  width: auto;
+  padding: 13px 20px;
+  font-size: 16px;
+}
+.pm-btn-ghost:hover { border-color: var(--pm-ink); }
+.pm-btn[disabled] { opacity: 0.6; cursor: default; transform: none; box-shadow: none; }
+
+.pm-reassure { font-size: 14px; color: var(--pm-muted); text-align: center; margin-top: 14px; }
+.pm-reassure .lock { color: var(--pm-green-deep); }
+
+.pm-link {
+  background: none;
+  border: 0;
+  color: var(--pm-green-deep);
+  font-family: var(--pm-disp);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 4px 2px;
+}
+.pm-backrow {
+  margin-top: 26px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ── "salvesta" kaart (s0 paremalt) ──────────────────────────────────────── */
+.pm-save-card { position: relative; overflow: hidden; }
+.pm-save-card .strokes { position: absolute; right: -6px; top: -10px; display: flex; gap: 8px; opacity: 0.13; }
+.pm-save-card .strokes i { width: 14px; height: 120px; background: var(--pm-green); transform: skewX(-13deg); border-radius: 5px; }
+.pm-save-card .strokes i:nth-child(2) { height: 150px; }
+.pm-save-card .strokes i:nth-child(3) { height: 95px; background: var(--pm-ink); }
+.pm-save-card h3 { font-family: var(--pm-disp); font-size: 25px; font-weight: 700; margin: 6px 0 8px; letter-spacing: -0.01em; position: relative; color: var(--pm-ink); }
+.pm-save-card p { color: var(--pm-muted); font-size: 17px; margin-bottom: 6px; position: relative; }
+.pm-benefits { list-style: none; margin: 16px 0 22px; padding: 0; display: grid; gap: 11px; position: relative; }
+.pm-benefits li { display: flex; gap: 11px; align-items: flex-start; font-size: 16px; }
+.pm-benefits .b { width: 27px; height: 27px; border-radius: 8px; background: #e9f4e5; color: var(--pm-green-deep); display: grid; place-items: center; flex: none; font-weight: 700; }
+.pm-benefits b { font-weight: 700; }
+
+/* ── valitud oskuste loend (s0 vasakult: chip) ───────────────────────────── */
+.pm-pkg-title { font-family: var(--pm-disp); font-weight: 700; font-size: 22px; margin-bottom: 3px; }
+.pm-pkg-sub { color: var(--pm-muted); font-size: 15px; margin-bottom: 18px; }
+.pm-chip { display: flex; align-items: center; gap: 12px; padding: 13px 15px; border: 1px solid var(--pm-line); border-radius: 12px; background: #fff; margin-bottom: 9px; }
+.pm-chip .tick { width: 24px; height: 24px; border-radius: 50%; background: #e9f4e5; color: var(--pm-green-deep); display: grid; place-items: center; flex: none; font-weight: 700; }
+.pm-chip b { font-weight: 700; font-family: var(--pm-disp); font-size: 17px; }
+.pm-chip small { display: block; color: var(--pm-muted); font-size: 14px; font-weight: 400; }
+.pm-chip.is-wait { border-color: #f0e2c0; background: var(--pm-amber-bg); }
+.pm-chip.is-wait .tick { background: #fff; color: var(--pm-amber); }
+
+/* ── usaldusriba (s1) ────────────────────────────────────────────────────── */
+.pm-trust { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0 4px; }
+@media (max-width: 520px) { .pm-trust { grid-template-columns: 1fr; } }
+.pm-trust div { display: flex; gap: 9px; align-items: flex-start; font-size: 14px; color: var(--pm-ink-2); }
+.pm-trust .t { color: var(--pm-green-deep); flex: none; font-weight: 700; }
+
+/* ── vorm ────────────────────────────────────────────────────────────────── */
+.pm-field { margin-bottom: 4px; }
+.pm-field label { display: block; font-family: var(--pm-disp); font-weight: 700; font-size: 16px; margin-bottom: 8px; color: var(--pm-ink); }
+.pm-field input {
+  width: 100%;
+  font-family: var(--pm-body);
+  font-size: 21px;
+  padding: 17px 18px;
+  border: 2px solid var(--pm-line);
+  border-radius: 13px;
+  background: #fff;
+  color: var(--pm-ink);
+  min-height: 56px;
+}
+.pm-field input:focus { outline: 0; border-color: var(--pm-green); box-shadow: var(--pm-focus); }
+.pm-consent { display: flex; gap: 12px; align-items: flex-start; margin: 18px 0; font-size: 15px; color: var(--pm-muted); }
+.pm-consent input { margin-top: 5px; width: 20px; height: 20px; min-height: 20px; accent-color: var(--pm-green); flex: none; }
+.pm-consent a { color: var(--pm-green-deep); font-weight: 700; }
+.pm-error { margin: 10px 0 0; color: #a11; font-size: 0.95rem; font-weight: 700; }
+
+/* ── "vaata e-posti" (s2) ────────────────────────────────────────────────── */
+.pm-center { text-align: center; max-width: 50ch; margin: 0 auto; }
+.pm-envelope {
+  width: 92px; height: 92px; border-radius: 22px; background: #fff; border: 1px solid #d8ead1;
+  display: grid; place-items: center; margin: 0 auto 22px; box-shadow: var(--pm-shadow-sm);
+  animation: pm-float 3s ease-in-out infinite;
+}
+@keyframes pm-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+.pm-addr { font-weight: 700; color: var(--pm-ink); }
+.pm-note {
+  background: var(--pm-amber-bg); border: 1px solid #f0e2c0; border-radius: 12px;
+  padding: 14px 16px; font-size: 15px; color: var(--pm-amber); margin-top: 18px;
+  display: flex; gap: 10px; align-items: flex-start; text-align: left;
+}
+.pm-note a { color: var(--pm-amber); font-weight: 700; }
+.pm-waitline { display: flex; align-items: center; gap: 10px; justify-content: center; color: var(--pm-muted); font-size: 15px; margin-top: 16px; }
+.pm-pulse { width: 9px; height: 9px; border-radius: 50%; background: var(--pm-green); animation: pm-pulse 1.4s ease-in-out infinite; }
+@keyframes pm-pulse { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.1); } }
+
+/* ── konto tervitus (s3) ─────────────────────────────────────────────────── */
+.pm-welcome { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+.pm-welcome .ring {
+  width: 54px; height: 54px; border-radius: 50%; background: var(--pm-green); color: #fff;
+  display: grid; place-items: center; font-size: 26px; flex: none; box-shadow: 0 0 0 6px rgba(63, 156, 48, 0.16);
+}
+.pm-account-bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.pm-account-email { font-family: var(--pm-disp); font-weight: 700; color: var(--pm-ink); margin: 0; }
+
+/* ── kogumite sakid (tabs) ───────────────────────────────────────────────── */
+.pm-tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--pm-line); margin: 24px 0 22px; flex-wrap: wrap; }
+.pm-tabbtn {
+  font-family: var(--pm-disp); font-weight: 700; font-size: 16px; background: none; border: 0;
+  border-bottom: 3px solid transparent; color: var(--pm-muted); padding: 10px 8px 13px; cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+}
+.pm-tabbtn .cnt { font-size: 12px; background: #e9f4e5; color: var(--pm-green-deep); border-radius: 999px; padding: 1px 9px; }
+.pm-tabbtn.on { color: var(--pm-ink); border-bottom-color: var(--pm-green); }
+.pm-pane { display: none; }
+.pm-pane.on { display: block; animation: pm-rise 0.35s both; }
+.pm-paneintro { color: var(--pm-muted); font-size: 17px; margin-bottom: 18px; max-width: 64ch; }
+
+/* ── oskuse rida + kaalukontroll ─────────────────────────────────────────── */
+.pm-srow { display: flex; align-items: center; gap: 15px; padding: 15px; border: 1px solid var(--pm-line); border-radius: 13px; background: #fff; margin-bottom: 10px; }
+.pm-srow .body { flex: 1; min-width: 0; }
+.pm-srow .nm { font-family: var(--pm-disp); font-weight: 600; font-size: 18px; }
+.pm-srow .meta { font-size: 14px; color: var(--pm-muted); }
+.pm-weight { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: none; }
+.pm-dots { display: flex; gap: 5px; }
+.pm-dot {
+  width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--pm-green); background: #fff;
+  cursor: pointer; transition: 0.15s; padding: 0;
+}
+.pm-dot.fill { background: var(--pm-green); }
+.pm-dot:hover { transform: scale(1.15); }
+.pm-weight small { font-family: var(--pm-disp); font-size: 11px; color: var(--pm-muted); font-weight: 600; }
+
+/* ── vaste-sildid (õpetatakse / jälgime) ─────────────────────────────────── */
+.pm-tag { display: inline-flex; align-items: center; gap: 6px; font-family: var(--pm-disp); font-size: 13px; font-weight: 600; border-radius: 999px; padding: 3px 11px; margin-top: 7px; }
+.pm-tag.ok { background: #e9f4e5; color: var(--pm-green-deep); }
+.pm-tag.wait { background: var(--pm-amber-bg); color: var(--pm-amber); }
+.pm-tag.ok a, .pm-tag.wait a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+
+/* ── "parim vaste" plokk + sobivuse riba ─────────────────────────────────── */
+.pm-match { margin-top: 16px; padding: 17px; border-radius: 13px; background: #fff; border: 1px solid #d8ead1; position: relative; overflow: hidden; }
+.pm-match::after {
+  content: ""; position: absolute; right: -14px; top: -14px; width: 70px; height: 70px;
+  background: repeating-linear-gradient(115deg, var(--pm-green-bright) 0 7px, transparent 7px 16px); opacity: 0.16;
+}
+.pm-match .k { font-family: var(--pm-disp); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pm-green-deep); font-weight: 700; }
+.pm-match .v { font-family: var(--pm-disp); font-size: 20px; font-weight: 700; margin-top: 3px; }
+.pm-match .v a { color: var(--pm-ink); text-decoration: none; }
+.pm-match .v a:hover { color: var(--pm-green-deep); }
+.pm-match small { display: block; margin-top: 8px; }
+.pm-fit { height: 10px; border-radius: 8px; background: #e7ece4; overflow: hidden; margin-top: 11px; }
+.pm-fit i { display: block; height: 100%; background: linear-gradient(90deg, var(--pm-green), var(--pm-green-bright)); border-radius: 8px; animation: pm-grow 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes pm-grow { from { width: 0; } }
+
+/* ── programmi rida (prioriteet + nooled) ────────────────────────────────── */
+.pm-prow { display: flex; align-items: center; gap: 14px; padding: 15px; border: 1px solid var(--pm-line); border-radius: 13px; background: #fff; margin-bottom: 10px; }
+.pm-rank { font-family: var(--pm-disp); font-weight: 800; font-size: 23px; color: var(--pm-green); width: 30px; text-align: center; flex: none; }
+.pm-prow .body { flex: 1; min-width: 0; }
+.pm-prow .nm { font-family: var(--pm-disp); font-weight: 600; font-size: 18px; }
+.pm-prow .nm a { color: var(--pm-ink); text-decoration: none; }
+.pm-prow .nm a:hover { color: var(--pm-green-deep); }
+.pm-prow .meta { font-size: 14px; color: var(--pm-muted); }
+.pm-fitbar { height: 8px; border-radius: 7px; background: #e7ece4; overflow: hidden; margin-top: 8px; max-width: 260px; }
+.pm-fitbar i { display: block; height: 100%; background: linear-gradient(90deg, var(--pm-green), var(--pm-green-bright)); }
+.pm-moves { display: flex; flex-direction: column; gap: 4px; flex: none; }
+.pm-mv { width: 38px; height: 32px; border: 1px solid var(--pm-line); background: #fff; border-radius: 9px; cursor: pointer; font-size: 15px; color: var(--pm-ink); }
+.pm-mv:hover { border-color: var(--pm-green); color: var(--pm-green); }
+.pm-mv:disabled { opacity: 0.3; cursor: default; }
+
+/* ── võrdluse rida ───────────────────────────────────────────────────────── */
+.pm-cmp { display: flex; align-items: center; gap: 14px; padding: 17px; border: 1px solid var(--pm-line); border-radius: 13px; background: #fff; margin-bottom: 11px; }
+.pm-cmp .ic { width: 46px; height: 46px; border-radius: 12px; background: var(--pm-blue-bg); color: var(--pm-blue); display: grid; place-items: center; font-size: 22px; flex: none; }
+.pm-cmp .nm { font-family: var(--pm-disp); font-weight: 600; font-size: 17px; }
+.pm-cmp .meta { font-size: 14px; color: var(--pm-muted); }
+.pm-cmp .body { flex: 1; min-width: 0; }
+.pm-addbtn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 9px; background: #fff;
+  border: 1.5px dashed var(--pm-line); color: var(--pm-green-deep); font-family: var(--pm-disp);
+  font-weight: 700; font-size: 16px; padding: 12px 18px; border-radius: 12px; cursor: pointer; width: 100%;
+}
+.pm-addbtn:hover { border-color: var(--pm-green); background: #f1f8ee; }
+
+/* ── "mida saad veel teha" ───────────────────────────────────────────────── */
+.pm-nextgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (max-width: 680px) { .pm-nextgrid { grid-template-columns: 1fr; } }
+.pm-next {
+  display: flex; gap: 14px; align-items: flex-start; padding: 18px; border: 1px solid var(--pm-line);
+  border-radius: 14px; background: #fff; cursor: pointer; text-align: left;
+  transition: transform 0.15s, box-shadow 0.2s, border-color 0.2s; font: inherit; color: inherit; text-decoration: none;
+}
+.pm-next:hover { transform: translateY(-3px); box-shadow: var(--pm-shadow); border-color: #d8ead1; }
+.pm-next .ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex: none; font-size: 21px; }
+.pm-next h4 { font-family: var(--pm-disp); font-size: 18px; font-weight: 600; margin: 0 0 2px; color: var(--pm-ink); }
+.pm-next p { font-size: 14px; color: var(--pm-muted); margin: 0; }
+.pm-ic-a { background: #e9f4e5; color: var(--pm-green-deep); }
+.pm-ic-b { background: var(--pm-blue-bg); color: var(--pm-blue); }
+.pm-ic-c { background: #fff5e6; color: #b8862a; }
+.pm-ic-d { background: #f3eefa; color: #6b4ea8; }
+
+/* ── teavitused, meeldetuletused, profiil (account alasektsioonid) ───────── */
+.pm-acc-block { border-top: 1px solid var(--pm-line); margin-top: 28px; padding-top: 24px; }
+.pm-acc-block h3 { font-family: var(--pm-disp); font-weight: 700; font-size: 19px; margin: 0 0 6px; color: var(--pm-ink); }
+.pm-acc-block .pm-paneintro { margin-bottom: 14px; }
+.pm-acc-toggle { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; color: var(--pm-ink); font-size: 16px; cursor: pointer; }
+.pm-acc-toggle input { width: 22px; min-height: 22px; height: 22px; margin-top: 2px; flex: 0 0 auto; accent-color: var(--pm-green); }
+.pm-acc-toggle span strong { color: var(--pm-ink); }
+.pm-funding-options { display: grid; gap: 4px; margin-bottom: 6px; }
+.pm-status { margin: 8px 0 0; padding: 9px 12px; border-radius: 8px; font-size: 0.95rem; font-weight: 700; background: #e9f4e5; color: var(--pm-green-deep); }
+.pm-status.is-error { background: #ffe0e0; color: #a11; }
+.pm-empty { color: var(--pm-muted); margin: 0 0 12px; }
+.pm-row {
+  display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;
+  border: 1px solid var(--pm-line); border-radius: 12px; padding: 12px 15px; margin-top: 8px; background: #fff;
+}
+.pm-row a { color: var(--pm-green-deep); font-weight: 700; }
+.pm-row .meta { color: var(--pm-muted); font-size: 0.9rem; }
+.pm-mini {
+  width: auto; min-height: 40px; padding: 8px 14px; font-size: 0.9rem; border-radius: 9px;
+  background: #fff; color: var(--pm-green-deep); border: 1px solid var(--pm-green); font-family: var(--pm-disp);
+  font-weight: 700; cursor: pointer;
+}
+.pm-mini.neutral { color: var(--pm-muted); border-color: var(--pm-line); }
+.pm-mini:hover { border-color: var(--pm-green); color: var(--pm-green-deep); }
+.pm-dl-badge { display: inline-block; margin-left: 6px; padding: 1px 9px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
+.pm-dl-badge.soon { background: var(--pm-amber-bg); color: var(--pm-amber); }
+.pm-dl-badge.today { background: #ffe0e0; color: #a11; }
+.pm-dl-badge.past { background: #eceef0; color: #5f6569; }
+.pm-combo-prompt { background: #e9f4e5; border: 1px solid #cfe0cf; border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; }
+.pm-combo-prompt p { margin: 0 0 10px; color: var(--pm-green-deep); }
+.pm-skill-chip {
+  background: #fff; border: 1px solid var(--pm-green); color: var(--pm-green-deep); border-radius: 999px;
+  padding: 6px 13px; font-size: 0.86rem; font-weight: 700; cursor: pointer; font-family: var(--pm-disp);
+}
+.pm-skill-chip:hover { background: #f1f8ee; }
+.pm-chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.pm-select {
+  width: 100%; min-height: 52px; border: 2px solid var(--pm-line); border-radius: 13px; padding: 13px 15px;
+  font-family: var(--pm-body); font-size: 17px; color: var(--pm-ink); background: #fff;
+}
+.pm-select:focus { outline: 0; border-color: var(--pm-green); box-shadow: var(--pm-focus); }
+.pm-embargo-foot { border-top: 1px dashed var(--pm-line); padding-top: 12px; margin-top: 14px; }
+
+/* ── sild-bännerid (demo / anonüümne) ────────────────────────────────────── */
+.pm-banner { border-radius: 12px; padding: 14px 16px; font-size: 0.97rem; }
+.pm-banner.anon { background: #e9f4e5; border: 1px solid #cfe0cf; color: var(--pm-green-deep); margin-bottom: 18px; }
+.pm-banner.bridge { background: var(--pm-amber-bg); border: 1px solid #f0e2c0; color: var(--pm-amber); margin: 0 0 22px; }
+.pm-banner.bridge strong, .pm-banner.anon strong { font-weight: 700; }
+
+/* ── modal + toast ───────────────────────────────────────────────────────── */
+.pm-modal { position: fixed; inset: 0; z-index: 80; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(23, 24, 26, 0.5); }
+.pm-modal-card { background: #fff; border-radius: 16px; padding: 28px; max-width: 460px; width: 100%; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3); }
+.pm-modal-card h3 { font-family: var(--pm-disp); font-weight: 700; color: var(--pm-ink); margin: 0 0 10px; font-size: 1.25rem; }
+.pm-modal-card p { color: var(--pm-muted); margin: 0 0 8px; }
+.pm-modal-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.pm-modal-actions .pm-btn { width: auto; }
+.pm-toast {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 90;
+  background: var(--pm-ink); color: #fff; padding: 13px 19px; border-radius: 12px; font-weight: 700;
+  font-family: var(--pm-disp); box-shadow: var(--pm-shadow); max-width: calc(100% - 32px);
+}
+
+/* ── konto-leht: tausta + ülemine paigutus ───────────────────────────────── */
+.pm-stage { background: var(--pm-ground); padding: 14px 0 96px; min-height: 60vh; }
+.pm-screen { display: none; }
+.pm-screen.on { display: block; }
+.pm[hidden], .pm-screen[hidden], .pm [hidden] { display: none !important; }
+
+.pm-crumbs { font-size: 0.9rem; color: var(--pm-muted); margin-bottom: 16px; padding-top: 8px; }
+.pm-crumbs a { color: var(--pm-green-deep); text-decoration: none; }
+.pm-crumbs a:hover { text-decoration: underline; }
+
+@media (max-width: 640px) {
+  .pm-account-bar { flex-direction: column; align-items: flex-start; }
+  .pm-card { padding: 22px; }
+}
