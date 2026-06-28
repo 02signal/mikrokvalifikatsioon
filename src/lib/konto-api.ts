@@ -191,10 +191,23 @@ export async function verifyLogin(
 
 /**
  * Loe serveri konto-seisund (Bearer). NB: server ei tagasta nimesid — ainult
- * `package_ref` + `outcome_refs` + viimati-arvutatud kattuvuse väljad.
- * @returns `{ packages }` 200 korral; null kui sessioon puudub või 401/tõrge.
+ * `package_ref` + `outcome_refs` + viimati-arvutatud kattuvuse väljad. Lisaks
+ * tagastab server maskitud e-posti (`email_masked`, nt "a***@ettevote.ee") ja
+ * tellimuste loendi (`subscriptions`) — neid kuvame, ei salvesta toorest PII-d.
+ *
+ * ADDITIIVNE LISA (ainus lubatud muudatus siin failis): tagastame nüüd ka
+ * `email_masked` + `subscriptions` LÄBI, et sisselogitud vaade saaks näidata
+ * "kellena sa oled" (risti-seadmel) ja loetleda tellimused. Päringu/auth/
+ * sessiooni loogika on PUUTUMATA — ainult tagastatav kuju laienes.
+ *
+ * @returns `{ packages, email_masked, subscriptions }` 200 korral; null kui
+ *          sessioon puudub või 401/tõrge.
  */
-export async function fetchState(): Promise<{ packages: any[] } | null> {
+export async function fetchState(): Promise<{
+  packages: any[];
+  email_masked: string | null;
+  subscriptions: any[];
+} | null> {
   if (!kontoEnabled()) return null;
   const session = getSession();
   if (!session) return null;
@@ -205,7 +218,13 @@ export async function fetchState(): Promise<{ packages: any[] } | null> {
     });
     if (!res.ok) return null;
     const data = await res.json();
-    return { packages: Array.isArray(data?.packages) ? data.packages : [] };
+    return {
+      packages: Array.isArray(data?.packages) ? data.packages : [],
+      email_masked: typeof data?.email_masked === "string" && data.email_masked.trim()
+        ? data.email_masked.trim()
+        : null,
+      subscriptions: Array.isArray(data?.subscriptions) ? data.subscriptions : [],
+    };
   } catch {
     return null;
   }

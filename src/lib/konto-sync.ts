@@ -30,8 +30,10 @@ const PACKAGE_REF_RE = /^pkg_[0-9a-f]{24}$/;
  * Üks sünkroonitav pakett (väljuv koorem). `coverage` on v1-s ära jäetud.
  * `package_ref` lisatakse AINULT siis, kui kohalik kaart juba teab selle paketi
  * serveri-viidet — siis server taaskasutab seda (idempotentne) uue mintimise asemel.
+ * `weight` on paketi tähtsus-järjekord (väiksem = tähtsam, kasutaja seatud järjekord):
+ * server salvestab selle, et reprioritiseerimine püsiks ka teises seadmes/uuel laadimisel.
  */
-export type SyncPackage = { client_id: string; outcome_refs: string[]; coverage?: any; package_ref?: string };
+export type SyncPackage = { client_id: string; outcome_refs: string[]; coverage?: any; package_ref?: string; weight?: number };
 
 /** Serveri sünkroonimisvastuse üksus: kliendi id <-> serveri viide. */
 export type SyncedPackage = { client_id: string; package_ref: string };
@@ -79,17 +81,23 @@ export function buildSyncPayload(
   knownPkgRef?: (clientId: string) => string | null | undefined,
 ): SyncPackage[] {
   const out: SyncPackage[] = [];
+  // `weight` peegeldab paketi NÄHTAVAT järjekorda (väiksem = tähtsam). Loendame
+  // ainult saadetavaid (lahenduvaid) pakette, et järjekord oleks tihe ja pidev —
+  // server salvestab selle ja /state tagastab sama `weight`-i, nii et kasutaja
+  // seatud reprioritiseerimine püsib ka uuel laadimisel / teises seadmes.
+  let weight = 0;
   for (const pkg of state?.packages ?? []) {
     if (!pkg || typeof pkg.id !== "string") continue;
     const outcome_refs = refsForPackage(pkg.items, refOf);
     if (outcome_refs.length === 0) continue; // ei saa tühja paketti sünkroonida
-    const item: SyncPackage = { client_id: pkg.id, outcome_refs };
+    const item: SyncPackage = { client_id: pkg.id, outcome_refs, weight };
     // Korduv sünkroon idempotentseks: kui teame juba selle paketi serveri-viidet,
     // saadame selle kaasa, et server taaskasutaks (tema sync upsert'ib kliendi
     // antud kehtival package_ref'il) — mitte ei looks duplikaati.
     const known = knownPkgRef ? knownPkgRef(pkg.id) : null;
     if (typeof known === "string" && PACKAGE_REF_RE.test(known)) item.package_ref = known;
     out.push(item);
+    weight += 1;
     if (out.length >= MAX_PACKAGES) break; // serveri ülempiir pakettidele
   }
   return out;
