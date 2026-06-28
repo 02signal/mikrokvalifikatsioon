@@ -109,6 +109,9 @@ const schema = {
       <!-- ============ EKRAAN B — välja logitud: Loo konto / Logi sisse ============ -->
       <!-- STATE s1: usaldus-/rämpsposti-hirm. VASTUS: täpselt mida, miks, ei spämmi, sina kontrollid. -->
       <section class="pm-wrap pm-screen on" data-screen="auth" data-tool-section="konto-login" aria-labelledby="authH">
+        <!-- .pm-rise puhkeseis on NÄHTAV (opacity:1); sisenemis-efekti mängib
+             JS (revealRise) iga ekraani paljastamisel transition'iga. Nii on keha
+             alati nähtav, ka siis kui ekraan paljastatakse alles async-laadimise järel. -->
         <div class="pm-rise">
           <div class="pm-eyebrow">Minu konto</div>
           <h1 id="authH">Hoia oma valikud <em>alles.</em></h1>
@@ -597,15 +600,51 @@ const schema = {
           if (i === n) el.setAttribute("aria-current", "step"); else el.removeAttribute("aria-current");
         });
       };
+      // Mängi paljastatud ekraani .pm-rise(de)l sisenemise-efekt TRANSITION'iga.
+      // MIKS NII: CSS-animatsiooni `both`-täide jättis peidetud (display:none)
+      // ekraani, mis paljastatakse alles hiljem (account pärast async fetchState'i),
+      // opacity:0 peale = tühi keha. Transition-mustriga on puhkeseis NÄHTAV
+      // (opacity:1) ja efekt on vaid kaunistus: paneme korraks .pm-rise-enter
+      // (opacity:0 + nihe, transition:none), sunnime reflow ja eemaldame klassi
+      // järgmisel kaadril → element liugleb nähtavaks. Kui efekt ei käivitu (nt
+      // reduced-motion), jääb keha ikka NÄHTAVAKS.
+      const revealRise = (name: "auth" | "check" | "account"): void => {
+        const sec = $(`[data-screen="${name}"]`);
+        if (!sec) return;
+        const rises = $$(".pm-rise", sec);
+        for (const el of rises) {
+          el.classList.add("pm-rise-enter");   // algseis: opacity:0, transition:none
+          void el.offsetWidth;                 // sunni reflow, et algseis kinnistuks
+        }
+        requestAnimationFrame(() => {
+          for (const el of rises) el.classList.remove("pm-rise-enter"); // → liugleb nähtavaks
+        });
+      };
+
       const showScreen = (name: "auth" | "check" | "account"): void => {
-        $$("[data-screen]").forEach((s) => { (s as HTMLElement).hidden = s.getAttribute("data-screen") !== name; });
+        // Ekraani nähtavuse otsustab .pm-screen.on KLASS (CSS:
+        // `.pm-screen{display:none}` / `.pm-screen.on{display:block}`), seega
+        // peame klassi vahetama - AINULT `hidden`-atribuudi eemaldamine EI tee
+        // ekraani nähtavaks (jääks `.pm-screen` ilma `.on`-ita display:none'i).
+        // Hoiame `hidden` ka sünkroonis (a11y + `[hidden]` !important kindlustab
+        // peitmise) - aga `.on` on see, mis ekraani PÄRISELT kuvab.
+        $$("[data-screen]").forEach((s) => {
+          const match = s.getAttribute("data-screen") === name;
+          s.classList.toggle("on", match);
+          (s as HTMLElement).hidden = !match;
+        });
         const stepperWrap = $("[data-stepper-wrap]");
         if (stepperWrap) {
-          // Auth on rahulik (apex-laadne) → peida mõõdik; check=samm 3, account=samm 4.
+          // Auth on rahulik (apex-laadne) → peida mõõdik. Sammud (data-pm-step)
+          // on 0-põhised: 0 "Vali, mis huvitab", 1 "Salvesta endale",
+          // 2 "Kinnita e-post" (=check), 3 "Sinu konto" (=account).
           stepperWrap.hidden = name === "auth";
-          if (name === "check") setStep(2);
-          if (name === "account") setStep(3);
+          if (name === "check") setStep(2);     // samm 3 - "Kinnita e-post"
+          if (name === "account") setStep(3);   // samm 4 - "Sinu konto"
         }
+        // Mängi just avatud ekraani sisenemise-efekt (vt revealRise). Keha on
+        // niikuinii nähtav (puhkeseis opacity:1) - see on vaid kaunistus.
+        revealRise(name);
         window.scrollTo({ top: 0, behavior: "auto" });
       };
 
@@ -1551,8 +1590,16 @@ const schema = {
         if (emailEl && !emailEl.textContent) emailEl.textContent = "Sinu konto";
         const bridge = $("[data-bridge-banner]");
         if (bridge) (bridge as HTMLElement).hidden = true;   // REAL: see pole demorežiim
-        const srv = await fetchState();
-        renderRealAccount((srv?.packages as ServerPackage[]) ?? []);
+        // VASTUPIDAVUS: fetchState neelab võrgu-/401-tõrke ise (→ null), aga
+        // hoiame renderduse omaette try/catch'is, et ükski ootamatu viga EI
+        // jätaks kasutajat tühjale ekraanile. Tõrke korral näitame ikkagi konto
+        // ekraani tühja-seisundiga (renderRealAccount([]) joonistab tühja teate).
+        try {
+          const srv = await fetchState();
+          renderRealAccount((srv?.packages as ServerPackage[]) ?? []);
+        } catch {
+          renderRealAccount([]);   // näita konto tühja-seisundit, mitte tühja keha
+        }
       };
 
       // ====================================================================
@@ -1564,8 +1611,12 @@ const schema = {
       const boot = (): void => {
         renderAnonBanner();
         if (kontoEnabled()) {
-          if (getSession()) { void syncAndRenderReal(); }
-          else { showScreen("auth"); }
+          if (getSession()) {
+            // VASTUPIDAVUS: kui serveri-laadimine ootamatult tõrgub, ÄRA jäta
+            // kasutajat tühjale ekraanile - näita konto tühja-seisundit (sees,
+            // aga ilma pakettideta), et keha oleks alati olemas.
+            syncAndRenderReal().catch(() => { renderRealAccount([]); });
+          } else { showScreen("auth"); }
           return;
         }
         // ===== DEMO PATH (flag OFF): MUUTMATA loogika =====
