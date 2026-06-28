@@ -205,26 +205,49 @@ blockquote{background:#fff;border:1px solid var(--line);border-left:4px solid va
     </div>
     <p class="muted" style="font-size:15px"><strong>Millal:</strong> tekstikontekst või jalus, kus märk on juba mujal olemas. Sora-800 kontuur - terav igas suuruses.</p>
 
-    <h3>Motiiv-elemendid - maandumislehe aktsent</h3>
+    <div class="callout"><strong>Hele vs tume taust.</strong> Igal elemendil on hele- ja tumetausta variant - vali tausta järgi:
+      <ul style="margin-top:8px;margin-bottom:0">
+        <li><strong>Hele taust</strong> → tavaline variant: <code>mark.svg</code>, <code>lockup.svg</code>, <code>wordmark.svg</code>, <code>motif-strokes.svg</code> ...</li>
+        <li><strong>Tume taust</strong> → <code>-white</code> variant: <code>mark-white.svg</code>, <code>lockup-white.svg</code>, <code>motif-strokes-white.svg</code> ... (must muutub valgeks, rohelised jäävad).</li>
+        <li><strong>Õrn hero-aktsent:</strong> hele taust → <code>motif-strokes-faint.svg</code>, tume taust → <code>motif-strokes-faint-white.svg</code>.</li>
+      </ul>
+    </div>
+
+    <h3>Motiiv-elemendid - maandumislehe aktsent (hele + tume)</h3>
     <div class="cmp">
-      <div class="lcard"><div class="top"><span class="lab">motif-strokes.svg</span><span class="pill new">aktsent</span></div><div class="stage"><img src="../public/logo/motif-strokes.svg" alt="Motiiv: tõusvad ribad" style="height:60px"/></div></div>
-      <div class="lcard"><div class="top"><span class="lab">motif-strokes-faint.svg</span><span class="pill new">taust</span></div><div class="stage dark"><img src="../public/logo/motif-strokes-faint.svg" alt="Motiiv haju, tumedal" style="height:90px"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">motif-strokes.svg</span><span class="pill new">hele</span></div><div class="stage"><img src="../public/logo/motif-strokes.svg" alt="Motiiv: tõusvad ribad" style="height:60px"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">motif-strokes-white.svg</span><span class="pill new">tume</span></div><div class="stage dark"><img src="../public/logo/motif-strokes-white.svg" alt="Motiiv tumedal" style="height:60px"/></div></div>
     </div>
     <div class="cmp" style="margin-top:14px">
-      <div class="lcard"><div class="top"><span class="lab">motif-divider.svg</span><span class="pill new">eraldaja</span></div><div class="stage"><img src="../public/logo/motif-divider.svg" alt="Eraldaja motiiv" style="width:100%"/></div></div>
-      <div class="lcard"><div class="top"><span class="lab">motif-strokes-animated.svg</span><button class="replay" data-img="motanim">↻ Mängi uuesti</button></div><div class="stage"><img id="motanim" src="../public/logo/motif-strokes-animated.svg" alt="Motiiv, animeeritud" style="height:60px"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">motif-strokes-faint.svg</span><span class="pill new">hele taust</span></div><div class="stage"><img src="../public/logo/motif-strokes-faint.svg" alt="Motiiv haju, hele" style="height:90px"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">motif-strokes-faint-white.svg</span><span class="pill new">tume taust</span></div><div class="stage dark"><img src="../public/logo/motif-strokes-faint-white.svg" alt="Motiiv haju, tumedal - kõik kolm riba nähtaval" style="height:90px"/></div></div>
     </div>
-    <p class="muted" style="font-size:15px"><strong>Millal:</strong> maandumislehe hero/sektsiooni aktsent (<code>motif-strokes</code>), õrn hero-taust (<code>-faint</code>), sektsiooni eraldaja (<code>-divider</code>). Mitte logo asemel - need on dekoratiivsed brändi-elemendid.</p>
+    <div class="cmp" style="margin-top:14px">
+      <div class="lcard"><div class="top"><span class="lab">motif-divider.svg</span><span class="pill new">hele</span></div><div class="stage"><img src="../public/logo/motif-divider.svg" alt="Eraldaja motiiv" style="width:100%"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">motif-divider-white.svg</span><span class="pill new">tume</span></div><div class="stage dark"><img src="../public/logo/motif-divider-white.svg" alt="Eraldaja motiiv tumedal" style="width:100%"/></div></div>
+    </div>
+    <p class="muted" style="font-size:15px"><strong>Millal:</strong> maandumislehe hero/sektsiooni aktsent (<code>motif-strokes</code>), õrn hero-taust (<code>-faint</code>), sektsiooni eraldaja (<code>-divider</code>). Mitte logo asemel - need on dekoratiivsed brändi-elemendid. Tumedal taustal vali alati <code>-white</code> (muidu kaob kõige kõrgem must riba ära).</p>
 
-    <h3>Animeeritud variandid <span class="muted" style="font-size:14px;font-weight:400">(üks kord, austab prefers-reduced-motion)</span></h3>
+    <h3>Animeeritud variandid - hele <span class="muted" style="font-size:14px;font-weight:400">(üks kord, austab prefers-reduced-motion)</span></h3>
     <div class="cmp">
       <div class="lcard"><div class="top"><span class="lab">mark-animated.svg</span><button class="replay" data-img="kitmark">↻ Mängi uuesti</button></div><div class="stage"><img id="kitmark" src="../public/logo/mark-animated.svg" alt="Märk animeeritud" style="height:64px"/></div></div>
       <div class="lcard"><div class="top"><span class="lab">wordmark-animated.svg</span><button class="replay" data-img="kitword">↻ Mängi uuesti</button></div><div class="stage"><img id="kitword" src="../public/logo/wordmark-animated.svg" alt="Sõnamärk animeeritud"/></div></div>
     </div>
     <div class="cmp" style="margin-top:14px">
       <div class="lcard"><div class="top"><span class="lab">lockup-animated.svg</span><button class="replay" data-img="kitlock">↻ Mängi uuesti</button></div><div class="stage"><img id="kitlock" src="../public/logo/lockup-animated.svg" alt="Logolukk animeeritud"/></div></div>
-      <div class="lcard"><div class="top"><span class="lab">millal</span></div><div class="stage" style="display:block;padding:20px 18px"><p class="muted" style="font-size:15px;margin:0"><strong>mark-animated</strong> - päise tervitus, salvestuse kinnitus.<br><strong>wordmark-animated</strong> - tekstipealkiri, kus märk on juba olemas.<br><strong>lockup-animated</strong> - täis-logo erihetk (esmane laadimine).<br><strong>motif-animated</strong> - maandumislehe hero.</p></div></div>
+      <div class="lcard"><div class="top"><span class="lab">motif-strokes-animated.svg</span><button class="replay" data-img="motanim">↻ Mängi uuesti</button></div><div class="stage"><img id="motanim" src="../public/logo/motif-strokes-animated.svg" alt="Motiiv animeeritud" style="height:60px"/></div></div>
     </div>
+
+    <h3>Animeeritud variandid - tume <span class="muted" style="font-size:14px;font-weight:400">(samad, <code>-white</code>; lõppseis vastab tumetausta variandile)</span></h3>
+    <div class="cmp">
+      <div class="lcard"><div class="top"><span class="lab">mark-animated-white.svg</span><button class="replay" data-img="kitmarkw">↻ Mängi uuesti</button></div><div class="stage dark"><img id="kitmarkw" src="../public/logo/mark-animated-white.svg" alt="Märk animeeritud, tumedal" style="height:64px"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">wordmark-animated-white.svg</span><button class="replay" data-img="kitwordw">↻ Mängi uuesti</button></div><div class="stage dark"><img id="kitwordw" src="../public/logo/wordmark-animated-white.svg" alt="Sõnamärk animeeritud, tumedal"/></div></div>
+    </div>
+    <div class="cmp" style="margin-top:14px">
+      <div class="lcard"><div class="top"><span class="lab">lockup-animated-white.svg</span><button class="replay" data-img="kitlockw">↻ Mängi uuesti</button></div><div class="stage dark"><img id="kitlockw" src="../public/logo/lockup-animated-white.svg" alt="Logolukk animeeritud, tumedal"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">motif-strokes-animated-white.svg</span><button class="replay" data-img="motanimw">↻ Mängi uuesti</button></div><div class="stage dark"><img id="motanimw" src="../public/logo/motif-strokes-animated-white.svg" alt="Motiiv animeeritud, tumedal" style="height:60px"/></div></div>
+    </div>
+    <p class="muted" style="font-size:15px"><strong>Millal:</strong> <strong>mark-animated</strong> - päise tervitus, salvestuse kinnitus; <strong>wordmark-animated</strong> - tekstipealkiri, kus märk on juba olemas; <strong>lockup-animated</strong> - täis-logo erihetk (esmane laadimine); <strong>motif-strokes-animated</strong> - maandumislehe hero. Tumedal taustal kasuta <code>-white</code> versiooni.</p>
   </section>
 
   <!-- DO / DON'T -->

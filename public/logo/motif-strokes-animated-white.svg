@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.23 -2.0 56.23 44.0" role="img" aria-labelledby="tmaw dmaw" width="56" height="44"><title id="tmaw">Mikrokvalifikatsiooni motiiv (animeeritud)</title><desc id="dmaw">Kolm tousvat kaldriba tousevad korra - hero-aktsent.</desc><style>
+  .mk-bar{transform-box:fill-box;transform-origin:bottom;transform:scaleY(0);animation:mk-rise .42s cubic-bezier(.2,.7,.2,1) forwards}
+  .mk-b0{animation-delay:0s}.mk-b1{animation-delay:.14s}.mk-b2{animation-delay:.28s}
+  @keyframes mk-rise{to{transform:scaleY(1)}}
+  @media (prefers-reduced-motion:reduce){.mk-bar{transform:scaleY(1)!important;animation:none!important}}
+</style><g transform="skewX(-13)"><rect class="mk-bar mk-b0" x="0.0" y="18.0" width="11.0" height="22.0" rx="3.0" fill="#54c247"/><rect class="mk-bar mk-b1" x="16.0" y="8.8" width="11.0" height="31.2" rx="3.0" fill="#3f9c30"/><rect class="mk-bar mk-b2" x="32.0" y="0.0" width="11.0" height="40.0" rx="3.0" fill="#ffffff"/></g></svg>

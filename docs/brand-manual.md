@@ -22,7 +22,7 @@ tasane ja meeldiv kasv - jässakas, mitte ülespoole venitatud.
 - **Geomeetria (täpselt nagu style-tile `.mark`):** ribad on **laius 11**, **vahe 5** (x kohtadel
   0, 16, 32), grupil `skewX(-13°)`, nurgaraadius ~3. Kõrgused on **55% / 78% / 100% 40-st** ehk
   **22 / 31 / 40** (madalast kõrgeni, vasakult paremale). Kõige kõrgem (must) riba on seega 11 lai
-  ja 40 kõrge (~3,6:1 - jässakas ja rahulik), mitte sale. Must täpp ~11 px läbimõõduga on
+  ja 40 kõrge (~3,6:1 - jässakas ja tasane), mitte sale. Must täpp ~11 px läbimõõduga on
   baasjoonel, ribadest veidi paremal (vahe ~5). Märgi viewBox on **lamav** (`-11 -2 63 44`,
   laius ületab kõrguse). Ehitatud puhaste `<rect>`-idega - krõbe ja minimaalne, mitte joonistuse jälg.
 - **Värvid vasakult paremale:** **heleroheline `#54c247` -> roheline `#3f9c30` -> must `#17181a`**,
@@ -103,23 +103,35 @@ Reegel: suur ja kontrastne tekst, üks selge tegevus korraga, raha ja aeg alati 
 
 **Uus v3 logo - täielik komplekt (kõik `public/logo/` all):**
 
-| Fail | Mis | Millal kasutada |
+| Fail (hele / tume) | Mis | Millal kasutada |
 |---|---|---|
 | `mark.svg` / `mark-white.svg` | ainult v3 märk (element) | väike pind, favicon, app-ikoon, kaardi nurk - kus sõnamärk ei mahu |
 | `lockup.svg` / `lockup-white.svg` | märk + sõnamärk + loosung | **vaikevalik** - päis, jalus, dokumendid, jagatavad pildid |
 | `wordmark.svg` / `wordmark-white.svg` | ainult sõnamärk + loosung (Sora kontuur) | tekstikontekst või jalus, kus märk on juba mujal olemas |
-| `motif-strokes.svg` | tõusvad ribad eraldi (motiiv) | maandumislehe hero/sektsiooni aktsent |
-| `motif-strokes-faint.svg` | sama, madala läbipaistvusega | õrn hero-taust |
-| `motif-divider.svg` | ribad + peen joon | sektsiooni eraldaja/aktsent |
-| `mark-animated.svg` | märk: ribad tõusevad, siis täpp | erihetked (vt §7) |
-| `wordmark-animated.svg` | sõnamärk ilmub õrnalt üles | tekstipealkiri, kus märk on juba olemas |
-| `lockup-animated.svg` | ribad tõusevad, siis sõnamärk | täis-logo erihetk (esmane laadimine) |
-| `motif-strokes-animated.svg` | motiivi ribad tõusevad korra | maandumislehe hero |
+| `motif-strokes.svg` / `motif-strokes-white.svg` | tõusvad ribad eraldi (motiiv) | maandumislehe hero/sektsiooni aktsent |
+| `motif-strokes-faint.svg` / `motif-strokes-faint-white.svg` | sama, madala läbipaistvusega | õrn hero-taust |
+| `motif-divider.svg` / `motif-divider-white.svg` | ribad + peen joon | sektsiooni eraldaja/aktsent |
+| `mark-animated.svg` / `mark-animated-white.svg` | märk: ribad tõusevad, siis täpp | erihetked (vt §7) |
+| `wordmark-animated.svg` / `wordmark-animated-white.svg` | sõnamärk ilmub õrnalt üles | tekstipealkiri, kus märk on juba olemas |
+| `lockup-animated.svg` / `lockup-animated-white.svg` | ribad tõusevad, siis sõnamärk | täis-logo erihetk (esmane laadimine) |
+| `motif-strokes-animated.svg` / `motif-strokes-animated-white.svg` | motiivi ribad tõusevad korra | maandumislehe hero |
 | `old_*.svg` | vana logo (alles hoitud) | ainult viide/varu; komponendis prop `old` |
 
 **Sõnamärk on Sora-800 kontuurina** (mitte pildist trace) - terav igas suuruses, fondisõltuvuseta.
 Loosung "INVESTEERI ENDASSE" on Sora-700 kontuurina. Animeeritud variandid mängivad **korra**
 ja austavad `prefers-reduced-motion` (siis kohe lõppseis).
+
+### Hele vs tume taust
+
+Igal elemendil on hele- ja tumetausta variant. Vali tausta järgi:
+
+- **Hele taust** -> tavaline variant: `mark.svg`, `lockup.svg`, `wordmark.svg`, `motif-strokes.svg` ...
+- **Tume taust** -> `-white` variant: `mark-white.svg`, `lockup-white.svg`, `motif-strokes-white.svg` ...
+  Must muutub valgeks, brändi rohelised jäävad samaks.
+- **Õrn hero-aktsent:** hele taust -> `motif-strokes-faint.svg`, tume taust -> `motif-strokes-faint-white.svg`.
+
+Tumedal taustal vali alati `-white`. Muidu kaob kõige kõrgem must riba ära (näiteks
+`motif-strokes-faint.svg` tumedal taustal - kolmas riba ei paista).
 
 Saidil tuleb logo komponendist `Logo.astro` (vt §9) - logolukk renderdab v3 märgi + **elava**
 Sora-teksti (terav ja valitav), nii et see vastab v3 päisele täpselt. Eraldi `*.svg` failid on
