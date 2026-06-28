@@ -275,6 +275,9 @@ const schema = {
         createPackage, renamePackage, deletePackage, setActive,
         addItem, removeItem, type PkgItem, type PackagesState,
       } from "../../lib/packages";
+      // KONTO-API on TARBI-AINULT: loeme ainult seisundit (sees/väljas), et
+      // konto-CTA ei ütleks "loo konto", kui kasutaja on juba sees. Ei muuda midagi.
+      import { kontoEnabled, getSession } from "../../lib/konto-api";
       const search = document.querySelector("[data-outcome-search]") as HTMLInputElement | null;
       const fieldSel = document.querySelector("[data-outcome-field]") as HTMLSelectElement | null;
       const count = document.querySelector("[data-outcome-count]");
@@ -488,16 +491,39 @@ const schema = {
         }
       };
 
-      // Kui kontosessioon on juba selles brauseris olemas (mkval:account sild),
-      // muudab konto-CTA teksti "Salvesta minu kontole" — pakett liigub kontole
-      // järgmise /konto/ külastuse union-merge'iga (lossless). TOOTMISES asendab
-      // selle silla AMOS-i seansikontroll.
+      // Seisundi-teadlik konto-CTA: kui kasutaja on JUBA sees, ei tohi nupp öelda
+      // "loo konto". Loeme seisundi sama mehhanismiga, mida konto kasutab:
+      //  - REAL-tee (kontoEnabled): kehtiv seanss (getSession)
+      //  - DEMO-tee (lipp maas): mkval:account sild selles brauseris
+      // konto-api on TARBI-AINULT — me ei muuda selle loogikat. Pakett liigub
+      // kontole järgmise /konto/ külastuse (REAL: sünk; DEMO: union-merge) kaudu.
       const accountBtn = document.querySelector("[data-pkg-account]") as HTMLAnchorElement | null;
       const hasAccountSession = (): boolean => {
-        try { return !!localStorage.getItem("mkval:account"); } catch { return false; }
+        try {
+          if (kontoEnabled()) return !!getSession();
+          return !!localStorage.getItem("mkval:account");
+        } catch { return false; }
       };
       if (accountBtn && hasAccountSession()) {
-        accountBtn.textContent = "Salvesta see pakett kontole";
+        // Sees → ei "loo konto", vaid salvesta oma kontole + paku konto avamist.
+        accountBtn.textContent = "Salvesta oma kontole";
+        const accountHelp = document.querySelector("[data-pkg-account-help]");
+        if (accountHelp) {
+          accountHelp.textContent =
+            'Sa oled juba sees. Salvestame su valitud paketi sinu kontole - ava „Minu konto", et seda hallata, seada tähtsust ja näha sobivaid programme.';
+        }
+        // Lisa kerge teisene tegevus: ava Minu konto (kui seda veel pole).
+        const actions = accountBtn.parentElement;
+        if (actions && !actions.querySelector("[data-pkg-account-open]")) {
+          const open = document.createElement("a");
+          open.className = "btn btn-secondary";
+          open.href = "/konto/";
+          open.textContent = "Ava Minu konto";
+          open.setAttribute("data-pkg-account-open", "");
+          open.setAttribute("data-track-event", "cta_click");
+          open.setAttribute("data-track-label", "pkg_open_account");
+          accountBtn.insertAdjacentElement("afterend", open);
+        }
       }
 
       // Vahetaja: täida <select> pakettide nimedega, aktiivne valitud. Nimed jäävad

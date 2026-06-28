@@ -142,6 +142,21 @@ textarea {
   text-decoration: none;
 }
 
+/* "Minu konto" on navis eristatud, et seda oleks lihtne leida (ainult jaluse
+   asemel). Kerge roheline ääris = sinu koht, kuhu tagasi tulla; mitte tavaline
+   sisuleht. Lisatav, ei muuda teisi linke. */
+.navlinks a.nav-konto {
+  color: var(--teal, #2f7d6b);
+  border: 1px solid var(--teal, #2f7d6b);
+  border-radius: 999px;
+  padding: 5px 14px;
+  line-height: 1;
+}
+.navlinks a.nav-konto:hover {
+  background: var(--teal, #2f7d6b);
+  color: #fff;
+}
+
 /* Mobiilimenüü: hamburger nupp, lingid kokku kuni avamiseni */
 .nav-toggle {
   display: none;
@@ -211,6 +226,20 @@ textarea {
 
   .navlinks a:last-child {
     border-bottom: 0;
+  }
+
+  /* Mobiilis on lingid täislaiusega read - konto pill ei sobi, näita
+     selle asemel rohelist teksti, et see ikka silma jääks. */
+  .navlinks a.nav-konto {
+    border: 0;
+    border-radius: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 13px 4px;
+    font-weight: 800;
+  }
+  .navlinks a.nav-konto:hover {
+    background: transparent;
+    color: var(--teal, #2e7d22);
   }
 }
 

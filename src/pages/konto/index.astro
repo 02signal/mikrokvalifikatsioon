@@ -114,28 +114,46 @@ const schema = {
              alati nähtav, ka siis kui ekraan paljastatakse alles async-laadimise järel. -->
         <div class="pm-rise">
           <div class="pm-eyebrow">Minu konto</div>
-          <h1 id="authH">Hoia oma valikud <em>alles.</em></h1>
-          <p class="pm-lede">
-            Üks koht, kus su valitud oskuste pakett püsib alles ja kus saad õigel ajal teada sobivast
-            programmist, kombinatsioonist või lähenevast tähtajast. Parooli pole vaja - saadame sulle
-            sisselogimislingi e-postiga.
+          <h1 id="authH" data-auth-title>Hoia oma valikud <em>alles.</em></h1>
+          <p class="pm-lede" data-auth-lede>
+            Sinu e-post on sinu keskus - üks koht, kuhu tagasi tulla. Parooli pole vaja: saadame
+            sulle e-postiga lingi, mis kinnitab su e-posti ja logib sind sisse.
           </p>
+
+          <!-- Mille konto sulle annab (lühike, kasu-põhine - 60-70+ omanikule). -->
+          <ul class="pm-benefits" data-auth-value>
+            <li><span class="b" aria-hidden="true">✓</span> <span><b>Hoia oma oskused alles.</b> Su valitud oskuste pakett püsib alles - ka uues seadmes.</span></li>
+            <li><span class="b" aria-hidden="true">✓</span> <span><b>Saa teada sobivast programmist või kombinatsioonist.</b> Kui sinu oskustele midagi sobivat lisandub, anname märku - sa ei pea ise otsima.</span></li>
+            <li><span class="b" aria-hidden="true">✓</span> <span><b>Tähtaja-meeldetuletus.</b> Anname märku enne, kui registreerimine lõpeb - et sa ei jääks tähtajast ilma.</span></li>
+          </ul>
 
           <div class="pm-banner anon" data-anon-banner hidden></div>
 
+          <!-- Kaks veidi erinevat teed: uus konto (kasu + nõusolek) vs tagasi (lühike). -->
+          <div class="pm-mode" role="tablist" aria-label="Vali, mida soovid">
+            <button type="button" class="pm-modebtn on" role="tab" aria-selected="true" data-mode-btn="signup">Liitu / loo konto</button>
+            <button type="button" class="pm-modebtn" role="tab" aria-selected="false" data-mode-btn="login">Logi sisse</button>
+          </div>
+
           <div class="pm-card" style="max-width:580px">
             <form data-auth-form data-site-lead-form data-source-site="mikrokvalifikatsioon.ee">
+              <p class="pm-modehint" data-mode-hint="signup">
+                <strong>Uus siin?</strong> Jäta e-post, pane linnuke nõusoleku juurde - hoiame su valikud alles.
+              </p>
+              <p class="pm-modehint" data-mode-hint="login" hidden>
+                <strong>Juba kasutaja?</strong> Sisesta sama e-post, saadame sulle sisselogimislingi.
+              </p>
               <div class="pm-field">
                 <label for="kontoEmail">Sinu e-post</label>
                 <input id="kontoEmail" name="email" type="email" required autocomplete="email" placeholder="nimi@ettevote.ee" />
               </div>
-              <div class="pm-trust" aria-hidden="false">
+              <div class="pm-trust" data-mode-only="signup" aria-hidden="false">
                 <div><span class="t" aria-hidden="true">✓</span> Kogume <b>ainult e-posti</b> - ei nime, ei muud.</div>
                 <div><span class="t" aria-hidden="true">✓</span> <b>Ei spämmi</b> - kiri ainult siis, kui on midagi sinu jaoks.</div>
                 <div><span class="t" aria-hidden="true">✓</span> <b>Sina kontrollid</b> - eemaldad end ühe klõpsuga.</div>
                 <div><span class="t" aria-hidden="true">✓</span> Andmed Eestis · <a href="/privaatsus/">privaatsus</a></div>
               </div>
-              <label class="pm-consent" data-consent-row>
+              <label class="pm-consent" data-consent-row data-mode-only="signup">
                 <input type="checkbox" name="consent" data-consent />
                 <span>
                   Jah, hoidke mu valikud alles ja andke teada, kui sobiv programm, kombinatsioon või
@@ -144,7 +162,7 @@ const schema = {
               </label>
               <p class="pm-error" data-auth-error hidden></p>
               <button class="pm-btn pm-btn-primary" type="submit" data-auth-submit>
-                Saada mulle link <span class="arr" aria-hidden="true">→</span>
+                <span data-auth-submit-label>Saada mulle link</span> <span class="arr" aria-hidden="true">→</span>
               </button>
               <div class="pm-reassure">
                 <span class="lock" aria-hidden="true">🔒</span> Vajab ainult e-posti. Tasuta. Parooli pole vaja.
@@ -274,6 +292,19 @@ const schema = {
           </div>
 
           <!-- Konto-haldus: meeldetuletused, teavitused, profiil, nõusolek -->
+          <!-- MINU TELLIMUSED — ülevaade, millele oled tellinud teavitusi. -->
+          <section class="pm-acc-block" data-feature="subs" aria-labelledby="subsH">
+            <h3 id="subsH">Minu tellimused</h3>
+            <p class="pm-paneintro">
+              Siit näed, millele oled teavitused tellinud - valdkonnad, oskused, kombinatsioonid ja
+              tähtaja-meeldetuletused. Saad iga tellimuse siit ka maha võtta.
+            </p>
+            <div data-subs-list></div>
+            <p class="pm-tiny" style="margin-top:10px">
+              Tellimusi saad hallata ja maha võtta siin lehel, samuti iga e-kirja jaluse loobumislingiga.
+            </p>
+          </section>
+
           <!-- FEATURE 2 — Tähtaja-meeldetuletused -->
           <section class="pm-acc-block" data-feature="reminders" aria-labelledby="remH">
             <h3 id="remH">Tähtaja-meeldetuletused</h3>
@@ -509,6 +540,21 @@ const schema = {
       };
       const clearAccount = (): void => { try { localStorage.removeItem(ACCOUNT_KEY); } catch { /* ignore */ } };
 
+      // ---- SAMA-SEADE e-post (AINULT kuvamiseks) ----
+      // REAL-tee server EI tagasta nime ega e-posti. Et sisselogitud vaade saaks
+      // näidata "kellena sa oled", hoiame kasutaja enda kirjutatud e-posti AINULT
+      // selles brauseris (sama seade, kus link küsiti). Risti-seadme sisselogimisel
+      // jääb tühjaks → vaade kuvab neutraalse "Sinu konto". Pühitakse välja logides
+      // ja konto kustutamisel. EI lähe kunagi serverisse ega analüütikasse.
+      const TYPED_EMAIL_KEY = "mkval:konto_typed_email";
+      const rememberTypedEmail = (email: string): void => {
+        try { if (email) localStorage.setItem(TYPED_EMAIL_KEY, email); } catch { /* private mode */ }
+      };
+      const readTypedEmail = (): string | null => {
+        try { const v = localStorage.getItem(TYPED_EMAIL_KEY); return v && v.length > 0 ? v : null; } catch { return null; }
+      };
+      const clearTypedEmail = (): void => { try { localStorage.removeItem(TYPED_EMAIL_KEY); } catch { /* ignore */ } };
+
       // ---- REAL-PATH source: mkval:paketid v2 PackagesState (/oskused/ source) ----
       // Used ONLY by the sync path (kontoEnabled). Mirrors /oskused/ loadState:
       // stored v2 wins; else migrate legacy mkval:pakett; else empty.
@@ -657,6 +703,31 @@ const schema = {
       const consentInput = $("[data-consent]") as HTMLInputElement | null;
       const authError = $("[data-auth-error]");
 
+      // ---- Auth-mood: "signup" (uus konto + nõusolek) vs "login" (lühike tagasi-tee) ----
+      // Sama magic-link'i mehhanism mõlemas; erinevad ainult copy + rõhk + nõusoleku-rida.
+      type AuthMode = "signup" | "login";
+      let authMode: AuthMode = "signup";
+      const setAuthMode = (m: AuthMode): void => {
+        authMode = m;
+        $$("[data-mode-btn]").forEach((b) => {
+          const on = b.getAttribute("data-mode-btn") === m;
+          b.classList.toggle("on", on);
+          b.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        $$("[data-mode-hint]").forEach((el) => { (el as HTMLElement).hidden = el.getAttribute("data-mode-hint") !== m; });
+        // signup-only plokid (usaldusriba, nõusolek) on login-moodis peidetud,
+        // et tagasi-tee oleks lahja: "sisesta e-post, saadame lingi".
+        $$("[data-mode-only]").forEach((el) => { (el as HTMLElement).hidden = el.getAttribute("data-mode-only") !== m; });
+        const lbl = $("[data-auth-submit-label]");
+        if (lbl) lbl.textContent = m === "login" ? "Saada sisselogimislink" : "Loo konto ja saada link";
+        if (authError) authError.hidden = true;
+      };
+      $$("[data-mode-btn]").forEach((b) => b.addEventListener("click", () => {
+        const m = b.getAttribute("data-mode-btn") as AuthMode;
+        setAuthMode(m);
+        track("cta_click", { cta_label: "auth_mode", auth_mode: m });
+      }));
+
       const renderAnonBanner = (): void => {
         if (!anonBanner) return;
         const n = readPkg().length;
@@ -675,7 +746,10 @@ const schema = {
         const email = (emailInput?.value || "").trim().toLowerCase();
         const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         const existing = readAccount();
-        const isReturning = !!existing && existing.email === email && existing.consent;
+        // "Tagasi-tee": kasutaja valis Logi sisse VÕI demo-sild teab juba kinnitatud kontot.
+        // Sel juhul ei nõua me nõusoleku-linnukest uuesti (nõusoleku-rida on login-moodis
+        // niikuinii peidetud). Uue konto (signup) loomiseks jääb nõusolek KOHUSTUSLIKUKS.
+        const isReturning = authMode === "login" || (!!existing && existing.email === email && existing.consent);
         // Nõusolek on uue konto loomiseks kohustuslik, olemasolevasse sisselogimiseks mitte.
         if (!emailOk) {
           if (authError) { authError.textContent = "Palun sisesta korrektne e-post."; authError.hidden = false; }
@@ -694,6 +768,12 @@ const schema = {
           if (emailInput) emailInput.disabled = true;
           track("lead_form_submit_attempt", { form_name: "account" });
           track("account_login_request", {}); // no PII
+          // SAMA-SEADE identiteet: hoia kasutaja enda kirjutatud e-post AINULT
+          // siia brauserisse, et sisselogitud vaade saaks näidata "kellena sa
+          // oled". EI lähe serverisse (ainult requestLogin saab e-posti) ega
+          // analüütikasse. Risti-seadme sisselogimisel jääb see tühjaks ja vaade
+          // kuvab neutraalse "Sinu konto" (vt syncAndRenderReal).
+          rememberTypedEmail(email);
           try { await requestLogin(email); } catch { /* näita kontrolli-e-posti niikuinii; saab uue tellida */ }
           track("lead_form_submit", { form_name: "account", delivery: "magic_link" });
           if (btn) { btn.disabled = false; btn.textContent = origLabel; }
@@ -964,6 +1044,7 @@ const schema = {
         renderReminders();
         renderNotify();
         renderFunding();
+        renderSubscriptions();
       };
 
       // ---- KOGUM 1: Minu oskused (kaalukontroll + vaste/jälgime + parim vaste) ----
@@ -1196,6 +1277,7 @@ const schema = {
         persist();
         // LIVE-bridge: reminder_subscribed AMOS-i torusse (course_offers; kind veel lepingus defineerimata).
         if (on) await postSubscribe({ kind: "deadline_reminder", email: CURRENT.email, consent_purpose: "course_offers", slugs: watchedSlugs() });
+        renderSubscriptions();
         status("[data-reminders-status]", on ? "Tehtud - tuletame tähtajad meelde." : "Meeldetuletused välja lülitatud.");
         track("cta_click", { cta_label: "reminders_toggle", enabled: on ? "jah" : "ei" });
         track("reminder_subscribed", { enabled: on ? "jah" : "ei" });
@@ -1275,6 +1357,7 @@ const schema = {
           combo: kind === "kombinatsioon" ? value.split(" + ") : (kind === "oskus" ? [value] : null),
         });
         renderNotify();
+        renderSubscriptions();
         status("[data-notify-status]", "Lisatud - anname märku, kui sobiv programm või kombinatsioon lisandub.");
         const route = kind === "kombinatsioon" ? "notify_combo" : kind === "valdkond" ? "notify_field" : "notify_skill";
         track("result_high_intent", { result_route: route, combo_size: kind === "kombinatsioon" ? value.split(" + ").length : 1 });
@@ -1303,7 +1386,71 @@ const schema = {
         else CURRENT.comboWaitlist = CURRENT.comboWaitlist.filter((x) => x !== value);
         persist();
         renderNotify();
+        renderSubscriptions();
         toast("Eemaldatud.");
+      });
+
+      // ---- MINU TELLIMUSED: ülevaade kõigist teavitustellimustest ----
+      // Demo-tee koondab CURRENT-i tellimused üheks loendiks (eemaldamine peegeldab
+      // olemasolevatesse jaotistesse). Serveri-tee näitab "tuleb peagi" tühjaseisu,
+      // STRUKTUURITUNA nii, et kui /state hakkab tellimusi tagastama, joonistame need
+      // sama loendina (vt renderServerSubscriptions). Mehhanism (loobumine serveris)
+      // saabub koos backendiga - me ei võltsi serverikutset, mida veel pole.
+      type SubRow = { kind: string; value: string; label: string; removable: boolean };
+      const renderSubscriptions = (): void => {
+        const list = $("[data-subs-list]");
+        if (!list) return;
+        if (!CURRENT) return;   // serveri-tee kasutab renderServerSubscriptions
+        const rows: SubRow[] = [];
+        if (CURRENT.reminders) rows.push({ kind: "reminder", value: "all", label: "Tähtaja-meeldetuletused (sees)", removable: true });
+        for (const f of CURRENT.notifyFields) rows.push({ kind: "valdkond", value: f, label: `Valdkond: ${f}`, removable: true });
+        for (const s of CURRENT.notifySkills) rows.push({ kind: "oskus", value: s, label: `Oskus: ${s}`, removable: true });
+        for (const c of CURRENT.comboWaitlist) rows.push({ kind: "kombinatsioon", value: c, label: `Kombinatsioon: ${c}`, removable: true });
+        if (!rows.length) {
+          list.innerHTML = `<p class="pm-empty">Sa pole veel ühtegi teavitust tellinud. Lisa allpool valdkond, oskus või kombinatsioon - siis anname märku, kui sobiv lisandub.</p>`;
+          return;
+        }
+        list.innerHTML = rows.map((r) =>
+          `<div class="pm-row" data-sub-kind="${escHtml(r.kind)}" data-sub-value="${escHtml(r.value)}">
+            <span>${escHtml(r.label)}</span>
+            ${r.removable ? `<button type="button" class="pm-mini neutral" data-sub-remove>Lõpeta tellimus</button>` : ""}
+          </div>`).join("");
+      };
+      // Serveri-tee tellimuste vaade (ETTEVALMISTUS): praegu tühi "tuleb peagi"
+      // seisund; kui /state hakkab tagastama tellimusi (subscriptions[]), kuvame
+      // need siin sama kujuga. Eemaldamise mehhanism saabub koos backendiga.
+      const renderServerSubscriptions = (subs: { label?: string }[] | null): void => {
+        const list = $("[data-subs-list]");
+        if (!list) return;
+        if (subs && subs.length) {
+          list.innerHTML = subs.map((s) =>
+            `<div class="pm-row"><span>${escHtml(typeof s.label === "string" ? s.label : "Tellimus")}</span></div>`).join("");
+          return;
+        }
+        list.innerHTML = `<p class="pm-empty">Tellimuste kuvamine ja haldus siin on peagi tulekul. Praegu saad tellimusi tellida allpool ja loobuda iga e-kirja jaluse lingiga.</p>`;
+      };
+      $("[data-subs-list]")?.addEventListener("click", (e) => {
+        const t = e.target as HTMLElement;
+        if (!t.matches("[data-sub-remove]") || !CURRENT) return;
+        const row = t.closest("[data-sub-kind]") as HTMLElement;
+        const kind = row.dataset.subKind, value = row.dataset.subValue || "";
+        if (kind === "reminder") {
+          CURRENT.reminders = false;
+          const tog = $("[data-reminders-toggle]") as HTMLInputElement | null;
+          if (tog) tog.checked = false;
+        } else if (kind === "valdkond") {
+          CURRENT.notifyFields = CURRENT.notifyFields.filter((x) => x !== value);
+        } else if (kind === "oskus") {
+          CURRENT.notifySkills = CURRENT.notifySkills.filter((x) => x !== value);
+        } else if (kind === "kombinatsioon") {
+          CURRENT.comboWaitlist = CURRENT.comboWaitlist.filter((x) => x !== value);
+        }
+        persist();
+        renderNotify();
+        renderReminders();
+        renderSubscriptions();
+        toast("Tellimus lõpetatud.");
+        track("cta_click", { cta_label: "subscription_remove", sub_kind: kind || "" });
       });
 
       // ---- FEATURE 4: toetuse profiil ----
@@ -1354,6 +1501,7 @@ const schema = {
           // pühib KOGU kohaliku konto-oleku (sessioon + nimekaart + pkgref-kaart).
           // EI kutsu postSubscribe — see on DEMO-tee. PII ei lähe analüütikasse.
           await deleteAccount();
+          clearTypedEmail();   // pühi ka sama-seadme kuvatav e-post
           track("cta_click", { cta_label: "account_delete" });
           CURRENT = null;
           if (emailInput) emailInput.value = "";
@@ -1381,6 +1529,7 @@ const schema = {
       $("[data-logout]")?.addEventListener("click", () => {
         // REAL PATH: lõpeta seanss (kustuta token). DEMO: tühista ainult sild.
         if (kontoEnabled()) clearSession();
+        clearTypedEmail();   // sama-seadme kuvatav e-post läheb koos väljalogimisega
         CURRENT = null;
         renderAnonBanner();
         showScreen("auth");
@@ -1489,10 +1638,14 @@ const schema = {
         return `<p class="pm-tiny" style="margin-top:8px">${escHtml(coverLine)}</p>`;
       };
 
+      // Serveri-tee tellimused (ETTEVALMISTUS): syncAndRenderReal seab selle,
+      // kui /state hakkab tellimusi tagastama. Praegu null → "tuleb peagi".
+      let serverSubs: { label?: string }[] | null = null;
       const renderRealAccount = (packages: ServerPackage[]): void => {
         const body = $("[data-skills-body]");
         const emptyActions = $("[data-packages-empty-actions]");
         const bestBox = $("[data-best-match]");
+        renderServerSubscriptions(serverSubs);   // tellimuste ülevaade (serveri-tee)
         if (!body) return;
         if (bestBox) bestBox.hidden = true;
         // Serveri-teel pole kliendi õpiväljundi-teksti ega kaalu (PII-vaba sild),
@@ -1585,20 +1738,50 @@ const schema = {
             }
           }
         } catch { /* sünk parima võimaliku; renderda ikkagi serveri seis */ }
-        // Serveri-teel pole demo-konto e-posti; näita neutraalset sildi.
-        const emailEl = $("[data-account-email]");
-        if (emailEl && !emailEl.textContent) emailEl.textContent = "Sinu konto";
         const bridge = $("[data-bridge-banner]");
         if (bridge) (bridge as HTMLElement).hidden = true;   // REAL: see pole demorežiim
         // VASTUPIDAVUS: fetchState neelab võrgu-/401-tõrke ise (→ null), aga
         // hoiame renderduse omaette try/catch'is, et ükski ootamatu viga EI
         // jätaks kasutajat tühjale ekraanile. Tõrke korral näitame ikkagi konto
         // ekraani tühja-seisundiga (renderRealAccount([]) joonistab tühja teate).
+        let srvPackages: ServerPackage[] = [];
+        let masked: string | null = null;
         try {
           const srv = await fetchState();
-          renderRealAccount((srv?.packages as ServerPackage[]) ?? []);
+          srvPackages = (srv?.packages as ServerPackage[]) ?? [];
+          // ETTEVALMISTUS: kui /state hakkab tagastama maskitud e-posti
+          // (nt "a***@ettevote.ee"), kuvame selle. Praegu seda välja pole →
+          // jääb null ja kasutame sama-seadme kirjutatud e-posti või neutraalset silti.
+          const m = (srv as any)?.masked_email;
+          if (typeof m === "string" && m.trim()) masked = m.trim();
+          // ETTEVALMISTUS: kui /state hakkab tagastama tellimusi, kuva need
+          // "Minu tellimused" all. Praegu seda välja pole → jääb null ("tuleb peagi").
+          const subs = (srv as any)?.subscriptions;
+          serverSubs = Array.isArray(subs) ? subs : null;
+        } catch { srvPackages = []; }
+        // IDENTITEET: 1) serveri maskitud e-post (kui tuleb), 2) sama-seadme
+        // kirjutatud e-post, 3) neutraalne "Sinu konto" + märge, et e-post on peagi.
+        renderIdentity(masked, readTypedEmail());
+        try {
+          renderRealAccount(srvPackages);
         } catch {
           renderRealAccount([]);   // näita konto tühja-seisundit, mitte tühja keha
+        }
+      };
+
+      // ---- Sisselogitud identiteet ("kellena sa oled, mis e-mailiga") ----
+      // Kolm taset, kõige usaldusväärsem esimesena. Demo-tee annab täis e-posti
+      // otse (renderAccount). Risti-seadmel pole me midagi → neutraalne + märge.
+      const renderIdentity = (maskedEmail: string | null, typedEmail: string | null): void => {
+        const el = $("[data-account-email]");
+        if (!el) return;
+        if (maskedEmail) {
+          el.textContent = maskedEmail;
+        } else if (typedEmail) {
+          el.textContent = typedEmail;
+        } else {
+          // Risti-seadme sisselogimine: me ei tea e-posti ega päki seda välja.
+          el.innerHTML = `Sinu konto <span class="pm-soon">(e-posti kuvamine on peagi)</span>`;
         }
       };
 

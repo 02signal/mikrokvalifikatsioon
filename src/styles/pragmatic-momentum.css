@@ -270,6 +270,40 @@
 .pm-chip.is-wait { border-color: #f0e2c0; background: var(--pm-amber-bg); }
 .pm-chip.is-wait .tick { background: #fff; color: var(--pm-amber); }
 
+/* ── auth-mood: Liitu/loo konto vs Logi sisse (s1) ───────────────────────── */
+.pm-mode {
+  display: inline-flex;
+  gap: 4px;
+  background: #eef2ec;
+  border: 1px solid var(--pm-line);
+  border-radius: 999px;
+  padding: 4px;
+  margin: 18px 0 14px;
+}
+.pm-modebtn {
+  font-family: var(--pm-disp);
+  font-weight: 700;
+  font-size: 15px;
+  border: 0;
+  background: none;
+  color: var(--pm-muted);
+  padding: 8px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.pm-modebtn.on {
+  background: #fff;
+  color: var(--pm-ink);
+  box-shadow: var(--pm-shadow-sm);
+}
+.pm-modehint {
+  font-size: 15px;
+  color: var(--pm-muted);
+  margin: 0 0 14px;
+}
+.pm-modehint strong { color: var(--pm-ink); font-weight: 700; }
+.pm-modehint[hidden] { display: none; }
+
 /* ── usaldusriba (s1) ────────────────────────────────────────────────────── */
 .pm-trust { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0 4px; }
 @media (max-width: 520px) { .pm-trust { grid-template-columns: 1fr; } }
@@ -323,6 +357,7 @@
 }
 .pm-account-bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
 .pm-account-email { font-family: var(--pm-disp); font-weight: 700; color: var(--pm-ink); margin: 0; }
+.pm-account-email .pm-soon { font-family: var(--pm-body); font-weight: 400; font-size: 0.85rem; color: var(--pm-muted); }
 
 /* ── kogumite sakid (tabs) ───────────────────────────────────────────────── */
 .pm-tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--pm-line); margin: 24px 0 22px; flex-wrap: wrap; }
