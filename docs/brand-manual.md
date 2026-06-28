@@ -83,8 +83,9 @@ brändi värv - see on üks konkreetne seisund.
 
 - **Pealkirjad: Sora** (geomeetriline grotesk). Kajab raske väiketähelist sõnamärki, mõjub
   edasiviivalt ja enesekindlalt. Kasuta paksusid 600-800 pealkirjades, 700 kicker-tekstis.
-  **Sõnamärk "mikrokvalifikatsioon" on elav Sora-800 väiketekst** (mitte pilt) - nii on lukk
-  alati terav ja vastab v3 päisele. Sora laetakse saidil (`Seo.astro`).
+  **Sõnamärk "mikrokvalifikatsioon" on saidil elav Sora-800 väiketekst** (mitte pilt) - terav ja
+  valitav. Eraldi `*.svg` failides on sõnamärk **Sora-800 kontuurina** (font välja joonistatud),
+  samuti terav igas suuruses - mitte PNG-trace. Sora laetakse saidil (`Seo.astro`).
 - **Tekst: Atkinson Hyperlegible**. See font on loodud just loetavuse jaoks - tähed on
   selgelt eristatavad (näiteks I, l, 1 ja O, 0 ei lähe segi).
 
@@ -100,26 +101,38 @@ Reegel: suur ja kontrastne tekst, üks selge tegevus korraga, raha ja aeg alati 
 
 ## 4. Logo variandid - millal millist
 
-**Uus v3 logo (peamine):**
+**Uus v3 logo - täielik komplekt (kõik `public/logo/` all):**
 
-| Fail | Mis | Millal |
+| Fail | Mis | Millal kasutada |
 |---|---|---|
-| `mark.svg` | värviline v3 märk | väike pind, favicon, app-ikoon, kaardi nurk, kus sõnamärk ei mahu |
-| `mark-white.svg` | v3 märk tumedal taustal | tume hero, jalus, tume riba (rohelised jäävad, must muutub valgeks) |
-| `mark-animated.svg` | animeeritud v3 märk | erihetked (vt §7) |
-| `lockup.svg` | märk + sõnamärk + loosung | **vaikevalik** - päis, jalus, dokumendid, jagatavad pildid |
-| `lockup-white.svg` | logolukk tumedal taustal | sama tumedal taustal |
+| `mark.svg` / `mark-white.svg` | ainult v3 märk (element) | väike pind, favicon, app-ikoon, kaardi nurk - kus sõnamärk ei mahu |
+| `lockup.svg` / `lockup-white.svg` | märk + sõnamärk + loosung | **vaikevalik** - päis, jalus, dokumendid, jagatavad pildid |
+| `wordmark.svg` / `wordmark-white.svg` | ainult sõnamärk + loosung (Sora kontuur) | tekstikontekst või jalus, kus märk on juba mujal olemas |
+| `motif-strokes.svg` | tõusvad ribad eraldi (motiiv) | maandumislehe hero/sektsiooni aktsent |
+| `motif-strokes-faint.svg` | sama, madala läbipaistvusega | õrn hero-taust |
+| `motif-divider.svg` | ribad + peen joon | sektsiooni eraldaja/aktsent |
+| `mark-animated.svg` | märk: ribad tõusevad, siis täpp | erihetked (vt §7) |
+| `wordmark-animated.svg` | sõnamärk ilmub õrnalt üles | tekstipealkiri, kus märk on juba olemas |
+| `lockup-animated.svg` | ribad tõusevad, siis sõnamärk | täis-logo erihetk (esmane laadimine) |
+| `motif-strokes-animated.svg` | motiivi ribad tõusevad korra | maandumislehe hero |
+| `old_*.svg` | vana logo (alles hoitud) | ainult viide/varu; komponendis prop `old` |
 
-Saidil tuleb logo komponendist `Logo.astro` (vt §9) - logolukk renderdab v3 märgi + elava
-Sora-teksti, nii et see vastab v3 päisele täpselt. Eraldi `*.svg` failid on välis-kasutuseks
-(dokumendid, jagatavad pildid), `lockup.svg` kasutab fondisõltuvuseta path-sõnamärki.
+**Sõnamärk on Sora-800 kontuurina** (mitte pildist trace) - terav igas suuruses, fondisõltuvuseta.
+Loosung "INVESTEERI ENDASSE" on Sora-700 kontuurina. Animeeritud variandid mängivad **korra**
+ja austavad `prefers-reduced-motion` (siis kohe lõppseis).
+
+Saidil tuleb logo komponendist `Logo.astro` (vt §9) - logolukk renderdab v3 märgi + **elava**
+Sora-teksti (terav ja valitav), nii et see vastab v3 päisele täpselt. Eraldi `*.svg` failid on
+välis-kasutuseks (dokumendid, jagatav meedia), kus sõnamärk on Sora kontuurina.
 
 **Vana logo (alles hoitud, varuvariant):** `old_mark.svg`, `old_mark-white.svg`,
 `old_mark-ink.svg`, `old_mark-animated.svg`, `old_lockup.svg`, `old_lockup-white.svg`.
-Komponendis prop `old`. Kasuta ainult viitamiseks/varuks.
+Komponendis prop `old`. Kasuta ainult viitamiseks/varuks - puutumata.
 
 Põhimõte: kui ruumi on, kasuta **logolukku**. Kui ruumi napib või pind on väike, kasuta
-**ainult märki**. Tumedal taustal vali alati `-white` / `theme="light"`.
+**ainult märki**. Tekstikontekstis, kus märk juba olemas, kasuta **sõnamärki**. Maandumislehe
+heros/sektsioonis kasuta **motiiv-elemente** (mitte logo asemel - need on dekoratiivsed).
+Tumedal taustal vali alati `-white` / `theme="light"`.
 
 ---
 

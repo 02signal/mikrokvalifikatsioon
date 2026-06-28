@@ -80,7 +80,7 @@ blockquote{background:#fff;border:1px solid var(--line);border-left:4px solid va
     </div>
     <div class="toc">
       <a href="#cmp">Uus vs vana logo</a><a href="#mark">Märk</a><a href="#color">Värv</a><a href="#type">Kiri</a>
-      <a href="#variants">Variandid</a><a href="#dodont">Tee / ära tee</a><a href="#motif">Motiiv</a><a href="#anim">Animatsioon</a><a href="#comp">Komponent</a>
+      <a href="#variants">Variandid</a><a href="#kit">Logo elemendid</a><a href="#dodont">Tee / ära tee</a><a href="#motif">Motiiv</a><a href="#anim">Animatsioon</a><a href="#comp">Komponent</a>
     </div>
   </section>
 
@@ -119,7 +119,7 @@ blockquote{background:#fff;border:1px solid var(--line);border-left:4px solid va
     <div class="kick">1. Märk (peamine)</div>
     <h2>Kolm tõusvat ribakest + täpp</h2>
     <ul>
-      <li><strong>Geomeetria:</strong> ribad kaldu <code>skewX(-13°)</code>, kõrgused <strong>55% / 78% / 100%</strong> (madalast kõrgeni, vasakult paremale), võrdne laius, õrnalt ümarad nurgad. Ehitatud puhaste <code>&lt;rect&gt;</code>-idega - krõbedad, mitte joonistuse jälg.</li>
+      <li><strong>Geomeetria (täpselt nagu style-tile):</strong> ribad laius 11, vahe 5, grupil <code>skewX(-13°)</code>, nurgaraadius ~3. Kõrgused <strong>55% / 78% / 100% 40-st = 22 / 31 / 40</strong> (madalast kõrgeni, vasakult paremale). Tasane, jässakas kasv - mitte ülespoole venitatud. Lamav viewBox <code>-11 -2 63 44</code>. Ehitatud puhaste <code>&lt;rect&gt;</code>-idega - krõbe, mitte joonistuse jälg.</li>
       <li><strong>Värvid vasakult paremale:</strong> heleroheline <code>#54c247</code> → roheline <code>#3f9c30</code> → must <code>#17181a</code>; täpp must. Liikumise gradient: heledast alguse-energiast kindla lõpuni.</li>
       <li><strong>Tähendus:</strong> liikumine edasi. Ribad tõusevad - sammhaaval ülespoole. Visuaalne lubadus loosungile <strong>"investeeri endasse"</strong>.</li>
     </ul>
@@ -169,11 +169,62 @@ blockquote{background:#fff;border:1px solid var(--line);border-left:4px solid va
       <tr><td><code>mark.svg</code></td><td>värviline v3 märk</td><td>väike pind, favicon, ikoon, kus sõnamärk ei mahu</td></tr>
       <tr><td><code>mark-white.svg</code></td><td>märk tumedal taustal</td><td>tume hero, jalus, tume riba</td></tr>
       <tr><td><code>mark-animated.svg</code></td><td>animeeritud märk</td><td>erihetked (vt §7)</td></tr>
-      <tr><td><code>lockup.svg</code></td><td>märk + sõnamärk + loosung</td><td><strong>vaikevalik</strong> - päis, jalus, dokumendid</td></tr>
-      <tr><td><code>lockup-white.svg</code></td><td>logolukk tumedal</td><td>tumedal taustal</td></tr>
+      <tr><td><code>lockup.svg</code> / <code>-white</code></td><td>märk + sõnamärk + loosung</td><td><strong>vaikevalik</strong> - päis, jalus, dokumendid</td></tr>
+      <tr><td><code>wordmark.svg</code> / <code>-white</code></td><td>ainult sõnamärk + loosung (Sora kontuur)</td><td>tekstikontekst, jalus, kus märk juba olemas</td></tr>
+      <tr><td><code>motif-strokes.svg</code> jt</td><td>tõusvad ribad eraldi (motiiv)</td><td>maandumislehe hero/aktsent, eraldaja</td></tr>
+      <tr><td><code>*-animated.svg</code></td><td>animeeritud variandid</td><td>erihetked (vt §7)</td></tr>
       <tr><td><code>old_*.svg</code></td><td>vana logo (alles)</td><td>ainult viide/varu; komponendis prop <code>old</code></td></tr>
     </table>
-    <p>Saidil tuleb logo komponendist <code>Logo.astro</code>. Kui ruumi on - logolukk; kui napib - ainult märk. Tumedal taustal alati <code>-white</code> / <code>theme="light"</code>.</p>
+    <p>Saidil tuleb logo komponendist <code>Logo.astro</code>. Kui ruumi on - logolukk; kui napib - ainult märk. Tumedal taustal alati <code>-white</code> / <code>theme="light"</code>. Eraldi <code>*.svg</code> failid on välis-kasutuseks (dokumendid, jagatav meedia) - sõnamärk on neis Sora kontuurina (terav, fondisõltuvuseta).</p>
+  </section>
+
+  <!-- LOGO KIT / VARIANTS GALLERY -->
+  <section id="kit">
+    <div class="kick">Logo elemendid ja variandid</div>
+    <h2>Iga variant + millal kasutada</h2>
+    <p class="muted">Kõik failid on <code>public/logo/</code> all. Sõnamärk on Sora-800 kontuurina (terav, mitte pildist tehtud).</p>
+
+    <h3>Ainult märk - logo element</h3>
+    <div class="cmp">
+      <div class="lcard"><div class="top"><span class="lab">mark.svg</span><span class="pill new">element</span></div><div class="stage"><img src="../public/logo/mark.svg" alt="Märk" style="height:64px"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">mark-white.svg</span><span class="pill new">element</span></div><div class="stage dark"><img src="../public/logo/mark-white.svg" alt="Märk tumedal" style="height:64px"/></div></div>
+    </div>
+    <p class="muted" style="font-size:15px"><strong>Millal:</strong> väike pind, favicon, app-ikoon, kaardi nurk - kus sõnamärk ei mahu.</p>
+
+    <h3>Logolukk - vaikevalik</h3>
+    <div class="cmp">
+      <div class="lcard"><div class="top"><span class="lab">lockup.svg</span><span class="pill new">vaikevalik</span></div><div class="stage"><img src="../public/logo/lockup.svg" alt="Logolukk"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">lockup-white.svg</span><span class="pill new">vaikevalik</span></div><div class="stage dark"><img src="../public/logo/lockup-white.svg" alt="Logolukk tumedal"/></div></div>
+    </div>
+    <p class="muted" style="font-size:15px"><strong>Millal:</strong> vaikevalik - päis, jalus, dokumendid, jagatavad pildid.</p>
+
+    <h3>Ainult sõnamärk - tekstikontekst</h3>
+    <div class="cmp">
+      <div class="lcard"><div class="top"><span class="lab">wordmark.svg</span><span class="pill new">tekst</span></div><div class="stage"><img src="../public/logo/wordmark.svg" alt="Sõnamärk"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">wordmark-white.svg</span><span class="pill new">tekst</span></div><div class="stage dark"><img src="../public/logo/wordmark-white.svg" alt="Sõnamärk tumedal"/></div></div>
+    </div>
+    <p class="muted" style="font-size:15px"><strong>Millal:</strong> tekstikontekst või jalus, kus märk on juba mujal olemas. Sora-800 kontuur - terav igas suuruses.</p>
+
+    <h3>Motiiv-elemendid - maandumislehe aktsent</h3>
+    <div class="cmp">
+      <div class="lcard"><div class="top"><span class="lab">motif-strokes.svg</span><span class="pill new">aktsent</span></div><div class="stage"><img src="../public/logo/motif-strokes.svg" alt="Motiiv: tõusvad ribad" style="height:60px"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">motif-strokes-faint.svg</span><span class="pill new">taust</span></div><div class="stage dark"><img src="../public/logo/motif-strokes-faint.svg" alt="Motiiv haju, tumedal" style="height:90px"/></div></div>
+    </div>
+    <div class="cmp" style="margin-top:14px">
+      <div class="lcard"><div class="top"><span class="lab">motif-divider.svg</span><span class="pill new">eraldaja</span></div><div class="stage"><img src="../public/logo/motif-divider.svg" alt="Eraldaja motiiv" style="width:100%"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">motif-strokes-animated.svg</span><button class="replay" data-img="motanim">↻ Mängi uuesti</button></div><div class="stage"><img id="motanim" src="../public/logo/motif-strokes-animated.svg" alt="Motiiv, animeeritud" style="height:60px"/></div></div>
+    </div>
+    <p class="muted" style="font-size:15px"><strong>Millal:</strong> maandumislehe hero/sektsiooni aktsent (<code>motif-strokes</code>), õrn hero-taust (<code>-faint</code>), sektsiooni eraldaja (<code>-divider</code>). Mitte logo asemel - need on dekoratiivsed brändi-elemendid.</p>
+
+    <h3>Animeeritud variandid <span class="muted" style="font-size:14px;font-weight:400">(üks kord, austab prefers-reduced-motion)</span></h3>
+    <div class="cmp">
+      <div class="lcard"><div class="top"><span class="lab">mark-animated.svg</span><button class="replay" data-img="kitmark">↻ Mängi uuesti</button></div><div class="stage"><img id="kitmark" src="../public/logo/mark-animated.svg" alt="Märk animeeritud" style="height:64px"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">wordmark-animated.svg</span><button class="replay" data-img="kitword">↻ Mängi uuesti</button></div><div class="stage"><img id="kitword" src="../public/logo/wordmark-animated.svg" alt="Sõnamärk animeeritud"/></div></div>
+    </div>
+    <div class="cmp" style="margin-top:14px">
+      <div class="lcard"><div class="top"><span class="lab">lockup-animated.svg</span><button class="replay" data-img="kitlock">↻ Mängi uuesti</button></div><div class="stage"><img id="kitlock" src="../public/logo/lockup-animated.svg" alt="Logolukk animeeritud"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">millal</span></div><div class="stage" style="display:block;padding:20px 18px"><p class="muted" style="font-size:15px;margin:0"><strong>mark-animated</strong> - päise tervitus, salvestuse kinnitus.<br><strong>wordmark-animated</strong> - tekstipealkiri, kus märk on juba olemas.<br><strong>lockup-animated</strong> - täis-logo erihetk (esmane laadimine).<br><strong>motif-animated</strong> - maandumislehe hero.</p></div></div>
+    </div>
   </section>
 
   <!-- DO / DON'T -->
