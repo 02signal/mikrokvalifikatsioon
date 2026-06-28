@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="et">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Brändijuhend - Mikrokvalifikatsioon.ee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#17181a;--green:#3f9c30;--green-bright:#54c247;--green-deep:#2e7d22;
+  --ground:#f5f7f4;--surface:#fff;--line:#e5e8e3;--muted:#5a615b;--amber:#9a7b22;--amber-bg:#fbf3df;
+  --shadow:0 18px 40px rgba(23,24,26,.10);--shadow-sm:0 2px 8px rgba(23,24,26,.05);
+  --disp:"Sora",system-ui,sans-serif;--body:"Atkinson Hyperlegible",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--body);color:var(--ink);background:var(--ground);line-height:1.65;font-size:18px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:980px;margin:0 auto;padding:0 26px}
+section{padding:42px 0;border-bottom:1px solid var(--line)}
+.kick{font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--green-deep);margin-bottom:12px}
+h1{font-family:var(--disp);font-weight:800;font-size:clamp(34px,6vw,56px);letter-spacing:-.03em;line-height:1.02;margin-bottom:14px}
+h2{font-family:var(--disp);font-weight:700;font-size:clamp(23px,3.2vw,32px);letter-spacing:-.02em;margin-bottom:8px}
+h3{font-family:var(--disp);font-weight:600;font-size:19px;margin:22px 0 8px}
+p{margin-bottom:12px;max-width:70ch}.muted{color:var(--muted)}
+ul{margin:0 0 12px 22px}li{margin-bottom:6px;max-width:68ch}
+code{font-family:ui-monospace,Menlo,monospace;font-size:.86em;background:#eef1ed;padding:2px 6px;border-radius:6px}
+strong{font-weight:700}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:16px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--disp);font-weight:700;font-size:14px;color:var(--ink)}
+.callout{background:#fff;border:1px solid #d8ead1;border-left:4px solid var(--green);border-radius:12px;padding:16px 18px;margin:16px 0;box-shadow:var(--shadow-sm)}
+blockquote{background:#fff;border:1px solid var(--line);border-left:4px solid var(--green-bright);border-radius:12px;padding:14px 18px;margin:16px 0;color:var(--ink)}
+
+/* hero */
+.hero{background:var(--ink);color:#fff;border-radius:22px;padding:40px;margin:18px 0 6px;position:relative;overflow:hidden}
+.hero .acc{position:absolute;right:-10px;top:-16px;display:flex;gap:12px;opacity:.16}
+.hero .acc i{width:22px;height:200px;background:var(--green-bright);transform:skewX(-13deg);border-radius:7px}
+.hero .acc i:nth-child(2){height:250px;background:#fff}.hero .acc i:nth-child(3){height:160px;background:var(--green)}
+.hero h1{position:relative}.hero h1 em{font-style:normal;color:var(--green-bright)}
+.hero p{color:#c9cdc8;position:relative;font-size:20px}
+
+/* logo comparison */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:8px 0}
+@media(max-width:720px){.cmp{grid-template-columns:1fr}}
+.lcard{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface);box-shadow:var(--shadow-sm)}
+.lcard .top{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.lcard .lab{font-family:var(--disp);font-weight:700;font-size:15px}
+.lcard .pill{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.pill.new{background:#e9f4e5;color:var(--green-deep)}.pill.old{background:#eee;color:var(--muted)}
+.stage{display:grid;place-items:center;padding:34px 20px;min-height:120px}
+.stage.dark{background:var(--ink)}
+.stage img{max-width:100%;height:auto}
+.replay{font-family:var(--disp);font-weight:700;font-size:13px;background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:6px 12px;cursor:pointer;color:var(--ink)}
+.replay:hover{border-color:var(--green)}
+.mark-row{display:flex;gap:34px;align-items:flex-end;flex-wrap:wrap}
+
+/* swatches */
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:8px}
+.swi{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.swi .c{height:60px}.swi .m{padding:8px 10px;font-size:13px}.swi .m b{font-family:var(--disp);display:block}
+.typ{font-family:var(--disp)}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.toc a{font-family:var(--disp);font-weight:600;font-size:14px;text-decoration:none;color:var(--green-deep);border:1px solid var(--line);border-radius:999px;padding:6px 13px;background:#fff}
+.toc a:hover{border-color:var(--green)}
+.do2{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:680px){.do2{grid-template-columns:1fr}}
+.do2 .col{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}
+.do2 .col.yes{border-top:3px solid var(--green)}.do2 .col.no{border-top:3px solid #c2553f}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <section style="border-bottom:0;padding-bottom:8px">
+    <div class="kick">Brändijuhend</div>
+    <div class="hero">
+      <div class="acc"><i></i><i></i><i></i></div>
+      <img src="../public/logo/lockup-white.svg" alt="Mikrokvalifikatsioon.ee" style="height:38px;margin-bottom:18px;position:relative"/>
+      <h1>Pragmaatiline <em>liikumine.</em></h1>
+      <p>Enesekindel, edasiviiv, tasuvuse-põhine tööriist - mitte akadeemiline, mitte ajakirjalik. Juht: tõsta end uuele tasemele.</p>
+    </div>
+    <div class="toc">
+      <a href="#cmp">Uus vs vana logo</a><a href="#mark">Märk</a><a href="#color">Värv</a><a href="#type">Kiri</a>
+      <a href="#variants">Variandid</a><a href="#dodont">Tee / ära tee</a><a href="#motif">Motiiv</a><a href="#anim">Animatsioon</a><a href="#comp">Komponent</a>
+    </div>
+  </section>
+
+  <!-- NEW vs OLD -->
+  <section id="cmp">
+    <div class="kick">Mis muutus</div>
+    <h2>Uus (v3) vs vana logo</h2>
+    <p class="muted">Peamine logo on nüüd <strong>v3 "pragmaatiline liikumine"</strong> märk - puhtad geomeetrilised tõusvad ribad + Sora sõnamärk. Vana logo on alles hoitud (<code>old_*</code>) viitamiseks ja varuks.</p>
+
+    <h3>Logolukk - hele taust</h3>
+    <div class="cmp">
+      <div class="lcard"><div class="top"><span class="lab">Uus v3</span><span class="pill new">uus</span></div><div class="stage"><img src="../public/logo/lockup.svg" alt="Uus v3 logolukk"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">Vana</span><span class="pill old">old_</span></div><div class="stage"><img src="../public/logo/old_lockup.svg" alt="Vana logolukk"/></div></div>
+    </div>
+
+    <h3>Logolukk - tume taust</h3>
+    <div class="cmp">
+      <div class="lcard"><div class="top"><span class="lab">Uus v3</span><span class="pill new">uus</span></div><div class="stage dark"><img src="../public/logo/lockup-white.svg" alt="Uus v3 logolukk tumedal"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">Vana</span><span class="pill old">old_</span></div><div class="stage dark"><img src="../public/logo/old_lockup-white.svg" alt="Vana logolukk tumedal"/></div></div>
+    </div>
+
+    <h3>Märk + animatsioon</h3>
+    <div class="cmp">
+      <div class="lcard"><div class="top"><span class="lab">Uus v3 - animeeritud</span><button class="replay" data-img="newanim">↻ Mängi uuesti</button></div><div class="stage"><img id="newanim" src="../public/logo/mark-animated.svg" alt="Uus v3 märk, animeeritud" style="height:64px"/></div></div>
+      <div class="lcard"><div class="top"><span class="lab">Vana - animeeritud</span><button class="replay" data-img="oldanim">↻ Mängi uuesti</button></div><div class="stage"><img id="oldanim" src="../public/logo/old_mark-animated.svg" alt="Vana märk, animeeritud" style="height:64px"/></div></div>
+    </div>
+    <div class="mark-row" style="margin-top:14px">
+      <div><div class="muted" style="font-size:13px;margin-bottom:6px">uus märk</div><img src="../public/logo/mark.svg" alt="Uus v3 märk" style="height:54px"/></div>
+      <div><div class="muted" style="font-size:13px;margin-bottom:6px">uus, tumedal</div><span style="display:inline-block;background:var(--ink);padding:12px 16px;border-radius:10px"><img src="../public/logo/mark-white.svg" alt="Uus v3 märk valge" style="height:42px;vertical-align:middle"/></span></div>
+      <div><div class="muted" style="font-size:13px;margin-bottom:6px">vana märk</div><img src="../public/logo/old_mark.svg" alt="Vana märk" style="height:54px"/></div>
+    </div>
+  </section>
+
+  <!-- MARK -->
+  <section id="mark">
+    <div class="kick">1. Märk (peamine)</div>
+    <h2>Kolm tõusvat ribakest + täpp</h2>
+    <ul>
+      <li><strong>Geomeetria:</strong> ribad kaldu <code>skewX(-13°)</code>, kõrgused <strong>55% / 78% / 100%</strong> (madalast kõrgeni, vasakult paremale), võrdne laius, õrnalt ümarad nurgad. Ehitatud puhaste <code>&lt;rect&gt;</code>-idega - krõbedad, mitte joonistuse jälg.</li>
+      <li><strong>Värvid vasakult paremale:</strong> heleroheline <code>#54c247</code> → roheline <code>#3f9c30</code> → must <code>#17181a</code>; täpp must. Liikumise gradient: heledast alguse-energiast kindla lõpuni.</li>
+      <li><strong>Tähendus:</strong> liikumine edasi. Ribad tõusevad - sammhaaval ülespoole. Visuaalne lubadus loosungile <strong>"investeeri endasse"</strong>.</li>
+    </ul>
+    <div class="callout"><strong>1.1 Vana logo (alles hoitud).</strong> Vana logo (sh animeeritud) on säilitatud failidena <code>public/logo/old_*.svg</code>. Komponendis <code>Logo.astro</code> saab selle prop'iga <code>old</code>. Kasuta ainult viitamiseks/varuks - <strong>vaikevalik on uus v3 logo</strong>.</div>
+    <h3>Puhas ruum ja vähimad mõõdud</h3>
+    <ul>
+      <li><strong>Puhas ruum:</strong> märgi/luku ümber vähemalt ühe riba laiuse jagu vaba ala.</li>
+      <li><strong>Ainult märk:</strong> vähim 22 px ekraanil, 8 mm trükis (väiksemana kaob täpp).</li>
+      <li><strong>Logolukk:</strong> vähim 150 px ekraanil, 30 mm trükis (väiksemana kaob loosung - siis lukk ilma loosungita või ainult märk).</li>
+    </ul>
+  </section>
+
+  <!-- COLOR -->
+  <section id="color">
+    <div class="kick">2. Värv = roll</div>
+    <h2>Värv kannab tähendust, mitte kaunistust</h2>
+    <p class="muted">See ei ole valdkonna-värvisüsteem. Kõik ~9 valdkonda elavad ühe keele all - valdkonnad eristuvad <strong>sisu</strong>, mitte värvi/märgi kaudu.</p>
+    <div class="sw">
+      <div class="swi"><div class="c" style="background:#3f9c30"></div><div class="m"><b>Roheline</b>edasiminek · salvesta · vaste</div></div>
+      <div class="swi"><div class="c" style="background:#54c247"></div><div class="m"><b>Heleroheline</b>liikumise tipp · aktsent</div></div>
+      <div class="swi"><div class="c" style="background:#2e7d22"></div><div class="m"><b>Roheline süvik</b>tekst/lingid (AA)</div></div>
+      <div class="swi"><div class="c" style="background:#17181a"></div><div class="m"><b>Must</b>autoriteet · register · märk</div></div>
+      <div class="swi"><div class="c" style="background:#f5f7f4;border-bottom:1px solid var(--line)"></div><div class="m"><b>Taust</b>jahe-neutraalne, mitte kreem</div></div>
+      <div class="swi"><div class="c" style="background:#fff;border-bottom:1px solid var(--line)"></div><div class="m"><b>Pind</b>krõbedad valged kaardid</div></div>
+      <div class="swi"><div class="c" style="background:#fbf3df"></div><div class="m"><b>Amber</b>AINULT "veel otsime"</div></div>
+    </div>
+    <p style="margin-top:12px"><strong>Roheline = edasiminek, must = autoriteetne register, taust jahe-neutraalne, amber ainult kui me alles otsime vastet.</strong></p>
+  </section>
+
+  <!-- TYPE -->
+  <section id="type">
+    <div class="kick">3. Kiri</div>
+    <h2>Sora + Atkinson Hyperlegible</h2>
+    <p><strong class="typ" style="font-weight:800">Pealkirjad: Sora</strong> - geomeetriline grotesk, kajab raske väiketähelist sõnamärki, mõjub edasiviivalt. Paksused 600-800. Sõnamärk on elav Sora-800 väiketekst (mitte pilt).</p>
+    <p style="font-family:var(--disp);font-weight:800;font-size:30px;letter-spacing:-.02em">Tõsta end uuele tasemele</p>
+    <p><strong>Tekst: Atkinson Hyperlegible</strong> - loodud loetavuse jaoks (I, l, 1 ja O, 0 ei lähe segi).</p>
+    <p style="font-size:18px">Vali oskused, mida tahad osata - me näitame, kes neid õpetab ja kes selle maksab.</p>
+    <div class="callout"><strong>Miks (60+ loogika):</strong> kasutajad on lai vanusevahemik, paljud 15-20 a kogemusega, paljud 60+. Loetavus on tingimus, mitte maitse. Sora annab pealkirjadele jõu ilma "kooli-tagasi" toonita; akadeemilist seriifi ei kasuta (luges liiga "ülikooli" + ajas segi Ettevõtluskeskuse ilmega).</div>
+  </section>
+
+  <!-- VARIANTS -->
+  <section id="variants">
+    <div class="kick">4. Logo variandid</div>
+    <h2>Millal millist</h2>
+    <table>
+      <tr><th>Fail</th><th>Mis</th><th>Millal</th></tr>
+      <tr><td><code>mark.svg</code></td><td>värviline v3 märk</td><td>väike pind, favicon, ikoon, kus sõnamärk ei mahu</td></tr>
+      <tr><td><code>mark-white.svg</code></td><td>märk tumedal taustal</td><td>tume hero, jalus, tume riba</td></tr>
+      <tr><td><code>mark-animated.svg</code></td><td>animeeritud märk</td><td>erihetked (vt §7)</td></tr>
+      <tr><td><code>lockup.svg</code></td><td>märk + sõnamärk + loosung</td><td><strong>vaikevalik</strong> - päis, jalus, dokumendid</td></tr>
+      <tr><td><code>lockup-white.svg</code></td><td>logolukk tumedal</td><td>tumedal taustal</td></tr>
+      <tr><td><code>old_*.svg</code></td><td>vana logo (alles)</td><td>ainult viide/varu; komponendis prop <code>old</code></td></tr>
+    </table>
+    <p>Saidil tuleb logo komponendist <code>Logo.astro</code>. Kui ruumi on - logolukk; kui napib - ainult märk. Tumedal taustal alati <code>-white</code> / <code>theme="light"</code>.</p>
+  </section>
+
+  <!-- DO / DON'T -->
+  <section id="dodont">
+    <div class="kick">5. Tee / ära tee</div>
+    <div class="do2">
+      <div class="col yes"><h3 style="margin-top:0;color:var(--green-deep)">Tee</h3><ul>
+        <li>Hoia kriipsude värvijärjekord (heleroheline → roheline → must).</li>
+        <li>Anna logole puhas ruum.</li>
+        <li>Tumedal taustal kasuta <code>-white</code>.</li>
+        <li>Hoia logolukk horisontaalne, baasjoonel.</li>
+      </ul></div>
+      <div class="col no"><h3 style="margin-top:0;color:#c2553f">Ära tee</h3><ul>
+        <li>Ära venita ega moonuta (hoia kuvasuhe).</li>
+        <li>Ära muuda värve (üleni sinine, kuldne vms).</li>
+        <li>Ära pööra/kalluta lukku ega muuda kriipsude nurka.</li>
+        <li>Ära tee valdkondadele eraldi värvi/märki - üks keel, sisu eristab.</li>
+        <li>Ära lisa varju, helki ega kontuuri.</li>
+        <li>Ära kasuta amberit mujal kui "veel otsime".</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <!-- MOTIF -->
+  <section id="motif">
+    <div class="kick">6. Liikumise motiiv</div>
+    <h2>Tõusvad ribad struktuurielemendina</h2>
+    <p>Märgi kolm tõusvat riba korduvad mitte kaunistuse, vaid <strong>struktuurina</strong>:</p>
+    <ul>
+      <li><strong>sobivuse/katvuse ribad</strong>, mis "tõusevad" (täituvad laadimisel):</li>
+    </ul>
+    <div style="height:10px;border-radius:8px;background:#e7ece4;overflow:hidden;max-width:320px;margin:6px 0 14px"><div style="height:100%;width:82%;background:linear-gradient(90deg,var(--green),var(--green-bright))"></div></div>
+    <ul>
+      <li><strong>edasi-nool</strong> nupul ("Salvesta valikud →") liigub klõpsamisel veidi paremale;</li>
+      <li><strong>aktsentkriipsud</strong> hero-ribal ja kaardi nurgas (õrnalt, läbipaistvalt).</li>
+    </ul>
+    <p>Iga persoona saab sama sõnumi: sa liigud edasi, tase tõuseb. Ribad/nooled on funktsionaalsed (näitavad edenemist) ja kannavad brändi DNA-d korraga.</p>
+  </section>
+
+  <!-- ANIMATION -->
+  <section id="anim">
+    <div class="kick">7. Animeeritud logo</div>
+    <h2>Kus mõjub, kus mitte</h2>
+    <p>Animeeritud logo joonistab kolm kriipsu järjest "üles", siis ilmuvad täpid (~0,8 s, <strong>korra</strong>). Austab <code>prefers-reduced-motion</code> (siis kohe lõppseis).</p>
+    <div class="do2">
+      <div class="col yes"><h3 style="margin-top:0;color:var(--green-deep)">Kus mõjub</h3><ul>
+        <li><strong>Esmasel lehe laadimisel päises</strong> - lukk tõuseb korra. Üks kord, mitte iga lehe vahetusel.</li>
+        <li><strong>Salvestamise hetkel</strong> ("Sinu valikud on hoitud") - kinnitab "tehtud, sa liikusid edasi". Strateegiliselt tugevaim hetk.</li>
+        <li><strong>Tühi/laadimis-seisund</strong> - märk tõuseb korra, et koht ei mõjuks katkisena.</li>
+      </ul></div>
+      <div class="col no"><h3 style="margin-top:0;color:#c2553f">Kus MITTE</h3><ul>
+        <li>Mitte igal lehel ega iga laadimisel - kordus tüütab.</li>
+        <li>Mitte lõputu loopina - tõus on ühekordne žest.</li>
+        <li>Mitte keskendumist nõudva sisu kõrval (vormid, võrdlustabel).</li>
+        <li>Mitte siis, kui kasutaja on valinud <code>prefers-reduced-motion</code>.</li>
+      </ul></div>
+    </div>
+    <p><strong>Lühidalt: animatsioon on tervitus ja kinnitus, mitte dekoratsioon. Üks tõus õigel hetkel mõjub; kümme tõusu on müra.</strong></p>
+  </section>
+
+  <!-- COMPONENT -->
+  <section id="comp" style="border-bottom:0">
+    <div class="kick">8-9. Kuhu rakendatud + komponent</div>
+    <h2>Logo.astro</h2>
+    <p><strong>Rakendatud:</strong> päis (<code>src/components/Nav.astro</code>) - uus v3 logolukk <code>&lt;Logo variant="lockup" animated /&gt;</code>, ribad tõusevad esmasel laadimisel korra. <strong>Soovitatud järgmine koht</strong> (mitte veel tehtud): konto salvestamise kinnitus.</p>
+    <p><code>src/components/Logo.astro</code> on ainus koht, kust logo tuleb. Vaikimisi uus v3 logo. Propid:</p>
+    <ul>
+      <li><code>variant</code>: <code>"mark"</code> | <code>"lockup"</code> (vaikimisi lockup)</li>
+      <li><code>theme</code>: <code>"dark"</code> (hele taust) | <code>"light"</code> (tume taust)</li>
+      <li><code>animated</code>: ribad tõusevad korra (austab reduced-motion)</li>
+      <li><code>old</code>: renderdab säilitatud vana logo</li>
+    </ul>
+    <pre style="background:var(--ink);color:#e8eae6;padding:16px 18px;border-radius:12px;overflow:auto;font-family:ui-monospace,monospace;font-size:14px;line-height:1.7"><code style="background:none;color:inherit;padding:0">&lt;Logo variant="lockup" animated /&gt;        <span style="color:#9aa">&lt;!-- päis: v3 lukk, ribad tõusevad --&gt;</span>
+&lt;Logo variant="mark" theme="light" /&gt;      <span style="color:#9aa">&lt;!-- v3 märk tumedal --&gt;</span>
+&lt;Logo variant="lockup" old /&gt;              <span style="color:#9aa">&lt;!-- vana logo (varu) --&gt;</span></code></pre>
+  </section>
+
+  <section style="border-bottom:0;padding-top:10px"><p class="muted" style="font-size:14px">Allikas: <code>docs/brand-manual.md</code> · style tile: <code>docs/style-tile-pragmatic-momentum.html</code> · disain: <code>docs/prototype-konto-onboarding-v3.html</code></p></section>
+</div>
+<script>
+document.querySelectorAll('.replay').forEach(b=>b.addEventListener('click',()=>{
+  const img=document.getElementById(b.dataset.img);const s=img.getAttribute('src').split('?')[0];
+  img.setAttribute('src',s+'?t='+(window.__t=(window.__t||0)+1));
+}));
+</script>
+</body>
+</html>
