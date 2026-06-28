@@ -62,12 +62,12 @@ const median = row?.median ?? null;
 <style>
   .salary-cards { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
   .salary-card {
-    background: var(--ice); border: 1px solid var(--line); border-radius: 10px;
-    padding: 14px 18px; display: grid; gap: 4px; min-width: 200px; flex: 1 1 200px;
+    background: var(--ice); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 16px 20px; display: grid; gap: 4px; min-width: 200px; flex: 1 1 200px;
   }
   .salary-card--lead { border-left: 4px solid var(--green); }
   .salary-label { font-size: 0.85rem; color: var(--muted); }
-  .salary-value { color: var(--teal); font-weight: 700; font-size: 1.6rem; }
+  .salary-value { font-family: var(--font-display); color: var(--teal); font-weight: 800; font-size: 1.7rem; letter-spacing: -0.02em; }
   .salary-value--muted { color: var(--navy); font-weight: 700; font-size: 1.3rem; }
   .salary-source { font-size: 0.8rem; color: var(--muted); margin: 12px 0 0; }
 </style>

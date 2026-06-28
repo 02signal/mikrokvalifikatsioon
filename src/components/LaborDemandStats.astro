@@ -76,12 +76,12 @@ const updated = dateText(laborGeneratedAt || laborCheckedAt);
 <style>
   .demand-grid { display: grid; gap: 14px; margin-top: 6px; }
   .demand-card {
-    background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--green);
-    border-radius: 10px; padding: 14px 16px; display: flex; flex-wrap: wrap;
+    background: var(--white); border: 1px solid var(--line); border-left: 4px solid var(--green);
+    border-radius: var(--radius); padding: 16px 18px; display: flex; flex-wrap: wrap;
     align-items: baseline; gap: 6px 14px;
   }
   .demand-label { font-size: 0.85rem; color: var(--muted); flex: 1 1 100%; }
-  .demand-value { color: var(--teal); font-weight: 700; font-size: 1.5rem; }
+  .demand-value { font-family: var(--font-display); color: var(--teal); font-weight: 800; font-size: 1.6rem; letter-spacing: -0.02em; }
   .demand-top { font-size: 0.9rem; color: var(--muted); flex: 1 1 100%; }
   .demand-trend { font-size: 0.95rem; font-weight: 600; color: var(--muted); }
   .demand-trend[data-dir="up"] { color: #2e7d22; }
