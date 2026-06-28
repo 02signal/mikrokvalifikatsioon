@@ -170,7 +170,7 @@ export const { getStaticPaths, GET } = await OGImageRoute({
     return {
       title: page.title,
       description: page.description,
-      logo: { path: "./public/mk-logo-white.png", size: [264] },
+      logo: { path: "./public/og-logo-white.png", size: [264] },
       bgImage: {
         path: "./public/og-bg.png",
         fit: "cover" as const,

@@ -1,5 +1,6 @@
 ---
 import Seo from "../../components/Seo.astro";
+import Logo from "../../components/Logo.astro";
 import Faq from "../../components/Faq.astro";
 import "../../styles/global.css";
 import { catalog, providers, fields, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
@@ -82,7 +83,7 @@ const langAlternates = [
     <header class="topbar">
       <nav class="nav" aria-label="Main navigation">
         <a class="brand" href="/en/" aria-label="Mikrokvalifikatsioon.ee — home">
-          <img src="/mk-logo.png" alt="Mikrokvalifikatsioon.ee — invest in yourself" width="270" height="29" />
+          <Logo variant="lockup" theme="dark" animated />
         </a>
         <div class="navlinks">
           <a href="#what">What is it?</a>
