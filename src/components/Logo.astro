@@ -1,0 +1,82 @@
+---
+// Mikrokvalifikatsiooni logo - üks koht märgi ja sõnamärgi jaoks.
+// SVG on ehitatud pathidena (fondisõltuvuseta), nii et renderdub kõikjal ühtmoodi.
+// variant: "mark" = ainult märk (kolm tõusvat kriipsu + täpid) · "lockup" = märk + sõnamärk + loosung.
+// theme: "dark" = must/roheline heledal taustal · "light" = valge/roheline tumedal taustal.
+// animated: kui true, kriipsud "tõusevad" järjest ja täpid ilmuvad korra laadimisel.
+//   Austab prefers-reduced-motion (siis kohe lõppseis, ilma liikumiseta).
+import { LOGO } from "../data/logo-fragments";
+
+interface Props {
+  variant?: "mark" | "lockup";
+  theme?: "dark" | "light";
+  animated?: boolean;
+  class?: string;
+}
+
+const {
+  variant = "lockup",
+  theme = "dark",
+  animated = false,
+  class: className = "",
+} = Astro.props;
+
+const frag = LOGO[variant][theme];
+const inner = animated ? frag.anim : frag.static;
+const vb = LOGO[variant].vb;
+const label = "Mikrokvalifikatsioon.ee";
+---
+
+<svg
+  class:list={["mk-logo", animated && "is-animated", className]}
+  viewBox={vb}
+  role="img"
+  aria-label={label}
+  xmlns="http://www.w3.org/2000/svg"
+  preserveAspectRatio="xMinYMid meet"
+  set:html={inner}
+/>
+
+<style>
+  .mk-logo {
+    display: block;
+    height: 100%;
+    width: auto;
+  }
+
+  /* Animeeritud variant: kriipsud "joonistuvad" alt üles järjest, siis ilmuvad täpid. ~0,8 s, korra. */
+  .mk-logo.is-animated :global(.mk-sl) {
+    animation: mk-draw 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  }
+  .mk-logo.is-animated :global(.mk-s0) { animation-delay: 0s; }
+  .mk-logo.is-animated :global(.mk-s1) { animation-delay: 0.12s; }
+  .mk-logo.is-animated :global(.mk-s2) { animation-delay: 0.24s; }
+
+  .mk-logo.is-animated :global(.mk-dot) {
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(0);
+    animation: mk-pop 0.3s cubic-bezier(0.2, 1.5, 0.4, 1) forwards;
+  }
+  .mk-logo.is-animated :global(.mk-dg) { animation-delay: 0.3s; }
+  .mk-logo.is-animated :global(.mk-di) { animation-delay: 0.5s; }
+
+  @keyframes mk-draw {
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes mk-pop {
+    to { transform: scale(1); }
+  }
+
+  /* Vähem liikumist: kohe lõppseis, ilma animatsioonita. */
+  @media (prefers-reduced-motion: reduce) {
+    .mk-logo.is-animated :global(.mk-sl) {
+      stroke-dashoffset: 0 !important;
+      animation: none !important;
+    }
+    .mk-logo.is-animated :global(.mk-dot) {
+      transform: scale(1) !important;
+      animation: none !important;
+    }
+  }
+</style>

@@ -73,6 +73,13 @@ textarea {
   width: auto;
 }
 
+/* Inline-SVG logo (Logo.astro) sama kõrgusega kui vana pildimärk. */
+.brand .mk-logo {
+  display: block;
+  height: 30px;
+  width: auto;
+}
+
 .navlinks {
   display: flex;
   gap: 16px;
