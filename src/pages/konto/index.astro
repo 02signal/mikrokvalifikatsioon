@@ -457,7 +457,7 @@ const schema = {
       // REAL-PATH libs (built concurrently). Demo path never calls these (flag OFF).
       import {
         kontoEnabled, requestLogin, getSession, clearSession, getNamesFor, setName,
-        fetchState, syncPackages, deleteAccount,
+        fetchState, syncPackages, deleteAccount, KONTO_API_BASE,
       } from "../../lib/konto-api";
       import { buildSyncPayload, namesFromSync, packagesUnsyncable } from "../../lib/konto-sync";
       import { outcomeRefForText } from "../../data/outcomeRefs";
@@ -603,6 +603,48 @@ const schema = {
           return r.ok;
         } catch { return false; }
       };
+
+      // ---- REAL-PATH konto-haldus (Bearer) — uued AMOS-i otspunktid ------
+      // Need on Codexi paralleelselt ehitatud konto-halduse kutsed: paketi
+      // kustutamine ja tellimuste lisamine/maha võtmine. Need EI ela
+      // konto-api.ts-is (selle auth/sessiooni/päringu loogika jääb puutumata) —
+      // siin tarbime sama Bearer-sessiooni nagu fetchState/syncPackages.
+      //
+      // GRAATSILINE DEGRADEERUMINE (kõva reegel): kuni AMOS-i host on need
+      // uuesti juurutanud, võivad nad anda 404/401. Sel juhul tagastame
+      // "pending" — leht hoiab juhtnupu alles ja näitab rahulikku "tuleb peagi"
+      // seisu. EI VÕLTSI kunagi edu, mida serveris ei toimunud. Tagastus:
+      //   "ok"      — server kinnitas (2xx);
+      //   "pending" — otspunkt veel pole live (404/401) → juhtnupp jääb, kuvame ootel;
+      //   "error"   — võrk/muu tõrge → näita rahulikku viga, lase uuesti proovida.
+      type WireResult = "ok" | "pending" | "error";
+      const kontoUrl = (path: string): string => `${(KONTO_API_BASE || "").replace(/\/+$/, "")}${path}`;
+      const postKonto = async (path: string, body: Record<string, unknown>): Promise<WireResult> => {
+        if (!kontoEnabled()) return "pending";
+        const session = getSession();
+        if (!session) return "error";
+        try {
+          const r = await fetch(kontoUrl(path), {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${session}` },
+            body: JSON.stringify(body),
+          });
+          if (r.ok) return "ok";
+          // 404 = host pole uut otspunkti veel juurutanud; 401 = sama (uus
+          // marsruut tundmatu) → kohtle ootel-olekuna, ÄRA kustuta sessiooni.
+          if (r.status === 404 || r.status === 401) return "pending";
+          return "error";
+        } catch { return "error"; }
+      };
+      // POST /packages/delete {package_ref}
+      const deletePackageRemote = (packageRef: string): Promise<WireResult> =>
+        postKonto("/api/konto/v1/packages/delete", { package_ref: packageRef });
+      // POST /subscriptions {kind,target_ref}
+      const subscribeRemote = (kind: string, targetRef: string): Promise<WireResult> =>
+        postKonto("/api/konto/v1/subscriptions", { kind, target_ref: targetRef });
+      // POST /subscriptions/unsubscribe {ref}
+      const unsubscribeRemote = (ref: string): Promise<WireResult> =>
+        postKonto("/api/konto/v1/subscriptions/unsubscribe", { ref });
 
       // ---- Toast + modal -------------------------------------------------
       let toastTimer: ReturnType<typeof setTimeout> | undefined;
@@ -1037,7 +1079,7 @@ const schema = {
 
       const renderAccount = (state: AccountState): void => {
         CURRENT = state;
-        $("[data-account-email]")!.textContent = state.email;
+        $("[data-account-email]")!.textContent = `Sa oled sees e-postiga ${state.email}`;
         renderSkills();
         renderProgrammes();
         renderCompares();
@@ -1271,8 +1313,44 @@ const schema = {
         }).join("");
       };
       $("[data-reminders-toggle]")?.addEventListener("change", async (e) => {
-        if (!CURRENT) return;
         const on = (e.target as HTMLInputElement).checked;
+        // REAL-PATH: meeldetuletus on serveri tellimus (kind "deadline_reminder").
+        // Sees → POST /subscriptions; väljas → leia serveri-tellimuse ref ja
+        // POST /subscriptions/unsubscribe. Mõlemad degradeeruvad graatsiliselt.
+        if (kontoEnabled()) {
+          track("cta_click", { cta_label: "reminders_toggle", enabled: on ? "jah" : "ei" });
+          if (on) {
+            const res = await subscribeRemote("deadline_reminder", "all");
+            if (res === "ok") {
+              status("[data-reminders-status]", "Tehtud - tuletame tähtajad meelde.");
+              await refreshServerSubs();
+              track("reminder_subscribed", { enabled: "jah" });
+            } else {
+              (e.target as HTMLInputElement).checked = false;   // ära jäta valet "sees"-seisu
+              status("[data-reminders-status]",
+                res === "pending"
+                  ? "Meeldetuletuste sisselülitamine siit on peagi tulekul."
+                  : "Sisselülitamine ei õnnestunud. Proovi hetke pärast uuesti.",
+                res === "error");
+            }
+          } else {
+            const sub = (serverSubs || []).find((s) => s && (s.kind === "deadline_reminder" || s.kind === "reminder") && typeof s.ref === "string");
+            const res = sub?.ref ? await unsubscribeRemote(sub.ref) : "pending";
+            if (res === "ok") {
+              status("[data-reminders-status]", "Meeldetuletused välja lülitatud.");
+              await refreshServerSubs();
+            } else {
+              (e.target as HTMLInputElement).checked = true;
+              status("[data-reminders-status]",
+                res === "pending"
+                  ? "Väljalülitamine siit on peagi tulekul. Praegu saad loobuda iga e-kirja jaluse lingiga."
+                  : "Väljalülitamine ei õnnestunud. Proovi hetke pärast uuesti.",
+                res === "error");
+            }
+          }
+          return;
+        }
+        if (!CURRENT) return;
         CURRENT.reminders = on;
         persist();
         // LIVE-bridge: reminder_subscribed AMOS-i torusse (course_offers; kind veel lepingus defineerimata).
@@ -1366,15 +1444,30 @@ const schema = {
 
       $("[data-notify-field-add]")?.addEventListener("click", () => {
         const sel = $("[data-notify-field]") as HTMLSelectElement;
-        if (sel.value) { addNotify("valdkond", sel.value); sel.value = ""; }
+        if (!sel.value) return;
+        // REAL-PATH: telli valdkonna-teavitus serverisse (POST /subscriptions).
+        if (kontoEnabled()) {
+          const field = sel.value;
+          sel.value = "";
+          subscribeRealAndNote("field", field, "Lisatud - anname märku, kui sellesse valdkonda sobiv programm lisandub.");
+          return;
+        }
+        addNotify("valdkond", sel.value); sel.value = "";
       });
       $("[data-skill-chip-row]")?.addEventListener("click", (e) => {
         const s = (e.target as HTMLElement).getAttribute("data-skill");
-        if (s) addNotify("oskus", s);
+        if (!s) return;
+        // REAL-PATH: oskuse-chipid tulevad kliendi paketist (CURRENT) ja seda
+        // serveri-teel pole - chip-rida jääb serveri-teel tühjaks. Kui chip
+        // siiski olemas (segarežiim), telli oskus serverisse.
+        if (kontoEnabled()) { subscribeRealAndNote("skill", s, "Lisatud - anname märku, kui sellele oskusele programm lisandub."); return; }
+        addNotify("oskus", s);
       });
       $("[data-combo-subscribe]")?.addEventListener("click", () => {
         const key = $("[data-combo-prompt]")?.dataset.comboKey;
-        if (key) addNotify("kombinatsioon", key);
+        if (!key) return;
+        if (kontoEnabled()) { subscribeRealAndNote("combo", key, "Lisatud - anname märku, kui see kombinatsioon lisandub."); return; }
+        addNotify("kombinatsioon", key);
       });
       $("[data-notify-list]")?.addEventListener("click", (e) => {
         const t = e.target as HTMLElement;
@@ -1416,18 +1509,104 @@ const schema = {
             ${r.removable ? `<button type="button" class="pm-mini neutral" data-sub-remove>Lõpeta tellimus</button>` : ""}
           </div>`).join("");
       };
-      // Serveri-tee tellimuste vaade (ETTEVALMISTUS): praegu tühi "tuleb peagi"
-      // seisund; kui /state hakkab tagastama tellimusi (subscriptions[]), kuvame
-      // need siin sama kujuga. Eemaldamise mehhanism saabub koos backendiga.
-      const renderServerSubscriptions = (subs: { label?: string }[] | null): void => {
+      // Serveri-tee tellimuste vaade (LIVE): /state tagastab subscriptions[]
+      // kujul { ref, kind, label_ref, state }. Kuvame iga tellimuse loetava
+      // sildiga ja "Lõpeta tellimus" nupuga (POST /subscriptions/unsubscribe).
+      // Tühi loend → puhas tühjaseis. Maha võtmine degradeerub graatsiliselt,
+      // kui unsubscribe-otspunkt pole veel live (vt klõpsukäsitleja allpool).
+      type ServerSub = { ref?: string; kind?: string; label_ref?: string; state?: string };
+      // kind -> loetav eesliide (eesti, lühike). Tundmatu kind → "Tellimus".
+      const SUB_KIND_LABEL: Record<string, string> = {
+        valdkond: "Valdkond",
+        field: "Valdkond",
+        oskus: "Oskus",
+        skill: "Oskus",
+        kombinatsioon: "Kombinatsioon",
+        combo: "Kombinatsioon",
+        combo_waitlist: "Kombinatsioon",
+        reminder: "Tähtaja-meeldetuletus",
+        deadline_reminder: "Tähtaja-meeldetuletus",
+        funding: "Toetuse profiil",
+        funding_profile: "Toetuse profiil",
+        notify_list: "Teavitus",
+      };
+      const subLabel = (s: ServerSub): string => {
+        const kind = typeof s.kind === "string" ? s.kind : "";
+        const prefix = SUB_KIND_LABEL[kind] || "Tellimus";
+        const ref = typeof s.label_ref === "string" && s.label_ref.trim() ? s.label_ref.trim() : "";
+        return ref ? `${prefix}: ${ref}` : prefix;
+      };
+      const renderServerSubscriptions = (subs: ServerSub[] | null): void => {
         const list = $("[data-subs-list]");
         if (!list) return;
-        if (subs && subs.length) {
-          list.innerHTML = subs.map((s) =>
-            `<div class="pm-row"><span>${escHtml(typeof s.label === "string" ? s.label : "Tellimus")}</span></div>`).join("");
+        const rows = (subs || []).filter((s) => s && (s.state == null || s.state === "active"));
+        if (!rows.length) {
+          list.innerHTML = `<p class="pm-empty">Sa pole veel ühtegi teavitust tellinud. Lisa allpool valdkond, oskus või kombinatsioon - siis anname märku, kui sobiv lisandub.</p>`;
           return;
         }
-        list.innerHTML = `<p class="pm-empty">Tellimuste kuvamine ja haldus siin on peagi tulekul. Praegu saad tellimusi tellida allpool ja loobuda iga e-kirja jaluse lingiga.</p>`;
+        list.innerHTML = rows.map((s) => {
+          const ref = typeof s.ref === "string" ? s.ref : "";
+          const removeBtn = ref
+            ? `<button type="button" class="pm-mini neutral" data-server-unsub="${escHtml(ref)}">Lõpeta tellimus</button>`
+            : "";
+          return `<div class="pm-row" data-server-sub-ref="${escHtml(ref)}">
+            <span>${escHtml(subLabel(s))}</span>
+            ${removeBtn}
+          </div>`;
+        }).join("");
+      };
+      // REAL-PATH: lõpeta tellimus (POST /subscriptions/unsubscribe {ref}).
+      // Õnnestumisel võtame rea ära; "pending" (404/401) korral hoiame nupu ja
+      // näitame rahulikku ootel-teadet; tõrkel "proovi uuesti". Demo-tee
+      // ([data-sub-remove]) on eraldi käsitleja ja jääb puutumata.
+      $("[data-subs-list]")?.addEventListener("click", async (e) => {
+        if (!kontoEnabled()) return;   // demo-tee kasutab [data-sub-remove]
+        const btn = (e.target as HTMLElement).closest("[data-server-unsub]") as HTMLButtonElement | null;
+        if (!btn) return;
+        const ref = btn.getAttribute("data-server-unsub") || "";
+        if (!ref) return;
+        const row = btn.closest("[data-server-sub-ref]") as HTMLElement | null;
+        const origLabel = btn.textContent || "Lõpeta tellimus";
+        btn.disabled = true; btn.textContent = "Lõpetan…";
+        const res = await unsubscribeRemote(ref);
+        if (res === "ok") {
+          row?.remove();
+          const list = $("[data-subs-list]");
+          if (list && !list.querySelector("[data-server-sub-ref]")) renderServerSubscriptions([]);
+          toast("Tellimus lõpetatud.");
+          track("cta_click", { cta_label: "subscription_remove" });
+          return;
+        }
+        btn.disabled = false; btn.textContent = origLabel;
+        if (res === "pending") {
+          status("[data-notify-status]", "Tellimuse maha võtmine siit on peagi tulekul. Praegu saad loobuda iga e-kirja jaluse lingiga.");
+        } else {
+          status("[data-notify-status]", "Tellimuse lõpetamine ei õnnestunud. Proovi hetke pärast uuesti.", true);
+        }
+      });
+      // REAL-PATH: pärast tellimuse lisamist tõmba /state uuesti ja joonista
+      // tellimuste loend serveri tõe järgi (mitte oletatuna).
+      const refreshServerSubs = async (): Promise<void> => {
+        try {
+          const srv = await fetchState();
+          serverSubs = Array.isArray(srv?.subscriptions) ? srv!.subscriptions : null;
+          renderServerSubscriptions(serverSubs);
+        } catch { /* hoia praegune vaade */ }
+      };
+      // REAL-PATH: telli teavitus (POST /subscriptions {kind,target_ref}).
+      // "ok" → kinnita + värskenda loend serverist; "pending" (404/401) → aus
+      // ootel-teade (otspunkt pole veel live); "error" → proovi uuesti.
+      const subscribeRealAndNote = async (kind: string, targetRef: string, okMsg: string): Promise<void> => {
+        const res = await subscribeRemote(kind, targetRef);
+        if (res === "ok") {
+          status("[data-notify-status]", okMsg);
+          await refreshServerSubs();
+          track("result_high_intent", { result_route: `notify_${kind}` });
+        } else if (res === "pending") {
+          status("[data-notify-status]", "Tellimuse lisamine siit on peagi tulekul. Praegu kogume su huvi ja anname teada, kui see live'i läheb.");
+        } else {
+          status("[data-notify-status]", "Tellimuse lisamine ei õnnestunud. Proovi hetke pärast uuesti.", true);
+        }
       };
       $("[data-subs-list]")?.addEventListener("click", (e) => {
         const t = e.target as HTMLElement;
@@ -1461,8 +1640,26 @@ const schema = {
         });
       };
       $$("[data-funding]").forEach((el) => el.addEventListener("change", async (e) => {
-        if (!CURRENT) return;
         const route = (e.target as HTMLInputElement).value as "ise" | "tootukassa" | "tooandja";
+        // REAL-PATH: toetuse profiil on serveri tellimus (kind "funding_profile",
+        // target_ref = marsruut). POST /subscriptions; degradeerub graatsiliselt.
+        if (kontoEnabled()) {
+          track("tool_completed", { tool_name: "funding_profile", result_route: route });
+          track("funding_profile_set", { result_route: route });
+          const res = await subscribeRemote("funding_profile", route);
+          if (res === "ok") {
+            status("[data-funding-status]", "Salvestatud - kohandame su teavitused selle järgi.");
+            await refreshServerSubs();
+          } else {
+            status("[data-funding-status]",
+              res === "pending"
+                ? "Toetuse profiili salvestamine siit on peagi tulekul."
+                : "Salvestamine ei õnnestunud. Proovi hetke pärast uuesti.",
+              res === "error");
+          }
+          return;
+        }
+        if (!CURRENT) return;
         CURRENT.funding_route = route;
         persist();
         // LIVE-bridge: funding_profile AMOS-i torusse (kind veel lepingus defineerimata).
@@ -1638,9 +1835,9 @@ const schema = {
         return `<p class="pm-tiny" style="margin-top:8px">${escHtml(coverLine)}</p>`;
       };
 
-      // Serveri-tee tellimused (ETTEVALMISTUS): syncAndRenderReal seab selle,
-      // kui /state hakkab tellimusi tagastama. Praegu null → "tuleb peagi".
-      let serverSubs: { label?: string }[] | null = null;
+      // Serveri-tee tellimused (LIVE): syncAndRenderReal seab selle /state
+      // vastusest (subscriptions[]). null/tühi → puhas tühjaseis.
+      let serverSubs: ServerSub[] | null = null;
       const renderRealAccount = (packages: ServerPackage[]): void => {
         const body = $("[data-skills-body]");
         const emptyActions = $("[data-packages-empty-actions]");
@@ -1666,7 +1863,14 @@ const schema = {
         }
         if (emptyActions) emptyActions.hidden = true;
         body.innerHTML = "";
-        for (const pkg of packages) {
+        // Järjesta serveri salvestatud tähtsuse (weight) järgi - väiksem = tähtsam.
+        // Nii püsib kasutaja seatud reprioritiseerimine ka uuel laadimisel/teises seadmes.
+        const ordered = [...packages].sort((a, b) => {
+          const wa = typeof (a as any).weight === "number" ? (a as any).weight : Number.MAX_SAFE_INTEGER;
+          const wb = typeof (b as any).weight === "number" ? (b as any).weight : Number.MAX_SAFE_INTEGER;
+          return wa - wb;
+        });
+        for (const pkg of ordered) {
           const name = getNamesFor(pkg.package_ref) || "Pakett";   // ainult kliendipoolne nimi
           const size = pkg.outcome_refs?.length ?? 0;
           const card = document.createElement("div");
@@ -1678,7 +1882,9 @@ const schema = {
             <div class="body">
               <div class="nm">${escHtml(name)} <span class="pm-tag ok">${size} oskust</span></div>
               ${match}
-            </div>`;
+              <p class="pm-status" data-pkg-status hidden></p>
+            </div>
+            <button type="button" class="pm-mini neutral" data-pkg-remove="${escHtml(pkg.package_ref)}">Eemalda</button>`;
           body.appendChild(card);
         }
         renderRealProgrammes(packages);
@@ -1686,6 +1892,61 @@ const schema = {
         track("package_view", { count: totalOutcomes });
         showScreen("account");
       };
+
+      // ---- REAL-PATH: ühe paketi EEMALDAMINE (POST /packages/delete) ----
+      // Delegeeritud klõps Minu oskused -kogumi kaartidel. Õnnestumisel võtame
+      // kaardi ära ja puhastame kohaliku pkgref-kaardi rea. Kui otspunkt pole
+      // veel live (404/401 → "pending"), HOIAME nupu alles ja näitame rahulikku
+      // "tuleb peagi" seisu - EI võltsi edu. Tõrkel rahulik "proovi uuesti".
+      let pkgDeleteBusy = false;
+      $("[data-skills-body]")?.addEventListener("click", async (e) => {
+        if (!kontoEnabled()) return;   // demo-tee ei kasuta serveri-kustutust
+        const btn = (e.target as HTMLElement).closest("[data-pkg-remove]") as HTMLButtonElement | null;
+        if (!btn) return;
+        const ref = btn.getAttribute("data-pkg-remove") || "";
+        if (!ref || pkgDeleteBusy) return;
+        const card = btn.closest("[data-pkg-ref]") as HTMLElement | null;
+        const statusEl = card ? (card.querySelector("[data-pkg-status]") as HTMLElement | null) : null;
+        const showCard = (msg: string): void => { if (statusEl) { statusEl.textContent = msg; statusEl.hidden = false; } };
+        const ok = await confirmModal(
+          "Eemalda see pakett?",
+          "Võtame selle paketi su kontolt ära. Su teised paketid ja oskused jäävad alles.",
+          "Jah, eemalda");
+        if (!ok) return;
+        pkgDeleteBusy = true;
+        const origLabel = btn.textContent || "Eemalda";
+        btn.disabled = true; btn.textContent = "Eemaldan…";
+        const res = await deletePackageRemote(ref);
+        pkgDeleteBusy = false;
+        if (res === "ok") {
+          // Puhasta kohalik pkgref-kaart (client_id -> package_ref) sellest reast.
+          try {
+            const map = readPkgRefMap();
+            for (const cid of Object.keys(map)) if (map[cid] === ref) delete map[cid];
+            writePkgRefMap(map);
+          } catch { /* private mode */ }
+          card?.remove();
+          toast("Pakett eemaldatud.");
+          track("cta_click", { cta_label: "package_remove" });
+          // Kui ühtegi kaarti enam pole, näita tühjaseisu.
+          const body = $("[data-skills-body]");
+          if (body && !body.querySelector("[data-pkg-ref]")) {
+            body.innerHTML = `<p class="pm-empty">Sul pole enam ühtegi salvestatud paketti. Mine oskuste lehele, korja sobivad oskused ja vajuta „Salvesta kontole".</p>`;
+            const emptyActions = $("[data-packages-empty-actions]");
+            if (emptyActions) emptyActions.hidden = false;
+            setCount("[data-count-osk]", 0);
+            setCount("[data-count-prog]", 0);
+            renderRealProgrammes([]);
+          }
+          return;
+        }
+        btn.disabled = false; btn.textContent = origLabel;
+        if (res === "pending") {
+          showCard("Paketi eemaldamine siit on peagi tulekul. Praegu saad kogu konto kustutada allpool.");
+        } else {
+          showCard("Eemaldamine ei õnnestunud. Proovi hetke pärast uuesti.");
+        }
+      });
 
       // Serveri-tee programmide kogum: parim üksik + kombinatsioon kõigist pakettidest.
       const renderRealProgrammes = (packages: ServerPackage[]): void => {
@@ -1749,15 +2010,13 @@ const schema = {
         try {
           const srv = await fetchState();
           srvPackages = (srv?.packages as ServerPackage[]) ?? [];
-          // ETTEVALMISTUS: kui /state hakkab tagastama maskitud e-posti
-          // (nt "a***@ettevote.ee"), kuvame selle. Praegu seda välja pole →
-          // jääb null ja kasutame sama-seadme kirjutatud e-posti või neutraalset silti.
-          const m = (srv as any)?.masked_email;
-          if (typeof m === "string" && m.trim()) masked = m.trim();
-          // ETTEVALMISTUS: kui /state hakkab tagastama tellimusi, kuva need
-          // "Minu tellimused" all. Praegu seda välja pole → jääb null ("tuleb peagi").
-          const subs = (srv as any)?.subscriptions;
-          serverSubs = Array.isArray(subs) ? subs : null;
+          // LIVE: server tagastab maskitud e-posti (`email_masked`, nt
+          // "a***@ettevote.ee"). Kuvame selle PEAMISE identiteedina - see
+          // töötab ka risti-seadmel (ei sõltu sama-seadme kirjutatud e-postist).
+          masked = srv?.email_masked ?? null;
+          // LIVE: server tagastab tellimuste loendi (`subscriptions`). Kuvame
+          // need "Minu tellimused" all; tühi → puhas tühjaseis.
+          serverSubs = Array.isArray(srv?.subscriptions) ? srv!.subscriptions : null;
         } catch { srvPackages = []; }
         // IDENTITEET: 1) serveri maskitud e-post (kui tuleb), 2) sama-seadme
         // kirjutatud e-post, 3) neutraalne "Sinu konto" + märge, et e-post on peagi.
@@ -1770,15 +2029,19 @@ const schema = {
       };
 
       // ---- Sisselogitud identiteet ("kellena sa oled, mis e-mailiga") ----
-      // Kolm taset, kõige usaldusväärsem esimesena. Demo-tee annab täis e-posti
-      // otse (renderAccount). Risti-seadmel pole me midagi → neutraalne + märge.
+      // Kolm taset, kõige usaldusväärsem esimesena:
+      //   1) serveri MASKITUD e-post (email_masked) - töötab RISTI-SEADMEL,
+      //      sest tuleb serverist, mitte sellest brauserist. PEAMINE identiteet.
+      //   2) sama-seadme kirjutatud e-post (kui server seda veel ei anna ja
+      //      kasutaja logis samas brauseris sisse).
+      //   3) neutraalne "Sinu konto" + rahulik märge (risti-seade, e-postita).
       const renderIdentity = (maskedEmail: string | null, typedEmail: string | null): void => {
         const el = $("[data-account-email]");
         if (!el) return;
         if (maskedEmail) {
-          el.textContent = maskedEmail;
+          el.textContent = `Sa oled sees e-postiga ${maskedEmail}`;
         } else if (typedEmail) {
-          el.textContent = typedEmail;
+          el.textContent = `Sa oled sees e-postiga ${typedEmail}`;
         } else {
           // Risti-seadme sisselogimine: me ei tea e-posti ega päki seda välja.
           el.innerHTML = `Sinu konto <span class="pm-soon">(e-posti kuvamine on peagi)</span>`;

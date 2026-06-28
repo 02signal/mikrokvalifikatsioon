@@ -35,17 +35,41 @@ const REFS = {
 const refOf = (text) => (typeof text === "string" && text in REFS ? REFS[text] : null);
 
 // ── buildSyncPayload — happy path: text -> ref ────────────────────────────────
-test("buildSyncPayload maps item keys to out_ refs, client_id = pkg.id", () => {
+test("buildSyncPayload maps item keys to out_ refs, client_id = pkg.id, weight 0", () => {
   const s = state([pkg("p-a", "Raamatupidaja", [item("excel"), item("graafik")])]);
   const payload = buildSyncPayload(s, refOf);
   assert.equal(payload.length, 1);
   assert.deepEqual(payload[0], {
     client_id: "p-a",
     outcome_refs: [REFS.excel, REFS.graafik],
+    weight: 0,
   });
   // Privacy: NO name, NO outcome text in the payload.
   assert.equal("coverage" in payload[0], false, "coverage omitted in v1");
   assert.equal(JSON.stringify(payload).includes("Raamatupidaja"), false, "name never sent");
+});
+
+// ── buildSyncPayload — weight encodes the visible reprioritise order ───────────
+test("buildSyncPayload sends a dense ascending weight = visible package order", () => {
+  const s = state([
+    pkg("p-a", "A", [item("excel")]),
+    pkg("p-b", "B", [item("graafik")]),
+  ]);
+  const payload = buildSyncPayload(s, refOf);
+  assert.equal(payload[0].weight, 0, "first package is top priority (weight 0)");
+  assert.equal(payload[1].weight, 1, "second package is next");
+});
+
+// ── buildSyncPayload — weight stays dense when an unsyncable package is skipped ─
+test("buildSyncPayload weight is dense (skips do not leave gaps)", () => {
+  const s = state([
+    pkg("p-a", "A", [item("excel")]),                 // weight 0
+    pkg("p-skip", "Skip", [item("tundmatu")]),        // dropped (0 refs)
+    pkg("p-c", "C", [item("graafik")]),               // weight 1, NOT 2
+  ]);
+  const payload = buildSyncPayload(s, refOf);
+  assert.equal(payload.length, 2);
+  assert.deepEqual(payload.map((p) => [p.client_id, p.weight]), [["p-a", 0], ["p-c", 1]]);
 });
 
 // ── buildSyncPayload — unresolvable outcomes dropped ──────────────────────────
