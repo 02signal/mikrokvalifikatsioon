@@ -83,6 +83,25 @@ started, by design. AMOS PRs: #1190/#1197/#1200/#1205/#1209/#1225/#1226/#1232. m
 
 ## Done
 
+- 2026-06-29: **Brand identity site-wide + konto unified-account + email pipeline, all LIVE end-to-end.**
+  (1) **Design system "pragmaatiline liikumine"** rolled out across the whole site (global.css token remap +
+  shared components + logo kit + `docs/brand-manual.*`; favicon/OG/EN-logo from the SVG kit) — mkval #57-#61.
+  (2) **Email fixed:** magic-link delivers. Root causes, in order: stale send-wrapper + Listmonk tx-cache
+  (Codex redeploy/restart); then Listmonk SMTP was using the **wrong Resend account** (02signal, domain
+  unverified) → switched to the ettevotluskeskus-account key `amos-listmonk-evk-smtp`; then the magic-link
+  pointed at the API host `liitu.` (404) → now built from the **apex** via `OUTREACH_KONTO_FACE_BASE_URL`
+  (AMOS #1324). Erasure endpoint ownership-gated (AMOS #1334). DNS for mikrokvalifikatsioon.ee verified in Resend.
+  (3) **Konto unified-account** ("sinu e-post on sinu keskus"): account in nav + value, login-aware CTAs,
+  distinct Logi sisse/Liitu flows, masked email shown, skills reprioritise(weight)+single-delete,
+  subscriptions (field/funding/programme_reminder/skill) round-trip via `amos_crm.package_subscription`,
+  `/state` returns `{email_masked, subscriptions, packages}`, confirmation-gated unsubscribe. mkval
+  #62/#63/#64/#65; AMOS #1335 (state contract) + #1342 (subscription CRUD + match-notify detection; my
+  duplicate #1341 closed). Frontend↔backend contract reconciled (kind enum, target_ref grammar, `{ref}`).
+  **Pending follow-ups:** match-notify *emails* (detection deployed; sends need the delta-notify worker
+  scheduled + `OUTREACH_SEND_MODE` live + the feature-flagged `sendKontoSubscriptionMatched`) · add a
+  **DMARC** TXT for mikrokvalifikatsioon.ee (`v=DMARC1; p=none; rua=mailto:postmaster@mikrokvalifikatsioon.ee`)
+  · revoke the old 02signal Resend key (fingerprint e74421da263f).
+
 - 2026-06-26: **Konto account LIVE + the retention loop code-complete.** The account went to production
   (login API `liitu.mikrokvalifikatsioon.ee`, face on the apex, `OUTREACH_SEND_MODE` live) and this round
   finished the remaining slices, each built by a team of agents + adversarially reviewed + gated.
