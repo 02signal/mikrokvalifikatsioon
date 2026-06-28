@@ -197,10 +197,11 @@ started, by design. AMOS PRs: #1190/#1197/#1200/#1205/#1209/#1225/#1226/#1232. m
 - **Brand follow-ups** (from the brand-manual + logo work, `docs/brand-manual.md`; logo evolved to
   the v3 "pragmatic momentum" mark, old logo preserved as `public/logo/old_*.svg`): (1) apply the
   animated `Logo` at the konto save-confirmation moment ("Sinu valikud on hoitud") - the strongest
-  brand moment per the manual, deliberately not done yet to avoid over-applying; (2) generate a
-  raster favicon/og + an `og/[route].ts` logo swap from the new `public/logo/mark.svg` / `lockup.svg`
-  so the v3 mark is the single source (OG cards + favicon still use the old `mk-logo*.png`); (3) swap
-  the EN homepage `<img src="/mk-logo.png">` (`src/pages/en/index.astro`) for the `Logo` component;
+  brand moment per the manual, deliberately not done yet to avoid over-applying; (2) **DONE
+  (2026-06-28):** favicon (`favicon.ico` + `icon.png`), `logo-square.png` (JSON-LD) and OG-card logo
+  (`og-logo-white.png`, swapped in `og/[route].ts`) now rasterised from the v3 SVG kit via
+  `scripts/gen-brand-rasters.mjs` (re-run when the SVGs change); old `mk-logo*.png` kept but
+  unreferenced by live code; (3) **DONE (2026-06-28):** EN homepage now uses the `Logo` component;
   (4) consider self-hosting Sora (woff2) instead of the Google Fonts link now added in `Seo.astro`.
 - Private-provider entries (3-4 known) once their public pages are verified.
 - mikrokvalifikatsioonid.ee → 301 to /kataloog/ (DNS/Vercel config, owner-gated).
