@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132.5 67.55" role="img" aria-labelledby="ta da" width="132" height="68"><title id="ta">Mikrokvalifikatsioon.ee</title><desc id="da">Animeeritud mark: kolm kriipsu tousevad jarjest ja tapid ilmuvad - liikumine edasi.</desc><style>
+  .sl{animation:draw .42s cubic-bezier(.2,.7,.2,1) forwards;}
+  .s0{animation-delay:0s} .s1{animation-delay:.12s} .s2{animation-delay:.24s}
+  .dot{transform-box:fill-box;transform-origin:center;transform:scale(0);animation:pop .3s cubic-bezier(.2,1.5,.4,1) forwards;}
+  .dg{animation-delay:.30s} .di{animation-delay:.50s}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @keyframes pop{to{transform:scale(1)}}
+  @media (prefers-reduced-motion:reduce){
+    .sl{stroke-dashoffset:0!important;animation:none!important}
+    .dot{transform:scale(1)!important;animation:none!important}
+  }
+</style><path class="sl s0" d="M13.75,56.5 L42.25,11.05" stroke="#54c247" stroke-width="16.0" stroke-linecap="round" fill="none" stroke-dasharray="53.65" stroke-dashoffset="53.65"/><path class="sl s1" d="M49.83,56.55 L79.17,11.0" stroke="#3f9c30" stroke-width="16.0" stroke-linecap="round" fill="none" stroke-dasharray="54.18" stroke-dashoffset="54.18"/><path class="sl s2" d="M86.75,56.5 L115.25,11.05" stroke="#17181a" stroke-width="16.0" stroke-linecap="round" fill="none" stroke-dasharray="53.65" stroke-dashoffset="53.65"/><circle class="dot dg" cx="11.0" cy="12.27" r="8.0" fill="#54c247"/><circle class="dot di" cx="121.5" cy="55.77" r="8.0" fill="#17181a"/></svg>

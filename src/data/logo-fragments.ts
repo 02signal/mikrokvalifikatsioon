@@ -1,10 +1,25 @@
-// AUTO-GENEREERITUD logo-fragmendid (mark + sonamark pathidena, fondisoltuvuseta).
-// Allikas: public/mk-logo.png trace + style-tile mark-geomeetria. Vt docs/brand-manual.md.
-// Mark = kolm tousvat kriipsu (heleroheline, roheline, must) + roheline ja must tapp.
+// AUTO-GENEREERITUD logo-fragmendid. Vt docs/brand-manual.md.
+// NEW_MARK = v3 'pragmaatiline liikumine' mark (kolm tousvat kaldkriipsu skewX(-13deg) +
+//   tapp), ehitatud geomeetriliste <rect>idega. See on PEAMINE logo.
+// OLD_LOGO = sailitatud vana logo (sonamark pathidena, public/mk-logo.png trace) -
+//   viitamiseks/varuvariandiks, vastab public/logo/old_*.svg failidele.
 
-export interface LogoFragment { vb: string; dark: { static: string; anim: string }; light: { static: string; anim: string }; }
+export interface MarkFragment { vb: string; dark: { static: string; anim: string }; light: { static: string; anim: string }; }
+export interface OldFragment { vb: string; dark: { static: string; anim: string }; light: { static: string; anim: string }; }
 
-export const LOGO: Record<'mark' | 'lockup', LogoFragment> = {
+export const NEW_MARK: MarkFragment = {
+  vb: "0.0 -2.0 63.0 104.0",
+  dark: {
+    static: `<g transform="translate(25.087,0) skewX(-13)"><rect x="0.0" y="45.0" width="11.0" height="55.0" rx="3.0" fill="#54c247"/><rect x="16.0" y="22.0" width="11.0" height="78.0" rx="3.0" fill="#3f9c30"/><rect x="32.0" y="0.0" width="11.0" height="100.0" rx="3.0" fill="#17181a"/></g><circle cx="55.5" cy="94.5" r="5.5" fill="#17181a"/>`,
+    anim: `<g transform="translate(25.087,0) skewX(-13)"><rect class="mk-bar mk-b0" x="0.0" y="45.0" width="11.0" height="55.0" rx="3.0" fill="#54c247"/><rect class="mk-bar mk-b1" x="16.0" y="22.0" width="11.0" height="78.0" rx="3.0" fill="#3f9c30"/><rect class="mk-bar mk-b2" x="32.0" y="0.0" width="11.0" height="100.0" rx="3.0" fill="#17181a"/></g><circle class="mk-dot" cx="55.5" cy="94.5" r="5.5" fill="#17181a"/>`,
+  },
+  light: {
+    static: `<g transform="translate(25.087,0) skewX(-13)"><rect x="0.0" y="45.0" width="11.0" height="55.0" rx="3.0" fill="#54c247"/><rect x="16.0" y="22.0" width="11.0" height="78.0" rx="3.0" fill="#3f9c30"/><rect x="32.0" y="0.0" width="11.0" height="100.0" rx="3.0" fill="#ffffff"/></g><circle cx="55.5" cy="94.5" r="5.5" fill="#ffffff"/>`,
+    anim: `<g transform="translate(25.087,0) skewX(-13)"><rect class="mk-bar mk-b0" x="0.0" y="45.0" width="11.0" height="55.0" rx="3.0" fill="#54c247"/><rect class="mk-bar mk-b1" x="16.0" y="22.0" width="11.0" height="78.0" rx="3.0" fill="#3f9c30"/><rect class="mk-bar mk-b2" x="32.0" y="0.0" width="11.0" height="100.0" rx="3.0" fill="#ffffff"/></g><circle class="mk-dot" cx="55.5" cy="94.5" r="5.5" fill="#ffffff"/>`,
+  },
+};
+
+export const OLD_LOGO: Record<'mark' | 'lockup', OldFragment> = {
   mark: {
     vb: "0 0 132.5 67.55",
     dark: {

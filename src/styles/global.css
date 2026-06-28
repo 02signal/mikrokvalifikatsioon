@@ -73,11 +73,16 @@ textarea {
   width: auto;
 }
 
-/* Inline-SVG logo (Logo.astro) sama kõrgusega kui vana pildimärk. */
+/* Inline-SVG logo (Logo.astro mark-variant) sama kõrgusega kui vana pildimärk. */
 .brand .mk-logo {
   display: block;
   height: 30px;
   width: auto;
+}
+
+/* v3 logolukk päises: em-põhine mõõt, sõnamärk ~19 px (märk ~1,55em ≈ 30 px kõrge). */
+.brand .mk-lockup {
+  font-size: 19px;
 }
 
 .navlinks {

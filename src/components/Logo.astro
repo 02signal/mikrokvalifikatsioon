@@ -1,16 +1,22 @@
 ---
 // Mikrokvalifikatsiooni logo - üks koht märgi ja sõnamärgi jaoks.
-// SVG on ehitatud pathidena (fondisõltuvuseta), nii et renderdub kõikjal ühtmoodi.
-// variant: "mark" = ainult märk (kolm tõusvat kriipsu + täpid) · "lockup" = märk + sõnamärk + loosung.
+// PEAMINE on v3 "pragmaatiline liikumine" logo: kolm tõusvat kaldkriipsu (skewX -13°,
+// kõrgused 55/78/100%, heleroheline -> roheline -> must) + must täpp. Märk on ehitatud
+// geomeetriliste <rect>idega (krõbe, minimaalne). Logoluku sõnamärk on elav Sora-800
+// väiketekst, nii et lukk vastab v3 päisele täpselt. Sora laetakse saidil (Seo.astro).
+//
+// variant: "mark" = ainult märk · "lockup" = märk + "mikrokvalifikatsioon" + loosung.
 // theme: "dark" = must/roheline heledal taustal · "light" = valge/roheline tumedal taustal.
-// animated: kui true, kriipsud "tõusevad" järjest ja täpid ilmuvad korra laadimisel.
-//   Austab prefers-reduced-motion (siis kohe lõppseis, ilma liikumiseta).
-import { LOGO } from "../data/logo-fragments";
+// animated: kui true, kriipsud "tõusevad" järjest ja täpp ilmub korra laadimisel
+//   (austab prefers-reduced-motion -> kohe lõppseis).
+// old: kui true, renderdab säilitatud VANA logo (old_* failid, sõnamärk pathidena).
+import { NEW_MARK, OLD_LOGO } from "../data/logo-fragments";
 
 interface Props {
   variant?: "mark" | "lockup";
   theme?: "dark" | "light";
   animated?: boolean;
+  old?: boolean;
   class?: string;
 }
 
@@ -18,24 +24,64 @@ const {
   variant = "lockup",
   theme = "dark",
   animated = false,
+  old = false,
   class: className = "",
 } = Astro.props;
 
-const frag = LOGO[variant][theme];
-const inner = animated ? frag.anim : frag.static;
-const vb = LOGO[variant].vb;
 const label = "Mikrokvalifikatsioon.ee";
+
+// VANA logo: säilitatud trace-fragmendid (üks SVG, märk + sõnamärk pathidena).
+const oldFrag = old ? OLD_LOGO[variant][theme] : null;
+const oldVb = old ? OLD_LOGO[variant].vb : "";
+const oldInner = oldFrag ? (animated ? oldFrag.anim : oldFrag.static) : "";
+
+// UUS v3 märk (inline SVG).
+const markFrag = NEW_MARK[theme];
+const markVb = NEW_MARK.vb;
+const markInner = animated ? markFrag.anim : markFrag.static;
+
+// Logoluku tekstivärvid.
+const wordColor = theme === "light" ? "#ffffff" : "#17181a";
+const tagColor = theme === "light" ? "#a9adb0" : "#5a615b";
 ---
 
-<svg
-  class:list={["mk-logo", animated && "is-animated", className]}
-  viewBox={vb}
-  role="img"
-  aria-label={label}
-  xmlns="http://www.w3.org/2000/svg"
-  preserveAspectRatio="xMinYMid meet"
-  set:html={inner}
-/>
+{old ? (
+  <svg
+    class:list={["mk-logo", animated && "is-animated", className]}
+    viewBox={oldVb}
+    role="img"
+    aria-label={label}
+    xmlns="http://www.w3.org/2000/svg"
+    preserveAspectRatio="xMinYMid meet"
+    set:html={oldInner}
+  />
+) : variant === "mark" ? (
+  <svg
+    class:list={["mk-logo", animated && "is-animated", className]}
+    viewBox={markVb}
+    role="img"
+    aria-label={label}
+    xmlns="http://www.w3.org/2000/svg"
+    preserveAspectRatio="xMinYMid meet"
+    set:html={markInner}
+  />
+) : (
+  <span class:list={["mk-lockup", animated && "is-animated", className]} role="img" aria-label={label}>
+    <svg
+      class="mk-lockup-mark"
+      viewBox={markVb}
+      aria-hidden="true"
+      focusable="false"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMinYMid meet"
+      set:html={markInner}
+    />
+    <span class="mk-lockup-text" aria-hidden="true">
+      <span class="mk-word" style={`color:${wordColor}`}>mikrokvalifikatsioon</span>
+      <span class="mk-tag" style={`color:${tagColor}`}>investeeri endasse</span>
+    </span>
+  </span>
+)}
 
 <style>
   .mk-logo {
@@ -44,38 +90,83 @@ const label = "Mikrokvalifikatsioon.ee";
     width: auto;
   }
 
-  /* Animeeritud variant: kriipsud "joonistuvad" alt üles järjest, siis ilmuvad täpid. ~0,8 s, korra. */
-  .mk-logo.is-animated :global(.mk-sl) {
-    animation: mk-draw 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  /* Logolukk: v3 märk + elav Sora-tekst, baasjoonel kõrvuti (vastab v3 päisele). */
+  .mk-lockup {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42em;
+    line-height: 1;
   }
-  .mk-logo.is-animated :global(.mk-s0) { animation-delay: 0s; }
-  .mk-logo.is-animated :global(.mk-s1) { animation-delay: 0.12s; }
-  .mk-logo.is-animated :global(.mk-s2) { animation-delay: 0.24s; }
+  .mk-lockup-mark {
+    display: block;
+    height: 1.55em;
+    width: auto;
+    flex: none;
+  }
+  .mk-lockup-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.12em;
+  }
+  .mk-word {
+    font-family: "Sora", system-ui, sans-serif;
+    font-weight: 800;
+    font-size: 1em;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .mk-tag {
+    font-family: "Sora", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 0.34em;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
 
-  .mk-logo.is-animated :global(.mk-dot) {
+  /* Animeeritud v3 märk: kriipsud "tõusevad" baasjoonelt järjest, siis ilmub täpp. ~0,8 s, korra. */
+  .is-animated :global(.mk-bar) {
+    transform-box: fill-box;
+    transform-origin: bottom;
+    transform: scaleY(0);
+    animation: mk-rise 0.34s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  }
+  .is-animated :global(.mk-b0) { animation-delay: 0s; }
+  .is-animated :global(.mk-b1) { animation-delay: 0.12s; }
+  .is-animated :global(.mk-b2) { animation-delay: 0.24s; }
+  .is-animated :global(.mk-dot) {
     transform-box: fill-box;
     transform-origin: center;
     transform: scale(0);
-    animation: mk-pop 0.3s cubic-bezier(0.2, 1.5, 0.4, 1) forwards;
+    animation: mk-pop 0.3s cubic-bezier(0.2, 1.5, 0.4, 1) 0.42s forwards;
   }
-  .mk-logo.is-animated :global(.mk-dg) { animation-delay: 0.3s; }
-  .mk-logo.is-animated :global(.mk-di) { animation-delay: 0.5s; }
 
-  @keyframes mk-draw {
-    to { stroke-dashoffset: 0; }
+  @keyframes mk-rise { to { transform: scaleY(1); } }
+  @keyframes mk-pop { to { transform: scale(1); } }
+
+  /* Vana logo (trace-variant): kriipsud "joonistuvad", täpid ilmuvad. */
+  .is-animated :global(.mk-sl) {
+    animation: mk-draw 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
   }
-  @keyframes mk-pop {
-    to { transform: scale(1); }
-  }
+  .is-animated :global(.mk-s0) { animation-delay: 0s; }
+  .is-animated :global(.mk-s1) { animation-delay: 0.12s; }
+  .is-animated :global(.mk-s2) { animation-delay: 0.24s; }
+  .is-animated :global(.mk-dg) { animation-delay: 0.3s; }
+  .is-animated :global(.mk-di) { animation-delay: 0.5s; }
+  @keyframes mk-draw { to { stroke-dashoffset: 0; } }
 
   /* Vähem liikumist: kohe lõppseis, ilma animatsioonita. */
   @media (prefers-reduced-motion: reduce) {
-    .mk-logo.is-animated :global(.mk-sl) {
-      stroke-dashoffset: 0 !important;
+    .is-animated :global(.mk-bar) {
+      transform: scaleY(1) !important;
       animation: none !important;
     }
-    .mk-logo.is-animated :global(.mk-dot) {
+    .is-animated :global(.mk-dot) {
       transform: scale(1) !important;
+      animation: none !important;
+    }
+    .is-animated :global(.mk-sl) {
+      stroke-dashoffset: 0 !important;
       animation: none !important;
     }
   }

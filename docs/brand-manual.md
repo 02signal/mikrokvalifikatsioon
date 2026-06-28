@@ -8,28 +8,43 @@ strateegia ja visuaalne suund (`mkval-strategy-and-visual-direction.md`), style 
 Juhtmõte üheski reas: **pragmaatiline liikumine**. Enesekindel, edasiviiv, tasuvuse-põhine
 tööriist - mitte akadeemiline, mitte ajakirjalik.
 
+> **Logo on edasi arenenud.** Peamine logo on nüüd **v3 "pragmaatiline liikumine"** märk
+> (puhtad tõusvad ribad), mitte vana logo koopia. Vana logo on alles hoitud (vt §1.1) -
+> see jääb viitamiseks ja varuvariandiks, aga uus on see, mida kasutame.
+
 ---
 
-## 1. Märk
+## 1. Märk (v3 - peamine)
 
-Märk on **kolm tõusvat kaldkriipsu** (vasakult paremale, üles) ja **kaks täppi** -
-roheline täpp üleval vasakul, must täpp all paremal.
+Märk on **kolm tõusvat kaldribakest** ja **must täpp** nende kõrval, baasjoonel.
 
-- **Tähendus:** liikumine edasi. Kolm kriipsu tõusevad - sa lähed sammhaaval ülespoole.
-  See on visuaalne lubadus loosungile **"investeeri endasse"**: tõsta end uuele tasemele.
-- Kriipsude värvid vasakult paremale: **heleroheline -> roheline -> must**. See on
-  liikumise gradient - heledast alguse-energiast kindla, autoriteetse lõpuni.
+- **Geomeetria:** ribad on kaldu `skewX(-13°)`, kõrgused **55% / 78% / 100%** (madalast kõrgeni,
+  vasakult paremale), laius võrdne, nurgad õrnalt ümarad. Need on ehitatud puhaste
+  `<rect>`-idega - krõbedad ja minimaalsed, mitte joonistuse jälg.
+- **Värvid vasakult paremale:** **heleroheline `#54c247` -> roheline `#3f9c30` -> must `#17181a`**,
+  täpp must. See on liikumise gradient - heledast alguse-energiast kindla, autoriteetse lõpuni.
+- **Tähendus:** liikumine edasi. Ribad tõusevad - sa lähed sammhaaval ülespoole. See on
+  visuaalne lubadus loosungile **"investeeri endasse"**: tõsta end uuele tasemele.
 - Märk on brändi DNA. Sama tõusva kaldjoone motiivi kasutame ka mujal liideses
   (vt §6 Liikumise motiiv).
 
 Failid: `public/logo/mark.svg` (värviline), `public/logo/mark-white.svg` (tumedal taustal),
-`public/logo/mark-ink.svg` (ühevärviline must).
+`public/logo/mark-animated.svg` (animeeritud). Logolukk: `public/logo/lockup.svg` ja
+`lockup-white.svg`.
+
+### 1.1 Vana logo (alles hoitud)
+
+Vana logo - sealhulgas animeeritud variant - on **säilitatud** failidena `public/logo/old_*.svg`
+(`old_mark.svg`, `old_lockup.svg`, `old_mark-animated.svg`, `old_mark-white.svg`,
+`old_mark-ink.svg`, `old_lockup-white.svg`). Need töötavad endiselt iseseisvalt. Komponendis
+`Logo.astro` saab vana logo tagasi prop'iga `old` (vt §9). Kasuta vana logo ainult viitamiseks
+või varuvariandina - **vaikevalik on uus v3 logo**.
 
 ### Puhas ruum ja vähimad mõõdud
 
-- **Puhas ruum:** jäta märgi ümber vaba ala vähemalt ühe kriipsu laiuse jagu. Logoluku
+- **Puhas ruum:** jäta märgi ümber vaba ala vähemalt ühe riba laiuse jagu. Logoluku
   (märk + sõnamärk) puhul samuti - ükski tekst ega element ei tohi tulla sellele lähemale.
-- **Vähim mõõt - ainult märk:** 24 px kõrgust ekraanil, 8 mm trükis. Väiksemana kaovad täpid.
+- **Vähim mõõt - ainult märk:** 22 px kõrgust ekraanil, 8 mm trükis. Väiksemana kaob täpp.
 - **Vähim mõõt - logolukk (märk + sõnamärk + loosung):** 150 px laiust ekraanil, 30 mm trükis.
   Väiksemana muutub loosung "INVESTEERI ENDASSE" loetamatuks - siis kasuta logolukku ilma
   loosungita või ainult märki.
@@ -64,6 +79,8 @@ brändi värv - see on üks konkreetne seisund.
 
 - **Pealkirjad: Sora** (geomeetriline grotesk). Kajab raske väiketähelist sõnamärki, mõjub
   edasiviivalt ja enesekindlalt. Kasuta paksusid 600-800 pealkirjades, 700 kicker-tekstis.
+  **Sõnamärk "mikrokvalifikatsioon" on elav Sora-800 väiketekst** (mitte pilt) - nii on lukk
+  alati terav ja vastab v3 päisele. Sora laetakse saidil (`Seo.astro`).
 - **Tekst: Atkinson Hyperlegible**. See font on loodud just loetavuse jaoks - tähed on
   selgelt eristatavad (näiteks I, l, 1 ja O, 0 ei lähe segi).
 
@@ -79,16 +96,26 @@ Reegel: suur ja kontrastne tekst, üks selge tegevus korraga, raha ja aeg alati 
 
 ## 4. Logo variandid - millal millist
 
+**Uus v3 logo (peamine):**
+
 | Fail | Mis | Millal |
 |---|---|---|
-| `mark.svg` | värviline märk | väike pind, favicon, app-ikoon, kaardi nurk, kus sõnamärk ei mahu |
-| `mark-white.svg` | märk tumedal taustal | tume hero, jalus, tume riba (rohelised jäävad, must muutub valgeks) |
-| `mark-ink.svg` | ühevärviline must märk | trükis ühevärvilisena, templ, vesimärk, kus värvi ei saa kasutada |
+| `mark.svg` | värviline v3 märk | väike pind, favicon, app-ikoon, kaardi nurk, kus sõnamärk ei mahu |
+| `mark-white.svg` | v3 märk tumedal taustal | tume hero, jalus, tume riba (rohelised jäävad, must muutub valgeks) |
+| `mark-animated.svg` | animeeritud v3 märk | erihetked (vt §7) |
 | `lockup.svg` | märk + sõnamärk + loosung | **vaikevalik** - päis, jalus, dokumendid, jagatavad pildid |
 | `lockup-white.svg` | logolukk tumedal taustal | sama tumedal taustal |
 
-Põhimõte: kui ruumi on, kasuta **logolukku** (`lockup.svg`). Kui ruumi napib või pind on
-väike, kasuta **ainult märki**. Tumedal taustal vali alati `-white` variant.
+Saidil tuleb logo komponendist `Logo.astro` (vt §9) - logolukk renderdab v3 märgi + elava
+Sora-teksti, nii et see vastab v3 päisele täpselt. Eraldi `*.svg` failid on välis-kasutuseks
+(dokumendid, jagatavad pildid), `lockup.svg` kasutab fondisõltuvuseta path-sõnamärki.
+
+**Vana logo (alles hoitud, varuvariant):** `old_mark.svg`, `old_mark-white.svg`,
+`old_mark-ink.svg`, `old_mark-animated.svg`, `old_lockup.svg`, `old_lockup-white.svg`.
+Komponendis prop `old`. Kasuta ainult viitamiseks/varuks.
+
+Põhimõte: kui ruumi on, kasuta **logolukku**. Kui ruumi napib või pind on väike, kasuta
+**ainult märki**. Tumedal taustal vali alati `-white` / `theme="light"`.
 
 ---
 
@@ -113,8 +140,8 @@ väike, kasuta **ainult märki**. Tumedal taustal vali alati `-white` variant.
 
 ## 6. Liikumise motiiv
 
-Märgi kolm tõusvat kriipsu (kald ~13-45° üles) korduvad **struktuurielemendina**, mitte
-kaunistusena:
+Märgi kolm tõusvat riba (kald `skewX(-13°)`, kõrgused 55/78/100%) korduvad
+**struktuurielemendina**, mitte kaunistusena:
 
 - **sobivuse ja katvuse ribad**, mis "tõusevad" (täituvad vasakult paremale laadimisel);
 - **edasi-nool** nupul ("Salvesta valikud →") liigub klõpsamisel veidi paremale;
@@ -158,9 +185,10 @@ mõjub; kümme tõusu on müra.
 
 ## 8. Kuhu on rakendatud
 
-- **Päis (`src/components/Nav.astro`):** logolukk inline-SVG-na, `<Logo variant="lockup"
-  animated />`. Esmasel laadimisel tõuseb märk korra (austab `prefers-reduced-motion`).
-  Mõõt sama mis varem (~30 px kõrgus), alt/aria säilitatud (`aria-label="Mikrokvalifikatsioon.ee"`).
+- **Päis (`src/components/Nav.astro`):** **uus v3 logolukk** komponendina, `<Logo variant="lockup"
+  animated />` - v3 märk + elav Sora-800 sõnamärk + loosung. Esmasel laadimisel tõusevad ribad
+  korra (austab `prefers-reduced-motion`). Mõõt sama mis varem (~30 px kõrgus), alt/aria
+  säilitatud (`aria-label="Mikrokvalifikatsioon.ee"`).
 
 **Soovitatud järgmine mõjus koht (mitte veel rakendatud, et mitte üle teha):** konto
 salvestamise kinnitus ("Sinu valikud on hoitud") - seal sobib `Logo`-le `animated` üks kord,
@@ -170,20 +198,24 @@ kui salvestus õnnestub. See on §7 järgi strateegiliselt tugevaim hetk.
 
 ## 9. Komponent `Logo.astro`
 
-`src/components/Logo.astro` on ainus koht, kust logo tuleb. Propid:
+`src/components/Logo.astro` on ainus koht, kust logo tuleb. Vaikimisi renderdab **uue v3 logo**.
+Propid:
 
-- `variant`: `"mark"` (ainult märk) või `"lockup"` (märk + sõnamärk + loosung). Vaikimisi `lockup`.
+- `variant`: `"mark"` (ainult v3 märk) või `"lockup"` (märk + elav Sora-sõnamärk + loosung).
+  Vaikimisi `lockup`.
 - `theme`: `"dark"` (heledal taustal, vaikimisi) või `"light"` (tumedal taustal).
-- `animated`: `true` -> kriipsud tõusevad korra laadimisel (austab `prefers-reduced-motion`).
+- `animated`: `true` -> ribad tõusevad korra laadimisel (austab `prefers-reduced-motion`).
+- `old`: `true` -> renderdab säilitatud **vana** logo (path-sõnamärk, `old_*.svg` vaste).
 - `class`: lisaklass mõõtmiseks/paigutuseks.
 
-SVG on ehitatud pathidena - **fondisõltuvuseta**, renderdub kõikjal ühtmoodi. Ligipääsetav:
-`role="img"` ja `aria-label="Mikrokvalifikatsioon.ee"`.
+Märk on ehitatud geomeetriliste `<rect>`-idega; logoluku sõnamärk on elav Sora-800 tekst (Sora
+laetakse saidil). Ligipääsetav: `role="img"` ja `aria-label="Mikrokvalifikatsioon.ee"`.
 
 Näited:
 
 ```astro
-<Logo variant="lockup" animated />            <!-- päis: tõuseb korra -->
-<Logo variant="mark" theme="light" />          <!-- ainult märk tumedal taustal, staatiline -->
-<Logo variant="lockup" theme="light" />        <!-- logolukk tumedal hero-ribal -->
+<Logo variant="lockup" animated />            <!-- päis: v3 lukk, ribad tõusevad korra -->
+<Logo variant="mark" theme="light" />          <!-- ainult v3 märk tumedal taustal, staatiline -->
+<Logo variant="lockup" theme="light" />        <!-- v3 logolukk tumedal hero-ribal -->
+<Logo variant="lockup" old />                  <!-- vana logo (viide/varuvariant) -->
 ```
