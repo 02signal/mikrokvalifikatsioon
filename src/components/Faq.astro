@@ -21,14 +21,17 @@ const { items, openFirst = 2 } = Astro.props;
   .faq { display: grid; gap: 10px; }
   .faq-item {
     border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 14px 18px;
-    background: #fff;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
   }
   .faq-item summary {
     cursor: pointer;
-    font-size: 1.02rem;
-    font-weight: 800;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
     color: var(--ink);
     list-style: none;
     display: flex;
@@ -36,7 +39,7 @@ const { items, openFirst = 2 } = Astro.props;
     gap: 16px;
   }
   .faq-item summary::-webkit-details-marker { display: none; }
-  .faq-item summary::after { content: "+"; color: var(--teal); font-weight: 900; }
+  .faq-item summary::after { content: "+"; color: var(--green); font-weight: 800; font-size: 1.2rem; line-height: 1; }
   .faq-item[open] summary::after { content: "–"; }
   .faq-item p { margin: 10px 0 4px; color: var(--muted); }
 </style>

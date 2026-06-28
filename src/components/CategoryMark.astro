@@ -1,8 +1,10 @@
 ---
-// Kategooria-aktsentmärk lehe päises. Värv vastab OG-kaartide aktsentloogikale
-// (vt src/pages/og/[route].ts ACCENT) — sama mõisteperekond (valdkond/teema/
-// karjäär/kool/võrdlus/vastus/programm/sisu), igaüks oma värviga. Puhtalt
-// dekoratiivne: aria-hidden + tühi alt, ei lisa ekraanilugejale müra.
+// Lehe päise aktsentmärk. Brändijuhend §2/§5: ÜKS visuaalne keel — valdkonnad ei
+// saa eraldi värvi ega märki, sisu eristab. Seepärast renderdab see kõigil
+// kategooriatel sama brändi v3 märgi (tõusvad ribad + täpp), oma loomulikus
+// proportsioonis (ei venita). Puhtalt dekoratiivne: aria-hidden + tühi alt,
+// ei lisa ekraanilugejale müra. `kind` prop on alles, et lehekülgede märgistus
+// jääks puutumatuks (väärtus ei muuda enam ilmet).
 type Kind =
   | "content"
   | "programme"
@@ -15,22 +17,13 @@ type Kind =
 
 interface Props { kind: Kind }
 const { kind } = Astro.props;
-
-const MARK: Record<Kind, string> = {
-  content: "/mark-green.svg",     // sisu / register
-  programme: "/mark-teal.svg",    // üks programm
-  topic: "/mark-blue.svg",        // teema / oskus
-  field: "/mark-violet.svg",      // valdkond
-  career: "/mark-amber.svg",      // karjäär
-  provider: "/mark-slate.svg",    // koolitaja
-  comparison: "/mark-rose.svg",   // võrdlus
-  question: "/mark-cyan.svg",     // vastus (GEO)
-};
-const src = MARK[kind] ?? MARK.content;
+// kind säilitatud ühilduvuseks; üks bränd-märk kõigile (sisu eristab, mitte värv).
+void kind;
 ---
 
-<img class="category-mark" src={src} width="48" height="48" alt="" aria-hidden="true" loading="lazy" />
+<img class="category-mark" src="/logo/mark.svg" width="63" height="44" alt="" aria-hidden="true" loading="lazy" />
 
 <style>
-  .category-mark { display: block; width: 48px; height: 48px; margin: 0 0 8px; }
+  /* Loomulik kuvasuhe (63×44) säilitatud — brändijuhend §5 "ära venita". */
+  .category-mark { display: block; height: 40px; width: auto; margin: 0 0 10px; }
 </style>

@@ -54,8 +54,8 @@ const feedUpdated = dmy(laborGeneratedAt);
     display: grid; gap: 18px; margin-top: 6px;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   }
-  .prov-col { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
-  .prov-h { margin: 0 0 8px; font-size: 0.95rem; color: var(--navy); }
+  .prov-col { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow-sm); }
+  .prov-h { margin: 0 0 8px; font-family: var(--font-display); font-weight: 700; font-size: 0.98rem; color: var(--navy); }
   .prov-list { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 0.9rem; color: var(--muted); }
   .prov-list a { color: var(--teal); }
   .prov-yes li::marker { content: "✓ "; color: #2e7d22; }
