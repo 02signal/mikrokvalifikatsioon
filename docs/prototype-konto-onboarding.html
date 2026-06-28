@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="et">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Konto onboarding - teenusedisaini prototüüp · Mikrokvalifikatsioon.ee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c1d1a; --green:#3f9c30; --green-bright:#54c247; --teal:#2e7d22; --blue:#1f5f8b;
+  --paper:#f4f1e9; --card:#fffdf8; --ice:#eaf4e6; --muted:#5f6560;
+  --line:#e4e0d4; --gold:#caa14a; --amber:#9a7b22; --amber-bg:#fbf3df;
+  --shadow-sm:0 2px 8px rgba(28,29,26,.06);
+  --shadow:0 22px 48px rgba(28,29,26,.13);
+  --r:18px;
+  --serif:"Fraunces",Georgia,serif;
+  --sans:"Atkinson Hyperlegible",ui-sans-serif,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans); color:var(--ink); line-height:1.6; font-size:19px;
+  background:
+    radial-gradient(120% 80% at 85% -10%, rgba(84,194,71,.10), transparent 60%),
+    radial-gradient(90% 60% at 0% 110%, rgba(202,161,74,.10), transparent 55%),
+    var(--paper);
+  background-attachment:fixed; min-height:100vh; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+header.bar{position:sticky;top:0;z-index:40;background:rgba(244,241,233,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:18px;height:72px}
+.brand{font-family:var(--serif);font-weight:600;font-size:22px;letter-spacing:-.02em;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:10px}
+.brand .dot{width:13px;height:13px;border-radius:50%;background:var(--green-bright);box-shadow:0 0 0 4px rgba(84,194,71,.2)}
+.bar nav{display:flex;gap:22px;margin-left:6px;flex:1}
+.bar nav a{color:var(--muted);text-decoration:none;font-size:16px}
+.bar nav a:hover{color:var(--ink)}
+@media(max-width:820px){.bar nav{display:none}}
+.acct-btn{display:inline-flex;align-items:center;gap:9px;background:var(--ink);color:#fff;border:0;font-family:var(--sans);font-weight:700;font-size:16px;padding:11px 18px;border-radius:999px;cursor:pointer;text-decoration:none;transition:transform .15s ease, background .2s}
+.acct-btn:hover{transform:translateY(-1px);background:#000}
+.acct-btn .ic{width:18px;height:18px}
+
+.steps{display:flex;gap:10px;justify-content:center;padding:30px 0 6px;flex-wrap:wrap}
+.step{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--muted)}
+.step .n{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:15px;background:var(--card);transition:.3s}
+.step.done .n{background:var(--green);border-color:var(--green);color:#fff}
+.step.active .n{border-color:var(--green);color:var(--green);box-shadow:0 0 0 5px rgba(63,156,48,.14)}
+.step.active{color:var(--ink);font-weight:700}
+.step .bar2{width:26px;height:2px;background:var(--line);border-radius:2px}
+@media(max-width:560px){.step span.lbl{display:none}.step .bar2{width:14px}}
+
+.stage{padding:14px 0 90px}
+.screen{display:none;animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
+.screen.on{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.eyebrow{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:14px}
+h1{font-family:var(--serif);font-weight:500;font-size:clamp(32px,5vw,52px);line-height:1.05;letter-spacing:-.02em;margin-bottom:16px}
+h1 em{font-style:italic;color:var(--green)}
+.lede{font-size:21px;color:var(--muted);max-width:50ch;margin-bottom:30px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:30px}
+.grid2{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;align-items:start}
+@media(max-width:840px){.grid2{grid-template-columns:1fr}}
+
+.pkg-title{font-family:var(--serif);font-size:24px;font-weight:600;margin-bottom:4px}
+.pkg-sub{color:var(--muted);font-size:16px;margin-bottom:18px}
+.chip{display:flex;align-items:center;gap:12px;padding:13px 15px;border:1px solid var(--line);border-radius:13px;background:#fff;margin-bottom:10px}
+.chip .tick{width:24px;height:24px;border-radius:50%;background:var(--ice);color:var(--green);display:grid;place-items:center;flex:none;font-weight:700}
+.chip b{font-weight:700}.chip small{display:block;color:var(--muted);font-size:14px;font-weight:400}
+.match{margin-top:16px;padding:16px;border-radius:13px;background:linear-gradient(180deg,var(--ice),#fff);border:1px solid #d6e8cf}
+.match .k{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);font-weight:700}
+.match .v{font-family:var(--serif);font-size:20px;font-weight:600;margin-top:3px}
+.cover{height:9px;border-radius:9px;background:#e7eee3;overflow:hidden;margin-top:10px}
+.cover i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--green-bright));border-radius:9px}
+
+.save-card{position:relative;overflow:hidden}
+.save-card::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 60% at 90% 0%,rgba(84,194,71,.14),transparent 60%);pointer-events:none}
+.save-card .heart{font-size:30px}
+.save-card h3{font-family:var(--serif);font-size:25px;font-weight:600;margin:10px 0 8px}
+.save-card p{color:var(--muted);font-size:17px;margin-bottom:6px}
+.benefits{list-style:none;margin:16px 0 22px;display:grid;gap:11px}
+.benefits li{display:flex;gap:11px;align-items:flex-start;font-size:16px}
+.benefits .b{width:26px;height:26px;border-radius:8px;background:var(--ice);color:var(--green);display:grid;place-items:center;flex:none}
+.benefits b{font-weight:700}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:var(--sans);font-weight:700;font-size:19px;border:0;border-radius:14px;padding:16px 26px;cursor:pointer;text-decoration:none;transition:transform .15s,box-shadow .2s,background .2s;width:100%}
+.btn-primary{background:var(--green);color:#fff;box-shadow:0 12px 26px rgba(63,156,48,.32)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 34px rgba(63,156,48,.4)}
+.btn-ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line);box-shadow:none;width:auto;padding:13px 20px;font-size:16px}
+.btn-ghost:hover{border-color:var(--ink)}
+.reassure{font-size:14px;color:var(--muted);text-align:center;margin-top:14px;display:flex;gap:7px;justify-content:center;align-items:center}
+.reassure .lock{color:var(--green)}
+
+.field{margin:6px 0 4px}
+.field label{display:block;font-weight:700;font-size:16px;margin-bottom:8px}
+.field input{width:100%;font-family:var(--sans);font-size:21px;padding:17px 18px;border:2px solid var(--line);border-radius:14px;background:#fff}
+.field input:focus{outline:0;border-color:var(--green);box-shadow:0 0 0 5px rgba(63,156,48,.14)}
+.consent{display:flex;gap:12px;align-items:flex-start;margin:18px 0;font-size:15px;color:var(--muted)}
+.consent input{margin-top:5px;width:20px;height:20px;accent-color:var(--green);flex:none}
+.tiny{font-size:14px;color:var(--muted)}
+
+.envelope{width:96px;height:96px;border-radius:24px;background:linear-gradient(180deg,var(--ice),#fff);border:1px solid #d6e8cf;display:grid;place-items:center;margin:0 auto 22px;box-shadow:var(--shadow-sm);animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.center{text-align:center;max-width:48ch;margin:0 auto}
+.addr{font-weight:700;color:var(--ink)}
+.note{background:var(--amber-bg);border:1px solid #f0e2c0;border-radius:12px;padding:14px 16px;font-size:15px;color:var(--amber);margin-top:18px;display:flex;gap:10px;align-items:flex-start}
+
+/* ---- account (persona-driven) ---- */
+.welcome{display:flex;align-items:center;gap:16px;margin-bottom:8px}
+.welcome .ring{width:54px;height:54px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:26px;flex:none;box-shadow:0 0 0 6px rgba(63,156,48,.16)}
+.tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);margin:24px 0 22px;flex-wrap:wrap}
+.tabbtn{font-family:var(--sans);font-weight:700;font-size:17px;background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);padding:10px 6px 13px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.tabbtn .cnt{font-size:13px;background:var(--ice);color:var(--green);border-radius:999px;padding:1px 9px;font-weight:700}
+.tabbtn.on{color:var(--ink);border-bottom-color:var(--green)}
+.pane{display:none}.pane.on{display:block;animation:rise .35s both}
+.paneintro{color:var(--muted);font-size:17px;margin-bottom:18px;max-width:60ch}
+
+/* skill row with weight + match state */
+.srow{display:flex;align-items:center;gap:16px;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--card);margin-bottom:11px;transition:.3s}
+.srow .body{flex:1;min-width:0}
+.srow .nm{font-weight:700;font-size:18px}
+.srow .meta{font-size:14px;color:var(--muted)}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;border-radius:999px;padding:3px 11px;margin-top:7px}
+.tag.ok{background:var(--ice);color:var(--green)}
+.tag.wait{background:var(--amber-bg);color:var(--amber)}
+/* weight control = 3 clickable dots (tähtsus) */
+.weight{display:flex;flex-direction:column;align-items:center;gap:5px;flex:none}
+.dots{display:flex;gap:5px}
+.dot3{width:16px;height:16px;border-radius:50%;border:2px solid var(--green);background:#fff;cursor:pointer;transition:.15s}
+.dot3.fill{background:var(--green)}
+.dot3:hover{transform:scale(1.15)}
+.weight small{font-size:11.5px;color:var(--muted);letter-spacing:.02em}
+
+/* programme row with priority reorder */
+.prow{display:flex;align-items:center;gap:14px;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--card);margin-bottom:11px}
+.rank{font-family:var(--serif);font-weight:600;font-size:22px;color:var(--green);width:30px;text-align:center;flex:none}
+.prow .body{flex:1;min-width:0}
+.prow .nm{font-weight:700;font-size:18px}
+.prow .meta{font-size:14px;color:var(--muted)}
+.fitbar{height:7px;border-radius:7px;background:#e7eee3;overflow:hidden;margin-top:8px;max-width:260px}
+.fitbar i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--green-bright))}
+.moves{display:flex;flex-direction:column;gap:4px;flex:none}
+.mv{width:34px;height:30px;border:1px solid var(--line);background:#fff;border-radius:9px;cursor:pointer;font-size:15px;color:var(--ink);line-height:1}
+.mv:hover{border-color:var(--green);color:var(--green)}.mv:disabled{opacity:.3;cursor:default}
+
+.cmp{display:flex;align-items:center;gap:14px;padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--card);margin-bottom:11px}
+.cmp .ic{width:46px;height:46px;border-radius:12px;background:#eef3fa;color:var(--blue);display:grid;place-items:center;font-size:22px;flex:none}
+.cmp .body{flex:1}.cmp .nm{font-weight:700;font-size:17px}.cmp .meta{font-size:14px;color:var(--muted)}
+
+.addrow{margin-top:6px}
+.addbtn{display:inline-flex;align-items:center;gap:9px;background:#fff;border:1.5px dashed var(--line);color:var(--teal);font-family:var(--sans);font-weight:700;font-size:16px;padding:12px 18px;border-radius:13px;cursor:pointer;width:100%}
+.addbtn:hover{border-color:var(--green);background:var(--ice)}
+
+.backrow{margin-top:26px;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.link{background:none;border:0;color:var(--teal);font-family:var(--sans);font-size:16px;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.demohint{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:var(--ink);color:#fff;font-size:13px;padding:9px 16px;border-radius:999px;z-index:50;opacity:.92;box-shadow:var(--shadow)}
+.demohint b{color:var(--green-bright)}
+svg.ic-svg{display:block}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="#" onclick="go(0);return false"><span class="dot"></span>Mikrokvalifikatsioon.ee</a>
+    <nav><a href="#">Kataloog</a><a href="#">Oskused</a><a href="#">Kuidas valida?</a><a href="#">Kes maksab?</a></nav>
+    <button class="acct-btn" onclick="go(3)">
+      <svg class="ic-svg ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>
+      Minu konto
+    </button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="steps" id="steps">
+    <div class="step" data-s="0"><span class="n">1</span><span class="lbl">Vali, mis huvitab</span></div><div class="bar2"></div>
+    <div class="step" data-s="1"><span class="n">2</span><span class="lbl">Salvesta endale</span></div><div class="bar2"></div>
+    <div class="step" data-s="2"><span class="n">3</span><span class="lbl">Kinnita e-post</span></div><div class="bar2"></div>
+    <div class="step" data-s="3"><span class="n">4</span><span class="lbl">Sinu konto</span></div>
+  </div>
+</div>
+
+<main class="wrap stage">
+
+  <!-- ===== 0: value + save moment ===== -->
+  <section class="screen on" id="s0">
+    <div class="eyebrow">Sa just valisid endale oskused</div>
+    <h1>Need valikud on <em>sinu omad.</em><br>Tahad need alles hoida?</h1>
+    <p class="lede">Sa valisid oskused, mida tahad õppida, ja me näitasime, millised programmid neid katavad. Salvesta valikud endale - siis ei pea uuesti otsima, saad võrrelda oma ajal, ja me anname märku, kui mõnele oskusele lisandub sobiv programm.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="pkg-title">Valitud oskused</div>
+        <div class="pkg-sub">4 oskust · valitud täna</div>
+        <div class="chip"><span class="tick">✓</span><div><b>Andmete visualiseerimine</b><small>graafikud, töölauad</small></div></div>
+        <div class="chip"><span class="tick">✓</span><div><b>Exceli edasijõudnu</b><small>pivot-tabelid, valemid</small></div></div>
+        <div class="chip"><span class="tick">✓</span><div><b>Aruandluse automatiseerimine</b><small>korduvad aruanded</small></div></div>
+        <div class="chip" style="border-color:#f0e2c0;background:var(--amber-bg)"><span class="tick" style="background:#fff;color:var(--amber)">?</span><div><b>Power BI juurutamine</b><small style="color:var(--amber)">sellele veel ei leidnud programmi</small></div></div>
+        <p class="tiny" style="margin-top:6px">Ühele oskusele ei ole veel programmi - aga me hoiame selle alles ja anname teada, kui sobiv lisandub.</p>
+      </div>
+
+      <div class="card save-card">
+        <div class="heart">🤍</div>
+        <h3>Salvesta oma valikud</h3>
+        <p>Üks samm. Pärast on kõik siin ootamas.</p>
+        <ul class="benefits">
+          <li><span class="b">↺</span><div><b>Ei pea uuesti otsima</b> - oskused on su konto all hoitud.</div></li>
+          <li><span class="b">⚖</span><div><b>Võrdle oma ajal</b> - programmid kõrvuti, sinu tähtsuse järgi.</div></li>
+          <li><span class="b">🔔</span><div><b>Jälgime su eest</b> - teade, kui oskusele lisandub programm.</div></li>
+        </ul>
+        <button class="btn btn-primary" onclick="go(1)">Salvesta valikud →</button>
+        <div class="reassure"><span class="lock">🔒</span> Vajab ainult e-posti. Tasuta. Parooli pole vaja.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 1: save = email ===== -->
+  <section class="screen" id="s1">
+    <div class="eyebrow">Veel üks samm</div>
+    <h1>Kuhu su valikud <em>hoiule panna?</em></h1>
+    <p class="lede">Sisesta oma e-post. Saadame sulle ühe lingi - vajutad, ja kõik on hoitud. Parooli pole vaja meelde jätta.</p>
+    <div class="card" style="max-width:560px">
+      <div class="field"><label for="em">Sinu e-post</label><input id="em" type="email" placeholder="nimi@ettevote.ee" autocomplete="email" /></div>
+      <label class="consent"><input type="checkbox" id="cons" checked /><span>Jah, hoidke mu valikud alles ja andke teada, kui oskusele lisandub programm. Saan end igal ajal eemaldada.</span></label>
+      <button class="btn btn-primary" onclick="sendLink()">Saada mulle link →</button>
+      <p class="tiny" style="margin-top:14px;text-align:center">Kogume ainult su e-posti, et valikud hoida ja teateid saata. <a href="#" style="color:var(--teal)">Privaatsus</a></p>
+    </div>
+    <div class="backrow"><button class="link" onclick="go(0)">← Tagasi valikute juurde</button></div>
+  </section>
+
+  <!-- ===== 2: check email ===== -->
+  <section class="screen" id="s2">
+    <div class="card center" style="max-width:580px;margin:10px auto">
+      <div class="envelope"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></svg></div>
+      <h1 style="font-size:30px">Vaata oma e-posti</h1>
+      <p class="lede" style="margin:10px auto 4px">Saatsime lingi aadressile <span class="addr" id="sentTo">nimi@ettevote.ee</span>.</p>
+      <p style="color:var(--muted)">Ava e-kiri ja vajuta <b>„Logi sisse"</b> - see kinnitab su e-posti ja viib su valikute juurde. Link kehtib 30 minutit.</p>
+      <div class="note"><span>✉️</span><div>Kiri tuleb aadressilt <b>info@mikrokvalifikatsioon.ee</b>. Ei näe seda? Vaata rämpsposti kausta.</div></div>
+      <div class="backrow"><button class="link" onclick="sendLink()">Saada link uuesti</button><span style="color:var(--line)">·</span><button class="link" onclick="go(1)">Muuda e-posti</button></div>
+      <div class="backrow" style="margin-top:8px"><button class="btn btn-ghost" onclick="go(3)">Mul on link - ava konto (demo) →</button></div>
+    </div>
+  </section>
+
+  <!-- ===== 3: account = three persona-driven collections ===== -->
+  <section class="screen" id="s3">
+    <div class="welcome">
+      <div class="ring">✓</div>
+      <div><div class="eyebrow" style="margin:0">Sa oled sees</div>
+        <h1 style="font-size:clamp(28px,4vw,40px);margin:2px 0 0">Tere tulemast. Sinu valikud on <em>hoitud.</em></h1></div>
+    </div>
+    <p class="lede" style="margin:14px 0 0">Kõik ühes kohas. Vali allpool, mis sind kõige rohkem huvitab.</p>
+
+    <div class="tabs">
+      <button class="tabbtn on" data-t="osk" onclick="tab('osk')">Minu oskused <span class="cnt" id="c-osk">4</span></button>
+      <button class="tabbtn" data-t="prog" onclick="tab('prog')">Minu programmid <span class="cnt" id="c-prog">3</span></button>
+      <button class="tabbtn" data-t="cmp" onclick="tab('cmp')">Minu võrdlused <span class="cnt">1</span></button>
+    </div>
+
+    <!-- PANE: skills (the raw intent - visible even without a match; weighted) -->
+    <div class="pane on" id="p-osk">
+      <p class="paneintro">Need on oskused, mille <b>sina</b> valisid. Sea igaühe tähtsus (klõpsa täppe) - me sätime programmid selle järgi. Oskus, millele veel programmi ei ole, jääb samuti alles - jälgime ja anname teada.</p>
+      <div id="skills"></div>
+      <div class="match" style="margin-top:18px">
+        <div class="k">Sinu tähtsuste järgi - parim vaste praegu</div>
+        <div class="v" id="bestmatch">TalTech · Andmeanalüütika alused</div>
+        <div class="cover"><i id="bestcov" style="width:80%"></i></div>
+        <small class="tiny" id="bestnote" style="display:block;margin-top:8px">Katab su 3 tähtsaimat oskust · 12 EAP · ~900 €</small>
+      </div>
+    </div>
+
+    <!-- PANE: programmes (saved/interested; priority reorder top→bottom) -->
+    <div class="pane" id="p-prog">
+      <p class="paneintro">Programmid, mille sa salvestasid. Sea järjekord noolte abil - tähtsaim üleval. Number näitab su prioriteeti; riba näitab, kui suure osa su oskustest see katab.</p>
+      <div id="progs"></div>
+    </div>
+
+    <!-- PANE: comparisons (saved side-by-side) -->
+    <div class="pane" id="p-cmp">
+      <p class="paneintro">Võrdlused, mille sa salvestasid. Ava ja vaata programme kõrvuti - hind, maht, õpiväljundid.</p>
+      <div class="cmp"><span class="ic">⚖</span><div class="body"><div class="nm">TalTech vs Tartu Ülikool</div><div class="meta">Andmeanalüütika · salvestatud täna</div></div><button class="btn-ghost" style="border-radius:11px">Ava →</button></div>
+      <div class="addrow"><button class="addbtn">＋ Lisa uus võrdlus</button></div>
+    </div>
+
+    <div class="backrow" style="margin-top:30px"><button class="link" onclick="go(0)">↻ Vaata kogu teekonda algusest</button></div>
+  </section>
+</main>
+
+<div class="demohint">Prototüüp - klikitav. <b>Klõpsa oskuste täppe ja programmide nooli</b>, et näha prioriteete.</div>
+
+<script>
+const screens=[...document.querySelectorAll('.screen')], steps=[...document.querySelectorAll('.step')];
+function go(n){screens.forEach(s=>s.classList.remove('on'));document.getElementById('s'+n).classList.add('on');
+  steps.forEach((st,i)=>{st.classList.toggle('active',i===n);st.classList.toggle('done',i<n)});
+  window.scrollTo({top:0,behavior:'smooth'});}
+function sendLink(){document.getElementById('sentTo').textContent=(document.getElementById('em').value.trim()||'nimi@ettevote.ee');go(2);}
+function tab(t){document.querySelectorAll('.tabbtn').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id==='p-'+t));}
+
+/* ---- data model: skills (weighted) + programmes (priority) ---- */
+const WL=['huvi','tähtis','väga tähtis'];
+let skills=[
+  {nm:'Andmete visualiseerimine',meta:'graafikud, töölauad',w:3,match:'TalTech · Andmeanalüütika alused'},
+  {nm:'Power BI juurutamine',meta:'ettevõtte aruandlus',w:3,match:null},
+  {nm:'Exceli edasijõudnu',meta:'pivot-tabelid, valemid',w:2,match:'Pärnu KHK · Excel tööks'},
+  {nm:'Aruandluse automatiseerimine',meta:'korduvad aruanded',w:1,match:'TalTech · Andmeanalüütika alused'},
+];
+let progs=[
+  {nm:'Andmeanalüütika alused',meta:'TalTech · 12 EAP · ~900 €',fit:80},
+  {nm:'Andmeteadus',meta:'Tartu Ülikool · 30 EAP · tasuta',fit:62},
+  {nm:'Ärianalüütika',meta:'EBS · 6 EAP · ~600 €',fit:45},
+];
+function renderSkills(){
+  skills.sort((a,b)=>b.w-a.w);
+  document.getElementById('skills').innerHTML=skills.map((s,i)=>`
+    <div class="srow">
+      <div class="weight">
+        <div class="dots">${[1,2,3].map(d=>`<span class="dot3 ${d<=s.w?'fill':''}" onclick="setW(${i},${d})" title="${WL[d-1]}"></span>`).join('')}</div>
+        <small>${WL[s.w-1]}</small>
+      </div>
+      <div class="body">
+        <div class="nm">${s.nm}</div><div class="meta">${s.meta}</div>
+        ${s.match?`<span class="tag ok">✓ Õpetatakse: ${s.match}</span>`:`<span class="tag wait">⌛ Veel pole vastet - jälgime ja anname teada</span>`}
+      </div>
+    </div>`).join('');
+  // recompute "best match" headline from the weighted, matched skills
+  const top=skills.filter(s=>s.match).sort((a,b)=>b.w-a.w)[0];
+  if(top){document.getElementById('bestmatch').textContent=top.match;}
+}
+function setW(i,d){ // note: i is the post-sort index; map by identity
+  const sorted=[...skills].sort((a,b)=>b.w-a.w); sorted[i].w=d; renderSkills();
+}
+function renderProgs(){
+  document.getElementById('progs').innerHTML=progs.map((p,i)=>`
+    <div class="prow">
+      <div class="rank">${i+1}</div>
+      <div class="body"><div class="nm">${p.nm}</div><div class="meta">${p.meta}</div>
+        <div class="fitbar"><i style="width:${p.fit}%"></i></div></div>
+      <div class="moves">
+        <button class="mv" onclick="move(${i},-1)" ${i===0?'disabled':''}>↑</button>
+        <button class="mv" onclick="move(${i},1)" ${i===progs.length-1?'disabled':''}>↓</button>
+      </div>
+    </div>`).join('');
+}
+function move(i,d){const j=i+d;if(j<0||j>=progs.length)return;[progs[i],progs[j]]=[progs[j],progs[i]];renderProgs();}
+renderSkills();renderProgs();go(0);
+</script>
+</body>
+</html>
