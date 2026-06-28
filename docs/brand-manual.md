@@ -16,11 +16,15 @@ tööriist - mitte akadeemiline, mitte ajakirjalik.
 
 ## 1. Märk (v3 - peamine)
 
-Märk on **kolm tõusvat kaldribakest** ja **must täpp** nende kõrval, baasjoonel.
+Märk on **kolm tõusvat kaldribakest** ja **must täpp** nende kõrval, baasjoonel. Toon on
+tasane ja meeldiv kasv - jässakas, mitte ülespoole venitatud.
 
-- **Geomeetria:** ribad on kaldu `skewX(-13°)`, kõrgused **55% / 78% / 100%** (madalast kõrgeni,
-  vasakult paremale), laius võrdne, nurgad õrnalt ümarad. Need on ehitatud puhaste
-  `<rect>`-idega - krõbedad ja minimaalsed, mitte joonistuse jälg.
+- **Geomeetria (täpselt nagu style-tile `.mark`):** ribad on **laius 11**, **vahe 5** (x kohtadel
+  0, 16, 32), grupil `skewX(-13°)`, nurgaraadius ~3. Kõrgused on **55% / 78% / 100% 40-st** ehk
+  **22 / 31 / 40** (madalast kõrgeni, vasakult paremale). Kõige kõrgem (must) riba on seega 11 lai
+  ja 40 kõrge (~3,6:1 - jässakas ja rahulik), mitte sale. Must täpp ~11 px läbimõõduga on
+  baasjoonel, ribadest veidi paremal (vahe ~5). Märgi viewBox on **lamav** (`-11 -2 63 44`,
+  laius ületab kõrguse). Ehitatud puhaste `<rect>`-idega - krõbe ja minimaalne, mitte joonistuse jälg.
 - **Värvid vasakult paremale:** **heleroheline `#54c247` -> roheline `#3f9c30` -> must `#17181a`**,
   täpp must. See on liikumise gradient - heledast alguse-energiast kindla, autoriteetse lõpuni.
 - **Tähendus:** liikumine edasi. Ribad tõusevad - sa lähed sammhaaval ülespoole. See on
