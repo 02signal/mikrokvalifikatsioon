@@ -1,0 +1,30 @@
+---
+// Pragmaatiline liikumine — neljasammuline edenemis-mõõdik (stepper).
+// Konto onboarding: 1 Vali → 2 Salvesta → 3 Kinnita e-post → 4 Sinu konto.
+// `current` (0-3) märgib aktiivse sammu; varasemad on "done".
+// Klient saab samme uuendada elemendi `data-pm-step` kaudu (vt /konto/).
+interface Props {
+  /** Aktiivne samm, 0-põhine (0..3) */
+  current?: number;
+  /** Sammude sildid (vaikimisi konto-voo sõnastus) */
+  labels?: string[];
+}
+const {
+  current = 0,
+  labels = ["Vali, mis huvitab", "Salvesta endale", "Kinnita e-post", "Sinu konto"],
+} = Astro.props;
+---
+<ol class="pm-steps" data-pm-steps aria-label="Edenemine">
+  {labels.map((label, i) => (
+    <>
+      <li
+        class={`pm-step${i === current ? " active" : ""}${i < current ? " done" : ""}`}
+        data-pm-step={i}
+        aria-current={i === current ? "step" : undefined}
+      >
+        <span class="n">{i + 1}</span><span class="lbl">{label}</span>
+      </li>
+      {i < labels.length - 1 ? <span class="pm-step-bar" aria-hidden="true"></span> : null}
+    </>
+  ))}
+</ol>

@@ -2,12 +2,19 @@
 import Seo from "../../components/Seo.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
+import PmStepper from "../../components/PmStepper.astro";
 import "../../styles/global.css";
+import "../../styles/pragmatic-momentum.css";
 import { catalog } from "../../data/catalog";
 import { fields } from "../../data/catalog";
 
 // ============================================================================
 // Minu konto — mkval ET face (account-MVP).
+//
+// VISUAALNE KEEL: "Pragmaatiline liikumine" (docs/style-tile + onboarding-v3).
+// Sora + Atkinson Hyperlegible, jahe-neutraalne taust, roheline = edasiminek,
+// tõusvad kriipsud motiivina, seisundi-juhitud ekraanid. Kogu konto-pind on
+// .pm juurklassi all, et disainisüsteem ei segaks teiste lehtede global.css-i.
 //
 // ARHITEKTUUR (konsolideerimise külmutus): see on ÕHUKE NÄGU. Kogu isiku-
 // tuvastus, nõusoleku-pearaamat, paketihoidla ja meeldetuletuste ajastus
@@ -75,223 +82,318 @@ const schema = {
       robots="noindex,follow"
       jsonLd={schema}
     />
+    <!-- Pragmaatiline liikumine: Sora (pealkirjad) + Atkinson Hyperlegible (tekst) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <Nav />
 
-    <main class="report-page simple-report" data-konto-root>
+    <main class="pm pm-stage" id="main" data-konto-root>
+      <div class="pm-wrap">
+        <nav class="pm-crumbs" aria-label="Asukoht">
+          <a href="/">Avaleht</a> › <span>Minu konto</span>
+        </nav>
+      </div>
+
+      <!-- Edenemis-mõõdik: peidetud välja-logitud (auth) ekraanil, et apex jääks rahulik;
+           kuvame kinnitamise (check) ja konto (account) ekraanil. -->
+      <div class="pm-wrap" data-stepper-wrap hidden>
+        <PmStepper current={2} />
+      </div>
+
       <!-- ============ EKRAAN B — välja logitud: Loo konto / Logi sisse ============ -->
-      <section class="report-hero simple-report-hero" data-screen="auth">
-        <div class="section-inner">
-          <nav class="crumbs" aria-label="Asukoht">
-            <a href="/">Avaleht</a> › <span>Minu konto</span>
-          </nav>
-          <span class="eyebrow">Minu konto</span>
-          <h1>Minu konto</h1>
-          <p>
+      <!-- STATE s1: usaldus-/rämpsposti-hirm. VASTUS: täpselt mida, miks, ei spämmi, sina kontrollid. -->
+      <section class="pm-wrap pm-screen on" data-screen="auth" data-tool-section="konto-login" aria-labelledby="authH">
+        <div class="pm-rise">
+          <div class="pm-eyebrow">Minu konto</div>
+          <h1 id="authH">Hoia oma valikud <em>alles.</em></h1>
+          <p class="pm-lede">
             Üks koht, kus su valitud oskuste pakett püsib alles ja kus saad õigel ajal teada sobivast
-            programmist, kombinatsioonist või lähenevast tähtajast. Parooli pole vaja — saadame sulle
-            turvalise sisselogimislingi e-postiga.
+            programmist, kombinatsioonist või lähenevast tähtajast. Parooli pole vaja - saadame sulle
+            sisselogimislingi e-postiga.
           </p>
-        </div>
-      </section>
 
-      <section class="white" data-screen="auth" data-tool-section="konto-login">
-        <div class="section-inner narrow">
-          <div class="anon-banner" data-anon-banner hidden></div>
+          <div class="pm-banner anon" data-anon-banner hidden></div>
 
-          <form class="lead-form" data-auth-form data-site-lead-form data-source-site="mikrokvalifikatsioon.ee">
-            <div class="form-grid">
-              <div class="field full">
-                <label for="kontoEmail">E-post</label>
-                <input id="kontoEmail" name="email" type="email" required autocomplete="email" placeholder="sinu@email.ee" />
+          <div class="pm-card" style="max-width:580px">
+            <form data-auth-form data-site-lead-form data-source-site="mikrokvalifikatsioon.ee">
+              <div class="pm-field">
+                <label for="kontoEmail">Sinu e-post</label>
+                <input id="kontoEmail" name="email" type="email" required autocomplete="email" placeholder="nimi@ettevote.ee" />
               </div>
-            </div>
-            <label class="checkbox" data-consent-row>
-              <input type="checkbox" name="consent" data-consent />
-              <span>
-                Nõustun, et Ettevõtluskeskus OÜ saadab mulle teavitused sobivatest programmidest,
-                kombinatsioonidest ja tähtaegadest. Saan nõusoleku igal ajal tagasi võtta (iga kirja
-                jaluses on loobumislink). Vaata <a href="/privaatsus/">privaatsust</a>.
-              </span>
-            </label>
-            <p class="field-error" data-auth-error hidden></p>
-            <div class="inline-actions">
-              <button class="btn btn-primary" type="submit" data-auth-submit>Saada mulle sisselogimislink</button>
-            </div>
-            <p class="form-note">
-              Kui sul on juba konto, saadame lingi sisselogimiseks. Kui veel pole, loome konto.
-            </p>
-          </form>
+              <div class="pm-trust" aria-hidden="false">
+                <div><span class="t" aria-hidden="true">✓</span> Kogume <b>ainult e-posti</b> - ei nime, ei muud.</div>
+                <div><span class="t" aria-hidden="true">✓</span> <b>Ei spämmi</b> - kiri ainult siis, kui on midagi sinu jaoks.</div>
+                <div><span class="t" aria-hidden="true">✓</span> <b>Sina kontrollid</b> - eemaldad end ühe klõpsuga.</div>
+                <div><span class="t" aria-hidden="true">✓</span> Andmed Eestis · <a href="/privaatsus/">privaatsus</a></div>
+              </div>
+              <label class="pm-consent" data-consent-row>
+                <input type="checkbox" name="consent" data-consent />
+                <span>
+                  Jah, hoidke mu valikud alles ja andke teada, kui sobiv programm, kombinatsioon või
+                  tähtaeg lisandub. Saan nõusoleku igal ajal tagasi võtta (iga kirja jaluses on loobumislink).
+                </span>
+              </label>
+              <p class="pm-error" data-auth-error hidden></p>
+              <button class="pm-btn pm-btn-primary" type="submit" data-auth-submit>
+                Saada mulle link <span class="arr" aria-hidden="true">→</span>
+              </button>
+              <div class="pm-reassure">
+                <span class="lock" aria-hidden="true">🔒</span> Vajab ainult e-posti. Tasuta. Parooli pole vaja.
+              </div>
+            </form>
+          </div>
         </div>
       </section>
 
       <!-- ============ EKRAAN C — pärast saatmist: Kontrolli e-posti ============ -->
-      <section class="white" data-screen="check" hidden>
-        <div class="section-inner narrow">
-          <div class="card check-card">
-            <h2>Kontrolli oma e-posti</h2>
-            <p>
-              Saatsime lingi aadressile <strong data-check-email>su e-postile</strong>. Ava e-kiri ja
-              vajuta „Logi sisse" — see kinnitab su e-posti ja viib su kontole. Link kehtib 30 minutit.
-            </p>
-            <p class="field-help">
-              Küsime kinnitust, et keegi teine ei saaks su e-postiga teavitusi tellida. See on ühekordne samm.
-            </p>
-            <div class="inline-actions">
-              <button type="button" class="btn btn-primary" data-resend>Saada link uuesti</button>
-              <button type="button" class="btn btn-secondary" data-change-email>Muuda e-posti</button>
-            </div>
-            <p class="form-note">
-              Ei näe kirja? Vaata rämpsposti kausta. Kiri tuleb aadressilt info@mikrokvalifikatsioon.ee.
-            </p>
-            <p class="form-note bridge-note">
-              <strong>Märkus:</strong> see on demo-sild. Tootmises saadab AMOS sulle päris sisselogimislingi
-              (magic-link). Praegu saad oma konto kohe avada nupust „Ava konto kohe (demo)".
-            </p>
-            <div class="inline-actions">
-              <button type="button" class="btn btn-secondary" data-demo-login>Ava konto kohe (demo)</button>
-            </div>
+      <!-- STATE s2: ebakindlus + ootus ("kas tuli?"). VASTUS: kristallselge mis/kellelt/millal + kontroll. -->
+      <section class="pm-wrap pm-screen" data-screen="check" hidden aria-labelledby="checkH">
+        <div class="pm-card pm-center pm-rise" style="max-width:580px;margin:10px auto">
+          <div class="pm-envelope" aria-hidden="true">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#3f9c30" stroke-width="1.8">
+              <rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="m3.5 7 8.5 6 8.5-6" />
+            </svg>
+          </div>
+          <h1 id="checkH" style="font-size:30px">Vaata oma e-posti</h1>
+          <p class="pm-lede" style="margin:10px auto 4px">
+            Saatsime lingi aadressile <span class="pm-addr" data-check-email>su e-postile</span>.
+          </p>
+          <p style="color:var(--pm-muted)">
+            Ava e-kiri ja vajuta <b>„Logi sisse"</b> - see kinnitab su e-posti ja viib su valikute juurde.
+            Link kehtib 30 minutit.
+          </p>
+          <p class="pm-tiny" style="margin-top:10px">
+            Küsime kinnitust, et keegi teine ei saaks su e-postiga teavitusi tellida. See on ühekordne samm.
+          </p>
+          <div class="pm-waitline"><span class="pm-pulse" aria-hidden="true"></span> Ootame, et sa lingile vajutaksid…</div>
+          <div class="pm-note">
+            <span aria-hidden="true">✉️</span>
+            <div>Kiri tuleb aadressilt <b>info@mikrokvalifikatsioon.ee</b>. Ei näe seda? Vaata rämpsposti kausta.</div>
+          </div>
+          <div class="pm-backrow">
+            <button type="button" class="pm-link" data-resend>Saada link uuesti</button>
+            <span style="color:var(--pm-line)" aria-hidden="true">·</span>
+            <button type="button" class="pm-link" data-change-email>Muuda e-posti</button>
+          </div>
+          <div class="pm-backrow bridge-note" style="margin-top:8px">
+            <button type="button" class="pm-btn pm-btn-ghost" data-demo-login>Mul on link - ava konto (demo) →</button>
           </div>
         </div>
       </section>
 
       <!-- ============ EKRAAN E — sisse logitud: Minu konto ============ -->
-      <section class="white" data-screen="account" hidden>
-        <div class="section-inner narrow">
-          <div class="account-bar">
-            <div>
-              <span class="kicker">Minu konto</span>
-              <p class="account-email" data-account-email></p>
+      <!-- STATE s3: saavutus + "mis nüüd?". VASTUS: kinnita (hoitud), orienteeri (3 kogumit), paku järgmine samm. -->
+      <section class="pm-wrap pm-screen" data-screen="account" hidden aria-labelledby="acctH">
+        <div class="pm-rise">
+          <div class="pm-account-bar" style="margin-bottom:8px">
+            <div class="pm-welcome">
+              <div class="ring" aria-hidden="true">✓</div>
+              <div>
+                <div class="pm-eyebrow" style="margin:0">Sa oled sees</div>
+                <h1 id="acctH" style="font-size:clamp(27px,4vw,38px);margin:2px 0 0">Sinu valikud on <em>hoitud.</em></h1>
+              </div>
             </div>
-            <button type="button" class="btn btn-secondary" data-logout>Logi välja</button>
+            <button type="button" class="pm-btn pm-btn-ghost" data-logout>Logi välja</button>
           </div>
+          <p class="pm-account-email" data-account-email></p>
+          <p class="pm-lede" style="margin:14px 0 0">
+            Kõik ühes kohas - see on nüüd sinu koht, kuhu tagasi tulla. Vali, mis sind kõige rohkem huvitab.
+          </p>
 
-          <p class="bridge-banner" data-bridge-banner>
+          <p class="pm-banner bridge" data-bridge-banner>
             <strong>Demorežiim.</strong> Su konto seisund (paketid, teavitused, profiil) elab praegu
             ainult selles brauseris. Tootmises hoiab seda AMOS, et see oleks kõigis seadmetes sama.
           </p>
 
-          <!-- FEATURE 1 — Minu oskuste paketid -->
-          <article class="acc-card" data-feature="packages">
-            <h2>Minu oskuste paketid</h2>
-            <p class="payback">
-              Hoiame su valitud oskused alles ja näitame, milline programm või kombinatsioon neile
-              kõige lähemal on. Nii ei pea sa otsima uuesti.
-            </p>
-            <div data-packages-body></div>
-            <div class="inline-actions" data-packages-empty-actions hidden>
-              <a class="btn btn-primary" href="/oskused/" data-track-event="cta_click" data-track-label="account_to_oskused">Ava oskuste leht</a>
-            </div>
-          </article>
+          <!-- 3 kogumit: Minu oskused / Minu programmid / Minu võrdlused -->
+          <div class="pm-tabs" role="tablist" aria-label="Minu kogumid">
+            <button class="pm-tabbtn on" role="tab" id="tab-osk" aria-selected="true" aria-controls="pane-osk" data-tab="osk">
+              Minu oskused <span class="cnt" data-count-osk>0</span>
+            </button>
+            <button class="pm-tabbtn" role="tab" id="tab-prog" aria-selected="false" aria-controls="pane-prog" data-tab="prog">
+              Minu programmid <span class="cnt" data-count-prog>0</span>
+            </button>
+            <button class="pm-tabbtn" role="tab" id="tab-cmp" aria-selected="false" aria-controls="pane-cmp" data-tab="cmp">
+              Minu võrdlused <span class="cnt" data-count-cmp>0</span>
+            </button>
+          </div>
 
+          <!-- KOGUM 1 — Minu oskused (kaalukontroll + vaste + jälgime-seisund) -->
+          <div class="pm-pane on" id="pane-osk" role="tabpanel" aria-labelledby="tab-osk" data-feature="packages">
+            <p class="pm-paneintro">
+              Need on oskused, mille <b>sina</b> valisid. Sea igaühe tähtsus (klõpsa täppe) - me sätime
+              programmid selle järgi. Oskus, millele veel programmi ei ole, jääb samuti alles - jälgime ja
+              anname teada.
+            </p>
+            <div data-skills-body></div>
+            <div data-packages-body hidden></div>
+            <div class="pm-match" data-best-match hidden>
+              <div class="k">Sinu tähtsuste järgi - parim vaste praegu</div>
+              <div class="v" data-best-match-name></div>
+              <div class="pm-fit"><i data-best-match-bar style="width:0%"></i></div>
+              <small class="pm-tiny" data-best-match-meta></small>
+            </div>
+            <div class="pm-backrow" style="justify-content:flex-start;margin-top:18px" data-packages-empty-actions hidden>
+              <a class="pm-btn pm-btn-primary" style="width:auto" href="/oskused/" data-track-event="cta_click" data-track-label="account_to_oskused">
+                Ava oskuste leht →
+              </a>
+            </div>
+          </div>
+
+          <!-- KOGUM 2 — Minu programmid (prioriteet + sobivuse riba) -->
+          <div class="pm-pane" id="pane-prog" role="tabpanel" aria-labelledby="tab-prog" data-feature="programmes">
+            <p class="pm-paneintro">
+              Programmid, mis su oskustele kõige lähemal on. Sea järjekord noolte abil - tähtsaim üleval.
+              Number näitab su prioriteeti; riba näitab, kui suure osa su oskustest see katab.
+            </p>
+            <div data-progs-body></div>
+            <p class="pm-empty" data-progs-empty hidden>
+              Su oskustele pole praegu veel ühtegi programmi vastet. Hoiame oskused alles ja anname märku,
+              kui sobiv lisandub.
+            </p>
+          </div>
+
+          <!-- KOGUM 3 — Minu võrdlused -->
+          <div class="pm-pane" id="pane-cmp" role="tabpanel" aria-labelledby="tab-cmp" data-feature="compares">
+            <p class="pm-paneintro">
+              Võrdlused, mille sa salvestasid. Ava ja vaata programme kõrvuti - hind, maht, õpiväljundid.
+            </p>
+            <div data-compares-body></div>
+            <a class="pm-addbtn" href="/mikrokvalifikatsioonide-vordlus/" data-track-event="cta_click" data-track-label="account_to_vordlus">
+              ＋ Lisa uus võrdlus
+            </a>
+          </div>
+
+          <!-- Konto-haldus: meeldetuletused, teavitused, profiil, nõusolek -->
           <!-- FEATURE 2 — Tähtaja-meeldetuletused -->
-          <article class="acc-card" data-feature="reminders">
-            <h2>Tähtaja-meeldetuletused</h2>
-            <p class="payback">
-              Anname e-postiga märku enne, kui mõne sind huvitava programmi registreerimine lõpeb —
+          <section class="pm-acc-block" data-feature="reminders" aria-labelledby="remH">
+            <h3 id="remH">Tähtaja-meeldetuletused</h3>
+            <p class="pm-paneintro">
+              Anname e-postiga märku enne, kui mõne sind huvitava programmi registreerimine lõpeb -
               et sa ei jääks tähtajast ilma ja saaksid soovi korral toetust õigel ajal taotleda.
             </p>
-            <label class="acc-toggle">
+            <label class="pm-acc-toggle">
               <input type="checkbox" data-reminders-toggle />
               <span><strong>Tuleta mulle tähtaegu meelde.</strong> Saadame meilini 7 päeva ja 1 päev enne registreerimise lõppu.</span>
             </label>
-            <p class="acc-status" data-reminders-status hidden></p>
+            <p class="pm-status" data-reminders-status hidden></p>
             <div data-reminders-list></div>
-            <p class="field-help">
+            <p class="pm-tiny" style="margin-top:10px">
               Meeldetuletused käivad su nõusoleku alusel. Saad need siit igal ajal välja lülitada.
+              Kuupäevad pärinevad koolide avalikelt lehtedelt ja võivad muutuda - lõplik tähtaeg on alati kooli lehel.
             </p>
-            <p class="field-help">
-              Kuupäevad pärinevad koolide avalikelt lehtedelt ja võivad muutuda — lõplik tähtaeg on alati kooli lehel.
-            </p>
-          </article>
+          </section>
 
           <!-- FEATURE 3 — Teavituslehed (valdkond / oskus / KOMBINATSIOON) -->
-          <article class="acc-card" data-feature="notify">
-            <h2>Teavita mind, kui sobiv lisandub</h2>
-            <p class="payback">
+          <section class="pm-acc-block" data-feature="notify" aria-labelledby="notifyH">
+            <h3 id="notifyH">Teavita mind, kui sobiv lisandub</h3>
+            <p class="pm-paneintro">
               Ütle, mis valdkond, oskus või oskuste kombinatsioon sind huvitab. Kui sellele lähedane
-              programm või kombinatsioon kataloogi lisandub, anname esimesena märku — sa ei pea ise
+              programm või kombinatsioon kataloogi lisandub, anname esimesena märku - sa ei pea ise
               pidevalt kontrollima.
             </p>
 
-            <div class="notify-combo" data-combo-prompt hidden>
+            <div class="pm-combo-prompt" data-combo-prompt hidden>
               <p data-combo-text></p>
-              <button type="button" class="btn btn-secondary" data-combo-subscribe>Teavita, kui see kombinatsioon lisandub</button>
+              <button type="button" class="pm-mini" data-combo-subscribe>Teavita, kui see kombinatsioon lisandub</button>
             </div>
 
-            <div class="form-grid notify-row">
-              <div class="field full">
-                <label for="notifyField">Valdkonna järgi</label>
-                <select id="notifyField" data-notify-field>
-                  <option value="">Vali valdkond</option>
-                  {fieldList.map((f) => <option value={f}>{f}</option>)}
-                </select>
-              </div>
+            <div class="pm-field">
+              <label for="notifyField">Valdkonna järgi</label>
+              <select id="notifyField" class="pm-select" data-notify-field>
+                <option value="">Vali valdkond</option>
+                {fieldList.map((f) => <option value={f}>{f}</option>)}
+              </select>
             </div>
-            <div class="inline-actions">
-              <button type="button" class="btn btn-secondary" data-notify-field-add>Lisa teavituslehte</button>
+            <div class="pm-backrow" style="justify-content:flex-start;margin-top:12px">
+              <button type="button" class="pm-mini" data-notify-field-add>Lisa teavituslehte</button>
             </div>
 
             <div data-skill-chips hidden>
-              <p class="field-help">Oskuse järgi (su paketist):</p>
-              <div class="chip-row" data-skill-chip-row></div>
+              <p class="pm-tiny" style="margin-top:14px">Oskuse järgi (su paketist):</p>
+              <div class="pm-chip-row" data-skill-chip-row></div>
             </div>
 
-            <p class="acc-status" data-notify-status hidden></p>
+            <p class="pm-status" data-notify-status hidden></p>
             <div data-notify-list></div>
 
-            <p class="field-help embargo-foot">
-              Me ei luba ega lubа kindlat programmi — kogume huvi, et näha, mille järele nõudlust on.
+            <p class="pm-tiny pm-embargo-foot">
+              Me ei luba ega lubа kindlat programmi - kogume huvi, et näha, mille järele nõudlust on.
               Kui sobiv lahendus lisandub, saad teate.
             </p>
-          </article>
+          </section>
 
           <!-- FEATURE 4 — Toetuse profiil -->
-          <article class="acc-card" data-feature="funding">
-            <h2>Kuidas õpinguid rahastada</h2>
-            <p class="payback">
-              Märgi, kuidas sa tõenäoliselt õpinguid maksad — siis näitame sulle just sinu teele sobivad
+          <section class="pm-acc-block" data-feature="funding" aria-labelledby="fundH">
+            <h3 id="fundH">Kuidas õpinguid rahastada</h3>
+            <p class="pm-paneintro">
+              Märgi, kuidas sa tõenäoliselt õpinguid maksad - siis näitame sulle just sinu teele sobivad
               sammud ja teavitused, et sa ei jätaks toetust kasutamata.
             </p>
-            <div class="funding-options">
-              <label class="acc-toggle">
+            <div class="pm-funding-options">
+              <label class="pm-acc-toggle">
                 <input type="radio" name="funding_route" value="ise" data-funding />
-                <span><strong>Maksan ise.</strong> Näitame hinda ja võimalikku tasuvust — millal kulu end tagasi teenib.</span>
+                <span><strong>Maksan ise.</strong> Näitame hinda ja võimalikku tasuvust - millal kulu end tagasi teenib.</span>
               </label>
-              <label class="acc-toggle">
+              <label class="pm-acc-toggle">
                 <input type="radio" name="funding_route" value="tootukassa" data-funding />
                 <span><strong>Töötukassa kaudu.</strong> Anname märku programmidest, mille puhul Töötukassa toetus võib kõne alla tulla. Lõpliku otsuse teeb alati Töötukassa.</span>
               </label>
-              <label class="acc-toggle">
+              <label class="pm-acc-toggle">
                 <input type="radio" name="funding_route" value="tooandja" data-funding />
-                <span><strong>Tööandja maksab.</strong> Koondame info, mille saad tööandjale esitada — maht, hind, mida pärast oskad.</span>
+                <span><strong>Tööandja maksab.</strong> Koondame info, mille saad tööandjale esitada - maht, hind, mida pärast oskad.</span>
               </label>
             </div>
-            <p class="acc-status" data-funding-status hidden></p>
-            <p class="field-help">
-              See on sinu enda hinnang ega ole siduv — toetuse otsustab vastav asutus.
+            <p class="pm-status" data-funding-status hidden></p>
+            <p class="pm-tiny" style="margin-top:8px">
+              See on sinu enda hinnang ega ole siduv - toetuse otsustab vastav asutus.
+              Rahastuse ja toetuse küsimustes aitab ka
+              <a href="https://digiteekaart.ee/" data-track-event="partner_site_click" data-track-label="account_funding_digiteekaart" rel="noopener" style="color:var(--pm-green-deep);font-weight:700">digiteekaart.ee</a>.
             </p>
-            <p class="field-help">
-              Rahastuse ja toetuse küsimustes aitab ka <a href="https://digiteekaart.ee/" data-track-event="partner_site_click" data-track-label="account_funding_digiteekaart" rel="noopener">digiteekaart.ee</a>.
-            </p>
-          </article>
+          </section>
+
+          <!-- "Mida saad veel teha" — persoona järgmised sammud -->
+          <h3 style="font-family:var(--pm-disp);font-weight:700;font-size:19px;margin:30px 0 14px">Mida saad veel teha</h3>
+          <div class="pm-nextgrid">
+            <a class="pm-next" href="/oskused/" data-track-event="cta_click" data-track-label="account_next_oskused">
+              <span class="ic pm-ic-a" aria-hidden="true">＋</span>
+              <div><h4>Lisa veel oskusi</h4><p>Teine eesmärk, teine ala - korja juurde.</p></div>
+            </a>
+            <a class="pm-next" href="/kataloog/" data-track-event="cta_click" data-track-label="account_next_kataloog">
+              <span class="ic pm-ic-b" aria-hidden="true">🔎</span>
+              <div><h4>Sirvi kataloogi</h4><p>Vaata kõiki programme ja tähtaegu.</p></div>
+            </a>
+            <a class="pm-next" href="/kes-maksab/" data-track-event="cta_click" data-track-label="account_next_kesmaksab">
+              <span class="ic pm-ic-c" aria-hidden="true">€</span>
+              <div><h4>Kes maksab</h4><p>Töötukassa, tööandja, ise - mis sulle sobib.</p></div>
+            </a>
+            <a class="pm-next" href="/mikrokvalifikatsioonide-vordlus/" data-track-event="cta_click" data-track-label="account_next_vordlus">
+              <span class="ic pm-ic-d" aria-hidden="true">⚖</span>
+              <div><h4>Võrdle kõrvuti</h4><p>Kaks programmi, üks pilk - hind ja maht.</p></div>
+            </a>
+          </div>
 
           <!-- FEATURE 5 — Nõusolek & andmed -->
-          <article class="acc-card" data-feature="consent">
-            <h2>Sinu nõusolek ja andmed</h2>
-            <p class="payback">Sa otsustad, mida me sulle saadame ja kui kaua su andmeid hoiame.</p>
-            <div class="inline-actions consent-actions">
-              <button type="button" class="btn btn-secondary" data-consent-withdraw>Võta teavituste nõusolek tagasi</button>
-              <button type="button" class="btn btn-secondary" data-data-download>Lae alla minu andmed</button>
-              <button type="button" class="btn btn-secondary" data-account-delete>Kustuta konto ja kõik andmed</button>
+          <section class="pm-acc-block" data-feature="consent" aria-labelledby="consentH">
+            <h3 id="consentH">Sinu nõusolek ja andmed</h3>
+            <p class="pm-paneintro">Sa otsustad, mida me sulle saadame ja kui kaua su andmeid hoiame.</p>
+            <div class="pm-backrow" style="justify-content:flex-start">
+              <button type="button" class="pm-mini neutral" data-consent-withdraw>Võta teavituste nõusolek tagasi</button>
+              <button type="button" class="pm-mini neutral" data-data-download>Lae alla minu andmed</button>
+              <button type="button" class="pm-mini neutral" data-account-delete>Kustuta konto ja kõik andmed</button>
             </div>
-            <p class="acc-status" data-consent-status hidden></p>
-            <p class="field-help">
+            <p class="pm-status" data-consent-status hidden></p>
+            <p class="pm-tiny" style="margin-top:10px">
               Sul on õigus küsida, mis andmeid hoiame, lasta neid parandada või kustutada. Kirjuta
-              info@mikrokvalifikatsioon.ee — vastame ühe tööpäeva jooksul.
+              info@mikrokvalifikatsioon.ee - vastame ühe tööpäeva jooksul.
             </p>
-          </article>
+          </section>
         </div>
       </section>
     </main>
@@ -299,156 +401,21 @@ const schema = {
     <Footer label="Minu konto" />
 
     <!-- Kinnitusdialoog (kustutamine / kombinatsioon jne) -->
-    <div class="konto-modal" data-modal hidden>
-      <div class="konto-modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="pm pm-modal" data-modal hidden>
+      <div class="pm-modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <h3 id="modalTitle" data-modal-title></h3>
         <p data-modal-body></p>
-        <div class="inline-actions">
-          <button type="button" class="btn btn-primary" data-modal-confirm></button>
-          <button type="button" class="btn btn-secondary" data-modal-cancel>Loobu</button>
+        <div class="pm-modal-actions">
+          <button type="button" class="pm-btn pm-btn-primary" data-modal-confirm></button>
+          <button type="button" class="pm-btn pm-btn-ghost" data-modal-cancel>Loobu</button>
         </div>
       </div>
     </div>
 
     <!-- Lühike toast-teade -->
-    <div class="konto-toast" data-toast hidden></div>
+    <div class="pm pm-toast" data-toast hidden></div>
 
     <script type="application/json" id="prog-data" is:inline set:html={progJson} />
-
-    <style>
-      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
-      .crumbs a { color: #5a6b80; }
-      .crumbs span { color: #212121; }
-      [data-screen][hidden] { display: none; }
-
-      .anon-banner {
-        background: #eef4ee; border: 1px solid #cfe0cf; border-radius: 10px;
-        padding: 14px 16px; margin-bottom: 18px; color: #2f5530; font-size: 0.95rem;
-      }
-      .anon-banner[hidden] { display: none; }
-
-      .checkbox a { color: var(--teal); font-weight: 700; }
-      .field-error { margin: 10px 0 0; color: #a11; font-size: 0.9rem; font-weight: 700; }
-      .field-error[hidden] { display: none; }
-
-      .check-card h2 { color: var(--navy); margin-bottom: 10px; }
-      .bridge-note { border-top: 1px dashed var(--line); padding-top: 12px; }
-
-      /* Konto (Ekraan E) */
-      .account-bar {
-        display: flex; justify-content: space-between; align-items: center; gap: 16px;
-        flex-wrap: wrap; margin-bottom: 16px;
-      }
-      .account-bar .btn { width: auto; }
-      .account-email { margin: 4px 0 0; font-weight: 800; color: #212121; }
-      .bridge-banner {
-        background: #fff7e6; border: 1px solid #f0dca8; border-radius: 10px;
-        padding: 12px 14px; color: #6b4e00; font-size: 0.92rem; margin: 0 0 20px;
-      }
-
-      .acc-card {
-        background: #fff; border: 1px solid var(--line); border-radius: 12px;
-        padding: 22px; margin-bottom: 18px; box-shadow: var(--shadow);
-      }
-      .acc-card h2 { color: var(--navy); font-size: 1.35rem; margin-bottom: 6px; }
-      .payback { color: var(--muted); margin: 0 0 14px; }
-
-      .acc-toggle {
-        display: flex; gap: 12px; align-items: flex-start; padding: 12px 0;
-        color: #212121; font-size: 0.97rem; cursor: pointer;
-      }
-      .acc-toggle input { width: 22px; min-height: 22px; margin-top: 2px; flex: 0 0 auto; }
-      .acc-toggle span strong { color: #212121; }
-      .funding-options { display: grid; gap: 4px; margin-bottom: 6px; }
-
-      .acc-status {
-        margin: 8px 0 0; padding: 9px 12px; border-radius: 8px; font-size: 0.92rem; font-weight: 700;
-        background: #eef4ee; color: #2f6b2c;
-      }
-      .acc-status[hidden] { display: none; }
-      .acc-status.is-error { background: #ffe0e0; color: #a11; }
-
-      .acc-empty { color: var(--muted); margin: 0 0 12px; }
-
-      .pkg-card {
-        border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin-bottom: 12px;
-        background: #fbfdfb;
-      }
-      .pkg-card-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
-      .pkg-card-name { font-weight: 800; color: #212121; margin: 0; }
-      .pkg-card-name input { font-weight: 800; max-width: 280px; min-height: 38px; }
-      .chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
-      .chip {
-        display: inline-flex; align-items: center; gap: 6px; background: #eef4ee; color: #2f5530;
-        border: 1px solid #cfe0cf; border-radius: 999px; padding: 3px 11px; font-size: 0.84rem; font-weight: 700;
-      }
-      .chip button { background: none; border: 0; color: #2f5530; cursor: pointer; font-size: 0.95rem; padding: 0; line-height: 1; }
-      .pkg-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-      .btn-mini {
-        width: auto; min-height: 38px; padding: 7px 13px; font-size: 0.86rem; border-radius: 8px;
-        background: #fff; color: var(--teal); border: 1px solid var(--teal); font-weight: 800; cursor: pointer;
-      }
-      .btn-mini.neutral { color: var(--muted); border-color: var(--line); }
-
-      .pm-match { background: #f3f6f3; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-top: 10px; }
-      .pm-match[hidden] { display: none; }
-      .pm-best a, .pm-combo a { color: var(--teal); font-weight: 700; }
-      .pm-prov { color: var(--muted); font-weight: 400; font-size: 0.88rem; }
-      .cov { display: inline-block; background: #eef4ee; color: #2f6b2c; border-radius: 999px; padding: 1px 9px; font-size: 0.78rem; font-weight: 700; }
-      .pm-combo { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
-      .pm-note { margin: 10px 0 0; font-size: 0.9rem; color: var(--muted); }
-      .pm-good { color: #2f6b2c; font-weight: 700; }
-      .pm-h2 { margin: 12px 0 5px; font-weight: 700; color: #212121; }
-
-      .reminder-row, .notify-item {
-        display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;
-        border: 1px solid var(--line); border-radius: 10px; padding: 11px 14px; margin-top: 8px; background: #fff;
-      }
-      .reminder-row a, .notify-item a { color: var(--teal); font-weight: 700; }
-      .reminder-meta { color: var(--muted); font-size: 0.88rem; }
-      .dl-badge { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px; font-size: 0.76rem; font-weight: 800; }
-      .dl-badge.soon { background: #fff1cc; color: #815900; }
-      .dl-badge.today { background: #ffe0e0; color: #a11; }
-      .dl-badge.past { background: #eceef0; color: #5f6569; }
-
-      .notify-combo {
-        background: #eef4ee; border: 1px solid #cfe0cf; border-radius: 10px; padding: 14px 16px; margin-bottom: 14px;
-      }
-      .notify-combo[hidden] { display: none; }
-      .notify-combo p { margin: 0 0 10px; color: #2f5530; }
-      .notify-combo .btn { width: auto; }
-      .notify-row { margin-top: 6px; }
-      .skill-chip {
-        background: #fff; border: 1px solid var(--teal); color: var(--teal); border-radius: 999px;
-        padding: 5px 12px; font-size: 0.82rem; font-weight: 700; cursor: pointer;
-      }
-      .embargo-foot { border-top: 1px dashed var(--line); padding-top: 12px; margin-top: 14px; }
-      .consent-actions .btn { width: auto; }
-
-      /* Modal + toast */
-      .konto-modal {
-        position: fixed; inset: 0; z-index: 80; display: flex; align-items: center; justify-content: center;
-        padding: 20px; background: rgba(33,33,33,0.5);
-      }
-      .konto-modal[hidden] { display: none; }
-      .konto-modal-card {
-        background: #fff; border-radius: 14px; padding: 26px; max-width: 460px; width: 100%;
-        box-shadow: 0 24px 60px rgba(0,0,0,0.3);
-      }
-      .konto-modal-card h3 { color: var(--navy); margin-bottom: 10px; }
-      .konto-modal-card p { color: var(--muted); margin: 0 0 8px; }
-      .konto-modal-card .btn { width: auto; }
-      .konto-toast {
-        position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 90;
-        background: #212121; color: #fff; padding: 12px 18px; border-radius: 10px; font-weight: 700;
-        box-shadow: 0 18px 46px rgba(33,33,33,0.3); max-width: calc(100% - 32px);
-      }
-      .konto-toast[hidden] { display: none; }
-
-      @media (max-width: 640px) {
-        .account-bar { flex-direction: column; align-items: flex-start; }
-      }
-    </style>
 
     <script>
       import { computeFit, type CoverageRow } from "../../lib/outcome-fit";
@@ -472,9 +439,15 @@ const schema = {
       // "mkval:account". TOOTMISES asendab selle AMOS (/konto/state +
       // /konto/migrate). Iga koht, kus me LOEME/KIRJUTAME seda silda, on
       // märgitud kommentaariga "BRIDGE:".
+      //
+      // UI-LOOGIKA EI MUUTNUD: see fail reskinnib ja korrastab konto IA
+      // (3 kogumit + kaalukontroll + programmi prioriteet), aga kogu konto-API
+      // sild (kontoEnabled / requestLogin / verifyLogin / fetchState /
+      // syncPackages / deleteAccount / getNames) jääb MUUTMATA — me ainult
+      // tarbime seda. Lipu-distsipliin (PUBLIC_KONTO_API_BASE) on puutumata.
       // ====================================================================
 
-      type PkgItem = { key: string; text: string; progs?: string[] };
+      type PkgItem = { key: string; text: string; progs?: string[]; w?: number };
       type AccountPackage = { id: string; name: string; items: PkgItem[] };
       type FundingRoute = "ise" | "tootukassa" | "tooandja" | null;
       type AccountState = {
@@ -487,11 +460,13 @@ const schema = {
         comboWaitlist: string[];     // kombinatsiooni-teavitused (võti = sorditud oskuste liit)
         reminders: boolean;
         funding_route: FundingRoute;
+        progOrder?: string[];        // kasutaja prioriteet programmidele (slug-järjekord)
       };
 
       const PKG_KEY = "mkval:pakett";
       const ACCOUNT_KEY = "mkval:account";        // BRIDGE: AMOS-i konto-seisundi sild
       const INTEREST_RE = /^mkval:interest:(.+)$/;
+      const WL = ["huvi", "tähtis", "väga tähtis"];   // kaalu-sildid (1..3)
 
       const track = (n: string, p: Record<string, unknown> = {}) => (window as any).digiteekaartTrack?.(n, p);
       const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T | null;
@@ -613,9 +588,24 @@ const schema = {
         el.hidden = false;
       };
 
-      // ---- Ekraanide vahetus --------------------------------------------
+      // ---- Stepper + ekraanide vahetus ----------------------------------
+      const setStep = (n: number): void => {
+        $$("[data-pm-step]").forEach((el) => {
+          const i = Number(el.getAttribute("data-pm-step"));
+          el.classList.toggle("active", i === n);
+          el.classList.toggle("done", i < n);
+          if (i === n) el.setAttribute("aria-current", "step"); else el.removeAttribute("aria-current");
+        });
+      };
       const showScreen = (name: "auth" | "check" | "account"): void => {
-        $$("[data-screen]").forEach((s) => { s.hidden = s.getAttribute("data-screen") !== name; });
+        $$("[data-screen]").forEach((s) => { (s as HTMLElement).hidden = s.getAttribute("data-screen") !== name; });
+        const stepperWrap = $("[data-stepper-wrap]");
+        if (stepperWrap) {
+          // Auth on rahulik (apex-laadne) → peida mõõdik; check=samm 3, account=samm 4.
+          stepperWrap.hidden = name === "auth";
+          if (name === "check") setStep(2);
+          if (name === "account") setStep(3);
+        }
         window.scrollTo({ top: 0, behavior: "auto" });
       };
 
@@ -636,7 +626,7 @@ const schema = {
         const parts: string[] = [];
         if (n) parts.push(`${n} salvestatud oskust`);
         if (m) parts.push(`${m} jälgitavat programmi`);
-        anonBanner.innerHTML = `📦 Sul on selles brauseris ${parts.join(" ja ")}. Sisse logides toome need sinu kontole — midagi ei kao.`;
+        anonBanner.innerHTML = `📦 Sul on selles brauseris ${parts.join(" ja ")}. Sisse logides toome need sinu kontole - midagi ei kao.`;
         anonBanner.hidden = false;
       };
 
@@ -752,11 +742,9 @@ const schema = {
       if (kontoEnabled()) {
         const demoBtn = $("[data-demo-login]");
         if (demoBtn) {
-          const demoWrap = demoBtn.closest(".inline-actions") as HTMLElement | null;
+          const demoWrap = demoBtn.closest(".bridge-note") as HTMLElement | null;
           (demoWrap ?? demoBtn).setAttribute("hidden", "");
         }
-        const bridgeNote = document.querySelector(".bridge-note");
-        if (bridgeNote) bridgeNote.setAttribute("hidden", "");
       } else {
         // BRIDGE: demo-login asendab magic-link'i klõpsu. TOOTMISES jõuab kasutaja
         // siia /konto/kinnita?token=… kaudu, kus AMOS kinnitab double-opt-in'i.
@@ -778,7 +766,7 @@ const schema = {
       const blankState = (email: string, consent: boolean): AccountState => ({
         email, consent,
         packages: [], interests: [], notifyFields: [], notifySkills: [], comboWaitlist: [],
-        reminders: false, funding_route: null,
+        reminders: false, funding_route: null, progOrder: [],
       });
 
       const migrateInto = (state: AccountState): { movedOutcomes: number; movedProgs: number } => {
@@ -801,7 +789,7 @@ const schema = {
                 ex.progs = [...set];
               }
             } else {
-              target.items.push({ key: it.key, text: it.text, progs: [...(it.progs || [])] });
+              target.items.push({ key: it.key, text: it.text, progs: [...(it.progs || [])], w: it.w ?? 2 });
               have.add(it.key);
               movedOutcomes += 1;
             }
@@ -875,22 +863,22 @@ const schema = {
         const line = (slug: string, n?: number): string => {
           const p = meta(slug);
           const facts = [p.provider, p.ects != null ? `${p.ects} EAP` : "", p.price || ""].filter(Boolean).join(" · ");
-          const cov = n != null ? ` <span class="cov">katab ${n}/${total}</span>` : "";
-          return `<a href="/kataloog/${slug}/" data-track-event="cta_click" data-track-label="account_match_detail">${escHtml(p.name)}</a> <span class="pm-prov">${escHtml(facts)}</span>${cov}`;
+          const cov = n != null ? ` <span class="pm-tag ok">katab ${n}/${total}</span>` : "";
+          return `<a href="/kataloog/${slug}/" data-track-event="cta_click" data-track-label="account_match_detail">${escHtml(p.name)}</a> <span style="color:var(--pm-muted);font-weight:400;font-size:0.88rem">${escHtml(facts)}</span>${cov}`;
         };
         const allInOne = !!best && best.fully_covers;
-        let html = `<h4 class="pm-h2">Sobivaim (${total} oskust)</h4>`;
+        let html = `<h4 style="font-family:var(--pm-disp);font-weight:700;margin:0 0 5px">Sobivaim (${total} oskust)</h4>`;
         if (best) {
-          html += `<p class="pm-best">${line(best.variant_ref, best.covered_count)}</p>`;
+          html += `<p style="margin:0 0 6px">${line(best.variant_ref, best.covered_count)}</p>`;
           if (allInOne) {
-            html += `<p class="pm-note pm-good">✓ See üksik programm katab kogu su paketi.</p>`;
+            html += `<p class="pm-tiny" style="color:var(--pm-green-deep);font-weight:700">✓ See üksik programm katab kogu su paketi.</p>`;
           } else {
-            html += `<p class="pm-h2">Täielikuks katteks (${combo.covered_refs.length}/${total}) sobib kombinatsioon:</p>`;
-            html += `<ol class="pm-combo">${combo.variants.map((v) => `<li>${line(v.variant_ref)}</li>`).join("")}</ol>`;
+            html += `<p style="font-family:var(--pm-disp);font-weight:700;margin:8px 0 5px">Täielikuks katteks (${combo.covered_refs.length}/${total}) sobib kombinatsioon:</p>`;
+            html += `<ol style="margin:0;padding-left:20px;display:grid;gap:4px">${combo.variants.map((v) => `<li>${line(v.variant_ref)}</li>`).join("")}</ol>`;
             const tail = combo.fully_covered
-              ? "Ükski üksik programm ei kata kogu su paketti — sa soovid oskuste kombinatsiooni, mida praegu pakub vaid mitu eri programmi."
-              : `Praegused programmid katavad sinu paketist ${combo.covered_refs.length}/${total} oskust — kõigile su valitud oskustele veel ühtegi katet pole.`;
-            html += `<p class="pm-note">${tail}</p>`;
+              ? "Ükski üksik programm ei kata kogu su paketti - sa soovid oskuste kombinatsiooni, mida praegu pakub vaid mitu eri programmi."
+              : `Praegused programmid katavad sinu paketist ${combo.covered_refs.length}/${total} oskust - kõigile su valitud oskustele veel ühtegi katet pole.`;
+            html += `<p class="pm-tiny" style="margin-top:8px">${tail}</p>`;
           }
         }
         // Kombinatsioon, mida ükski üksik programm ei kata → combo_size > 1
@@ -906,97 +894,234 @@ const schema = {
         const today = new Date(); today.setHours(0, 0, 0, 0);
         const due = new Date(iso + "T00:00:00");
         const days = Math.round((due.getTime() - today.getTime()) / DAY);
-        if (days < 0) return `<span class="dl-badge past">möödas</span>`;
-        if (days === 0) return `<span class="dl-badge today">täna!</span>`;
-        if (days <= 14) return `<span class="dl-badge soon">${days} p</span>`;
-        return `<span class="dl-badge past">${days} p</span>`;
+        if (days < 0) return `<span class="pm-dl-badge past">möödas</span>`;
+        if (days === 0) return `<span class="pm-dl-badge today">täna!</span>`;
+        if (days <= 14) return `<span class="pm-dl-badge soon">${days} p</span>`;
+        return `<span class="pm-dl-badge past">${days} p</span>`;
       };
 
       let CURRENT: AccountState | null = null;
       const persist = (): void => { if (CURRENT) writeAccount(CURRENT); };   // BRIDGE → AMOS
 
+      // Lameda oskuste loend kõigist pakettidest (kogum "Minu oskused" allikas).
+      const allItems = (): PkgItem[] => {
+        if (!CURRENT) return [];
+        const out: PkgItem[] = [];
+        for (const pkg of CURRENT.packages) for (const it of pkg.items) out.push(it);
+        return out;
+      };
+
+      const setCount = (sel: string, n: number): void => {
+        const el = $(sel);
+        if (el) el.textContent = String(n);
+      };
+
       const renderAccount = (state: AccountState): void => {
         CURRENT = state;
         $("[data-account-email]")!.textContent = state.email;
-        renderPackages();
+        renderSkills();
+        renderProgrammes();
+        renderCompares();
         renderReminders();
         renderNotify();
         renderFunding();
       };
 
-      // ---- FEATURE 1: paketid ----
+      // ---- KOGUM 1: Minu oskused (kaalukontroll + vaste/jälgime + parim vaste) ----
       let packageMatchTracked = false;
-      const renderPackages = (): void => {
+      const renderSkills = (): void => {
         if (!CURRENT) return;
-        const body = $("[data-packages-body]")!;
+        const body = $("[data-skills-body]")!;
         const emptyActions = $("[data-packages-empty-actions]");
-        if (!CURRENT.packages.length || CURRENT.packages.every((p) => !p.items.length)) {
-          body.innerHTML = `<p class="acc-empty">Sul pole veel salvestatud paketti. Mine oskuste lehele, korja sobivad oskused ja vajuta „Salvesta kontole".</p>`;
+        const bestBox = $("[data-best-match]");
+        const items = allItems();
+        setCount("[data-count-osk]", items.length);
+        if (!items.length) {
+          body.innerHTML = `<p class="pm-empty">Sul pole veel salvestatud oskusi. Mine oskuste lehele, korja sobivad oskused ja vajuta „Salvesta kontole".</p>`;
           if (emptyActions) emptyActions.hidden = false;
+          if (bestBox) bestBox.hidden = true;
           return;
         }
         if (emptyActions) emptyActions.hidden = true;
-        body.innerHTML = "";
-        for (const pkg of CURRENT.packages) {
-          if (!pkg.items.length) continue;
-          const card = document.createElement("div");
-          card.className = "pkg-card";
-          card.dataset.pkgId = pkg.id;
-          const chips = pkg.items.map((i) => `<span class="chip">${escHtml(i.text)}</span>`).join("");
-          const m = matchHtml(pkg.items);
-          card.innerHTML = `
-            <div class="pkg-card-head">
-              <p class="pkg-card-name" data-pkg-name>${escHtml(pkg.name)}</p>
-            </div>
-            <div class="chip-row">${chips}</div>
-            <div class="pkg-actions">
-              <button type="button" class="btn-mini" data-pkg-rename>Nimeta ümber</button>
-              <button type="button" class="btn-mini neutral" data-pkg-delete>Kustuta pakett</button>
-            </div>
-            <div class="pm-match">${m.html}</div>`;
-          body.appendChild(card);
-        }
-        // package_view + package_match (taaskasutatud)
-        track("package_view", { count: CURRENT.packages.reduce((s, p) => s + p.items.length, 0) });
+
+        // Match per item: leia esimene programm, mis seda oskust õpetab (sild — demo).
+        const itemMatch = (it: PkgItem): { slug: string; name: string } | null => {
+          for (const slug of it.progs || []) {
+            const p = PROG[slug];
+            if (p) return { slug, name: `${p.provider} · ${p.name}` };
+          }
+          return null;
+        };
+
+        // Sorteeri kaalu järgi kahanevalt (väga tähtis üleval), stabiilselt.
+        const order = items
+          .map((it, idx) => ({ it, idx, w: it.w ?? 2 }))
+          .sort((a, b) => (b.w - a.w) || (a.idx - b.idx));
+
+        body.innerHTML = order.map(({ it }) => {
+          const w = it.w ?? 2;
+          const m = itemMatch(it);
+          const dots = [1, 2, 3].map((d) =>
+            `<button type="button" class="pm-dot ${d <= w ? "fill" : ""}" data-set-weight="${escHtml(it.key)}" data-w="${d}" title="${WL[d - 1]}" aria-label="Tähtsus: ${WL[d - 1]} - ${escHtml(it.text)}"></button>`
+          ).join("");
+          const tag = m
+            ? `<span class="pm-tag ok">✓ Õpetatakse: <a href="/kataloog/${escHtml(m.slug)}/" data-track-event="cta_click" data-track-label="account_skill_match">${escHtml(m.name)}</a></span>`
+            : `<span class="pm-tag wait">⌛ Veel pole vastet - jälgime ja anname teada</span>`;
+          return `<div class="pm-srow">
+            <div class="pm-weight"><div class="pm-dots" role="group" aria-label="Tähtsus: ${escHtml(it.text)}">${dots}</div><small>${WL[w - 1]}</small></div>
+            <div class="body"><div class="nm">${escHtml(it.text)}</div>${tag}</div>
+          </div>`;
+        }).join("");
+
+        // Parim vaste kasutaja tähtsuste järgi: kõige raskem oskus, millel on vaste.
+        renderBestMatch(items, bestBox);
+
+        // package_view + package_match (taaskasutatud GA4 sündmused).
+        track("package_view", { count: items.length });
         if (!packageMatchTracked) {
           packageMatchTracked = true;
           for (const pkg of CURRENT.packages) {
-            const m = matchHtml(pkg.items);
-            if (m.comboSize) track("package_match", { combo_size: m.comboSize, all_in_one: m.allInOne ? "jah" : "ei" });
+            const mh = matchHtml(pkg.items);
+            if (mh.comboSize) track("package_match", { combo_size: mh.comboSize, all_in_one: mh.allInOne ? "jah" : "ei" });
           }
         }
         track("tool_completed", { tool_name: "saved_package" });
       };
 
-      $("[data-packages-body]")?.addEventListener("click", async (e) => {
+      const renderBestMatch = (items: PkgItem[], bestBox: HTMLElement | null): void => {
+        if (!bestBox) return;
+        const matchable = items.filter((i) => i.progs && i.progs.length);
+        if (!matchable.length) { bestBox.hidden = true; return; }
+        // computeFit annab parima üksiku programmi; pealkirjastame selle "tähtsuste järgi".
+        const total = matchable.length;
+        const projection = buildProjection(matchable);
+        const fit = computeFit(matchable.map((i) => i.key), projection);
+        const best = fit.best_single;
+        if (!best) { bestBox.hidden = true; return; }
+        const p = PROG[best.variant_ref];
+        if (!p) { bestBox.hidden = true; return; }
+        const pct = total > 0 ? Math.round((best.covered_count / total) * 100) : 0;
+        $("[data-best-match-name]")!.innerHTML = `<a href="/kataloog/${escHtml(best.variant_ref)}/" data-track-event="cta_click" data-track-label="account_best_match">${escHtml(p.provider)} · ${escHtml(p.name)}</a>`;
+        const bar = $("[data-best-match-bar]") as HTMLElement;
+        if (bar) bar.style.width = `${pct}%`;
+        const facts = [
+          `Katab su ${best.covered_count}/${total} oskust`,
+          p.ects != null ? `${p.ects} EAP` : "",
+          p.price || "",
+        ].filter(Boolean).join(" · ");
+        $("[data-best-match-meta]")!.textContent = facts;
+        bestBox.hidden = false;
+      };
+
+      // Kaalu seadmine (klõps täpil) — uuendab seisundit ja renderdab uuesti.
+      $("[data-skills-body]")?.addEventListener("click", (e) => {
         const t = e.target as HTMLElement;
-        const card = t.closest("[data-pkg-id]") as HTMLElement | null;
-        if (!card || !CURRENT) return;
-        const id = card.dataset.pkgId!;
-        const pkg = CURRENT.packages.find((p) => p.id === id);
-        if (!pkg) return;
-        if (t.matches("[data-pkg-delete]")) {
-          const ok = await confirmModal("Kustuta pakett?", "Kustuta see pakett? Seda ei saa tagasi võtta.", "Jah, kustuta");
-          if (!ok) return;
-          CURRENT.packages = CURRENT.packages.filter((p) => p.id !== id);
-          persist();
-          renderPackages();
-          toast("Pakett kustutatud.");
-        } else if (t.matches("[data-pkg-rename]")) {
-          const nameEl = $("[data-pkg-name]", card)!;
-          const cur = pkg.name;
-          nameEl.innerHTML = `<input type="text" value="${escHtml(cur)}" data-pkg-name-input maxlength="60" />`;
-          const input = $("[data-pkg-name-input]", card) as HTMLInputElement;
-          input.focus();
-          const save = () => {
-            pkg.name = (input.value || "").trim().slice(0, 60) || cur;
-            persist();
-            renderPackages();
-          };
-          input.addEventListener("blur", save, { once: true });
-          input.addEventListener("keydown", (ev) => { if ((ev as KeyboardEvent).key === "Enter") input.blur(); });
+        const key = t.getAttribute("data-set-weight");
+        if (!key || !CURRENT) return;
+        const w = Number(t.getAttribute("data-w")) || 2;
+        for (const pkg of CURRENT.packages) {
+          const it = pkg.items.find((x) => x.key === key);
+          if (it) { it.w = w; break; }
         }
+        persist();
+        renderSkills();
+        renderProgrammes();
+        track("cta_click", { cta_label: "skill_weight", weight: w });
       });
+
+      // ---- KOGUM 2: Minu programmid (prioriteet + sobivuse riba) ----
+      // Programmid = kõik slug'id, mis su oskusi katavad, kahanev kattuvuse järgi,
+      // aga kasutaja saab järjekorda noolega muuta (progOrder hoiab valiku).
+      const computeProgRows = (): { slug: string; covered: number; total: number; pct: number }[] => {
+        const items = allItems().filter((i) => i.progs && i.progs.length);
+        if (!items.length) return [];
+        const total = items.length;
+        const cover = new Map<string, number>();
+        for (const it of items) {
+          const seen = new Set<string>();
+          for (const slug of it.progs || []) {
+            if (!PROG[slug] || seen.has(slug)) continue;
+            seen.add(slug);
+            cover.set(slug, (cover.get(slug) || 0) + 1);
+          }
+        }
+        let rows = [...cover.entries()].map(([slug, covered]) => ({
+          slug, covered, total, pct: total > 0 ? Math.round((covered / total) * 100) : 0,
+        }));
+        // Kasutaja prioriteet (progOrder) — kui olemas, järjesta selle järgi; uued lõppu.
+        const order = CURRENT?.progOrder || [];
+        if (order.length) {
+          rows.sort((a, b) => {
+            const ia = order.indexOf(a.slug), ib = order.indexOf(b.slug);
+            if (ia === -1 && ib === -1) return b.covered - a.covered;
+            if (ia === -1) return 1;
+            if (ib === -1) return -1;
+            return ia - ib;
+          });
+        } else {
+          rows.sort((a, b) => (b.covered - a.covered) || a.slug.localeCompare(b.slug));
+        }
+        return rows;
+      };
+
+      const renderProgrammes = (): void => {
+        if (!CURRENT) return;
+        const body = $("[data-progs-body]")!;
+        const empty = $("[data-progs-empty]");
+        const rows = computeProgRows();
+        setCount("[data-count-prog]", rows.length);
+        if (!rows.length) {
+          body.innerHTML = "";
+          if (empty) empty.hidden = false;
+          return;
+        }
+        if (empty) empty.hidden = true;
+        // Sünkroni progOrder nähtava järjekorraga (et nooled oleksid stabiilsed).
+        CURRENT.progOrder = rows.map((r) => r.slug);
+        body.innerHTML = rows.map((r, i) => {
+          const p = PROG[r.slug];
+          const facts = [p.provider, p.ects != null ? `${p.ects} EAP` : "", p.price || ""].filter(Boolean).join(" · ");
+          return `<div class="pm-prow" data-prog="${escHtml(r.slug)}">
+            <div class="pm-rank" aria-hidden="true">${i + 1}</div>
+            <div class="body">
+              <div class="nm"><a href="/kataloog/${escHtml(r.slug)}/" data-track-event="cta_click" data-track-label="account_prog_detail">${escHtml(p.name)}</a></div>
+              <div class="meta">${escHtml(facts)} · katab ${r.covered}/${r.total} oskust</div>
+              <div class="pm-fitbar"><i style="width:${r.pct}%"></i></div>
+            </div>
+            <div class="pm-moves">
+              <button type="button" class="pm-mv" data-prog-move="-1" data-slug="${escHtml(r.slug)}" ${i === 0 ? "disabled" : ""} aria-label="Liiguta ülespoole">↑</button>
+              <button type="button" class="pm-mv" data-prog-move="1" data-slug="${escHtml(r.slug)}" ${i === rows.length - 1 ? "disabled" : ""} aria-label="Liiguta allapoole">↓</button>
+            </div>
+          </div>`;
+        }).join("");
+      };
+
+      $("[data-progs-body]")?.addEventListener("click", (e) => {
+        const t = e.target as HTMLElement;
+        const dir = t.getAttribute("data-prog-move");
+        const slug = t.getAttribute("data-slug");
+        if (!dir || !slug || !CURRENT) return;
+        const order = [...(CURRENT.progOrder || computeProgRows().map((r) => r.slug))];
+        const i = order.indexOf(slug);
+        const j = i + Number(dir);
+        if (i < 0 || j < 0 || j >= order.length) return;
+        [order[i], order[j]] = [order[j], order[i]];
+        CURRENT.progOrder = order;
+        persist();
+        renderProgrammes();
+        track("cta_click", { cta_label: "programme_reorder" });
+      });
+
+      // ---- KOGUM 3: Minu võrdlused ----
+      // Sild: serveris/AMOS-is veel ei ole salvestatud võrdlusi → näitame
+      // sissejuhatava tühiseisundi + lingi võrdluslehele. Kui hiljem tuleb
+      // konto-API väli, saab siia loendi lisada (degradeerub graatsiliselt).
+      const renderCompares = (): void => {
+        const body = $("[data-compares-body]");
+        if (!body) return;
+        setCount("[data-count-cmp]", 0);
+        body.innerHTML = `<p class="pm-empty">Sul pole veel salvestatud võrdlusi. Vali kataloogis kaks programmi ja vajuta „Võrdle kõrvuti" - võrdlus ilmub siia.</p>`;
+      };
 
       // ---- FEATURE 2: meeldetuletused ----
       // Jälgitavad programmid = paketi programmid ∪ interest-slugid.
@@ -1013,15 +1138,15 @@ const schema = {
         const list = $("[data-reminders-list]")!;
         const slugs = watchedSlugs().filter((s) => PROG[s].registrationDeadline);
         if (!slugs.length) {
-          list.innerHTML = `<p class="acc-empty">Sa ei jälgi veel ühtegi programmi tähtajaga. Lisa programm paketti või vajuta kataloogis „Teavita tähtajast", siis ilmub see siia. <a href="/kataloog/" data-track-event="cta_click" data-track-label="account_to_kataloog">Ava kataloog</a>.</p>`;
+          list.innerHTML = `<p class="pm-empty">Sa ei jälgi veel ühtegi programmi tähtajaga. Lisa programm paketti või vajuta kataloogis „Teavita tähtajast", siis ilmub see siia. <a href="/kataloog/" data-track-event="cta_click" data-track-label="account_to_kataloog">Ava kataloog</a>.</p>`;
           return;
         }
         list.innerHTML = slugs.map((s) => {
           const p = PROG[s];
-          return `<div class="reminder-row" data-watch="${escHtml(s)}">
+          return `<div class="pm-row" data-watch="${escHtml(s)}">
             <span><a href="/kataloog/${escHtml(s)}/">${escHtml(p.name)}</a>
-              <span class="reminder-meta">Registreerimine kuni ${formatEt(p.registrationDeadline as string)}</span> ${dlBadge(p.registrationDeadline)}</span>
-            <button type="button" class="btn-mini neutral" data-unwatch="${escHtml(s)}">Lakka jälgimast</button>
+              <span class="meta">Registreerimine kuni ${formatEt(p.registrationDeadline as string)}</span> ${dlBadge(p.registrationDeadline)}</span>
+            <button type="button" class="pm-mini neutral" data-unwatch="${escHtml(s)}">Lakka jälgimast</button>
           </div>`;
         }).join("");
       };
@@ -1032,7 +1157,7 @@ const schema = {
         persist();
         // LIVE-bridge: reminder_subscribed AMOS-i torusse (course_offers; kind veel lepingus defineerimata).
         if (on) await postSubscribe({ kind: "deadline_reminder", email: CURRENT.email, consent_purpose: "course_offers", slugs: watchedSlugs() });
-        status("[data-reminders-status]", on ? "Tehtud — tuletame tähtajad meelde." : "Meeldetuletused välja lülitatud.");
+        status("[data-reminders-status]", on ? "Tehtud - tuletame tähtajad meelde." : "Meeldetuletused välja lülitatud.");
         track("cta_click", { cta_label: "reminders_toggle", enabled: on ? "jah" : "ei" });
         track("reminder_subscribed", { enabled: on ? "jah" : "ei" });
       });
@@ -1075,7 +1200,7 @@ const schema = {
         if (available.length) {
           skillWrap.hidden = false;
           $("[data-skill-chip-row]", skillWrap)!.innerHTML = available
-            .map((s) => `<button type="button" class="skill-chip" data-skill="${escHtml(s)}">+ ${escHtml(s)}</button>`).join("");
+            .map((s) => `<button type="button" class="pm-skill-chip" data-skill="${escHtml(s)}">+ ${escHtml(s)}</button>`).join("");
         } else {
           skillWrap.hidden = true;
         }
@@ -1087,15 +1212,15 @@ const schema = {
         for (const s of CURRENT.notifySkills) rows.push(notifyRow("oskus", s, `Oskus: ${s}`));
         for (const c of CURRENT.comboWaitlist) rows.push(notifyRow("kombinatsioon", c, `Kombinatsioon: ${c}`));
         if (!rows.length) {
-          list.innerHTML = `<p class="acc-empty">Sa ei jälgi veel ühtegi valdkonda ega kombinatsiooni. Vali ülalt, mis sind huvitab.</p>`;
+          list.innerHTML = `<p class="pm-empty" style="margin-top:12px">Sa ei jälgi veel ühtegi valdkonda ega kombinatsiooni. Vali ülalt, mis sind huvitab.</p>`;
         } else {
           list.innerHTML = rows.join("");
         }
       };
       const notifyRow = (kind: string, value: string, label: string): string =>
-        `<div class="notify-item" data-notify-kind="${kind}" data-notify-value="${escHtml(value)}">
+        `<div class="pm-row" data-notify-kind="${kind}" data-notify-value="${escHtml(value)}">
           <span>${escHtml(label)}</span>
-          <button type="button" class="btn-mini neutral" data-notify-remove>Lakka jälgimast</button>
+          <button type="button" class="pm-mini neutral" data-notify-remove>Lakka jälgimast</button>
         </div>`;
 
       const addNotify = async (kind: "valdkond" | "oskus" | "kombinatsioon", value: string): Promise<void> => {
@@ -1111,7 +1236,7 @@ const schema = {
           combo: kind === "kombinatsioon" ? value.split(" + ") : (kind === "oskus" ? [value] : null),
         });
         renderNotify();
-        status("[data-notify-status]", "Lisatud — anname märku, kui sobiv programm või kombinatsioon lisandub.");
+        status("[data-notify-status]", "Lisatud - anname märku, kui sobiv programm või kombinatsioon lisandub.");
         const route = kind === "kombinatsioon" ? "notify_combo" : kind === "valdkond" ? "notify_field" : "notify_skill";
         track("result_high_intent", { result_route: route, combo_size: kind === "kombinatsioon" ? value.split(" + ").length : 1 });
         if (kind === "kombinatsioon") track("combo_waitlist", { combo_size: value.split(" + ").length });
@@ -1156,7 +1281,7 @@ const schema = {
         persist();
         // LIVE-bridge: funding_profile AMOS-i torusse (kind veel lepingus defineerimata).
         await postSubscribe({ kind: "funding_profile", email: CURRENT.email, consent_purpose: "course_offers", funding_route: route });
-        status("[data-funding-status]", "Salvestatud — kohandame su teavitused selle järgi.");
+        status("[data-funding-status]", "Salvestatud - kohandame su teavitused selle järgi.");
         track("tool_completed", { tool_name: "funding_profile", result_route: route });
         track("funding_profile_set", { result_route: route });
       }));
@@ -1222,6 +1347,18 @@ const schema = {
         showScreen("auth");
       });
 
+      // ---- Kogumite sakid (tabs) ----
+      $$("[data-tab]").forEach((btn) => btn.addEventListener("click", () => {
+        const t = btn.getAttribute("data-tab");
+        $$("[data-tab]").forEach((b) => {
+          const on = b.getAttribute("data-tab") === t;
+          b.classList.toggle("on", on);
+          b.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        $$(".pm-pane").forEach((p) => p.classList.toggle("on", p.id === `pane-${t}`));
+        track("cta_click", { cta_label: "account_tab", tab: t || "" });
+      }));
+
       // ====================================================================
       // REAL PATH (flag ON): renderda konto-ekraan SERVERI pakettidest.
       // Nimed + nimekaart jäävad localStorage'i; serverisse EI saadeta kunagi.
@@ -1273,7 +1410,7 @@ const schema = {
           typeof v.eap === "number" && Number.isFinite(v.eap) ? `${v.eap} EAP` : "",
           covered != null && total > 0 ? `katab ${covered}/${total}` : "",
         ].filter(Boolean).join(" · ");
-        return `${label}${meta ? ` <span class="reminder-meta">${meta}</span>` : ""}`;
+        return `${label}${meta ? ` <span style="color:var(--pm-muted);font-size:0.88rem">${meta}</span>` : ""}`;
       };
 
       const realFitHtml = (pkg: ServerPackage, total: number): string => {
@@ -1282,21 +1419,21 @@ const schema = {
         const combo = fit?.combination || null;
         if (fit && best) {
           const bestCovered = typeof best.covered_count === "number" ? best.covered_count : null;
-          let html = `<div class="pm-match"><h4 class="pm-h2">Sobivaim sinu paketile</h4>`;
-          html += `<p class="pm-best">${serverVariantLine(best, bestCovered, total)}</p>`;
+          let html = `<div class="pm-match"><h4 style="font-family:var(--pm-disp);font-weight:700;margin:0 0 5px">Sobivaim sinu paketile</h4>`;
+          html += `<p style="margin:0 0 6px">${serverVariantLine(best, bestCovered, total)}</p>`;
           if (best.fully_covers === true) {
-            html += `<p class="pm-note pm-good">See üks programm katab kogu su paketi.</p>`;
+            html += `<p class="pm-tiny" style="color:var(--pm-green-deep);font-weight:700">See üks programm katab kogu su paketi.</p>`;
           } else if (combo && Array.isArray(combo.variants) && combo.variants.length) {
             const covered = Array.isArray(combo.covered_refs) ? combo.covered_refs.length : null;
-            html += `<p class="pm-h2">Täielikuks katteks sobib kombinatsioon${covered != null ? ` (${covered}/${total})` : ""}:</p>`;
-            html += `<ol class="pm-combo">${combo.variants.map((v) => {
+            html += `<p style="font-family:var(--pm-disp);font-weight:700;margin:8px 0 5px">Täielikuks katteks sobib kombinatsioon${covered != null ? ` (${covered}/${total})` : ""}:</p>`;
+            html += `<ol style="margin:0;padding-left:20px;display:grid;gap:4px">${combo.variants.map((v) => {
               const adds = Array.isArray(v.adds_refs) ? v.adds_refs.length : null;
               return `<li>${serverVariantLine(v, adds, total)}</li>`;
             }).join("")}</ol>`;
             if (combo.fully_covered === true) {
-              html += `<p class="pm-note">Üksik programm ei kata veel kõike, aga kombinatsioon annab täiskatte.</p>`;
+              html += `<p class="pm-tiny" style="margin-top:8px">Üksik programm ei kata veel kõike, aga kombinatsioon annab täiskatte.</p>`;
             } else {
-              html += `<p class="pm-note">Praegune kataloog ei kata veel kõiki valitud oskusi. Anname märku, kui parem vaste lisandub.</p>`;
+              html += `<p class="pm-tiny" style="margin-top:8px">Praegune kataloog ei kata veel kõiki valitud oskusi. Anname märku, kui parem vaste lisandub.</p>`;
             }
           }
           return `${html}</div>`;
@@ -1310,16 +1447,28 @@ const schema = {
         const coverLine = full
           ? `Parim kate: ${bestSingle ?? covered}/${total} oskust ühest programmist.`
           : `Parim kate: ${covered}/${total} oskust ${progN} programmiga.`;
-        return `<p class="pm-note">${escHtml(coverLine)}</p>`;
+        return `<p class="pm-tiny" style="margin-top:8px">${escHtml(coverLine)}</p>`;
       };
 
       const renderRealAccount = (packages: ServerPackage[]): void => {
-        const body = $("[data-packages-body]");
+        const body = $("[data-skills-body]");
         const emptyActions = $("[data-packages-empty-actions]");
+        const bestBox = $("[data-best-match]");
         if (!body) return;
+        if (bestBox) bestBox.hidden = true;
+        // Serveri-teel pole kliendi õpiväljundi-teksti ega kaalu (PII-vaba sild),
+        // seega Minu oskused -kogum näitab paketi-kaarte serveri kattuvusega.
+        // Kaalukontroll/jälgime-rida on demo-tee (klient-tekst) omadus; serveri-tee
+        // degradeerub graatsiliselt: pakett + suurus + sobivuse plokk.
+        const totalOutcomes = packages.reduce((s, p) => s + (p.outcome_refs?.length ?? 0), 0);
+        setCount("[data-count-osk]", totalOutcomes);
+        setCount("[data-count-prog]", packages.length);
+        setCount("[data-count-cmp]", 0);
         if (!packages.length) {
-          body.innerHTML = `<p class="acc-empty">Sul pole veel salvestatud paketti. Mine oskuste lehele, korja sobivad oskused ja vajuta „Salvesta kontole".</p>`;
+          body.innerHTML = `<p class="pm-empty">Sul pole veel salvestatud paketti. Mine oskuste lehele, korja sobivad oskused ja vajuta „Salvesta kontole".</p>`;
           if (emptyActions) emptyActions.hidden = false;
+          renderRealProgrammes([]);
+          renderCompares();
           showScreen("account");
           return;
         }
@@ -1329,19 +1478,50 @@ const schema = {
           const name = getNamesFor(pkg.package_ref) || "Pakett";   // ainult kliendipoolne nimi
           const size = pkg.outcome_refs?.length ?? 0;
           const card = document.createElement("div");
-          card.className = "pkg-card";
+          card.className = "pm-srow";
+          card.style.alignItems = "flex-start";
           card.dataset.pkgRef = pkg.package_ref;
           const match = realFitHtml(pkg, size);
           card.innerHTML = `
-            <div class="pkg-card-head">
-              <p class="pkg-card-name">${escHtml(name)}</p>
-              <span class="cov">${size} oskust</span>
-            </div>
-            ${match}`;
+            <div class="body">
+              <div class="nm">${escHtml(name)} <span class="pm-tag ok">${size} oskust</span></div>
+              ${match}
+            </div>`;
           body.appendChild(card);
         }
-        track("package_view", { count: packages.reduce((s, p) => s + (p.outcome_refs?.length ?? 0), 0) });
+        renderRealProgrammes(packages);
+        renderCompares();
+        track("package_view", { count: totalOutcomes });
         showScreen("account");
+      };
+
+      // Serveri-tee programmide kogum: parim üksik + kombinatsioon kõigist pakettidest.
+      const renderRealProgrammes = (packages: ServerPackage[]): void => {
+        const body = $("[data-progs-body]");
+        const empty = $("[data-progs-empty]");
+        if (!body) return;
+        const lines: string[] = [];
+        let rank = 1;
+        for (const pkg of packages) {
+          const total = pkg.outcome_refs?.length ?? 0;
+          const best = pkg.fit?.best_single || null;
+          if (best && best.variant_ref) {
+            const pct = total > 0 && typeof best.covered_count === "number" ? Math.round((best.covered_count / total) * 100) : 0;
+            lines.push(`<div class="pm-prow">
+              <div class="pm-rank" aria-hidden="true">${rank++}</div>
+              <div class="body"><div class="nm">${serverVariantLine(best, typeof best.covered_count === "number" ? best.covered_count : null, total)}</div>
+              <div class="pm-fitbar"><i style="width:${pct}%"></i></div></div>
+            </div>`);
+          }
+        }
+        setCount("[data-count-prog]", lines.length);
+        if (!lines.length) {
+          body.innerHTML = "";
+          if (empty) empty.hidden = false;
+          return;
+        }
+        if (empty) empty.hidden = true;
+        body.innerHTML = lines.join("");
       };
 
       // Sünki kohalikud paketid üles (idempotentne) ja renderda serveri seisust.
@@ -1366,6 +1546,11 @@ const schema = {
             }
           }
         } catch { /* sünk parima võimaliku; renderda ikkagi serveri seis */ }
+        // Serveri-teel pole demo-konto e-posti; näita neutraalset sildi.
+        const emailEl = $("[data-account-email]");
+        if (emailEl && !emailEl.textContent) emailEl.textContent = "Sinu konto";
+        const bridge = $("[data-bridge-banner]");
+        if (bridge) (bridge as HTMLElement).hidden = true;   // REAL: see pole demorežiim
         const srv = await fetchState();
         renderRealAccount((srv?.packages as ServerPackage[]) ?? []);
       };
@@ -1383,7 +1568,7 @@ const schema = {
           else { showScreen("auth"); }
           return;
         }
-        // ===== DEMO PATH (flag OFF): MUUTMATA =====
+        // ===== DEMO PATH (flag OFF): MUUTMATA loogika =====
         const existing = readAccount();
         if (existing && existing.email) {
           renderAccount(existing);

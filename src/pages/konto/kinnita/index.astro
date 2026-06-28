@@ -2,10 +2,16 @@
 import Seo from "../../../components/Seo.astro";
 import Nav from "../../../components/Nav.astro";
 import Footer from "../../../components/Footer.astro";
+import PmStepper from "../../../components/PmStepper.astro";
 import "../../../styles/global.css";
+import "../../../styles/pragmatic-momentum.css";
 
 // ============================================================================
 // /konto/kinnita?token=… — magic-link'i maandumisleht (Ekraan D).
+//
+// VISUAALNE KEEL: "Pragmaatiline liikumine" (Sora + Atkinson, seisundi-juhitud).
+// See ekraan = persoona seisund "kinnitan, ootan" → rahulik kinnitus + selge
+// veaseisund. Logic JÄÄB MUUTMATA — ainult reskin.
 //
 // TOOTMINE: token valideeritakse AMOS-i vastu (HMAC confirm-token seam),
 // seans luuakse, double-opt-in läheb "confirmed", siis jookseb lossless
@@ -28,25 +34,39 @@ import "../../../styles/global.css";
       canonicalPath="/konto/kinnita/"
       robots="noindex,nofollow"
     />
+    <!-- Pragmaatiline liikumine: Sora (pealkirjad) + Atkinson Hyperlegible (tekst) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <Nav />
 
-    <main class="report-page simple-report">
-      <section class="report-hero simple-report-hero">
-        <div class="section-inner">
-          <span class="eyebrow">Minu konto</span>
-          <h1 data-confirm-title>Logime sind sisse…</h1>
-          <p data-confirm-body>Üks hetk — kinnitame su e-posti ja toome su paketi kontole.</p>
-        </div>
-      </section>
+    <main class="pm pm-stage">
+      <div class="pm-wrap">
+        <PmStepper current={2} />
+      </div>
 
-      <section class="white">
-        <div class="section-inner narrow">
-          <div class="card" data-confirm-card hidden>
-            <p data-confirm-detail></p>
-            <div class="inline-actions">
-              <a class="btn btn-primary" href="/konto/" data-track-event="cta_click" data-track-label="confirm_to_account">Telli uus link</a>
+      <section class="pm-wrap" style="padding-top:10px">
+        <div class="pm-card pm-center pm-rise" style="max-width:560px;margin:10px auto">
+          <div class="pm-envelope" data-confirm-icon aria-hidden="true">
+            <span class="pm-pulse" style="width:14px;height:14px"></span>
+          </div>
+          <div class="pm-eyebrow">Minu konto</div>
+          <h1 data-confirm-title style="font-size:30px">Logime sind sisse…</h1>
+          <p class="pm-lede" data-confirm-body style="margin:10px auto 0">
+            Üks hetk - kinnitame su e-posti ja toome su valikud kontole.
+          </p>
+
+          <div data-confirm-card hidden>
+            <p data-confirm-detail style="color:var(--pm-muted);margin:6px 0 0"></p>
+            <div class="pm-backrow" style="justify-content:center">
+              <a class="pm-btn pm-btn-primary" style="width:auto" href="/konto/" data-track-event="cta_click" data-track-label="confirm_to_account">
+                Telli uus link →
+              </a>
             </div>
           </div>
         </div>
@@ -126,10 +146,13 @@ import "../../../styles/global.css";
         const b = document.querySelector("[data-confirm-body]");
         const card = document.querySelector("[data-confirm-card]") as HTMLElement | null;
         const d = document.querySelector("[data-confirm-detail]");
+        const icon = document.querySelector("[data-confirm-icon]");
         if (t) t.textContent = title;
         if (b) (b as HTMLElement).hidden = true;
         if (d) d.textContent = detail;
         if (card) card.hidden = false;
+        // Veaseisund: peata pulss (rahulik, mitte ärev), näita amber-tooni.
+        if (icon) icon.innerHTML = `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9a7b22" stroke-width="1.8"><path d="M12 8v5"/><circle cx="12" cy="16.5" r="0.6" fill="#9a7b22"/><path d="M12 3 2.5 20h19L12 3Z"/></svg>`;
       };
 
       const run = (): void => {
