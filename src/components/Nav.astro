@@ -1,10 +1,11 @@
 ---
 // Üks koht ülemise navi jaoks, et lingid püsiks kõigil lehtedel ühtsed.
+import Logo from "./Logo.astro";
 ---
 <header class="topbar">
   <nav class="nav" aria-label="Põhinavigeerimine">
     <a class="brand" href="/" aria-label="Mikrokvalifikatsioon.ee avaleht">
-      <img src="/mk-logo.png" alt="Mikrokvalifikatsioon.ee — investeeri endasse" width="270" height="29" />
+      <Logo variant="lockup" animated class="brand-logo" />
     </a>
     <button class="nav-toggle" type="button" aria-label="Menüü" aria-expanded="false" aria-controls="nav-menu" data-nav-toggle>
       <span></span><span></span><span></span>

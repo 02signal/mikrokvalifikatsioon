@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.0 -2.0 63.0 44.0" role="img" aria-labelledby="taw daw" width="63" height="44"><title id="taw">Mikrokvalifikatsioon.ee</title><desc id="daw">Animeeritud mark: kolm riba tousevad jarjest ja tapp ilmub - tasane kasv.</desc><style>
+  .mk-bar{transform-box:fill-box;transform-origin:bottom;transform:scaleY(0);animation:mk-rise .34s cubic-bezier(.2,.7,.2,1) forwards}
+  .mk-b0{animation-delay:0s}.mk-b1{animation-delay:.12s}.mk-b2{animation-delay:.24s}
+  .mk-dot{transform-box:fill-box;transform-origin:center;transform:scale(0);animation:mk-pop .3s cubic-bezier(.2,1.5,.4,1) .42s forwards}
+  @keyframes mk-rise{to{transform:scaleY(1)}}
+  @keyframes mk-pop{to{transform:scale(1)}}
+  @media (prefers-reduced-motion:reduce){
+    .mk-bar{transform:scaleY(1)!important;animation:none!important}
+    .mk-dot{transform:scale(1)!important;animation:none!important}
+  }
+</style><g transform="skewX(-13)"><rect class="mk-bar mk-b0" x="0.0" y="18.0" width="11.0" height="22.0" rx="3.0" fill="#54c247"/><rect class="mk-bar mk-b1" x="16.0" y="8.8" width="11.0" height="31.2" rx="3.0" fill="#3f9c30"/><rect class="mk-bar mk-b2" x="32.0" y="0.0" width="11.0" height="40.0" rx="3.0" fill="#ffffff"/></g><circle class="mk-dot" cx="44.27" cy="34.5" r="5.5" fill="#ffffff"/></svg>
