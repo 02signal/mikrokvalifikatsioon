@@ -1,5 +1,28 @@
 # Mikrokvalifikatsioon.ee Backlog
 
+## Next steps (resume point — 2026-06-29)
+
+The konto unified-account + brand + email are all LIVE end-to-end (see the 2026-06-29 entry under
+"Done"). Remaining items, none blocking — most are owner/ops actions, not code:
+
+**Owner / ops (no code change):**
+1. **GSC Q&A warnings** — GSC flags 8 `/vastused/<slug>/` URLs for missing QAPage fields, but the live
+   pages are already `FAQPage` (verified 2026-06-29; stale 25-Jun crawl). FIX: in Search Console →
+   URL Inspection → **Request indexing** on the 8 `/vastused/` URLs (or just wait for re-crawl). No code.
+2. **Match-notify emails** — detection deployed (AMOS #1342); to make "udue match → teade" emails send,
+   Codex/ops must schedule the `konto-delta-notify` worker + set `OUTREACH_SEND_MODE=live` + enable the
+   feature-flagged `sendKontoSubscriptionMatched`.
+3. **DMARC** — add TXT `_dmarc.mikrokvalifikatsioon.ee` = `v=DMARC1; p=none; rua=mailto:postmaster@mikrokvalifikatsioon.ee` (DNS).
+4. **Revoke** the old 02signal Resend key (fingerprint `e74421da263f`) in that account's dashboard.
+
+**Dev follow-ups (when wanted):**
+5. Apply the animated `Logo` at the konto save-confirmation moment ("Sinu valikud on hoitud") — strongest brand moment.
+6. Self-host Sora (woff2) instead of the Google Fonts link in `Seo.astro`.
+
+Cross-repo note: mkval deploys on merge→main (Vercel); the AMOS konto backend deploys are host-side
+(Codex). AMOS is a busy multi-agent repo — check `origin/main` before building backend features (a
+parallel-build collision already happened: my #1341 closed in favour of Codex's #1342).
+
 ## Current Priority
 
 - Build the catalog into the most complete register of Estonian mikrokvalifikatsioonid + mikrokraadid (the moat).
