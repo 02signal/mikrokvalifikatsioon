@@ -166,6 +166,22 @@ started, by design. AMOS PRs: #1190/#1197/#1200/#1205/#1209/#1225/#1226/#1232. m
 - Next: GA4 exploration / Looker Studio board (top interest_signal by programme, top demand_request skills) + n8n routing of `interest_waitlist`/`demand_request` to a demand list. Optional phase 2: public "X huvitatud" social-proof counter (needs a small datastore, e.g. Vercel KV).
 
 ## Data freshness / AMOS
+- **Gap audit (2026-07-01):** confirmed this plan was never activated. The catalog is a static,
+  manually-committed snapshot (last data commit `55ae782`, 2026-06-24; the on-page "kontrollitud"
+  date is hardcoded `2026-06-12`). `PUBLIC_CATALOG_FEED_URL`/`PUBLIC_CATALOG_FEED_TRUSTED` are unset
+  everywhere (no `.env*`, no `vercel.json` entry), so every build falls through to the committed
+  fallback. No `.github/workflows/`, no Vercel cron. On the AMOS side, `mkval-catalog-refresh-job.mjs`
+  / `mkval-source-refresh-job.mjs` / the n8n `mkval-catalog-refresh-cycle` workflow exist but only
+  write JSON to a review queue — no warehouse write, no deploy-hook call (2026-06-24 live-refresh
+  report: "ühtegi laokirjet ei muudetud"). Registered as `PBI-MKVAL-DATA-002` in AMOS `BACKLOG.md`.
+- **Owner priority order (2026-07-01):** (1) FIRST — AMOS warehouse must continuously and reliably
+  absorb new/changed programme data, including marketing/description text edits, with a retained
+  **change history** (not just latest-state overwrite) — these changes are also how we understand
+  what's happening in the market. Also capture **intake/event-date scheduling cadence** as an
+  analytic signal (a programme that reopens intake more often is a popularity/demand proxy) feeding
+  the demand-radar/build-next loop. (2) ONLY THEN — make the mkval.ee-side auto-refresh (feed
+  consumption + Vercel deploy hook) genuinely **robust**: monitored, retried, alerting on staleness,
+  with rollback to the previous-good feed — not the current dormant stub.
 - Plan: automate catalog check + enrichment in AMOS (source of truth, holistic curriculum
   architecture shared with internal trainings); this site consumes a public-safe feed at
   build + auto-rebuilds via a Vercel Deploy Hook. Full architecture + feed contract in
@@ -210,6 +226,16 @@ started, by design. AMOS PRs: #1190/#1197/#1200/#1205/#1209/#1225/#1226/#1232. m
   7. Cutover: run feed and snapshot side by side, compare counts/provider distribution/null
      counts/sample pages, switch Vercel env to the feed, and document rollback by unsetting
      the env var or restoring the previous-good feed.
+  8. **(added 2026-07-01) Change-history log:** every warehouse write from the refresh job
+     appends a diff record (field, old value, new value, source_evidence_hash, observed_at)
+     instead of only overwriting latest state — must cover marketing/description text fields,
+     not just structured facts (EAP/price/dates).
+  9. **(added 2026-07-01) Intake-date cadence signal:** track how often each programme/instance
+     reopens intake over time as a warehouse fact, surfaced to the demand-radar/build-next
+     ranking as a popularity/demand proxy.
+  10. **(added 2026-07-01) Robustness on the site side (only after 1–9 are solid):** the
+      deploy-hook trigger must be monitored/alerting on staleness, retried on failure, and able
+      to roll back to the previous-good feed automatically — not a manual, unmonitored call.
 - Done: `license` (CC BY 4.0) added to Dataset schema (homepage + /andmed/) — fixes Search
   Console "Missing field 'license'". (Owner may change the licence.)
 
