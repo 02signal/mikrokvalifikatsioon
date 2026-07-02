@@ -155,6 +155,59 @@ test("source: feed accepts an active-only count that meets the floor (status fil
   if (d.use === "feed") assert.equal(d.entries.length, C, "archived entry filtered out");
 });
 
+// ── Defense-in-depth gates (2026-07-01): schemaVersion / count / forbidden keys ──
+// Real AMOS feeds always carry schemaVersion + count (see
+// mkval-catalog-feed-contract.mjs), so these gates only ever REJECT a present-
+// but-wrong value — they never affect the bare fixtures above (no schemaVersion
+// field there), keeping the pinned stale-feed-bug tests unchanged.
+test("source: trusted feed with an unknown schemaVersion → committed", () => {
+  const feedEntries = Array.from({ length: C + 5 }, (_, i) => ({ provider: "X", name: `p${i}` }));
+  const d = chooseCatalogSource({
+    feedUrl: "u",
+    trusted: true,
+    data: { schemaVersion: "amos.mkval.catalog/v99", programs: feedEntries },
+    committedCount: C
+  });
+  assert.equal(d.use, "committed");
+  assert.match(d.reason, /schemaVersion/);
+});
+
+test("source: trusted feed whose count disagrees with programs.length → committed", () => {
+  const feedEntries = Array.from({ length: C + 5 }, (_, i) => ({ provider: "X", name: `p${i}` }));
+  const d = chooseCatalogSource({
+    feedUrl: "u",
+    trusted: true,
+    data: { schemaVersion: "amos.mkval.catalog/v1", count: feedEntries.length - 1, programs: feedEntries },
+    committedCount: C
+  });
+  assert.equal(d.use, "committed");
+  assert.match(d.reason, /count/);
+});
+
+test("source: trusted feed carrying a forbidden field (e.g. email) → committed", () => {
+  const feedEntries = Array.from({ length: C + 5 }, (_, i) => ({ provider: "X", name: `p${i}` }));
+  feedEntries[0].email = "leak@example.com";
+  const d = chooseCatalogSource({
+    feedUrl: "u",
+    trusted: true,
+    data: { programs: feedEntries },
+    committedCount: C
+  });
+  assert.equal(d.use, "committed");
+  assert.match(d.reason, /keelatud/);
+});
+
+test("source: trusted feed with correct schemaVersion + count is still accepted", () => {
+  const feedEntries = Array.from({ length: C + 5 }, (_, i) => ({ provider: "X", name: `p${i}` }));
+  const d = chooseCatalogSource({
+    feedUrl: "u",
+    trusted: true,
+    data: { schemaVersion: "amos.mkval.catalog/v1", count: feedEntries.length, programs: feedEntries },
+    committedCount: C
+  });
+  assert.equal(d.use, "feed");
+});
+
 // Visible during the build so the chosen source + counts are auditable in logs.
 console.log(
   `[catalog-floor] source=${catalogSource} | committed: ${committedCount} entries / ${committedMatches} EHIS matches` +

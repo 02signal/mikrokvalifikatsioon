@@ -166,22 +166,33 @@ started, by design. AMOS PRs: #1190/#1197/#1200/#1205/#1209/#1225/#1226/#1232. m
 - Next: GA4 exploration / Looker Studio board (top interest_signal by programme, top demand_request skills) + n8n routing of `interest_waitlist`/`demand_request` to a demand list. Optional phase 2: public "X huvitatud" social-proof counter (needs a small datastore, e.g. Vercel KV).
 
 ## Data freshness / AMOS
-- **Gap audit (2026-07-01):** confirmed this plan was never activated. The catalog is a static,
-  manually-committed snapshot (last data commit `55ae782`, 2026-06-24; the on-page "kontrollitud"
-  date is hardcoded `2026-06-12`). `PUBLIC_CATALOG_FEED_URL`/`PUBLIC_CATALOG_FEED_TRUSTED` are unset
-  everywhere (no `.env*`, no `vercel.json` entry), so every build falls through to the committed
-  fallback. No `.github/workflows/`, no Vercel cron. On the AMOS side, `mkval-catalog-refresh-job.mjs`
-  / `mkval-source-refresh-job.mjs` / the n8n `mkval-catalog-refresh-cycle` workflow exist but only
-  write JSON to a review queue — no warehouse write, no deploy-hook call (2026-06-24 live-refresh
-  report: "ühtegi laokirjet ei muudetud"). Registered as `PBI-MKVAL-DATA-002` in AMOS `BACKLOG.md`.
-- **Owner priority order (2026-07-01):** (1) FIRST — AMOS warehouse must continuously and reliably
-  absorb new/changed programme data, including marketing/description text edits, with a retained
-  **change history** (not just latest-state overwrite) — these changes are also how we understand
-  what's happening in the market. Also capture **intake/event-date scheduling cadence** as an
-  analytic signal (a programme that reopens intake more often is a popularity/demand proxy) feeding
-  the demand-radar/build-next loop. (2) ONLY THEN — make the mkval.ee-side auto-refresh (feed
-  consumption + Vercel deploy hook) genuinely **robust**: monitored, retried, alerting on staleness,
-  with rollback to the previous-good feed — not the current dormant stub.
+- **Gap audit (2026-07-01):** the catalog is a static, manually-committed snapshot (last data
+  commit `55ae782`, 2026-06-24; the on-page "kontrollitud" date is hardcoded `2026-06-12`).
+  `PUBLIC_CATALOG_FEED_URL`/`PUBLIC_CATALOG_FEED_TRUSTED` are unset everywhere on this side, so
+  every build falls through to the committed fallback.
+- **Re-investigation (2026-07-01, deeper):** the AMOS-side pipeline (source refresh → Groq review
+  → public feed → `https://status.amos.02signal.com/mkval-catalog/catalog-feed.json` → Vercel
+  Deploy Hook → readiness audit) turned out to be **fully built and code-complete** — it was simply
+  never switched on host-side. The one genuine code gap was that nothing in it wrote to a relational
+  warehouse (every artifact was a file). That gap **shipped 2026-07-01** in AMOS
+  (`amos_registry.mkval_catalog_programme` / `_change_history` / `_intake_event`, see
+  `PBI-MKVAL-DATA-002` in AMOS `BACKLOG.md`). Change-history rows reuse AMOS's existing bounded,
+  privacy-safe descriptor (a `change_kind` + a short clamped `detail`) — **never raw marketing
+  text**; intake-event rows store raw observed dates only, cadence is a SQL query over them, not a
+  precomputed "popularity score".
+- **What's left is ONLY owner/host activation, no more code:** (1) create the Vercel Deploy Hook +
+  populate `/opt/amos/secrets/env/mkval-catalog-pipeline.env` (including the new
+  `AMOS_MKVAL_CATALOG_WAREHOUSE_*` gates) + provide the production Postgres DSN; (2) provision
+  `source-registry.json` to the AMOS host and enable the timers/n8n workflow; (3) set
+  `PUBLIC_CATALOG_FEED_URL`/`PUBLIC_CATALOG_FEED_TRUSTED=1` as Vercel env vars **here**; (4) run the
+  new SQL migration + flip the warehouse apply gate against production once verified in dry-run.
+  Full checklist in AMOS `BACKLOG.md §2026-07-01`.
+- **Site-side hardening shipped 2026-07-01 (this repo):** `src/data/catalog/index.ts`'s
+  `chooseCatalogSource` now also rejects a trusted feed with an unknown `schemaVersion`, a `count`
+  that disagrees with `programs.length`, or any forbidden field (email/token/secret/raw_html/…) —
+  closing the gap between what `docs/data-pipeline.md` specified and what the code checked. These
+  gates only reject a *present-but-wrong* value, so the existing pinned stale-feed-bug tests in
+  `scripts/catalog-floor.test.mjs` are untouched; four new tests cover the added gates.
 - Plan: automate catalog check + enrichment in AMOS (source of truth, holistic curriculum
   architecture shared with internal trainings); this site consumes a public-safe feed at
   build + auto-rebuilds via a Vercel Deploy Hook. Full architecture + feed contract in
@@ -226,16 +237,17 @@ started, by design. AMOS PRs: #1190/#1197/#1200/#1205/#1209/#1225/#1226/#1232. m
   7. Cutover: run feed and snapshot side by side, compare counts/provider distribution/null
      counts/sample pages, switch Vercel env to the feed, and document rollback by unsetting
      the env var or restoring the previous-good feed.
-  8. **(added 2026-07-01) Change-history log:** every warehouse write from the refresh job
-     appends a diff record (field, old value, new value, source_evidence_hash, observed_at)
-     instead of only overwriting latest state — must cover marketing/description text fields,
-     not just structured facts (EAP/price/dates).
-  9. **(added 2026-07-01) Intake-date cadence signal:** track how often each programme/instance
-     reopens intake over time as a warehouse fact, surfaced to the demand-radar/build-next
-     ranking as a popularity/demand proxy.
-  10. **(added 2026-07-01) Robustness on the site side (only after 1–9 are solid):** the
-      deploy-hook trigger must be monitored/alerting on staleness, retried on failure, and able
-      to roll back to the previous-good feed automatically — not a manual, unmonitored call.
+  8. **DONE 2026-07-01 (AMOS):** change-history log — `amos_registry.mkval_catalog_change_history`,
+     append-only, one row per detected marketing/positioning change (name/summary/goalText/
+     outcomes/ects/priceText/durationText), reusing the existing bounded privacy-safe descriptor
+     (never raw text). See AMOS `BACKLOG.md §2026-07-01`.
+  9. **DONE 2026-07-01 (AMOS):** intake-date cadence fact — `amos_registry.mkval_catalog_intake_event`,
+     append-only observed intake/instance dates; cadence is a SQL aggregate over this table, not a
+     precomputed score.
+  10. **DONE 2026-07-01 (this repo):** site-side defense-in-depth (`schemaVersion`/`count`/
+      forbidden-key checks in `chooseCatalogSource`, §above). **Still open:** the deploy-hook
+      trigger itself becoming monitored/alerting/auto-rollback is AMOS-side ops work, gated behind
+      the owner/host activation checklist above — no code left on this side.
 - Done: `license` (CC BY 4.0) added to Dataset schema (homepage + /andmed/) — fixes Search
   Console "Missing field 'license'". (Owner may change the licence.)
 

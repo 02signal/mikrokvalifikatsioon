@@ -43,6 +43,37 @@ function isoDate(value: unknown): string | null {
   return typeof value === "string" && /^\d{4}-\d{2}-\d{2}/.test(value) ? value.slice(0, 10) : null;
 }
 
+/** Tuntud AMOS mkval-kataloogi feedi schemaVersion väärtused. */
+const KNOWN_FEED_SCHEMA_VERSIONS = ["amos.mkval.catalog/v1", "amos.mkval.catalog/v2"];
+
+/** Väljad, mida avalik feed EI TOHI kunagi kanda (kaitse sügavuti — AMOS-i
+ * enda kontrakt keelab need juba enne avaldamist, aga saidi build ei tohi
+ * sõltuda ainult sellest). Vt AMOS `mkval-catalog-feed-contract.mjs`
+ * `FORBIDDEN_PROGRAM_KEYS`. */
+const FORBIDDEN_FEED_KEYS = [
+  "email", "phone", "isikukood", "personalCode", "token", "secret", "password",
+  "raw_html", "html", "raw_body", "private_notes", "owner_notes"
+];
+
+/** Otsi rekursiivselt keelatud võtit. Tagastab tee (nt "programs[3].email") või `null`. */
+function findForbiddenFeedKey(value: unknown, path = "feed"): string | null {
+  if (Array.isArray(value)) {
+    for (let i = 0; i < value.length; i += 1) {
+      const found = findForbiddenFeedKey(value[i], `${path}[${i}]`);
+      if (found) return found;
+    }
+    return null;
+  }
+  if (value !== null && typeof value === "object") {
+    for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
+      if (FORBIDDEN_FEED_KEYS.includes(key)) return `${path}.${key}`;
+      const found = findForbiddenFeedKey(child, `${path}.${key}`);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
 export type CatalogSourceName = "committed" | "feed";
 type FeedResult = { entries: CatalogEntry[]; checkedAt: string; updatedAt: string; contentHash: string | null; source: CatalogSourceName };
 
@@ -91,6 +122,20 @@ export function chooseCatalogSource(opts: {
   if (!Array.isArray(raw) || !raw.length) {
     return { use: "committed", reason: "usaldatud feed on vigase kujuga (puuduvad programs[])" };
   }
+  const obj = Array.isArray(data) ? null : (data as Record<string, unknown>);
+  // KAITSE SÜGAVUTI: kui feed deklareerib schemaVersion/count, peavad need
+  // paika pidama. Puuduvad väljad ei blokeeri (tagasiühilduvus vanade
+  // fixture'ite/kontrollidega) — aga VALE väärtus blokeerib alati.
+  if (obj && typeof obj.schemaVersion === "string" && !KNOWN_FEED_SCHEMA_VERSIONS.includes(obj.schemaVersion)) {
+    return { use: "committed", reason: `usaldatud feedi schemaVersion on tundmatu (${obj.schemaVersion})` };
+  }
+  if (obj && typeof obj.count === "number" && obj.count !== raw.length) {
+    return { use: "committed", reason: `usaldatud feedi count (${obj.count}) ei kattu programs[] pikkusega (${raw.length})` };
+  }
+  const forbidden = findForbiddenFeedKey(data);
+  if (forbidden) {
+    return { use: "committed", reason: `usaldatud feed sisaldab keelatud välja: ${forbidden}` };
+  }
   const entries = activeOnly(raw);
   // MITTE-REGRESSIOON: usaldatud feed ei tohi kunagi kaotada kirjeid.
   if (entries.length < committedCount) {
@@ -99,7 +144,6 @@ export function chooseCatalogSource(opts: {
       reason: `usaldatud feed kaotaks kirjeid (${entries.length} < kommititud ${committedCount}) → keeldun`
     };
   }
-  const obj = Array.isArray(data) ? null : (data as Record<string, unknown>);
   const checkedAt = obj ? (isoDate(obj.checkedAt) ?? LOCAL_CHECKED_AT) : LOCAL_CHECKED_AT;
   const updatedAt = obj ? (isoDate(obj.generatedAt) ?? isoDate(obj.updatedAt) ?? checkedAt) : checkedAt;
   const contentHash = obj && typeof obj.contentHash === "string" ? (obj.contentHash as string) : null;
