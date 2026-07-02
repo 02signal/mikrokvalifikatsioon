@@ -89,6 +89,32 @@ export const ehisPublisher: string = data.publisher;
 export const ehisLicence: string = data.licence;
 export const ehisFetchedAt: string = data.fetched_at;
 export const ehisCurricula: EhisCurriculum[] = data.curricula;
+export const ehisRegisteredCurricula: EhisCurriculum[] = ehisCurricula.filter((c) => c.status === "Registreeritud");
+
+export interface EhisCountRow {
+  key: string;
+  label: string;
+  count: number;
+}
+
+function countBy(items: EhisCurriculum[], keyOf: (item: EhisCurriculum) => string | null | undefined): EhisCountRow[] {
+  const counts = new Map<string, number>();
+  for (const item of items) {
+    const key = keyOf(item)?.trim() || "Määramata";
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+  return [...counts.entries()]
+    .map(([label, count]) => ({ key: norm(label), label, count }))
+    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label, "et"));
+}
+
+export const ehisProviderStats: EhisCountRow[] = countBy(ehisRegisteredCurricula, (c) => c.provider);
+export const ehisProviderTypeStats: EhisCountRow[] = countBy(ehisRegisteredCurricula, (c) => c.provider_type);
+export const ehisFieldStats: EhisCountRow[] = countBy(ehisRegisteredCurricula, (c) => c.field_name);
+
+export const ehisProgrammeCount = ehisRegisteredCurricula.length;
+export const ehisProviderCount = ehisProviderStats.length;
+export const ehisFieldCount = ehisFieldStats.filter((row) => row.label !== "Määramata").length;
 
 const BY_KOOD = new Map<string, EhisCurriculum>(data.curricula.map((c) => [c.ehis_kood, c]));
 

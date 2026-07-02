@@ -5,9 +5,21 @@ import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
 import { catalog, providers, fields, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 import { parsePriceEur } from "../../data/courseSchema";
+import {
+  ehisAttribution,
+  ehisFetchedAt,
+  ehisFieldCount,
+  ehisFieldStats,
+  ehisLicence,
+  ehisProgrammeCount,
+  ehisProviderCount,
+  ehisProviderStats,
+  ehisProviderTypeStats
+} from "../../data/ehisFacts";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
 const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
+const ehisFetchedAtText = ehisFetchedAt.split("-").reverse().join(".");
 
 const byField = fields
   .map((field) => ({ field, count: catalog.filter((entry) => entry.field === field).length }))
@@ -44,6 +56,10 @@ const maxEcts = ectsVals.length ? Math.max(...ectsVals) : null;
 
 const etCount = catalog.filter((e) => e.language === "et").length;
 const enCount = catalog.filter((e) => e.language === "en").length;
+const topEhisProviders = ehisProviderStats.slice(0, 10);
+const maxEhisProvider = Math.max(...topEhisProviders.map((row) => row.count));
+const topEhisFields = ehisFieldStats.slice(0, 10);
+const maxEhisField = Math.max(...topEhisFields.map((row) => row.count));
 
 const schema = {
   "@context": "https://schema.org",
@@ -64,17 +80,18 @@ const schema = {
     },
     {
       "@type": "Dataset",
-      name: "Eesti mikrokvalifikatsioonide ja mikrokraadide register",
-      description: `Avaandmestik Eesti ${catalog.length} mikrokvalifikatsioonist ja mikrokraadist ${providers.length} koolist ja koolitajalt: nimi, pakkuja, valdkond, maht (EAP), hind, õppevorm, keel ja vastuvõtt. Andmed pärinevad pakkujate avalikelt lehtedelt.`,
+      name: "Eesti mikrokvalifikatsioonide ja mikrokraadide andmekiht",
+      description: `Avaandmestik sisaldab kahte kihti: EHIS ametlik faktikiht (${ehisProgrammeCount} registreeritud õppekava ${ehisProviderCount} pakkujalt) ning rikastatud kasutajakataloog (${catalog.length} programmi ${providers.length} pakkujalt koos hinna, formaadi ja vastuvõtuga).`,
       url: "https://mikrokvalifikatsioon.ee/andmed/",
       inLanguage: "et",
       dateModified: catalogUpdatedAt,
-      temporalCoverage: catalogCheckedAt,
+      temporalCoverage: `${ehisFetchedAt}/${catalogCheckedAt}`,
       license: "https://creativecommons.org/licenses/by/4.0/",
       creator: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
-      variableMeasured: ["programmi nimi", "pakkuja", "valdkond", "maht (EAP)", "hind", "õppevorm", "keel", "vastuvõtt"],
+      variableMeasured: ["EHIS õppekava kood", "programmi nimi", "pakkuja", "pakkuja tüüp", "valdkond", "maht (EAP)", "õpiväljundid", "hind", "õppevorm", "keel", "vastuvõtt"],
       distribution: [
-        { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: "https://mikrokvalifikatsioon.ee/catalog.json" }
+        { "@type": "DataDownload", name: "Rikastatud kasutajakataloog", encodingFormat: "application/json", contentUrl: "https://mikrokvalifikatsioon.ee/catalog.json" },
+        { "@type": "DataDownload", name: "EHIS ametlik faktikiht", encodingFormat: "application/json", contentUrl: "https://mikrokvalifikatsioon.ee/ehis-catalog.json" }
       ]
     }
   ]
@@ -86,7 +103,7 @@ const schema = {
   <head>
     <Seo
       title="Andmed | Eesti mikrokvalifikatsioonide turg ja avaandmed"
-      description={`Eesti mikrokvalifikatsioonide turg andmetes: ${catalog.length} programmi ${providers.length} koolist, jaotus valdkonniti, hinna- ja mahuvahemik. Masinloetav avaandmestik (catalog.json) ametnikele ja uurijatele.`}
+      description={`Eesti mikrokvalifikatsioonide turg andmetes: EHIS ametlik faktikiht ${ehisProgrammeCount} õppekava / ${ehisProviderCount} pakkujat ja rikastatud kataloog ${catalog.length} programmi / ${providers.length} pakkujat.`}
       canonicalPath="/andmed/"
       ogTitle="Eesti mikrokvalifikatsioonide turg andmetes"
       ogDescription="Turukaart ja avaandmed: programmide arv, pakkujad, valdkonnad, hinnad ja mahud — masinloetavalt."
@@ -102,21 +119,25 @@ const schema = {
           <span class="eyebrow">Avaandmed ja turukaart</span>
           <h1>Eesti mikrokvalifikatsioonide turg andmetes.</h1>
           <p>
-            Koondvaade Eesti mikrokvalifikatsioonidest ja mikrokraadidest ühest kohast: mitu programmi,
-            kelle käest, mis valdkonnas, mis mahus ja hinnaga. Andmed pärinevad pakkujate avalikelt
-            lehtedelt; masinloetav versioon on vabalt kasutatav.
+            Koondvaade kahest kihist: EHIS ametlik faktikiht näitab kogu registreeritud
+            mikrokvalifikatsiooni õppekavade universumit; rikastatud kataloog lisab õppijale olulised
+            kasutusandmed nagu hind, õppevorm, vastuvõtt ja kooli leht.
           </p>
           <div class="actions">
-            <a class="btn btn-primary" href="/catalog.json" data-track-event="cta_click" data-track-label="andmed_catalog_json">Ava avaandmed (JSON)</a>
+            <a class="btn btn-primary" href="/ehis-catalog.json" data-track-event="cta_click" data-track-label="andmed_ehis_json">Ava EHIS faktikiht</a>
+            <a class="btn btn-secondary" href="/catalog.json" data-track-event="cta_click" data-track-label="andmed_catalog_json">Ava rikastatud kataloog</a>
             <a class="btn btn-secondary" href="/kuidas-koostame/" data-track-event="cta_click" data-track-label="andmed_metoodika">Kuidas andmed kogume</a>
           </div>
-          <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
+          <p class="report-date">EHIS snapshot: {ehisFetchedAtText}. Rikastatud kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
         </div>
       </section>
 
       <section class="white">
         <div class="section-inner">
           <div class="proof wide-proof">
+            <div><strong>{ehisProgrammeCount}</strong><span>EHIS registreeritud õppekava</span></div>
+            <div><strong>{ehisProviderCount}</strong><span>EHIS pakkujat</span></div>
+            <div><strong>{ehisFieldCount}</strong><span>EHIS õppekavarühma</span></div>
             <div><strong>{catalog.length}</strong><span>programmi registris</span></div>
             <div><strong>{providers.length}</strong><span>kooli ja koolitajat</span></div>
             <div><strong>{fields.length}</strong><span>valdkonda</span></div>
@@ -136,8 +157,55 @@ const schema = {
       <section class="ice">
         <div class="section-inner">
           <div class="section-head compact-head">
-            <span class="kicker">Valdkonniti</span>
-            <h2>Programmide jaotus valdkondade kaupa.</h2>
+            <span class="kicker">EHIS ametlik universum</span>
+            <h2>Kõik EHIS-is registreeritud mikrokvalifikatsiooni õppekavad.</h2>
+          </div>
+          <p class="lede">
+            See kiht on mõeldud uurimiseks, turuanalüüsiks ja uute pakkujate avastamiseks. Siin on ametlik
+            õppekava kood, pakkuja, pakkuja tüüp, EAP, õppekavarühm, keel ja õpiväljundid. Hinda,
+            vastuvõtuaega ja turunduslikku kirjeldust EHIS tavaliselt ei anna — need lisanduvad rikastatud kataloogis.
+          </p>
+          <div class="grid-3">
+            <article class="card">
+              <h3>Pakkuja tüübid</h3>
+              <ul class="data-list">
+                {ehisProviderTypeStats.map((row) => <li><span>{row.label}</span><strong>{row.count}</strong></li>)}
+              </ul>
+            </article>
+            <article class="card span-2">
+              <h3>Suurimad pakkujad EHIS-is</h3>
+              <div class="bars compact-bars">
+                {topEhisProviders.map((row) => (
+                  <div class="bar-row">
+                    <span class="bar-label">{row.label}</span>
+                    <span class="bar-track"><span class="bar-fill" style={`width:${Math.round((row.count / maxEhisProvider) * 100)}%`}></span></span>
+                    <span class="bar-value">{row.count}</span>
+                  </div>
+                ))}
+              </div>
+            </article>
+          </div>
+          <div class="section-head compact-head subhead">
+            <span class="kicker">Õppekavarühmad</span>
+            <h2>Kus turu maht koondub.</h2>
+          </div>
+          <div class="bars">
+            {topEhisFields.map((row) => (
+              <div class="bar-row">
+                <span class="bar-label">{row.label}</span>
+                <span class="bar-track"><span class="bar-fill" style={`width:${Math.round((row.count / maxEhisField) * 100)}%`}></span></span>
+                <span class="bar-value">{row.count}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Rikastatud kataloog</span>
+            <h2>Õppija jaoks rikastatud kirjete jaotus valdkondade kaupa.</h2>
           </div>
           <div class="bars">
             {byField.map((row) => (
@@ -151,7 +219,7 @@ const schema = {
         </div>
       </section>
 
-      <section class="white">
+      <section class="ice">
         <div class="section-inner">
           <div class="grid-3">
             <article class="card">
@@ -182,21 +250,23 @@ const schema = {
         <div class="section-inner narrow">
           <div class="section-head compact-head">
             <span class="kicker">Avaandmed</span>
-            <h2>Kasuta andmeid oma analüüsis.</h2>
+            <h2>Kasuta mõlemat andmekihti oma analüüsis.</h2>
           </div>
           <p>
-            Kogu register on masinloetav ja vabalt kasutatav. Iga kirje juures on pakkuja, valdkond,
-            maht, hind, õppevorm, keel, vastuvõtt ja kontrollkuupäev (<code>sourceCheckedAt</code>) ning
-            link pakkuja ametlikule lehele.
+            EHIS faktikiht annab ametliku täisuniversumi. Rikastatud kataloog annab õppija ja turunduse
+            jaoks vajalikud lisaväljad. Mõlemad on masinloetavad, et otsingud, turuülevaated ja
+            uurimisprojektid ei peaks staatilisi numbreid käsitsi kopeerima.
           </p>
           <ul class="check">
-            <li><a href="/catalog.json" data-track-event="cta_click" data-track-label="andmed_json">catalog.json</a> — täisregister JSON-formaadis</li>
+            <li><a href="/ehis-catalog.json" data-track-event="cta_click" data-track-label="andmed_ehis_json_2">ehis-catalog.json</a> — EHIS ametlik faktikiht ({ehisProgrammeCount} õppekava, {ehisProviderCount} pakkujat)</li>
+            <li><a href="/catalog.json" data-track-event="cta_click" data-track-label="andmed_json">catalog.json</a> — rikastatud kasutajakataloog ({catalog.length} programmi, {providers.length} pakkujat)</li>
             <li><a href="/llms.txt" data-track-event="cta_click" data-track-label="andmed_llms">llms.txt</a> — kokkuvõte AI-assistentidele</li>
           </ul>
           <p class="field-help">
-            <strong>Kuidas viidata:</strong> „Mikrokvalifikatsioon.ee register, uuendatud {updatedAtText}; avalikud allikafaktid kontrollitud {checkedAtText},
+            <strong>Kuidas viidata:</strong> „Mikrokvalifikatsioon.ee andmekiht, EHIS snapshot {ehisFetchedAtText}, rikastatud kataloog uuendatud {updatedAtText}; avalikud allikafaktid kontrollitud {checkedAtText},
             https://mikrokvalifikatsioon.ee/andmed/". Vaata ka <a href="/kuidas-koostame/">metoodikat ja sõltumatust</a>.
             <br /><strong>Litsents:</strong> <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a> — vaba kasutada viitega.
+            <br /><strong>EHIS viide:</strong> {ehisAttribution}. {ehisLicence}.
           </p>
           <p class="notice">
             See ei ole ametlik riiklik register. Ametlik info mikrokvalifikatsiooni õppekavade ja
@@ -232,7 +302,10 @@ const schema = {
 
     <style>
       .wide-proof { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
+      .lede { max-width: 860px; color: #44546a; }
+      .subhead { margin-top: 42px; }
       .bars { display: grid; gap: 10px; }
+      .compact-bars { gap: 8px; }
       .bar-row { display: grid; grid-template-columns: minmax(120px, 200px) 1fr auto; gap: 12px; align-items: center; }
       .bar-label { font-size: 0.92rem; color: #44546a; }
       .bar-track { background: #e4ecf2; border-radius: 999px; height: 14px; overflow: hidden; }
@@ -242,6 +315,8 @@ const schema = {
       .data-list li { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #eef3f7; }
       .data-list li:last-child { border-bottom: 0; }
       .data-list strong { color: #212121; }
+      .span-2 { grid-column: span 2; }
+      @media (max-width: 900px) { .span-2 { grid-column: span 1; } }
       @media (max-width: 560px) { .bar-row { grid-template-columns: 1fr auto; } .bar-track { grid-column: 1 / -1; order: 3; } }
     </style>
   </body>

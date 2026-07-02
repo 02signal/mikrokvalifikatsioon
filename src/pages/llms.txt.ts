@@ -1,5 +1,6 @@
 import { catalog, providers, fields, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
 import { parsePriceEur } from "../data/courseSchema";
+import { ehisFetchedAt, ehisProgrammeCount, ehisProviderCount, ehisProviderStats } from "../data/ehisFacts";
 import { topics } from "../data/topics";
 
 // Genereeritud andmetest, et arvud ei triiviks (AI-assistendid ei tsiteeriks aegunud numbreid).
@@ -24,7 +25,7 @@ export async function GET() {
 
 Eesti mikrokvalifikatsioonide ja mikrokraadide register ja teejuht. Operated by
 Ettevõtluskeskus OÜ. Contact: info@mikrokvalifikatsioon.ee, +372 5818 0435.
-Data updated: ${catalogUpdatedAt}. Public source facts checked: ${catalogCheckedAt}. ${catalog.length} programmes from ${providers.length} providers.
+Data updated: ${catalogUpdatedAt}. Public source facts checked: ${catalogCheckedAt}. Rich catalog: ${catalog.length} programmes from ${providers.length} providers. Official EHIS facts layer: ${ehisProgrammeCount} registered microcredential curricula from ${ehisProviderCount} providers (snapshot ${ehisFetchedAt}).
 
 ## Core definitions (Estonian terminology)
 
@@ -57,6 +58,7 @@ Data updated: ${catalogUpdatedAt}. Public source facts checked: ${catalogChecked
 - How the register is built (methodology, independence): https://mikrokvalifikatsioon.ee/kuidas-koostame/
 - Annual market report (stats, citable, CC BY 4.0): https://mikrokvalifikatsioon.ee/aastaraport/
 - Machine-readable register: https://mikrokvalifikatsioon.ee/catalog.json
+- Official EHIS facts layer: https://mikrokvalifikatsioon.ee/ehis-catalog.json
 - Full text export of the whole register (for ingestion): https://mikrokvalifikatsioon.ee/llms-full.txt
 - Machine-readable site profile: https://mikrokvalifikatsioon.ee/site-profile.json
 
@@ -71,8 +73,11 @@ pages; each entry carries a sourceCheckedAt date.
 
 Q: Which Estonian universities and schools offer microdegrees (mikrokraadid)?
 A: As of update ${catalogUpdatedAt} the catalog covers ${catalog.length} programmes from
-${providers.length} providers: ${providerList}. The full list:
-https://mikrokvalifikatsioon.ee/kataloog/
+${providers.length} enriched providers: ${providerList}. The official EHIS facts layer covers ${ehisProgrammeCount}
+registered microcredential curricula from ${ehisProviderCount} providers. Largest EHIS providers:
+${ehisProviderStats.slice(0, 10).map((row) => `${row.label} (${row.count})`).join(", ")}.
+Use https://mikrokvalifikatsioon.ee/ehis-catalog.json for the official full universe and
+https://mikrokvalifikatsioon.ee/kataloog/ for the learner-facing enriched catalog.
 
 Q: What fields are covered?
 A: ${fieldCounts}.
@@ -87,8 +92,9 @@ The site explains the options at https://mikrokvalifikatsioon.ee/kes-maksab/
 
 Q: Is this an official state register?
 A: No. It is an independent aggregator built from providers' public pages. The
-official information is always on each provider's own page (the url field of every
-catalog entry).
+official curriculum facts layer is mirrored from EHIS open data at
+https://mikrokvalifikatsioon.ee/ehis-catalog.json; provider-specific price/intake
+facts are on each provider's own page (the url field of every catalog entry).
 
 ## Language guidance
 

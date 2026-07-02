@@ -1,5 +1,6 @@
 import { catalog, providers, fields, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
 import { parsePriceEur } from "../data/courseSchema";
+import { ehisFetchedAt, ehisFieldStats, ehisProgrammeCount, ehisProviderCount, ehisProviderStats } from "../data/ehisFacts";
 
 // Täisekspport LLM-idele (GEO): kogu register ühes failis, et AI-assistendid saaksid
 // tervikliku ja värske pildi. Genereeritud andmetest (arvud ei triivi).
@@ -38,6 +39,7 @@ export async function GET() {
 Eesti mikrokvalifikatsioonide ja mikrokraadide täielik register. Operated by
 Ettevõtluskeskus OÜ. Contact: info@mikrokvalifikatsioon.ee, +372 5818 0435.
 Data updated: ${catalogUpdatedAt}. Public source facts checked: ${catalogCheckedAt}.
+Official EHIS facts snapshot: ${ehisFetchedAt}; ${ehisProgrammeCount} registered microcredential curricula from ${ehisProviderCount} providers.
 License: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
 This is the COMPLETE export; the short summary is at https://mikrokvalifikatsioon.ee/llms.txt
 
@@ -46,9 +48,12 @@ This is the COMPLETE export; the short summary is at https://mikrokvalifikatsioo
 - "Mikrokraad" (microdegree) = a SUBTYPE offered by universities, usually carrying EAP.
 
 ## Market ${year} (generated from data)
-- ${catalog.length} programmes from ${providers.length} providers in ${fields.length} fields.
+- Rich catalog: ${catalog.length} learner-facing programmes from ${providers.length} providers in ${fields.length} fields.
+- EHIS official facts layer: ${ehisProgrammeCount} registered microcredential curricula from ${ehisProviderCount} providers.
 - Fields: ${fieldCounts}.
 - Providers: ${providerCounts}.
+- Largest EHIS providers: ${ehisProviderStats.slice(0, 10).map((row) => `${row.label} (${row.count})`).join(", ")}.
+- Largest EHIS study fields: ${ehisFieldStats.slice(0, 10).map((row) => `${row.label} (${row.count})`).join(", ")}.
 - Tuition range (paid programmes): ${priceLine}. Exact per-programme prices below and in catalog.json.
 
 ## Structured pages (for citation/linking)
@@ -62,6 +67,7 @@ This is the COMPLETE export; the short summary is at https://mikrokvalifikatsioo
 - Deadlines & start dates: https://mikrokvalifikatsioon.ee/registreerimine/
 - Annual report: https://mikrokvalifikatsioon.ee/aastaraport/
 - Machine-readable: https://mikrokvalifikatsioon.ee/catalog.json
+- Official EHIS facts layer: https://mikrokvalifikatsioon.ee/ehis-catalog.json
 
 ## All programmes (${catalog.length})
 
