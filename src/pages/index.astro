@@ -4,10 +4,11 @@ import Footer from "../components/Footer.astro";
 import "../styles/global.css";
 import Nav from "../components/Nav.astro";
 import Faq from "../components/Faq.astro";
-import { catalog, providers, catalogUpdatedAt } from "../data/catalog";
-import { matchForCatalogEntry } from "../data/ehisFacts";
+import { catalog, catalogUpdatedAt } from "../data/catalog";
+import { ehisFetchedAt, ehisProgrammeCount, ehisProviderCount, matchForCatalogEntry } from "../data/ehisFacts";
 
 const emailHref = "mailto:info@mikrokvalifikatsioon.ee?subject=Mikrokvalifikatsioonide%20uudised";
+const ehisFetchedAtDate = ehisFetchedAt.slice(0, 10);
 
 // EHIS-i autoriteet: arvuta build-ajal, kui mitme kataloogi programmi faktid on
 // ametliku EHIS-i registriga sobitatud (exact | strong — st mitte "none"). Number
@@ -49,7 +50,7 @@ const schema = {
       url: "https://mikrokvalifikatsioon.ee/",
       email: "info@mikrokvalifikatsioon.ee",
       telephone: "+37258180435",
-      description: "Sõltumatu register ja teejuht: kõik Eesti mikrokvalifikatsioonid ja ülikoolide mikrokraadid ühes filtreeritavas kataloogis koos hinna, mahu ja rahastusvõimalustega.",
+      description: "Sõltumatu register ja teejuht: ametlik EHIS mikrokvalifikatsioonide faktikiht ning õppijale rikastatud kataloog hinna, mahu ja rahastusvõimalustega.",
       areaServed: "EE",
       logo: "https://mikrokvalifikatsioon.ee/logo-square.png",
       contactPoint: { "@type": "ContactPoint", areaServed: "EE", availableLanguage: ["et"] }
@@ -71,8 +72,8 @@ const schema = {
     },
     {
       "@type": "Dataset",
-      name: "Eesti mikrokvalifikatsioonide ja mikrokraadide register",
-      description: "Avalik register Eesti ülikoolide ja koolitajate mikrokvalifikatsioonidest ja mikrokraadidest: nimi, pakkuja, valdkond, maht, hind, õppevorm.",
+      name: "Eesti mikrokvalifikatsioonide ja mikrokraadide rikastatud kataloog",
+      description: "Avalik õppijale võrreldav kataloog Eesti ülikoolide ja koolitajate mikrokvalifikatsioonidest ja mikrokraadidest: nimi, pakkuja, valdkond, maht, hind, õppevorm.",
       url: "https://mikrokvalifikatsioon.ee/catalog.json",
       inLanguage: "et",
       dateModified: catalogUpdatedAt,
@@ -81,6 +82,19 @@ const schema = {
       publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
       isAccessibleForFree: true,
       distribution: { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: "https://mikrokvalifikatsioon.ee/catalog.json" }
+    },
+    {
+      "@type": "Dataset",
+      name: "EHIS mikrokvalifikatsiooni õppekavade ametlik faktikiht",
+      description: `EHIS ametlik avaandmete faktikiht: ${ehisProgrammeCount} registreeritud mikrokvalifikatsiooni õppekava ${ehisProviderCount} pakkujalt.`,
+      url: "https://mikrokvalifikatsioon.ee/ehis-catalog.json",
+      inLanguage: "et",
+      dateModified: ehisFetchedAtDate,
+      license: "https://creativecommons.org/licenses/by/4.0/",
+      creator: { "@type": "Organization", name: "Haridus- ja Teadusministeerium" },
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      isAccessibleForFree: true,
+      distribution: { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: "https://mikrokvalifikatsioon.ee/ehis-catalog.json" }
     },
     {
       "@type": "FAQPage",
@@ -99,10 +113,10 @@ const schema = {
   <head>
     <Seo
       title="Mikrokvalifikatsioonid ja mikrokraadid – Eesti register"
-      description="Kõik Eesti mikrokvalifikatsioonid ja ülikoolide mikrokraadid ühes kataloogis: valdkond, maht, hind ja kes selle kinni maksab. Leia oskus, mis tasub ära."
+      description={`EHIS ametlik faktikiht: ${ehisProgrammeCount} mikrokvalifikatsiooni õppekava ${ehisProviderCount} pakkujalt. Rikastatud kataloog: ${catalog.length} võrreldavat programmi hinna, mahu ja rahastusinfoga.`}
       canonicalPath="/"
       ogTitle="Eesti mikrokvalifikatsioonide ja mikrokraadide register"
-      ogDescription="Leia uus oskus, mida tunnustatakse: kõik mikrokvalifikatsioonid ja mikrokraadid ühest kohast, koos hinna ja rahastusvõimalustega."
+      ogDescription="Ametlik EHIS täisfaktide kiht ja õppijale võrreldav rikastatud kataloog koos hinna ja rahastusvõimalustega."
       jsonLd={schema}
       langAlternates={[{ lang: "et", path: "/" }, { lang: "en", path: "/en/" }]}
     />
@@ -156,8 +170,9 @@ const schema = {
           <span class="eyebrow">Uus oskus ilma aastatepikkuse kraadiõppeta</span>
           <h1>Leia oskus, mida tööandjad tunnustavad — ja keegi, kes selle kinni maksab.</h1>
           <p>
-            Eestis on juba sadu mikrokvalifikatsioone ja mikrokraade, aga need on laiali
-            kümnete koolide lehtedel. Siin on nad ühes kohas: mida õpid, kui kaua kestab,
+            Eestis on juba sadu EHIS-es registreeritud mikrokvalifikatsiooni õppekavu, aga
+            õppijale vajalikud detailid on laiali kümnete koolide lehtedel. Siin on ametlik
+            täisfaktide kiht ja rikastatud kataloog koos sellega, mida õpid, kui kaua kestab,
             mis maksab ja millal saab alustada.
           </p>
           <div class="actions">
@@ -165,14 +180,15 @@ const schema = {
             <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="home_hero_kataloog">Ava kataloog</a>
           </div>
           <div class="proof">
-            <div><strong>{catalog.length}</strong><span>programmi registris</span></div>
-            <div><strong>{providers.length}</strong><span>kooli ja koolitajat</span></div>
+            <div><strong>{ehisProgrammeCount}</strong><span>EHIS õppekava</span></div>
+            <div><strong>{ehisProviderCount}</strong><span>EHIS pakkujat</span></div>
+            <div><strong>{catalog.length}</strong><span>rikastatud valikut</span></div>
             <div><strong>kuud, mitte aastad</strong><span>tüüpiline õppeaeg</span></div>
           </div>
           <div class="hero-authority">
             <p class="hero-authority-stat">
-              <strong>{ehisVerifiedCount} programmi</strong>
-              <span>{catalogTotalCount}-st ametlikult EHIS-iga kontrollitud</span>
+              <strong>{ehisVerifiedCount} rikastatud kirjet</strong>
+              <span>{catalogTotalCount}-st EHIS-iga sobitatud; täis EHIS kiht katab {ehisProgrammeCount} õppekava.</span>
             </p>
             <p class="hero-authority-source">
               Andmed pärinevad EHIS-ist — Eesti Hariduse Infosüsteem
@@ -234,7 +250,7 @@ const schema = {
             <li class="hub-card">
               <a href="/kataloog/" data-track-event="cta_click" data-track-label="home_hub_kataloog">
                 <span class="hub-name">Kataloog</span>
-                <span class="hub-desc">Kõik programmid ühes filtreeritavas nimekirjas.</span>
+                <span class="hub-desc">Rikastatud kataloogi programmid ühes filtreeritavas nimekirjas.</span>
               </a>
             </li>
             <li class="hub-card">

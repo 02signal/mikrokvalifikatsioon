@@ -5,9 +5,11 @@ import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
 import { catalog, providers, fields, fieldsWithSlug, providersWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 import { outboundUrl } from "../../data/courseSchema";
+import { ehisFetchedAt, ehisProgrammeCount, ehisProviderCount } from "../../data/ehisFacts";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
 const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
+const ehisFetchedAtText = ehisFetchedAt.slice(0, 10).split("-").reverse().join(".");
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
@@ -28,7 +30,7 @@ const schema = {
     {
       // Loend viitab programmilehtedele; rikas Course-schema elab iga programmilehe peal.
       "@type": "ItemList",
-      name: "Eesti mikrokvalifikatsioonide ja mikrokraadide kataloog",
+      name: "Eesti mikrokvalifikatsioonide ja mikrokraadide rikastatud kataloog",
       numberOfItems: catalog.length,
       itemListElement: catalog.map((entry, index) => ({
         "@type": "ListItem",
@@ -46,10 +48,10 @@ const schema = {
   <head>
     <Seo
       title="Eesti mikrokvalifikatsioonid ja mikrokraadid – kataloog"
-      description={`${catalog.length} mikrokvalifikatsiooni ja mikrokraadi ${providers.length} koolist: valdkond, maht, hind, õppevorm. Filtreeri ja leia oskus, mis sulle sobib.`}
+      description={`Rikastatud kataloog: ${catalog.length} võrreldavat programmi ${providers.length} koolist. Ametlik EHIS faktikiht: ${ehisProgrammeCount} registreeritud õppekava ${ehisProviderCount} pakkujalt.`}
       canonicalPath="/kataloog/"
       ogTitle="Eesti mikrokvalifikatsioonide ja mikrokraadide kataloog"
-      ogDescription="Kõik programmid ühes kohas: valdkond, maht, hind ja link kooli lehele."
+      ogDescription="Õppijale võrreldavad programmid ühes kohas ning eraldi EHIS ametlik täisfaktide kiht."
       jsonLd={schema}
     />
   </head>
@@ -60,12 +62,23 @@ const schema = {
       <section class="report-hero simple-report-hero">
         <div class="section-inner">
           <span class="eyebrow">Register</span>
-          <h1>Kõik Eesti mikrokvalifikatsioonid ja mikrokraadid: {catalog.length} programmi {providers.length} koolist.</h1>
+          <h1>Rikastatud kataloog: {catalog.length} võrreldavat mikrokvalifikatsiooni ja mikrokraadi {providers.length} koolist.</h1>
           <p>
-            Iga kirje juures on valdkond, maht, hind (kui kool on selle avaldanud) ja link
-            kooli enda lehele. Andmed pärinevad koolide avalikelt lehtedelt.
+            See vaade näitab õppijale võrreldavaid kirjeid: valdkond, maht, hind
+            (kui kool on selle avaldanud) ja link kooli enda lehele. Ametlik EHIS
+            täisfaktide kiht katab eraldi {ehisProgrammeCount} registreeritud õppekava
+            {ehisProviderCount} pakkujalt.
           </p>
-          <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
+          <div class="catalog-proof">
+            <div><strong>{ehisProgrammeCount}</strong><span>EHIS õppekava</span></div>
+            <div><strong>{ehisProviderCount}</strong><span>EHIS pakkujat</span></div>
+            <div><strong>{catalog.length}</strong><span>rikastatud kirjet</span></div>
+            <div><strong>{providers.length}</strong><span>võrreldavat pakkujat</span></div>
+          </div>
+          <p class="report-date">
+            Rikastatud kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}. EHIS faktikiht uuendatud: {ehisFetchedAtText}.
+            <a href="/andmed/" data-track-event="cta_click" data-track-label="catalog_to_data">Vaata kogu andmekaarti →</a>
+          </p>
         </div>
       </section>
 
@@ -91,16 +104,16 @@ const schema = {
               </select>
             </div>
           </div>
-          <p class="field-help" data-catalog-count>{catalog.length} programmi</p>
+          <p class="field-help" data-catalog-count>{catalog.length} rikastatud programmi</p>
 
           <nav class="field-links" aria-label="Sirvi valdkonniti">
-            <span>Võrdle valdkonniti:</span>
+            <span>Võrdle rikastatud kataloogi valdkonniti:</span>
             {fieldsWithSlug.map((f) => (
               <a href={`/valdkond/${f.slug}/`} data-track-event="cta_click" data-track-label="catalog_field_link">{f.field} <b>{catalog.filter((e) => e.field === f.field).length}</b></a>
             ))}
           </nav>
           <nav class="field-links" aria-label="Sirvi koolide kaupa">
-            <span>Koolide kaupa:</span>
+            <span>Rikastatud kataloogi koolid:</span>
             {providersWithSlug.map((p) => (
               <a href={`/koolitaja/${p.slug}/`} data-track-event="cta_click" data-track-label="catalog_provider_link">{p.provider} <b>{catalog.filter((e) => e.provider === p.provider).length}</b></a>
             ))}
@@ -226,6 +239,32 @@ const schema = {
       .field-links a { display: inline-flex; gap: 4px; padding: 6px 12px; border-radius: 999px; background: #eef7ec; color: #2e7d22; font-size: 0.88rem; font-weight: 700; text-decoration: none; border: 1px solid #e2e4e3; }
       .field-links a:hover { background: #e4f7dd; }
       .field-links a b { font-weight: 800; opacity: 0.6; }
+      .catalog-proof {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+        gap: 10px;
+        margin: 22px 0 6px;
+        max-width: 780px;
+      }
+      .catalog-proof div {
+        border: 1px solid #e2e4e3;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.72);
+        padding: 14px 16px;
+      }
+      .catalog-proof strong {
+        display: block;
+        color: var(--ink);
+        font-size: clamp(1.4rem, 4vw, 2rem);
+        line-height: 1;
+      }
+      .catalog-proof span {
+        display: block;
+        margin-top: 6px;
+        color: var(--muted);
+        font-weight: 700;
+        font-size: 0.9rem;
+      }
       .compare-pick { display: inline-flex; gap: 6px; align-items: center; font-size: 0.9rem; color: #44546a; cursor: pointer; }
       .compare-pick input { width: 16px; height: 16px; min-height: 0; accent-color: #2e7d22; }
       .compare-bar {
@@ -281,7 +320,7 @@ const schema = {
           if (show) visible += 1;
         }
         lastVisible = visible;
-        if (count) count.textContent = `${visible} programmi`;
+        if (count) count.textContent = `${visible} rikastatud programmi`;
         clearTimeout(searchTimer);
         searchTimer = setTimeout(trackSearch, 600);
       };
