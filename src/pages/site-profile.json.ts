@@ -20,7 +20,7 @@ export async function GET() {
     audience:
       "Eesti täiskasvanud õppija (25-55), kes kaalub ümberõpet või täiendõpet ja tahab kiiret, tunnustatud oskust.",
     purpose:
-      "Sõltumatu register ja teejuht: kõik Eesti mikrokvalifikatsioonid ja ülikoolide mikrokraadid ühes filtreeritavas kataloogis koos hinna, mahu ja rahastusvõimalustega.",
+      "Sõltumatu register ja teejuht: EHIS ametlik mikrokvalifikatsiooni faktikiht kogu turu ulatuse jaoks ning õppijale rikastatud filtreeritav kataloog koos hinna, mahu ja rahastusvõimalustega.",
     importantCaveat:
       "See ei ole riiklik register. Ametlik EHIS faktikiht on peegeldatud eraldi failis ehis-catalog.json; hind, vastuvõtt ja kooli kirjeldav info on iga kooli enda lehel (catalog.json url-väli). Toetuste tingimused kinnitab Töötukassa või tööandja.",
     corePositioning:
@@ -45,9 +45,9 @@ export async function GET() {
     },
     pages: [
       { url: "https://mikrokvalifikatsioon.ee/", purpose: "Avaleht ja suunatest: 4 küsimust, kohe 3 sobivat programmi ja rahastuse vihje." },
-      { url: "https://mikrokvalifikatsioon.ee/kataloog/", purpose: `Filtreeritav register: ${catalog.length} programmi ${providers.length} koolist (otsing /kataloog/?q=, valdkond, kool).` },
+      { url: "https://mikrokvalifikatsioon.ee/kataloog/", purpose: `Rikastatud filtreeritav kataloog: ${catalog.length} võrreldavat programmi ${providers.length} koolist (otsing /kataloog/?q=, valdkond, kool). EHIS täiskiht on eraldi /andmed/ ja /ehis-catalog.json.` },
       { url: "https://mikrokvalifikatsioon.ee/kataloog/<slug>/", purpose: "Iga programmi oma leht: eesmärk, õpiväljundid, hindamine, hind, maht ja link kooli lehele (slug + pageUrl catalog.json-is)." },
-      { url: "https://mikrokvalifikatsioon.ee/mikrokraadid/", purpose: "Mikrokraadide ülevaade koolide kaupa ja võrdlus teiste tunnistustega." },
+      { url: "https://mikrokvalifikatsioon.ee/mikrokraadid/", purpose: "Rikastatud mikrokraadikirjete ülevaade koolide kaupa, EHIS täiskihi viitega ja võrdlus teiste tunnistustega." },
       { url: "https://mikrokvalifikatsioon.ee/mis-on-mikrokvalifikatsioon/", purpose: "Definitsioon, võrdlus (mikrokraad, kutsetunnistus, sertifikaat) ja KKK." },
       { url: "https://mikrokvalifikatsioon.ee/kes-maksab/", purpose: "Rahastuse teejuht: tööandja, Töötukassa, ise — kuidas igaüht küsida." },
       { url: "https://mikrokvalifikatsioon.ee/kkk/", purpose: "Korduma kippuvad küsimused: definitsioonid, aeg, hind, rahastus, tunnustus ja koolitajale — FAQPage schemaga." },

@@ -5,6 +5,7 @@ import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
 import { catalog, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
+import { ehisFetchedAt, ehisProgrammeCount, ehisProviderCount } from "../../data/ehisFacts";
 
 const universityEntries = catalog.filter((entry) => entry.providerType !== "erakool");
 const byProvider = [...new Set(universityEntries.map((entry) => entry.provider))].map((provider) => ({
@@ -13,6 +14,7 @@ const byProvider = [...new Set(universityEntries.map((entry) => entry.provider))
 }));
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
 const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
+const ehisFetchedAtText = ehisFetchedAt.slice(0, 10).split("-").reverse().join(".");
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
@@ -28,7 +30,7 @@ const schema = {
       "@type": "Article",
       image: "https://mikrokvalifikatsioon.ee/og/mikrokraadid.png",
       headline: "Mikrokraadid Eestis: mis need on ja kust neid leida",
-      description: "Mikrokraad on ülikooli pakutav mikrokvalifikatsioon. Ülevaade Eesti ülikoolide mikrokraadidest koolide kaupa.",
+      description: "Mikrokraad on kõrgkooli pakutav mikrokvalifikatsioon. Ülevaade rikastatud mikrokraadikirjetest koolide kaupa ning viide EHIS ametlikule täiskihile.",
       inLanguage: "et",
       datePublished: "2026-06-12",
       dateModified: catalogUpdatedAt,
@@ -44,12 +46,12 @@ const schema = {
 <html lang="et">
   <head>
     <Seo
-      title="Mikrokraadid Eestis | Kõikide ülikoolide mikrokraadid ühes kohas"
-      description={`Mikrokraad on ülikooli mikrokvalifikatsioon: lühike õpe, ametlik tunnistus. Vaata ${universityEntries.length} mikrokraadi kõikidest Eesti ülikoolidest ühest kohast.`}
+      title="Mikrokraadid Eestis | Rikastatud vaade ja EHIS faktikiht"
+      description={`Mikrokraad on kõrgkooli mikrokvalifikatsioon. Rikastatud vaates on ${universityEntries.length} võrreldavat mikrokraadikirjet; EHIS ametlik faktikiht katab ${ehisProgrammeCount} õppekava ${ehisProviderCount} pakkujalt.`}
       canonicalPath="/mikrokraadid/"
       ogType="article"
-      ogTitle="Mikrokraadid Eestis — kõik ülikoolid ühes kohas"
-      ogDescription="Mis on mikrokraad, kuidas see erineb mikrokvalifikatsioonist ja millised programmid on praegu olemas."
+      ogTitle="Mikrokraadid Eestis — rikastatud vaade ja EHIS faktikiht"
+      ogDescription="Mis on mikrokraad, kuidas see erineb mikrokvalifikatsioonist ja kuidas rikastatud kataloog suhestub EHIS ametliku täiskihiga."
       jsonLd={schema}
     />
   </head>
@@ -64,12 +66,15 @@ const schema = {
           <p>
             Lühike ülikooliõpe — tavaliselt mõni kuu kuni kaks semestrit töö kõrvalt — mille
             lõpus saad ametliku tunnistuse ühe konkreetse oskuse kohta. Eesti ülikoolid
-            pakuvad neid juba sadu, aga igaüks näitab ainult enda omi. Siin on nad koos.
+            ja rakenduskõrgkoolid pakuvad neid juba sadu. Siin on õppijale rikastatud valik
+            koos mahu, hinna ja kooli lingiga; EHIS ametlik faktikiht katab {ehisProgrammeCount}
+            registreeritud mikrokvalifikatsiooni õppekava {ehisProviderCount} pakkujalt.
           </p>
           <div class="actions">
             <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="mikrokraadid_hero_kataloog">Ava filtreeritav kataloog</a>
+            <a class="btn btn-secondary" href="/andmed/" data-track-event="cta_click" data-track-label="mikrokraadid_hero_andmed">Vaata EHIS andmekaarti</a>
           </div>
-          <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud koolide lehtedelt: {checkedAtText}</p>
+          <p class="report-date">Rikastatud kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud koolide lehtedelt: {checkedAtText}. EHIS faktikiht uuendatud: {ehisFetchedAtText}.</p>
         </div>
       </section>
 
@@ -77,7 +82,7 @@ const schema = {
         <div class="section-inner">
           <div class="section-head compact-head">
             <span class="kicker">Koolide kaupa</span>
-            <h2>Mikrokraadid Eesti kõrgkoolides.</h2>
+            <h2>Rikastatud mikrokraadikirjed Eesti kõrgkoolides.</h2>
           </div>
           {byProvider.map(({ provider, entries }) => (
             <div class="provider-block">
