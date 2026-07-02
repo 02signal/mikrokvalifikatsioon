@@ -233,11 +233,11 @@ export const questions: QuestionEntry[] = [
     question: "Kus saab mikrokraadi õppida?",
     shortAnswer:
       `EHIS ametlik faktikiht näitab ${ehisProviderCount} pakkujat ja ${ehisProgrammeCount} registreeritud mikrokvalifikatsiooni õppekava. ` +
-      `Õppijale rikastatud kataloogis on ${programmeCount} võrreldavat kirjet ${providerCount} pakkujalt, sh ${etList(providerRows.slice(0, 5).map((r) => r.provider))} ja teised. ` +
+      `Õppijale võrreldavas kataloogis on ${programmeCount} kirjet ${providerCount} pakkujalt, sh ${etList(providerRows.slice(0, 5).map((r) => r.provider))} ja teised. ` +
       `Ametlik täiskiht ja praktiline kataloog täiendavad teineteist: üks annab turu ulatuse, teine aitab valida.`,
     body: [
       `Mikrokraade ja mikrokvalifikatsioone pakuvad Eestis nii avalik-õiguslikud ülikoolid kui rakenduskõrgkoolid ja erakoolid. EHIS ametlik avaandmete kiht sisaldab praegu ${ehisProgrammeCount} registreeritud mikrokvalifikatsiooni õppekava ${ehisProviderCount} pakkujalt.`,
-      `Õppijale rikastatud kataloog koondab neist avalike koolilehtede põhjal ${programmeCount} võrreldavat kirjet ${providerCount} pakkujalt. Pakkujad programmide arvu järgi rikastatud kataloogis: ${providerRows.map((r) => `${r.provider} — ${r.count} programmi`).join("; ")}.`,
+      `Õppijale võrreldav kataloog koondab neist avalike koolilehtede põhjal ${programmeCount} kirjet ${providerCount} pakkujalt. Pakkujad programmide arvu järgi võrreldavas kataloogis: ${providerRows.map((r) => `${r.provider} — ${r.count} programmi`).join("; ")}.`,
       `Õppima saab enamasti veebis, hübriidõppes või kohapeal — õppevorm on iga programmi juures kataloogis. Registreerumine käib alati kooli enda lehel; meie kataloog suunab sind õigesse kohta ja näitab enne maht, hind ja valdkond kõrvuti.`
     ],
     relatedLinks: [
@@ -377,11 +377,11 @@ export const questions: QuestionEntry[] = [
     question: "Kas mikrokvalifikatsioon on EHIS-es ja ametlikult tunnustatud?",
     shortAnswer:
       `Jah — mikrokvalifikatsioonid on Eesti Hariduse Infosüsteemis (EHIS) registreeritud õppekavad ja seega ametlikult tunnustatud õpe. ` +
-      `EHIS-es on praegu ${ehisProgrammeCount} registreeritud mikrokvalifikatsiooni õppekava ${ehisProviderCount} pakkujalt; meie rikastatud kataloog koondab neist ${programmeCount} õppijale võrreldavat kirjet ja kuvab sobitatud ametlikud andmed otse EHIS-ist. ` +
+      `EHIS-es on praegu ${ehisProgrammeCount} registreeritud mikrokvalifikatsiooni õppekava ${ehisProviderCount} pakkujalt; meie võrreldav kataloog koondab neist ${programmeCount} õppijale kasutatavat kirjet ja kuvab sobitatud ametlikud andmed otse EHIS-ist. ` +
       `EHIS-i peab Haridus- ja Teadusministeerium ning andmed on avaandmed.`,
     body: [
       `EHIS (Eesti Hariduse Infosüsteem) on riiklik haridusandmete register, mida peab Haridus- ja Teadusministeerium. Kui mikrokvalifikatsiooni õppekava on EHIS-es registreeritud, tähendab see, et see on ametlikult kinnitatud õpe ja sellel on ametlik õppekavakood, kinnitatud maht (EAP) ning õpiväljundid.`,
-      `Meie register kasutab EHIS-i ametliku tõeallikana: iga sobitatud programmi nimi, EAP-maht, õppekeel ja ametlikud õpiväljundid pärinevad otse EHIS-ist (avaandmed, taaskasutatav viitega allikale). Nii ei tugine andmed üksnes kooli turunduslehele, vaid riiklikule registrile — see on usaldusväärsuse alus. EHIS-es on praegu ${ehisProgrammeCount} registreeritud mikrokvalifikatsiooni õppekava ${ehisProviderCount} pakkujalt; õppijale rikastatud kataloog koondab neist ${programmeCount} võrreldavat kirjet.`,
+      `Meie register kasutab EHIS-i ametliku tõeallikana: iga sobitatud programmi nimi, EAP-maht, õppekeel ja ametlikud õpiväljundid pärinevad otse EHIS-ist (avaandmed, taaskasutatav viitega allikale). Nii ei tugine andmed üksnes kooli turunduslehele, vaid riiklikule registrile — see on usaldusväärsuse alus. EHIS-es on praegu ${ehisProgrammeCount} registreeritud mikrokvalifikatsiooni õppekava ${ehisProviderCount} pakkujalt; õppijale võrreldav kataloog koondab neist ${programmeCount} kasutatavat kirjet.`,
       `Tunnustamine tööturul tuleneb just sellest ametlikust staatusest: tunnistus tõendab EHIS-es kinnitatud õppekava läbimist. Ülikooli mikrokraadi EAP-d on lisaks Euroopa ainepunktid (ECTS), mis on mõistetavad kogu Euroopas ja sageli hiljem kraadiõppes arvestatavad.`
     ],
     relatedLinks: [

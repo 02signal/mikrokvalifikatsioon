@@ -81,7 +81,7 @@ const schema = {
     {
       "@type": "Dataset",
       name: "Eesti mikrokvalifikatsioonide ja mikrokraadide andmekiht",
-      description: `Avaandmestik sisaldab kahte kihti: EHIS ametlik faktikiht (${ehisProgrammeCount} registreeritud õppekava ${ehisProviderCount} pakkujalt) ning rikastatud kasutajakataloog (${catalog.length} programmi ${providers.length} pakkujalt koos hinna, formaadi ja vastuvõtuga).`,
+      description: `Avaandmestik sisaldab kahte kihti: EHIS ametlik faktikiht (${ehisProgrammeCount} registreeritud õppekava ${ehisProviderCount} pakkujalt) ning õppijale võrreldav kasutajakataloog (${catalog.length} programmi ${providers.length} pakkujalt koos hinna, formaadi ja vastuvõtuga).`,
       url: "https://mikrokvalifikatsioon.ee/andmed/",
       inLanguage: "et",
       dateModified: catalogUpdatedAt,
@@ -90,7 +90,7 @@ const schema = {
       creator: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
       variableMeasured: ["EHIS õppekava kood", "programmi nimi", "pakkuja", "pakkuja tüüp", "valdkond", "maht (EAP)", "õpiväljundid", "hind", "õppevorm", "keel", "vastuvõtt"],
       distribution: [
-        { "@type": "DataDownload", name: "Rikastatud kasutajakataloog", encodingFormat: "application/json", contentUrl: "https://mikrokvalifikatsioon.ee/catalog.json" },
+        { "@type": "DataDownload", name: "Õppijale võrreldav kasutajakataloog", encodingFormat: "application/json", contentUrl: "https://mikrokvalifikatsioon.ee/catalog.json" },
         { "@type": "DataDownload", name: "EHIS ametlik faktikiht", encodingFormat: "application/json", contentUrl: "https://mikrokvalifikatsioon.ee/ehis-catalog.json" }
       ]
     }
@@ -103,7 +103,7 @@ const schema = {
   <head>
     <Seo
       title="Andmed | Eesti mikrokvalifikatsioonide turg ja avaandmed"
-      description={`Eesti mikrokvalifikatsioonide turg andmetes: EHIS ametlik faktikiht ${ehisProgrammeCount} õppekava / ${ehisProviderCount} pakkujat ja rikastatud kataloog ${catalog.length} programmi / ${providers.length} pakkujat.`}
+      description={`Eesti mikrokvalifikatsioonide turg andmetes: EHIS ametlik faktikiht ${ehisProgrammeCount} õppekava / ${ehisProviderCount} pakkujat ja võrreldav kataloog ${catalog.length} programmi / ${providers.length} pakkujat.`}
       canonicalPath="/andmed/"
       ogTitle="Eesti mikrokvalifikatsioonide turg andmetes"
       ogDescription="Turukaart ja avaandmed: programmide arv, pakkujad, valdkonnad, hinnad ja mahud — masinloetavalt."
@@ -120,15 +120,15 @@ const schema = {
           <h1>Eesti mikrokvalifikatsioonide turg andmetes.</h1>
           <p>
             Koondvaade kahest kihist: EHIS ametlik faktikiht näitab kogu registreeritud
-            mikrokvalifikatsiooni õppekavade universumit; rikastatud kataloog lisab õppijale olulised
+            mikrokvalifikatsiooni õppekavade universumit; võrreldav kataloog lisab õppijale olulised
             kasutusandmed nagu hind, õppevorm, vastuvõtt ja kooli leht.
           </p>
           <div class="actions">
             <a class="btn btn-primary" href="/ehis-catalog.json" data-track-event="cta_click" data-track-label="andmed_ehis_json">Ava EHIS faktikiht</a>
-            <a class="btn btn-secondary" href="/catalog.json" data-track-event="cta_click" data-track-label="andmed_catalog_json">Ava rikastatud kataloog</a>
+            <a class="btn btn-secondary" href="/catalog.json" data-track-event="cta_click" data-track-label="andmed_catalog_json">Ava võrreldav kataloog</a>
             <a class="btn btn-secondary" href="/kuidas-koostame/" data-track-event="cta_click" data-track-label="andmed_metoodika">Kuidas andmed kogume</a>
           </div>
-          <p class="report-date">EHIS snapshot: {ehisFetchedAtText}. Rikastatud kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
+          <p class="report-date">EHIS snapshot: {ehisFetchedAtText}. Võrreldav kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
         </div>
       </section>
 
@@ -138,8 +138,8 @@ const schema = {
             <div><strong>{ehisProgrammeCount}</strong><span>EHIS registreeritud õppekava</span></div>
             <div><strong>{ehisProviderCount}</strong><span>EHIS pakkujat</span></div>
             <div><strong>{ehisFieldCount}</strong><span>EHIS õppekavarühma</span></div>
-            <div><strong>{catalog.length}</strong><span>rikastatud kataloogikirjet</span></div>
-            <div><strong>{providers.length}</strong><span>rikastatud pakkujat</span></div>
+            <div><strong>{catalog.length}</strong><span>võrreldavat kataloogikirjet</span></div>
+            <div><strong>{providers.length}</strong><span>kooli kataloogis</span></div>
             <div><strong>{fields.length}</strong><span>valdkonda</span></div>
             {minEcts != null && maxEcts != null && (
               <div><strong>{minEcts}–{maxEcts}</strong><span>EAP vahemik</span></div>
@@ -163,7 +163,7 @@ const schema = {
           <p class="lede">
             See kiht on mõeldud uurimiseks, turuanalüüsiks ja uute pakkujate avastamiseks. Siin on ametlik
             õppekava kood, pakkuja, pakkuja tüüp, EAP, õppekavarühm, keel ja õpiväljundid. Hinda,
-            vastuvõtuaega ja turunduslikku kirjeldust EHIS tavaliselt ei anna — need lisanduvad rikastatud kataloogis.
+            vastuvõtuaega ja turunduslikku kirjeldust EHIS tavaliselt ei anna — need lisanduvad võrreldavas kataloogis.
           </p>
           <div class="grid-3">
             <article class="card">
@@ -204,8 +204,8 @@ const schema = {
       <section class="white">
         <div class="section-inner">
           <div class="section-head compact-head">
-            <span class="kicker">Rikastatud kataloog</span>
-            <h2>Õppija jaoks rikastatud kirjete jaotus valdkondade kaupa.</h2>
+            <span class="kicker">Võrreldav kataloog</span>
+            <h2>Õppijale võrreldavate kirjete jaotus valdkondade kaupa.</h2>
           </div>
           <div class="bars">
             {byField.map((row) => (
@@ -253,17 +253,17 @@ const schema = {
             <h2>Kasuta mõlemat andmekihti oma analüüsis.</h2>
           </div>
           <p>
-            EHIS faktikiht annab ametliku täisuniversumi. Rikastatud kataloog annab õppija ja turunduse
+            EHIS faktikiht annab ametliku täisuniversumi. Võrreldav kataloog annab õppija ja turunduse
             jaoks vajalikud lisaväljad. Mõlemad on masinloetavad, et otsingud, turuülevaated ja
             uurimisprojektid ei peaks staatilisi numbreid käsitsi kopeerima.
           </p>
           <ul class="check">
             <li><a href="/ehis-catalog.json" data-track-event="cta_click" data-track-label="andmed_ehis_json_2">ehis-catalog.json</a> — EHIS ametlik faktikiht ({ehisProgrammeCount} õppekava, {ehisProviderCount} pakkujat)</li>
-            <li><a href="/catalog.json" data-track-event="cta_click" data-track-label="andmed_json">catalog.json</a> — rikastatud kasutajakataloog ({catalog.length} programmi, {providers.length} pakkujat)</li>
+            <li><a href="/catalog.json" data-track-event="cta_click" data-track-label="andmed_json">catalog.json</a> — õppijale võrreldav kasutajakataloog ({catalog.length} programmi, {providers.length} pakkujat)</li>
             <li><a href="/llms.txt" data-track-event="cta_click" data-track-label="andmed_llms">llms.txt</a> — kokkuvõte AI-assistentidele</li>
           </ul>
           <p class="field-help">
-            <strong>Kuidas viidata:</strong> „Mikrokvalifikatsioon.ee andmekiht, EHIS snapshot {ehisFetchedAtText}, rikastatud kataloog uuendatud {updatedAtText}; avalikud allikafaktid kontrollitud {checkedAtText},
+            <strong>Kuidas viidata:</strong> „Mikrokvalifikatsioon.ee andmekiht, EHIS snapshot {ehisFetchedAtText}, võrreldav kataloog uuendatud {updatedAtText}; avalikud allikafaktid kontrollitud {checkedAtText},
             https://mikrokvalifikatsioon.ee/andmed/". Vaata ka <a href="/kuidas-koostame/">metoodikat ja sõltumatust</a>.
             <br /><strong>Litsents:</strong> <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a> — vaba kasutada viitega.
             <br /><strong>EHIS viide:</strong> {ehisAttribution}. {ehisLicence}.

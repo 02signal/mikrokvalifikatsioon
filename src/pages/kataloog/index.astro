@@ -30,7 +30,7 @@ const schema = {
     {
       // Loend viitab programmilehtedele; rikas Course-schema elab iga programmilehe peal.
       "@type": "ItemList",
-      name: "Eesti mikrokvalifikatsioonide ja mikrokraadide rikastatud kataloog",
+      name: "Eesti mikrokvalifikatsioonide ja mikrokraadide võrreldav kataloog",
       numberOfItems: catalog.length,
       itemListElement: catalog.map((entry, index) => ({
         "@type": "ListItem",
@@ -48,10 +48,10 @@ const schema = {
   <head>
     <Seo
       title="Eesti mikrokvalifikatsioonid ja mikrokraadid – kataloog"
-      description={`Rikastatud kataloog: ${catalog.length} võrreldavat programmi ${providers.length} koolist. Ametlik EHIS faktikiht: ${ehisProgrammeCount} registreeritud õppekava ${ehisProviderCount} pakkujalt.`}
+      description={`Võrreldav kataloog: ${catalog.length} programmi ${providers.length} koolist. Ametlik EHIS faktikiht: ${ehisProgrammeCount} registreeritud õppekava ${ehisProviderCount} pakkujalt.`}
       canonicalPath="/kataloog/"
       ogTitle="Eesti mikrokvalifikatsioonide ja mikrokraadide kataloog"
-      ogDescription="Õppijale võrreldavad programmid ühes kohas ning eraldi EHIS ametlik täisfaktide kiht."
+      ogDescription="Õppijale võrreldavad programmid ühes kohas ning eraldi EHIS ametlik faktikiht."
       jsonLd={schema}
     />
   </head>
@@ -61,22 +61,21 @@ const schema = {
     <main class="report-page simple-report">
       <section class="report-hero simple-report-hero">
         <div class="section-inner">
-          <span class="eyebrow">Register</span>
-          <h1>Rikastatud kataloog: {catalog.length} võrreldavat mikrokvalifikatsiooni ja mikrokraadi {providers.length} koolist.</h1>
+          <span class="eyebrow">Kataloog</span>
+          <h1>Leia mikrokvalifikatsioon või mikrokraad, mida saab päriselt võrrelda.</h1>
           <p>
-            See vaade näitab õppijale võrreldavaid kirjeid: valdkond, maht, hind
-            (kui kool on selle avaldanud) ja link kooli enda lehele. Ametlik EHIS
-            täisfaktide kiht katab eraldi {ehisProgrammeCount} registreeritud õppekava
-            {ehisProviderCount} pakkujalt.
+            Vali valdkond, kool või märksõna ja vaata ühes kohas mahtu, hinda,
+            õppevormi ning linki kooli ametlikule lehele. Täielik EHIS turupilt
+            ja õppijale võrreldav valik on allpool eraldi numbritena.
           </p>
           <div class="catalog-proof">
             <div><strong>{ehisProgrammeCount}</strong><span>EHIS õppekava</span></div>
             <div><strong>{ehisProviderCount}</strong><span>EHIS pakkujat</span></div>
-            <div><strong>{catalog.length}</strong><span>rikastatud kirjet</span></div>
-            <div><strong>{providers.length}</strong><span>võrreldavat pakkujat</span></div>
+            <div><strong>{catalog.length}</strong><span>võrreldavat kirjet</span></div>
+            <div><strong>{providers.length}</strong><span>kooli kataloogis</span></div>
           </div>
           <p class="report-date">
-            Rikastatud kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}. EHIS faktikiht uuendatud: {ehisFetchedAtText}.
+            Võrreldav kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}. EHIS faktikiht uuendatud: {ehisFetchedAtText}.
             <a href="/andmed/" data-track-event="cta_click" data-track-label="catalog_to_data">Vaata kogu andmekaarti →</a>
           </p>
         </div>
@@ -104,16 +103,16 @@ const schema = {
               </select>
             </div>
           </div>
-          <p class="field-help" data-catalog-count>{catalog.length} rikastatud programmi</p>
+          <p class="field-help" data-catalog-count>{catalog.length} võrreldavat programmi</p>
 
           <nav class="field-links" aria-label="Sirvi valdkonniti">
-            <span>Võrdle rikastatud kataloogi valdkonniti:</span>
+            <span>Võrdle kataloogi valdkonniti:</span>
             {fieldsWithSlug.map((f) => (
               <a href={`/valdkond/${f.slug}/`} data-track-event="cta_click" data-track-label="catalog_field_link">{f.field} <b>{catalog.filter((e) => e.field === f.field).length}</b></a>
             ))}
           </nav>
           <nav class="field-links" aria-label="Sirvi koolide kaupa">
-            <span>Rikastatud kataloogi koolid:</span>
+            <span>Koolide kaupa:</span>
             {providersWithSlug.map((p) => (
               <a href={`/koolitaja/${p.slug}/`} data-track-event="cta_click" data-track-label="catalog_provider_link">{p.provider} <b>{catalog.filter((e) => e.provider === p.provider).length}</b></a>
             ))}
@@ -320,7 +319,7 @@ const schema = {
           if (show) visible += 1;
         }
         lastVisible = visible;
-        if (count) count.textContent = `${visible} rikastatud programmi`;
+        if (count) count.textContent = `${visible} võrreldavat programmi`;
         clearTimeout(searchTimer);
         searchTimer = setTimeout(trackSearch, 600);
       };
