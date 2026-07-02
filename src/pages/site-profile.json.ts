@@ -1,4 +1,12 @@
 import { catalog, providers, fields, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
+import {
+  ehisFetchedAt,
+  ehisFieldStats,
+  ehisProgrammeCount,
+  ehisProviderCount,
+  ehisProviderStats,
+  ehisProviderTypeStats
+} from "../data/ehisFacts";
 
 // Genereeritud andmetest, et loendid ja kuupäev ei triiviks reaalsest kataloogist.
 export async function GET() {
@@ -14,7 +22,7 @@ export async function GET() {
     purpose:
       "Sõltumatu register ja teejuht: kõik Eesti mikrokvalifikatsioonid ja ülikoolide mikrokraadid ühes filtreeritavas kataloogis koos hinna, mahu ja rahastusvõimalustega.",
     importantCaveat:
-      "See ei ole riiklik register. Ametlik info on iga kooli enda lehel (catalog.json url-väli). Toetuste tingimused kinnitab Töötukassa või tööandja.",
+      "See ei ole riiklik register. Ametlik EHIS faktikiht on peegeldatud eraldi failis ehis-catalog.json; hind, vastuvõtt ja kooli kirjeldav info on iga kooli enda lehel (catalog.json url-väli). Toetuste tingimused kinnitab Töötukassa või tööandja.",
     corePositioning:
       "Mikrokraad on üks mikrokvalifikatsiooni liik. Mikrokvalifikatsioon on katusmõiste; ülikoolide pakutavaid kutsutakse mikrokraadideks.",
     catalog: {
@@ -26,6 +34,15 @@ export async function GET() {
         count: catalog.filter((entry) => entry.field === field).length
       }))
     },
+    ehisFacts: {
+      fetchedAt: ehisFetchedAt,
+      count: ehisProgrammeCount,
+      providerCount: ehisProviderCount,
+      providerTypes: ehisProviderTypeStats,
+      topProviders: ehisProviderStats.slice(0, 15),
+      topFields: ehisFieldStats.slice(0, 15),
+      url: "https://mikrokvalifikatsioon.ee/ehis-catalog.json"
+    },
     pages: [
       { url: "https://mikrokvalifikatsioon.ee/", purpose: "Avaleht ja suunatest: 4 küsimust, kohe 3 sobivat programmi ja rahastuse vihje." },
       { url: "https://mikrokvalifikatsioon.ee/kataloog/", purpose: `Filtreeritav register: ${catalog.length} programmi ${providers.length} koolist (otsing /kataloog/?q=, valdkond, kool).` },
@@ -36,9 +53,10 @@ export async function GET() {
       { url: "https://mikrokvalifikatsioon.ee/kkk/", purpose: "Korduma kippuvad küsimused: definitsioonid, aeg, hind, rahastus, tunnustus ja koolitajale — FAQPage schemaga." },
       { url: "https://mikrokvalifikatsioon.ee/koolitajale/", purpose: "Koolitajale: ametlik raamistik (TKS, 5–30 EAP, HAKA, EHIS) ja vorm oma programmi registrisse lisamiseks." },
       { url: "https://mikrokvalifikatsioon.ee/koolitajale/kvaliteedihindamine/", purpose: "Praktiline juhend: kvaliteedihindamise 8 valdkonda, tüüpvead ja ettevalmistus koolitajale." },
-      { url: "https://mikrokvalifikatsioon.ee/andmed/", purpose: "Turukaart ja avaandmed ametnikele/uurijatele: jaotused valdkonniti, hinna- ja mahuvahemik, link catalog.json-ile." },
+      { url: "https://mikrokvalifikatsioon.ee/andmed/", purpose: "Turukaart ja avaandmed ametnikele/uurijatele: EHIS täisuniversum + rikastatud kataloog, jaotused pakkuja/valdkonna/koolitüübi järgi." },
       { url: "https://mikrokvalifikatsioon.ee/kuidas-koostame/", purpose: "Metoodika ja sõltumatus: allikad, kontrollkuupäevad, neutraalsus, paranduste protsess." },
-      { url: "https://mikrokvalifikatsioon.ee/catalog.json", purpose: "Masinloetav register koos sourceCheckedAt kuupäevadega." }
+      { url: "https://mikrokvalifikatsioon.ee/catalog.json", purpose: "Masinloetav rikastatud register koos sourceCheckedAt kuupäevadega." },
+      { url: "https://mikrokvalifikatsioon.ee/ehis-catalog.json", purpose: "Masinloetav EHIS ametlik faktikiht: kõik registreeritud mikrokvalifikatsiooni õppekavad, pakkujad, EAP, valdkonnad ja õpiväljundid." }
     ],
     trackedEvents: ["tool_start", "tool_completed", "result_high_intent", "cta_click", "partner_site_click", "lead_form_start", "lead_form_submit"],
     recommendedAssistantAnswerPattern:
