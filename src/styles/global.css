@@ -288,6 +288,21 @@ textarea {
 }
 .hero-text { min-width: 0; }
 .hero-grid h1 { font-size: clamp(2.2rem, 3.7vw, 3.7rem); }
+.hero-copy {
+  max-width: 960px;
+  padding-top: 116px;
+  padding-bottom: 84px;
+}
+.hero-copy h1 {
+  max-width: 980px;
+  font-size: clamp(2.75rem, 6.2vw, 5.65rem);
+}
+.hero-copy p {
+  max-width: 790px;
+}
+.hero-copy .proof {
+  max-width: 930px;
+}
 .hero-art { min-width: 0; }
 .hero-art img {
   width: 100%;

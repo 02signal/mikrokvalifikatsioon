@@ -50,7 +50,7 @@ const schema = {
       url: "https://mikrokvalifikatsioon.ee/",
       email: "info@mikrokvalifikatsioon.ee",
       telephone: "+37258180435",
-      description: "Sõltumatu register ja teejuht: ametlik EHIS mikrokvalifikatsioonide faktikiht ning õppijale rikastatud kataloog hinna, mahu ja rahastusvõimalustega.",
+      description: "Sõltumatu register ja teejuht: ametlik EHIS mikrokvalifikatsioonide faktikiht ning õppijale võrreldav kataloog hinna, mahu ja rahastusvõimalustega.",
       areaServed: "EE",
       logo: "https://mikrokvalifikatsioon.ee/logo-square.png",
       contactPoint: { "@type": "ContactPoint", areaServed: "EE", availableLanguage: ["et"] }
@@ -72,7 +72,7 @@ const schema = {
     },
     {
       "@type": "Dataset",
-      name: "Eesti mikrokvalifikatsioonide ja mikrokraadide rikastatud kataloog",
+      name: "Eesti mikrokvalifikatsioonide ja mikrokraadide võrreldav kataloog",
       description: "Avalik õppijale võrreldav kataloog Eesti ülikoolide ja koolitajate mikrokvalifikatsioonidest ja mikrokraadidest: nimi, pakkuja, valdkond, maht, hind, õppevorm.",
       url: "https://mikrokvalifikatsioon.ee/catalog.json",
       inLanguage: "et",
@@ -113,10 +113,10 @@ const schema = {
   <head>
     <Seo
       title="Mikrokvalifikatsioonid ja mikrokraadid – Eesti register"
-      description={`EHIS ametlik faktikiht: ${ehisProgrammeCount} mikrokvalifikatsiooni õppekava ${ehisProviderCount} pakkujalt. Rikastatud kataloog: ${catalog.length} võrreldavat programmi hinna, mahu ja rahastusinfoga.`}
+      description={`EHIS ametlik faktikiht: ${ehisProgrammeCount} mikrokvalifikatsiooni õppekava ${ehisProviderCount} pakkujalt. Võrreldav kataloog: ${catalog.length} programmi hinna, mahu ja rahastusinfoga.`}
       canonicalPath="/"
       ogTitle="Eesti mikrokvalifikatsioonide ja mikrokraadide register"
-      ogDescription="Ametlik EHIS täisfaktide kiht ja õppijale võrreldav rikastatud kataloog koos hinna ja rahastusvõimalustega."
+      ogDescription="Ametlik EHIS faktikiht ja õppijale võrreldav kataloog koos hinna ja rahastusvõimalustega."
       jsonLd={schema}
       langAlternates={[{ lang: "et", path: "/" }, { lang: "en", path: "/en/" }]}
     />
@@ -165,39 +165,35 @@ const schema = {
 
     <main>
       <section class="hero">
-        <div class="hero-inner hero-grid">
+        <div class="hero-inner hero-copy">
           <div class="hero-text">
-          <span class="eyebrow">Uus oskus ilma aastatepikkuse kraadiõppeta</span>
-          <h1>Leia oskus, mida tööandjad tunnustavad — ja keegi, kes selle kinni maksab.</h1>
-          <p>
-            Eestis on juba sadu EHIS-es registreeritud mikrokvalifikatsiooni õppekavu, aga
-            õppijale vajalikud detailid on laiali kümnete koolide lehtedel. Siin on ametlik
-            täisfaktide kiht ja rikastatud kataloog koos sellega, mida õpid, kui kaua kestab,
-            mis maksab ja millal saab alustada.
-          </p>
-          <div class="actions">
-            <a class="btn btn-primary" href="#suunatest" data-track-event="cta_click" data-track-label="home_hero_suunatest">Tee 2 minuti suunatest</a>
-            <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="home_hero_kataloog">Ava kataloog</a>
-          </div>
-          <div class="proof">
-            <div><strong>{ehisProgrammeCount}</strong><span>EHIS õppekava</span></div>
-            <div><strong>{ehisProviderCount}</strong><span>EHIS pakkujat</span></div>
-            <div><strong>{catalog.length}</strong><span>rikastatud valikut</span></div>
-            <div><strong>kuud, mitte aastad</strong><span>tüüpiline õppeaeg</span></div>
-          </div>
-          <div class="hero-authority">
-            <p class="hero-authority-stat">
-              <strong>{ehisVerifiedCount} rikastatud kirjet</strong>
-              <span>{catalogTotalCount}-st EHIS-iga sobitatud; täis EHIS kiht katab {ehisProgrammeCount} õppekava.</span>
+            <span class="eyebrow">Uus oskus ilma aastatepikkuse kraadiõppeta</span>
+            <h1>Leia oskus, mida tööandjad tunnustavad — ja keegi, kes selle kinni maksab.</h1>
+            <p>
+              Eestis on EHIS-es juba sadu mikrokvalifikatsiooni õppekavu. Meie toome
+              õppijale vajalikud detailid ühte vaatesse: mida õpid, kui kaua kestab,
+              mis maksab, kes võib maksta ja millal saab alustada.
             </p>
-            <p class="hero-authority-source">
-              Andmed pärinevad EHIS-ist — Eesti Hariduse Infosüsteem
-              (Haridus- ja Teadusministeerium).
-            </p>
-          </div>
-          </div>
-          <div class="hero-art">
-            <img src="/hero-home.webp" width="1600" height="1200" loading="eager" alt="Abstraktne ja väärikas mikrokvalifikatsiooni ja mikrokraadi tunnistuse ning astmelise õpitee visuaal" />
+            <div class="actions">
+              <a class="btn btn-primary" href="#suunatest" data-track-event="cta_click" data-track-label="home_hero_suunatest">Tee 2 minuti suunatest</a>
+              <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="home_hero_kataloog">Ava kataloog</a>
+            </div>
+            <div class="proof">
+              <div><strong>{ehisProgrammeCount}</strong><span>EHIS õppekava</span></div>
+              <div><strong>{ehisProviderCount}</strong><span>EHIS pakkujat</span></div>
+              <div><strong>{catalog.length}</strong><span>võrreldavat kirjet</span></div>
+              <div><strong>kuud, mitte aastad</strong><span>tüüpiline õppeaeg</span></div>
+            </div>
+            <div class="hero-authority">
+              <p class="hero-authority-stat">
+                <strong>{ehisVerifiedCount} võrreldavat kirjet</strong>
+                <span>{catalogTotalCount}-st EHIS-iga sobitatud; täis EHIS kiht katab {ehisProgrammeCount} õppekava.</span>
+              </p>
+              <p class="hero-authority-source">
+                Andmed pärinevad EHIS-ist — Eesti Hariduse Infosüsteem
+                (Haridus- ja Teadusministeerium).
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -250,7 +246,7 @@ const schema = {
             <li class="hub-card">
               <a href="/kataloog/" data-track-event="cta_click" data-track-label="home_hub_kataloog">
                 <span class="hub-name">Kataloog</span>
-                <span class="hub-desc">Rikastatud kataloogi programmid ühes filtreeritavas nimekirjas.</span>
+                <span class="hub-desc">Võrreldava kataloogi programmid ühes filtreeritavas nimekirjas.</span>
               </a>
             </li>
             <li class="hub-card">

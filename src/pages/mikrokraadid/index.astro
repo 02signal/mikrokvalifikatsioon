@@ -30,7 +30,7 @@ const schema = {
       "@type": "Article",
       image: "https://mikrokvalifikatsioon.ee/og/mikrokraadid.png",
       headline: "Mikrokraadid Eestis: mis need on ja kust neid leida",
-      description: "Mikrokraad on kõrgkooli pakutav mikrokvalifikatsioon. Ülevaade rikastatud mikrokraadikirjetest koolide kaupa ning viide EHIS ametlikule täiskihile.",
+      description: "Mikrokraad on kõrgkooli pakutav mikrokvalifikatsioon. Ülevaade võrreldavatest mikrokraadikirjetest koolide kaupa ning viide EHIS ametlikule täiskihile.",
       inLanguage: "et",
       datePublished: "2026-06-12",
       dateModified: catalogUpdatedAt,
@@ -46,12 +46,12 @@ const schema = {
 <html lang="et">
   <head>
     <Seo
-      title="Mikrokraadid Eestis | Rikastatud vaade ja EHIS faktikiht"
-      description={`Mikrokraad on kõrgkooli mikrokvalifikatsioon. Rikastatud vaates on ${universityEntries.length} võrreldavat mikrokraadikirjet; EHIS ametlik faktikiht katab ${ehisProgrammeCount} õppekava ${ehisProviderCount} pakkujalt.`}
+      title="Mikrokraadid Eestis | Võrreldav vaade ja EHIS faktikiht"
+      description={`Mikrokraad on kõrgkooli mikrokvalifikatsioon. Võrreldavas vaates on ${universityEntries.length} mikrokraadikirjet; EHIS ametlik faktikiht katab ${ehisProgrammeCount} õppekava ${ehisProviderCount} pakkujalt.`}
       canonicalPath="/mikrokraadid/"
       ogType="article"
-      ogTitle="Mikrokraadid Eestis — rikastatud vaade ja EHIS faktikiht"
-      ogDescription="Mis on mikrokraad, kuidas see erineb mikrokvalifikatsioonist ja kuidas rikastatud kataloog suhestub EHIS ametliku täiskihiga."
+      ogTitle="Mikrokraadid Eestis — võrreldav vaade ja EHIS faktikiht"
+      ogDescription="Mis on mikrokraad, kuidas see erineb mikrokvalifikatsioonist ja kuidas võrreldav kataloog suhestub EHIS ametliku täiskihiga."
       jsonLd={schema}
     />
   </head>
@@ -62,19 +62,19 @@ const schema = {
       <section class="report-hero simple-report-hero">
         <div class="section-inner">
           <span class="eyebrow">Mikrokraadid</span>
-          <h1>Mikrokraad on ülikooli mikrokvalifikatsioon.</h1>
+          <h1>Mikrokraad on kõrgkooli mikrokvalifikatsioon.</h1>
           <p>
             Lühike ülikooliõpe — tavaliselt mõni kuu kuni kaks semestrit töö kõrvalt — mille
-            lõpus saad ametliku tunnistuse ühe konkreetse oskuse kohta. Eesti ülikoolid
-            ja rakenduskõrgkoolid pakuvad neid juba sadu. Siin on õppijale rikastatud valik
-            koos mahu, hinna ja kooli lingiga; EHIS ametlik faktikiht katab {ehisProgrammeCount}
-            registreeritud mikrokvalifikatsiooni õppekava {ehisProviderCount} pakkujalt.
+            lõpus saad ametliku tunnistuse ühe konkreetse oskuse kohta. Siin saad
+            mikrokraade võrrelda kooli, mahu, hinna ja algusaja järgi; EHIS ametlik
+            turupilt katab {ehisProgrammeCount} registreeritud mikrokvalifikatsiooni
+            õppekava {ehisProviderCount} pakkujalt.
           </p>
           <div class="actions">
             <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="mikrokraadid_hero_kataloog">Ava filtreeritav kataloog</a>
             <a class="btn btn-secondary" href="/andmed/" data-track-event="cta_click" data-track-label="mikrokraadid_hero_andmed">Vaata EHIS andmekaarti</a>
           </div>
-          <p class="report-date">Rikastatud kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud koolide lehtedelt: {checkedAtText}. EHIS faktikiht uuendatud: {ehisFetchedAtText}.</p>
+          <p class="report-date">Võrreldav kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud koolide lehtedelt: {checkedAtText}. EHIS faktikiht uuendatud: {ehisFetchedAtText}.</p>
         </div>
       </section>
 
@@ -82,7 +82,7 @@ const schema = {
         <div class="section-inner">
           <div class="section-head compact-head">
             <span class="kicker">Koolide kaupa</span>
-            <h2>Rikastatud mikrokraadikirjed Eesti kõrgkoolides.</h2>
+            <h2>Mikrokraadid Eesti kõrgkoolides.</h2>
           </div>
           {byProvider.map(({ provider, entries }) => (
             <div class="provider-block">

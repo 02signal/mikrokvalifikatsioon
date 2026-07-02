@@ -15,7 +15,7 @@ export async function GET() {
   const payload = {
     site: "Mikrokvalifikatsioon.ee",
     description:
-      "EHIS ametlik mikrokvalifikatsiooni õppekavade faktikiht: kõik avalikus EHIS snapshotis olevad registreeritud õppekavad, pakkujad, mahud, valdkonnad ja õpiväljundid. See täiendab rikastatud kasutajakataloogi catalog.json.",
+      "EHIS ametlik mikrokvalifikatsiooni õppekavade faktikiht: kõik avalikus EHIS snapshotis olevad registreeritud õppekavad, pakkujad, mahud, valdkonnad ja õpiväljundid. See täiendab õppijale võrreldavat kasutajakataloogi catalog.json.",
     source: "EHIS",
     publisher: ehisPublisher,
     attribution: ehisAttribution,
@@ -27,7 +27,7 @@ export async function GET() {
     providers: ehisProviderStats,
     fields: ehisFieldStats,
     importantCaveat:
-      "See on ametlikest EHIS avaandmetest koostatud faktikiht, mitte turunduslik rikastatud kataloog. Hinna, vastuvõtuaja ja kooli kirjeldava müügiteksti jaoks kasuta catalog.json kirjeid või kooli ametlikku lehte.",
+      "See on ametlikest EHIS avaandmetest koostatud faktikiht, mitte õppijale võrreldav turundus- ja kasutuskataloog. Hinna, vastuvõtuaja ja kooli kirjeldava müügiteksti jaoks kasuta catalog.json kirjeid või kooli ametlikku lehte.",
     curricula: ehisCurricula.map((entry) => ({
       ehisKood: entry.ehis_kood,
       providerRegistryCode: entry.registrikood,
