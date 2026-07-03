@@ -24,6 +24,7 @@
 //   /oskused/ ja see sild kasutavad sama identiteeti.
 
 import { catalog } from "./catalog/index.ts";
+import { cleanOutcomeTexts } from "./outcomes.ts";
 import { outcomeMeta } from "../lib/outcome-ref.ts";
 
 /** Ühe õpiväljundi serveri-pide: taksonoomia-silt + mitte-PII viide. */
@@ -46,8 +47,7 @@ function dedupKey(text: string): string {
 function buildOutcomeRefMap(): Record<string, OutcomeRefRecord> {
   const out: Record<string, OutcomeRefRecord> = {};
   for (const entry of catalog) {
-    if (!entry.outcomes) continue;
-    for (const raw of entry.outcomes) {
+    for (const raw of cleanOutcomeTexts(entry)) {
       const text = raw.trim();
       if (!text) continue;
       const key = dedupKey(text);

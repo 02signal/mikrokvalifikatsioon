@@ -1,5 +1,6 @@
 import { catalog, providers, fields, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
 import { parsePriceEur } from "../data/courseSchema";
+import { cleanOutcomeTexts } from "../data/outcomes";
 import { ehisFetchedAt, ehisFieldStats, ehisProgrammeCount, ehisProviderCount, ehisProviderStats } from "../data/ehisFacts";
 
 // Täisekspport LLM-idele (GEO): kogu register ühes failis, et AI-assistendid saaksid
@@ -12,6 +13,7 @@ export async function GET() {
   const priceLine = paid.length ? `${Math.min(...paid)}–${Math.max(...paid)} €` : "see provider pages";
 
   const entryBlock = (e: (typeof catalog)[number]): string => {
+    const outcomes = cleanOutcomeTexts(e);
     const facts = [
       e.field,
       e.ects != null ? `${e.ects} EAP` : null,
@@ -26,7 +28,7 @@ export async function GET() {
       facts,
       e.summary ? e.summary : null,
       e.goalText ? `Eesmärk: ${e.goalText}` : null,
-      e.outcomes && e.outcomes.length ? `Õpiväljundid: ${e.outcomes.map((o) => o.trim()).join("; ")}` : null,
+      outcomes.length ? `Õpiväljundid: ${outcomes.map((o) => o.trim()).join("; ")}` : null,
       e.assessmentText ? `Hindamine: ${e.assessmentText}` : null,
       `URL: https://mikrokvalifikatsioon.ee/kataloog/${e.slug}/`,
       `Allikas (kool): ${e.url}`

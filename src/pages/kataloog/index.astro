@@ -119,7 +119,7 @@ const schema = {
               </select>
             </div>
             <div class="field">
-              <label for="catalogLanguage">Õppekeel</label>
+              <label for="catalogLanguage">Programmi õppekeel</label>
               <select id="catalogLanguage" data-catalog-language>
                 <option value="">Kõik keeled</option>
                 {languages.map((item) => <option value={item.language}>{item.label} ({item.count})</option>)}
@@ -167,7 +167,7 @@ const schema = {
                 </div>
                 <dl>
                   <div><dt>Kool</dt><dd>{entry.provider}</dd></div>
-                  {entry.language && <div><dt>Õppekeel</dt><dd>{languageLabel(entry.language)}</dd></div>}
+                  {entry.language && <div><dt>Programmi õppekeel</dt><dd>{languageLabel(entry.language)}</dd></div>}
                   {entry.ects && <div><dt>Maht</dt><dd>{entry.ects} EAP</dd></div>}
                   {entry.priceText && <div><dt>Hind</dt><dd>{entry.priceText}</dd></div>}
                   {entry.durationText && <div><dt>Kestus</dt><dd>{entry.durationText}</dd></div>}

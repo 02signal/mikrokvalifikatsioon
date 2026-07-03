@@ -1,4 +1,5 @@
 import { catalog } from "./catalog";
+import { cleanOutcomeTexts } from "./outcomes";
 
 // Programmaatilised teema-/oskusemaandumislehed (pSEO).
 // Kureeritud mõistekaart: iga teema seob otsingusõna(d) andmete vastu. Leht tekib
@@ -53,7 +54,7 @@ export const TOPIC_DEFS: TopicDef[] = [
 type Entry = (typeof catalog)[number];
 
 function blob(e: Entry): string {
-  return [e.name, e.summary, e.goalText, e.field, ...(e.outcomes ?? [])]
+  return [e.name, e.summary, e.goalText, e.field, ...cleanOutcomeTexts(e)]
     .filter(Boolean)
     .join(" ")
     .toLowerCase();
@@ -81,7 +82,7 @@ export function topicOutcomes(t: Topic): { text: string; slug: string; name: str
   const out: { text: string; slug: string; name: string }[] = [];
   const seen = new Set<string>();
   for (const e of t.entries) {
-    for (const o of e.outcomes ?? []) {
+    for (const o of cleanOutcomeTexts(e)) {
       const lo = o.toLowerCase();
       if (!t.match.some((m) => lo.includes(m))) continue;
       const key = lo.trim();

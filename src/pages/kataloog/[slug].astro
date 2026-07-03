@@ -11,6 +11,7 @@ import { ehisAttribution } from "../../data/ehisFacts";
 import { intakeDatesFor, intakeDatesFetchedAt } from "../../data/intakeDates";
 import { formatEt } from "../../data/dates";
 import { fundingInfoFor, hasFundingInfo } from "../../data/funding";
+import { entryOutcomeObjects, languageLabel } from "../../data/outcomes";
 
 export function getStaticPaths() {
   return catalog.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
@@ -41,7 +42,8 @@ const ehisPdfUrl = ehis.officialPdfUrl;
 //  - schoolOutcomes = kooli ENDA õpiväljundid (originaal, säilitatud).
 // Sobimata (none) kirjel ehisOutcomes puudub ja kuvame ainult kooli oma.
 const ehisOutcomes = ehis.ehisOutcomes && ehis.ehisOutcomes.length > 0 ? ehis.ehisOutcomes : null;
-const schoolOutcomes = entry.outcomes && entry.outcomes.length > 0 ? entry.outcomes : null;
+const schoolOutcomeObjects = entryOutcomeObjects(entry);
+const schoolOutcomes = schoolOutcomeObjects.length > 0 ? schoolOutcomeObjects : null;
 // Kas kuvada eraldiseisev "Kooli enda kirjeldus" plokk: kui on kas kooli
 // õpiväljundid VÕI eesmärk (summary on alati hero-osas eraldi).
 const hasSchoolDescription = !!(schoolOutcomes || entry.goalText);
@@ -257,7 +259,14 @@ const schema = {
                   {entry.goalText && <p>{entry.goalText}</p>}
                   {schoolOutcomes && schoolOutcomes.length > 0 && (
                     <ul class="check">
-                      {schoolOutcomes.map((outcome) => <li>{outcome}</li>)}
+                      {schoolOutcomes.map((outcome) => (
+                        <li>
+                          {outcome.text}
+                          {outcome.textLanguage && outcome.textLanguage !== entry.language && (
+                            <span class="outcome-lang"> tekst: {languageLabel(outcome.textLanguage)}</span>
+                          )}
+                        </li>
+                      ))}
                     </ul>
                   )}
                   <p class="src-credit">
@@ -279,7 +288,14 @@ const schema = {
                 <div class="detail-block">
                   <h2>Mida sa pärast oskad?</h2>
                   <ul class="check">
-                    {schoolOutcomes.map((outcome) => <li>{outcome}</li>)}
+                    {schoolOutcomes.map((outcome) => (
+                      <li>
+                        {outcome.text}
+                        {outcome.textLanguage && outcome.textLanguage !== entry.language && (
+                          <span class="outcome-lang"> tekst: {languageLabel(outcome.textLanguage)}</span>
+                        )}
+                      </li>
+                    ))}
                   </ul>
                 </div>
               )}
@@ -411,6 +427,7 @@ const schema = {
       .detail-block-official, .detail-block-school { padding: 16px 18px; border-radius: 12px; border: 1px solid #d9e3ea; }
       .detail-block-official { background: #eef5f4; border-left: 4px solid var(--teal); }
       .detail-block-school { background: #fbfbf9; border-left: 4px solid #c9d2c9; }
+      .outcome-lang { display: inline-block; margin-left: 6px; color: #5a6b80; font-size: 0.86rem; font-weight: 600; }
       .src-credit { margin: 10px 0 0; font-size: 0.82rem; color: #5a6b80; }
       .notice-official { border-left-color: var(--teal); background: #eef5f4; margin-bottom: 16px; }
       .notice-school-check { border-left-color: var(--teal); background: #eef5f4; margin: 0 0 24px; }

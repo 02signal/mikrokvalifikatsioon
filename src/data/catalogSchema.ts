@@ -31,6 +31,8 @@ export type CatalogEntry = {
   goalText?: string | null;
   /** learning outcomes, short compressed bullets from the provider page; null until collected */
   outcomes?: string[] | null;
+  /** structured learning outcomes from AMOS feed; `language`/`textLanguage` = text language, `teachingLanguage` = programme language */
+  outcomeObjects?: CatalogOutcomeObject[] | null;
   /** assessment method(s) as stated by the provider; null until collected */
   assessmentText?: string | null;
   /** ISO date (YYYY-MM-DD) — registration deadline; from feed or parsed from intakeText */
@@ -38,4 +40,25 @@ export type CatalogEntry = {
   /** ISO date (YYYY-MM-DD) — study start; from feed or parsed from intakeText */
   startDate?: string | null;
   sourceCheckedAt: string;
+};
+
+export type CatalogLanguage = "et" | "en" | "ru";
+
+export type OutcomeQualityState = "approved" | "needs_review" | "rejected_fragment";
+
+export type CatalogOutcomeObject = {
+  id?: string | null;
+  text: string;
+  /** legacy v2 field: language of the outcome text */
+  language?: CatalogLanguage | null;
+  textLanguage?: CatalogLanguage | null;
+  teachingLanguage?: CatalogLanguage | null;
+  skillTag?: string | null;
+  qualityState?: OutcomeQualityState | null;
+  fragmentReason?: string | null;
+  translationEt?: string | null;
+  translationEn?: string | null;
+  translationSource?: string | null;
+  sourceUrl?: string | null;
+  sourceCheckedAt?: string | null;
 };

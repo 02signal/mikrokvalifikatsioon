@@ -1,4 +1,5 @@
 import { catalog } from "./catalog";
+import { cleanOutcomeTexts } from "./outcomes";
 
 // "X vs Y" võrdluslehed (pSEO). Et vältida õhukesi/doorway-lehti, genereerime AINULT
 // mõttekaid paare: sama valdkond, eri kool, MÕLEMAL on õpiväljundid (et lehel oleks päris
@@ -9,7 +10,7 @@ type Entry = (typeof catalog)[number];
 const TOP_K = 2;
 
 function outcomeKeys(e: Entry): Set<string> {
-  return new Set((e.outcomes ?? []).map((o) => o.trim().toLowerCase()).filter(Boolean));
+  return new Set(cleanOutcomeTexts(e).map((o) => o.trim().toLowerCase()).filter(Boolean));
 }
 
 export interface Comparison {
@@ -21,7 +22,7 @@ export interface Comparison {
   bOnly: string[];
 }
 
-const withOutcomes = catalog.filter((e) => (e.outcomes?.length ?? 0) > 0);
+const withOutcomes = catalog.filter((e) => cleanOutcomeTexts(e).length > 0);
 
 function similarity(a: Entry, b: Entry): number {
   const sa = outcomeKeys(a);
@@ -49,9 +50,9 @@ for (const a of withOutcomes) {
     if (seen.has(key)) continue;
     const aKeys = outcomeKeys(first);
     const bKeys = outcomeKeys(second);
-    const shared = (first.outcomes ?? []).filter((o) => bKeys.has(o.trim().toLowerCase()));
-    const aOnly = (first.outcomes ?? []).filter((o) => !bKeys.has(o.trim().toLowerCase()));
-    const bOnly = (second.outcomes ?? []).filter((o) => !aKeys.has(o.trim().toLowerCase()));
+    const shared = cleanOutcomeTexts(first).filter((o) => bKeys.has(o.trim().toLowerCase()));
+    const aOnly = cleanOutcomeTexts(first).filter((o) => !bKeys.has(o.trim().toLowerCase()));
+    const bOnly = cleanOutcomeTexts(second).filter((o) => !aKeys.has(o.trim().toLowerCase()));
     seen.set(key, { pair: key, a: first, b: second, shared, aOnly, bOnly });
   }
 }

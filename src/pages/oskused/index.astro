@@ -4,51 +4,52 @@ import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import { catalog, fields, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
+import { entryOutcomeObjects, languageLabel, languageSort } from "../../data/outcomes";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
 const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
-const languageLabel = (language: string | null | undefined): string => {
-  if (language === "et") return "Eesti";
-  if (language === "en") return "Inglise";
-  return "Märkimata";
-};
-const languageSort = (a: string, b: string): number => {
-  const order: Record<string, number> = { et: 1, en: 2, unknown: 99 };
-  return (order[a] ?? 90) - (order[b] ?? 90) || languageLabel(a).localeCompare(languageLabel(b), "et");
-};
 
 // Õpiväljund eraldi objektina: dedup teksti järgi, iga väljundi all programmid, mis seda õpetavad.
-type OutcomeProg = { slug: string; name: string; provider: string; field: string; language: string | null };
-type OutcomeGroup = { text: string; programmes: OutcomeProg[]; languages: string[] };
-const map = new Map<string, { text: string; programmes: OutcomeProg[]; languages: Set<string> }>();
+type OutcomeProg = { slug: string; name: string; provider: string; field: string; teachingLanguage: string | null; textLanguage: string };
+type OutcomeGroup = { text: string; programmes: OutcomeProg[]; textLanguages: string[]; teachingLanguages: string[] };
+const map = new Map<string, { text: string; programmes: OutcomeProg[]; textLanguages: Set<string>; teachingLanguages: Set<string> }>();
 for (const e of catalog) {
-  if (!e.outcomes) continue;
-  for (const raw of e.outcomes) {
-    const text = raw.trim();
+  for (const outcome of entryOutcomeObjects(e)) {
+    const text = outcome.text.trim();
     if (!text) continue;
     const key = text.toLowerCase();
     let g = map.get(key);
-    if (!g) { g = { text, programmes: [], languages: new Set() }; map.set(key, g); }
-    const language = e.language ?? null;
-    g.languages.add(language ?? "unknown");
-    g.programmes.push({ slug: e.slug, name: e.name, provider: e.provider, field: e.field, language });
+    if (!g) { g = { text, programmes: [], textLanguages: new Set(), teachingLanguages: new Set() }; map.set(key, g); }
+    const textLanguage = outcome.textLanguage ?? outcome.language ?? "et";
+    const teachingLanguage = outcome.teachingLanguage ?? e.language ?? null;
+    g.textLanguages.add(textLanguage ?? "unknown");
+    g.teachingLanguages.add(teachingLanguage ?? "unknown");
+    g.programmes.push({ slug: e.slug, name: e.name, provider: e.provider, field: e.field, teachingLanguage, textLanguage });
   }
 }
 const outcomes: OutcomeGroup[] = [...map.values()]
   .map((group) => ({
     text: group.text,
     programmes: group.programmes,
-    languages: [...group.languages].sort(languageSort)
+    textLanguages: [...group.textLanguages].sort(languageSort),
+    teachingLanguages: [...group.teachingLanguages].sort(languageSort)
   }))
   .sort((a, b) => a.text.localeCompare(b.text, "et"));
-const programmesWithOutcomes = catalog.filter((e) => e.outcomes && e.outcomes.length).length;
-const fieldsWithOutcomes = fields.filter((f) => catalog.some((e) => e.field === f && e.outcomes && e.outcomes.length));
-const languagesWithOutcomes = [...new Set(outcomes.flatMap((outcome) => outcome.languages))]
+const programmesWithOutcomes = catalog.filter((e) => entryOutcomeObjects(e).length).length;
+const fieldsWithOutcomes = fields.filter((f) => catalog.some((e) => e.field === f && entryOutcomeObjects(e).length));
+const textLanguagesWithOutcomes = [...new Set(outcomes.flatMap((outcome) => outcome.textLanguages))]
   .sort(languageSort)
   .map((language) => ({
     language,
     label: languageLabel(language === "unknown" ? null : language),
-    count: outcomes.filter((outcome) => outcome.languages.includes(language)).length
+    count: outcomes.filter((outcome) => outcome.textLanguages.includes(language)).length
+  }));
+const teachingLanguagesWithOutcomes = [...new Set(outcomes.flatMap((outcome) => outcome.teachingLanguages))]
+  .sort(languageSort)
+  .map((language) => ({
+    language,
+    label: languageLabel(language === "unknown" ? null : language),
+    count: outcomes.filter((outcome) => outcome.teachingLanguages.includes(language)).length
   }));
 
 // Match jaoks: programmi slug → metaandmed. Paketi-kirjed kannavad oma programmi-slugid
@@ -137,14 +138,22 @@ const schema = {
               </select>
             </div>
             <div class="field">
-              <label for="outcomeLanguage">Õppekeel</label>
-              <select id="outcomeLanguage" data-outcome-language>
+              <label for="outcomeTextLanguage">Õpiväljundi teksti keel</label>
+              <select id="outcomeTextLanguage" data-outcome-text-language>
                 <option value="">Kõik keeled</option>
-                {languagesWithOutcomes.map((item) => <option value={item.language}>{item.label} ({item.count})</option>)}
+                {textLanguagesWithOutcomes.map((item) => <option value={item.language}>{item.label} ({item.count})</option>)}
+              </select>
+            </div>
+            <div class="field">
+              <label for="outcomeTeachingLanguage">Programmi õppekeel</label>
+              <select id="outcomeTeachingLanguage" data-outcome-teaching-language>
+                <option value="">Kõik õppekeeled</option>
+                {teachingLanguagesWithOutcomes.map((item) => <option value={item.language}>{item.label} ({item.count})</option>)}
               </select>
             </div>
           </div>
           <p class="field-help" data-outcome-count>{outcomes.length} õpiväljundit</p>
+          <p class="field-help">Õpiväljundi teksti keel on kooli avaldatud lause keel. Programmi õppekeel võib sellest erineda.</p>
           <p class="field-help syn-hint" data-outcome-synonyms hidden></p>
 
           <ul class="outcome-list" data-outcome-list>
@@ -156,12 +165,13 @@ const schema = {
                   data-outcome
                   data-text={o.text.toLowerCase()}
                   data-fields={ofields.join("|")}
-                  data-languages={o.languages.join("|")}
+                  data-text-languages={o.textLanguages.join("|")}
+                  data-teaching-languages={o.teachingLanguages.join("|")}
                 >
                   <p class="outcome-text">{o.text}</p>
                   <p class="outcome-progs">
                     {o.programmes.map((p, i) => (
-                      <>{i > 0 && ", "}<a href={`/kataloog/${p.slug}/`} data-track-event="cta_click" data-track-label="outcome_to_detail">{p.name}</a> <span class="outcome-prov">({p.provider} · {languageLabel(p.language)})</span></>
+                      <>{i > 0 && ", "}<a href={`/kataloog/${p.slug}/`} data-track-event="cta_click" data-track-label="outcome_to_detail">{p.name}</a> <span class="outcome-prov">({p.provider} · õpe: {languageLabel(p.teachingLanguage)}{p.textLanguage !== (p.teachingLanguage ?? "unknown") ? ` · tekst: ${languageLabel(p.textLanguage)}` : ""})</span></>
                     ))}
                   </p>
                   <button type="button" class="pkg-add" data-pkg-add data-key={o.text.toLowerCase()} data-text={o.text}>+ Lisa paketti</button>
@@ -318,7 +328,8 @@ const schema = {
       import { kontoEnabled, getSession } from "../../lib/konto-api";
       const search = document.querySelector("[data-outcome-search]") as HTMLInputElement | null;
       const fieldSel = document.querySelector("[data-outcome-field]") as HTMLSelectElement | null;
-      const languageSel = document.querySelector("[data-outcome-language]") as HTMLSelectElement | null;
+      const textLanguageSel = document.querySelector("[data-outcome-text-language]") as HTMLSelectElement | null;
+      const teachingLanguageSel = document.querySelector("[data-outcome-teaching-language]") as HTMLSelectElement | null;
       const count = document.querySelector("[data-outcome-count]");
       const synHint = document.querySelector("[data-outcome-synonyms]") as HTMLElement | null;
       const empty = document.querySelector("[data-outcome-empty]") as HTMLElement | null;
@@ -343,7 +354,8 @@ const schema = {
       const apply = (): void => {
         const term = (search?.value || "").trim().toLowerCase();
         const f = fieldSel?.value || "";
-        const language = languageSel?.value || "";
+        const textLanguage = textLanguageSel?.value || "";
+        const teachingLanguage = teachingLanguageSel?.value || "";
         // Laienda otsingusõna lähedasteks mõisteteks (sünonüümid/käänded). Tühi sõna
         // näitab kõike; vaste = data-text sisaldab MÕNDA laiendatud terminit (alamsõne).
         const { terms, clusters } = term ? expandQuery(term, skillSynonyms) : { terms: [] as string[], clusters: [] as string[] };
@@ -354,7 +366,8 @@ const schema = {
           const matchesTerm = !term || terms.some((t) => text.includes(t));
           const show = matchesTerm &&
             (!f || (it.dataset.fields || "").split("|").includes(f)) &&
-            (!language || (it.dataset.languages || "").split("|").includes(language));
+            (!textLanguage || (it.dataset.textLanguages || "").split("|").includes(textLanguage)) &&
+            (!teachingLanguage || (it.dataset.teachingLanguages || "").split("|").includes(teachingLanguage));
           it.hidden = !show;
           if (show) visible += 1;
         }
@@ -378,7 +391,8 @@ const schema = {
 
       search?.addEventListener("input", apply);
       fieldSel?.addEventListener("change", apply);
-      languageSel?.addEventListener("change", apply);
+      textLanguageSel?.addEventListener("change", apply);
+      teachingLanguageSel?.addEventListener("change", apply);
 
       // Sügavlink /oskused/?q=oskus eeltäidab otsingu.
       const q = new URLSearchParams(window.location.search).get("q");

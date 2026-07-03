@@ -1,4 +1,5 @@
 import type { CatalogEntryWithSlug } from "./catalog";
+import { cleanOutcomeTexts } from "./outcomes";
 
 export const SITE = "https://mikrokvalifikatsioon.ee";
 
@@ -70,7 +71,8 @@ export function toCourse(entry: CatalogEntryWithSlug): Record<string, unknown> {
 
   if (entry.ects != null) course.numberOfCredits = entry.ects;
   // Real learning outcomes power Course/AI extraction; only added when collected.
-  if (entry.outcomes?.length) course.teaches = entry.outcomes;
+  const outcomes = cleanOutcomeTexts(entry);
+  if (outcomes.length) course.teaches = outcomes;
 
   const price = parsePriceEur(entry.priceText);
   if (price != null) {
