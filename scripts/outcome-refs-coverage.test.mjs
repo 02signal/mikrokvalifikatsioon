@@ -18,6 +18,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { catalog } from "../src/data/catalog/index.ts";
+import { cleanOutcomeTexts } from "../src/data/outcomes.ts";
 import { outcomeRefMap, outcomeRefForText, outcomeRecordForText } from "../src/data/outcomeRefs.ts";
 import { outcomeMeta, SKILL_TAG_RE } from "../src/lib/outcome-ref.ts";
 
@@ -25,15 +26,14 @@ const OUT_REF_RE = /^out_[0-9a-f]{24}$/;
 const FALLBACK_TAG = "muu_oskus";
 
 /**
- * Fresh, INDEPENDENT dedup of catalog outcomes — re-implemented here (not reusing
- * outcomeRefs.ts) so the count is a real cross-check, and matching /oskused/ EXACTLY:
- * `text = raw.trim()`, skip empty, key = `text.toLowerCase()`, first-seen text wins.
+ * Fresh dedup of catalog outcomes — deliberately reusing the public outcome
+ * cleanup helper, but not the outcomeRefs map, so the count still cross-checks
+ * the bridge while matching /oskused/ EXACTLY.
  */
 function freshDedup() {
   const seen = new Map(); // key -> first-seen trimmed text
   for (const e of catalog) {
-    if (!e.outcomes) continue;
-    for (const raw of e.outcomes) {
+    for (const raw of cleanOutcomeTexts(e)) {
       const text = String(raw).trim();
       if (!text) continue;
       const key = text.toLowerCase();

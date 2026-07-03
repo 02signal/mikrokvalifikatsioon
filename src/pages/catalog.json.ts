@@ -1,5 +1,6 @@
 import { catalog, catalogCheckedAt, catalogUpdatedAt, catalogContentHash } from "../data/catalog";
 import { detailUrl } from "../data/courseSchema";
+import { entryOutcomeObjects } from "../data/outcomes";
 
 export async function GET() {
   return new Response(
@@ -15,7 +16,15 @@ export async function GET() {
           "See register on info koondamiseks. Hinnad, mahud ja vastuvõtud muutuvad — ametlik info on iga kooli enda lehel (iga kirje url-väli).",
         count: catalog.length,
         // pageUrl = programmi siseleht; url = kooli ametlik leht.
-        programs: catalog.map((entry) => ({ ...entry, pageUrl: detailUrl(entry) }))
+        programs: catalog.map((entry) => {
+          const outcomeObjects = entryOutcomeObjects(entry);
+          return {
+            ...entry,
+            outcomes: outcomeObjects.map((outcome) => outcome.text),
+            outcomeObjects,
+            pageUrl: detailUrl(entry)
+          };
+        })
       },
       null,
       2

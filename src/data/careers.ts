@@ -1,4 +1,5 @@
 import { catalog } from "./catalog";
+import { cleanOutcomeTexts } from "./outcomes";
 
 // Karjäärilehed (#3). Iga karjäär seob rolli kataloogi programmidega ja tõstab esile
 // "portfoolio-sõbralikud" programmid (kus saab teha päris töid / praktilise väljundi).
@@ -26,7 +27,7 @@ export const CAREER_DEFS: CareerDef[] = [
 ];
 
 function blob(e: Entry): string {
-  return [e.name, e.summary, e.goalText, e.assessmentText, e.field, ...(e.outcomes ?? [])]
+  return [e.name, e.summary, e.goalText, e.assessmentText, e.field, ...cleanOutcomeTexts(e)]
     .filter(Boolean)
     .join(" ")
     .toLowerCase();
