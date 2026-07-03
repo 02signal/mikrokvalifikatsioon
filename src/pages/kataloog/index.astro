@@ -10,6 +10,22 @@ import { ehisFetchedAt, ehisProgrammeCount, ehisProviderCount } from "../../data
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
 const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
 const ehisFetchedAtText = ehisFetchedAt.slice(0, 10).split("-").reverse().join(".");
+const languageLabel = (language: string | null | undefined): string => {
+  if (language === "et") return "Eesti";
+  if (language === "en") return "Inglise";
+  return "Märkimata";
+};
+const languageSort = (a: string, b: string): number => {
+  const order: Record<string, number> = { et: 1, en: 2 };
+  return (order[a] ?? 99) - (order[b] ?? 99) || languageLabel(a).localeCompare(languageLabel(b), "et");
+};
+const languages = [...new Set(catalog.flatMap((entry) => entry.language ? [entry.language] : []))]
+  .sort(languageSort)
+  .map((language) => ({
+    language,
+    label: languageLabel(language),
+    count: catalog.filter((entry) => entry.language === language).length
+  }));
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
@@ -102,6 +118,13 @@ const schema = {
                 {providers.map((provider) => <option value={provider}>{provider}</option>)}
               </select>
             </div>
+            <div class="field">
+              <label for="catalogLanguage">Õppekeel</label>
+              <select id="catalogLanguage" data-catalog-language>
+                <option value="">Kõik keeled</option>
+                {languages.map((item) => <option value={item.language}>{item.label} ({item.count})</option>)}
+              </select>
+            </div>
           </div>
           <p class="field-help" data-catalog-count>{catalog.length} võrreldavat programmi</p>
 
@@ -135,6 +158,7 @@ const schema = {
                 data-name={entry.name.toLowerCase()}
                 data-field={entry.field}
                 data-provider={entry.provider}
+                data-language={entry.language ?? ""}
               >
                 <div>
                   <span class="status-tag status-blue">{entry.field}</span>
@@ -143,6 +167,7 @@ const schema = {
                 </div>
                 <dl>
                   <div><dt>Kool</dt><dd>{entry.provider}</dd></div>
+                  {entry.language && <div><dt>Õppekeel</dt><dd>{languageLabel(entry.language)}</dd></div>}
                   {entry.ects && <div><dt>Maht</dt><dd>{entry.ects} EAP</dd></div>}
                   {entry.priceText && <div><dt>Hind</dt><dd>{entry.priceText}</dd></div>}
                   {entry.durationText && <div><dt>Kestus</dt><dd>{entry.durationText}</dd></div>}
@@ -280,6 +305,7 @@ const schema = {
       const search = document.querySelector("[data-catalog-search]") as HTMLInputElement | null;
       const fieldSelect = document.querySelector("[data-catalog-field]") as HTMLSelectElement | null;
       const providerSelect = document.querySelector("[data-catalog-provider]") as HTMLSelectElement | null;
+      const languageSelect = document.querySelector("[data-catalog-language]") as HTMLSelectElement | null;
       const count = document.querySelector("[data-catalog-count]");
       const entries = [...document.querySelectorAll<HTMLElement>("[data-catalog-entry]")];
 
@@ -293,6 +319,7 @@ const schema = {
         const term = (search?.value || "").trim();
         const field = fieldSelect?.value || "";
         const provider = providerSelect?.value || "";
+        const language = languageSelect?.value || "";
         const T = (window as any).digiteekaartTrack;
         if (term.length >= 2) {
           T?.("view_search_results", { search_term: term.toLowerCase().slice(0, 80), results: lastVisible, source: "kataloog" });
@@ -301,7 +328,8 @@ const schema = {
           tool_name: "kataloogifilter",
           result_tier: lastVisible > 0 ? "leitud" : "tühi",
           field: field || "kõik",
-          provider: provider || "kõik"
+          provider: provider || "kõik",
+          language: language || "kõik"
         });
       };
 
@@ -309,12 +337,14 @@ const schema = {
         const term = (search?.value || "").trim().toLowerCase();
         const field = fieldSelect?.value || "";
         const provider = providerSelect?.value || "";
+        const language = languageSelect?.value || "";
         let visible = 0;
         for (const entry of entries) {
           const show =
             (!term || (entry.dataset.name || "").includes(term)) &&
             (!field || entry.dataset.field === field) &&
-            (!provider || entry.dataset.provider === provider);
+            (!provider || entry.dataset.provider === provider) &&
+            (!language || entry.dataset.language === language);
           entry.hidden = !show;
           if (show) visible += 1;
         }
@@ -327,6 +357,7 @@ const schema = {
       search?.addEventListener("input", applyFilters);
       fieldSelect?.addEventListener("change", applyFilters);
       providerSelect?.addEventListener("change", applyFilters);
+      languageSelect?.addEventListener("change", applyFilters);
 
       // Sügavlink /kataloog/?q=... eeltäidab otsingu (toetab WebSite SearchActionit ja jagatavaid linke).
       const initialQuery = new URLSearchParams(window.location.search).get("q");
