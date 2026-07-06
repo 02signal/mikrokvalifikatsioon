@@ -180,13 +180,23 @@ started, by design. AMOS PRs: #1190/#1197/#1200/#1205/#1209/#1225/#1226/#1232. m
   privacy-safe descriptor (a `change_kind` + a short clamped `detail`) — **never raw marketing
   text**; intake-event rows store raw observed dates only, cadence is a SQL query over them, not a
   precomputed "popularity score".
-- **What's left is ONLY owner/host activation, no more code:** (1) create the Vercel Deploy Hook +
-  populate `/opt/amos/secrets/env/mkval-catalog-pipeline.env` (including the new
-  `AMOS_MKVAL_CATALOG_WAREHOUSE_*` gates) + provide the production Postgres DSN; (2) provision
-  `source-registry.json` to the AMOS host and enable the timers/n8n workflow; (3) set
-  `PUBLIC_CATALOG_FEED_URL`/`PUBLIC_CATALOG_FEED_TRUSTED=1` as Vercel env vars **here**; (4) run the
-  new SQL migration + flip the warehouse apply gate against production once verified in dry-run.
-  Full checklist in AMOS `BACKLOG.md §2026-07-01`.
+- **CONFIRMED LIVE 2026-07-06.** Owner/Codex completed the activation checklist between 2026-07-02
+  and 2026-07-03 (Vercel Deploy Hook created, `/opt/amos/secrets/env/mkval-catalog-pipeline.env`
+  populated, `source-registry.json` provisioned, weekly systemd timers enabled — Monday 03:15
+  source-refresh → 03:32 review → 03:45 catalog-refresh, per the runbook). Verified end-to-end via
+  Vercel build logs, not just config presence:
+  - 2026-07-02 09:35 EEST build: `PUBLIC_CATALOG_FEED_URL` set but `PUBLIC_CATALOG_FEED_TRUSTED!=1`
+    → still fell back to the committed snapshot (169 programmes) — activation in progress.
+  - 2026-07-03 10:54 EEST build: `[catalog] usaldatud AMOS feed: 250 programmi` — first successful
+    trusted-feed build.
+  - 2026-07-06 (Monday) 03:46 EEST: a fresh production deploy landed 1 minute after the documented
+    03:45 catalog-refresh timer — the weekly automatic cycle firing on schedule, independently
+    confirmed (not a manual push). Live `/catalog.json` and the AMOS feed both report 250
+    programmes.
+  **Cadence going forward: weekly, Monday ~03:15–03:46 Estonia time** (systemd timers, not the
+  n8n daily-cron alternative). The committed JSON snapshot in this repo remains the manually
+  -maintained fallback/floor — it is intentionally NOT part of the automatic loop and last changed
+  2026-06-24; that is expected, not a regression.
 - **Site-side hardening shipped 2026-07-01 (this repo):** `src/data/catalog/index.ts`'s
   `chooseCatalogSource` now also rejects a trusted feed with an unknown `schemaVersion`, a `count`
   that disagrees with `programs.length`, or any forbidden field (email/token/secret/raw_html/…) —
@@ -245,9 +255,13 @@ started, by design. AMOS PRs: #1190/#1197/#1200/#1205/#1209/#1225/#1226/#1232. m
      append-only observed intake/instance dates; cadence is a SQL aggregate over this table, not a
      precomputed score.
   10. **DONE 2026-07-01 (this repo):** site-side defense-in-depth (`schemaVersion`/`count`/
-      forbidden-key checks in `chooseCatalogSource`, §above). **Still open:** the deploy-hook
-      trigger itself becoming monitored/alerting/auto-rollback is AMOS-side ops work, gated behind
-      the owner/host activation checklist above — no code left on this side.
+      forbidden-key checks in `chooseCatalogSource`, §above). **DONE + CONFIRMED LIVE 2026-07-06:**
+      the deploy-hook trigger is active and running weekly (Monday ~03:15–03:46, see §above) —
+      basic robustness (fail-closed non-regression guard + committed-snapshot fallback) was already
+      in the code and is now proven against real weekly cycles. Monitoring/alerting on staleness and
+      an automatic rollback-on-failure are not yet built — worth a small follow-up once the weekly
+      cycle has run a few more times, but not blocking (a failed AMOS run today just leaves the
+      previous build live, per the fail-closed design; it does not need to be attended in real time).
 - Done: `license` (CC BY 4.0) added to Dataset schema (homepage + /andmed/) — fixes Search
   Console "Missing field 'license'". (Owner may change the licence.)
 
