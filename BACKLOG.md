@@ -194,7 +194,14 @@ started, by design. AMOS PRs: #1190/#1197/#1200/#1205/#1209/#1225/#1226/#1232. m
     confirmed (not a manual push). Live `/catalog.json` and the AMOS feed both report 250
     programmes.
   **Cadence going forward: weekly, Monday ~03:15–03:46 Estonia time** (systemd timers, not the
-  n8n daily-cron alternative). The committed JSON snapshot in this repo remains the manually
+  n8n daily-cron alternative).
+- **Warehouse-apply also confirmed 2026-07-06** (EX63 host read-only check, relayed via AMOS
+  `BACKLOG.md` PBI-MKVAL-DATA-002): `amos_registry.mkval_catalog_programme=250`,
+  `mkval_catalog_change_history=687`, `mkval_catalog_intake_event=198` (plus a
+  `mkval_catalog_learning_outcome=707` table added on the AMOS side since). The relational warehouse
+  is genuinely populated, not just planning dry-runs — `PBI-MKVAL-DATA-002` is fully closed end to
+  end (file feed + Vercel + Postgres). Only a non-blocking observability nit remains on the AMOS
+  side (a missing job-report file for non-SSH visibility). The committed JSON snapshot in this repo remains the manually
   -maintained fallback/floor — it is intentionally NOT part of the automatic loop and last changed
   2026-06-24; that is expected, not a regression.
 - **Site-side hardening shipped 2026-07-01 (this repo):** `src/data/catalog/index.ts`'s
