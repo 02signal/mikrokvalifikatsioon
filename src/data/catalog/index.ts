@@ -145,7 +145,10 @@ export function chooseCatalogSource(opts: {
     };
   }
   const checkedAt = obj ? (isoDate(obj.checkedAt) ?? LOCAL_CHECKED_AT) : LOCAL_CHECKED_AT;
-  const updatedAt = obj ? (isoDate(obj.generatedAt) ?? isoDate(obj.updatedAt) ?? checkedAt) : checkedAt;
+  // `checkedAt` = viimati koolide lehtedega VÕRRELDUD (liigub igal kontrollil,
+  // ka kui miski ei muutunud). `updatedAt` = andmed viimati MUUTUSID: eelista
+  // AMOS-i `dataUpdatedAt` väli; kui puudub (vanem feed), taandu generatedAt-le.
+  const updatedAt = obj ? (isoDate(obj.dataUpdatedAt) ?? isoDate(obj.generatedAt) ?? isoDate(obj.updatedAt) ?? checkedAt) : checkedAt;
   const contentHash = obj && typeof obj.contentHash === "string" ? (obj.contentHash as string) : null;
   return { use: "feed", entries, checkedAt, updatedAt, contentHash };
 }
