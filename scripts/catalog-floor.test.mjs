@@ -120,6 +120,42 @@ test("source: trusted, well-formed, NON-regressing feed → feed (opt-in works)"
   }
 });
 
+test("source: 'kontrollitud' tuleb checkedAt-st ja 'uuendatud' dataUpdatedAt-st (mitte generatedAt)", () => {
+  // Nädalane kontroll ilma sisumuutuseta: checkedAt/generatedAt on värske
+  // (13.07), aga andmed muutusid viimati 06.06. "Uuendatud" peab näitama
+  // tegelikku muutuse kuupäeva, "kontrollitud" viimast kontrolli.
+  const feedEntries = Array.from({ length: C + 5 }, (_, i) => ({ provider: "X", name: `p${i}` }));
+  const d = chooseCatalogSource({
+    feedUrl: "https://amos.example/catalog-feed.json",
+    trusted: true,
+    data: {
+      programs: feedEntries,
+      checkedAt: "2026-07-13",
+      dataUpdatedAt: "2026-06-06",
+      generatedAt: "2026-07-13T00:45:00.000Z",
+      contentHash: "abc",
+    },
+    committedCount: C,
+  });
+  assert.equal(d.use, "feed");
+  if (d.use === "feed") {
+    assert.equal(d.checkedAt, "2026-07-13", "kontrollitud = checkedAt");
+    assert.equal(d.updatedAt, "2026-06-06", "uuendatud = dataUpdatedAt, mitte generatedAt");
+  }
+});
+
+test("source: dataUpdatedAt puudumisel taandub 'uuendatud' generatedAt-le (tagasiühilduvus)", () => {
+  const feedEntries = Array.from({ length: C + 5 }, (_, i) => ({ provider: "X", name: `p${i}` }));
+  const d = chooseCatalogSource({
+    feedUrl: "https://amos.example/catalog-feed.json",
+    trusted: true,
+    data: { programs: feedEntries, checkedAt: "2026-07-13", generatedAt: "2026-07-10", contentHash: "abc" },
+    committedCount: C,
+  });
+  assert.equal(d.use, "feed");
+  if (d.use === "feed") assert.equal(d.updatedAt, "2026-07-10");
+});
+
 test("source: trusted but malformed feed (no programs[]) → committed", () => {
   const d = chooseCatalogSource({
     feedUrl: "https://amos.example/catalog-feed.json",

@@ -204,6 +204,21 @@ started, by design. AMOS PRs: #1190/#1197/#1200/#1205/#1209/#1225/#1226/#1232. m
   side (a missing job-report file for non-SSH visibility). The committed JSON snapshot in this repo remains the manually
   -maintained fallback/floor — it is intentionally NOT part of the automatic loop and last changed
   2026-06-24; that is expected, not a regression.
+- **Done 2026-07-13 — truthful "kontrollitud" date (checkedAt no longer freezes).** Root cause of
+  the stuck `checkedAt` (observed frozen at 2026-07-02 across two weekly cycles): the feed's
+  `checkedAt` was DERIVED as `max(record.sourceCheckedAt)`, and a record's `sourceCheckedAt` only
+  advanced when it was re-promoted (i.e. when it CHANGED). On a no-change week the AMOS approved
+  store was not rewritten, so the date meant "last content change", not "last check". Fixed in AMOS
+  (`fix/mkval-checkedat-truthful-run-date`): the promote step now rewrites the approved store every
+  cycle stamping a run-level `checkedAt`; the catalog-refresh threads it into the feed; and the feed
+  now carries TWO distinct dates — `checkedAt` (last verified against schools, advances weekly) and
+  new `dataUpdatedAt` (last content change). Because `checkedAt` is in the content hash, a no-change
+  week now flips the hash → deploy hook fires → the site rebuilds and shows a fresh "Kontrollitud"
+  while honestly reporting 0 programme changes. Site consumer (`src/data/catalog/index.ts`) now
+  sources "Kontrollitud" from `checkedAt` and "Andmestik uuendatud" from `dataUpdatedAt` (falls back
+  to `generatedAt` for older feeds). E2e-proven: two no-change weeks → checkedAt 07-06→07-13,
+  dataUpdatedAt stays 06-12. This closes the observability nit noted below (staleness was invisible
+  because "checked" and "changed" were conflated).
 - **Site-side hardening shipped 2026-07-01 (this repo):** `src/data/catalog/index.ts`'s
   `chooseCatalogSource` now also rejects a trusted feed with an unknown `schemaVersion`, a `count`
   that disagrees with `programs.length`, or any forbidden field (email/token/secret/raw_html/…) —
