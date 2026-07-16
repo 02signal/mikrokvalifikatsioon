@@ -13,6 +13,13 @@ export type QuestionEntry = {
   slug: string;
   /** H1 ja JSON-LD Question.name — täpne loomulik otsingupäring. */
   question: string;
+  /**
+   * Valikuline SERP-pealkiri (title-silt). Kui määratud, kasutatakse seda
+   * otsingutulemuse pealkirjana H1/küsimuse asemel — nii saab pealkirja panna
+   * otsevastuse (nt "1 EAP = 26 tundi"), mis tõstab klõpsumäära. H1 jääb
+   * küsimuseks. Kui puudub, kasutatakse `${question} | Mikrokvalifikatsioon.ee`.
+   */
+  seoTitle?: string;
   /** 1–3 väljavõetavat lauset; kuvatakse rasvaselt esimesena (AI-tsiteeritav). */
   shortAnswer: string;
   /** Toetav sisu lõikudena (HTML-vaba, loomulik eesti keel). */
@@ -195,6 +202,7 @@ export const questions: QuestionEntry[] = [
   {
     slug: "mis-on-eap",
     question: "Mis on EAP?",
+    seoTitle: "Mis on EAP? 1 EAP = 26 tundi õppetööd | Mikrokvalifikatsioon.ee",
     shortAnswer:
       `EAP on Euroopa ainepunkt (ECTS — European Credit Transfer System), õppemahu ühik. ` +
       `1 EAP võrdub umbes 26 tunni õppija tööga, mis hõlmab nii loenguid kui iseseisvat tööd. ` +

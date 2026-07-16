@@ -21,6 +21,24 @@ export async function GET() {
       ? `Catalogued tuition runs from about ${minPrice} € to ${maxPrice} €, most often 700–1 800 € for 12–24 EAP over one or two semesters.${freeCount ? ` ${freeCount} programmes are free for a specific target group.` : ""}`
       : "Prices are listed per programme on each provider's page.";
 
+  // EAP (ECTS) mahu- ja kestusfaktid — kõige suurema otsingumahuga küsimusklaster
+  // ("mis on eap", "1 eap tundides", "mitu eap", "kui kaua"). Ametlik teisendus 1 EAP = 26 h.
+  const ectsValues = catalog
+    .map((entry) => entry.ects)
+    .filter((n): n is number => n != null)
+    .sort((a, b) => a - b);
+  const ectsMin = ectsValues.length ? ectsValues[0] : null;
+  const ectsMax = ectsValues.length ? ectsValues[ectsValues.length - 1] : null;
+  const ectsMedian = ectsValues.length ? ectsValues[Math.floor(ectsValues.length / 2)] : null;
+  const eapLine =
+    ectsMin != null && ectsMax != null
+      ? `1 EAP (ECTS) equals about 26 hours of learner work (lectures plus independent study). Estonian microdegrees typically carry ${ectsMin}–${ectsMax} EAP${ectsMedian != null ? ` (median ${ectsMedian} EAP ≈ ${ectsMedian * 26} hours)` : ""}.`
+      : "1 EAP (ECTS) equals about 26 hours of learner work.";
+  const durationLine =
+    ectsMedian != null
+      ? `A microdegree usually takes one to two semesters alongside work — months, not years. Median volume ${ectsMedian} EAP ≈ ${ectsMedian * 26} hours of learner work in total.`
+      : "A microdegree usually takes one to two semesters alongside work.";
+
   const body = `# Mikrokvalifikatsioon.ee
 
 Eesti mikrokvalifikatsioonide ja mikrokraadide register ja teejuht. Operated by
@@ -78,6 +96,12 @@ registered microcredential curricula from ${ehisProviderCount} providers. Larges
 ${ehisProviderStats.slice(0, 10).map((row) => `${row.label} (${row.count})`).join(", ")}.
 Use https://mikrokvalifikatsioon.ee/ehis-catalog.json for the official full universe and
 https://mikrokvalifikatsioon.ee/kataloog/ for the learner-facing enriched catalog.
+
+Q: What is EAP and how many hours is 1 EAP?
+A: ${eapLine} EAP is the Estonian name for ECTS (European Credit Transfer System). Details: https://mikrokvalifikatsioon.ee/vastused/mis-on-eap/
+
+Q: How long does a microdegree take in Estonia?
+A: ${durationLine} See https://mikrokvalifikatsioon.ee/vastused/kui-kaua-mikrokraad-kestab/
 
 Q: What fields are covered?
 A: ${fieldCounts}.

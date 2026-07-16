@@ -30,9 +30,18 @@ const SITE = "https://mikrokvalifikatsioon.ee";
 const slug = providersWithSlug.find((p) => p.provider === provider)?.slug as string;
 const canonicalPath = `/koolitaja/${slug}/`;
 
-const fullTitle = `${provider} mikrokraadid ja mikrokvalifikatsioonid`;
-const title = fullTitle.length <= 66 ? fullTitle : `${provider} — mikrokraadid`;
-const description = `Kõik ${entries.length} ${provider} mikrokvalifikatsiooni ja mikrokraadi ühes kohas — maht, hind, õppevorm ja õpiväljundid. Võrdle ja leia sobiv.`;
+// SERP-pealkiri: koolinimi + programmide arv ette (arv on tugev klõpsuhoob) ja
+// sisaldab päringusõnu "mikrokraadid"/"mikrokvalifikatsioonid". Koolon väldib
+// käändeprobleemi (nt "Tartu Ülikool: 18 mikrokraadi", mitte "Tartu Ülikool mikrokraadi").
+const count = entries.length;
+const fullTitle = `${provider}: ${count} mikrokraadi ja mikrokvalifikatsiooni`;
+const title = fullTitle.length <= 64 ? fullTitle : `${provider}: mikrokraadid ja lühiõpe`;
+// Kirjeldusse konkreetsed faktid ette (maht, hind) — annavad SERP-is põhjuse klõpsata
+// ja eristavad kooli enda üldlehest.
+const ectsFact = minEcts != null && maxEcts != null ? (minEcts === maxEcts ? `${minEcts} EAP` : `${minEcts}–${maxEcts} EAP`) : null;
+const priceFact = minPrice != null && maxPrice != null ? (minPrice === maxPrice ? `${minPrice} €` : `${minPrice}–${maxPrice} €`) : null;
+const factBits = [ectsFact ? `maht ${ectsFact}` : null, priceFact ? `hind ${priceFact}` : null].filter(Boolean).join(", ");
+const description = `Kõik ${count} ${provider} mikrokraadi ja mikrokvalifikatsiooni ühes võrreldavas tabelis${factBits ? `: ${factBits}` : ""}. Vaata maht, hind, õppevorm ja õpiväljundid kõrvuti ning vali sobiv.`;
 
 const schema = {
   "@context": "https://schema.org",
@@ -66,8 +75,8 @@ const schema = {
       title={title}
       description={description}
       canonicalPath={canonicalPath}
-      ogTitle={`${provider} — mikrokraadid`}
-      ogDescription={`${entries.length} programmi: maht, hind, õppevorm ja õpiväljundid ühes kohas.`}
+      ogTitle={`${provider}: ${count} mikrokraadi ja mikrokvalifikatsiooni`}
+      ogDescription={`${count} programmi ühes võrreldavas tabelis${factBits ? ` — ${factBits}` : ""}. Maht, hind, õppevorm ja õpiväljundid kõrvuti.`}
       jsonLd={schema}
     />
   </head>
