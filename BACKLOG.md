@@ -19,6 +19,19 @@ The konto unified-account + brand + email are all LIVE end-to-end (see the 2026-
 5. Apply the animated `Logo` at the konto save-confirmation moment ("Sinu valikud on hoitud") — strongest brand moment.
 6. Self-host Sora (woff2) instead of the Google Fonts link in `Seo.astro`.
 
+**SEO/GEO — CTR uplift 2026-07-16 (done + follow-ups):**
+7. **Done 2026-07-16** — 28-day GSC review found page-1 impressions with near-zero clicks (title/snippet
+   problem, not ranking): `/koolitaja/tartu-ulikool` 270 impr @ 0.74%, `/koolitaja/taltech` 94 @ 1.06%,
+   `/vastused/mis-on-eap` 141 @ 1.42%. Rewrote titles/meta to lead with programme count + concrete
+   EAP/price facts; added per-question `seoTitle` (mis-on-eap now answers in the title); de-jargoned the
+   `/mikrokraadid/` hub title; added EAP-hours + duration canonical answers to `llms.txt` (GEO). Commit
+   `seo: lift CTR on provider, EAP and hub pages`. **Measure again after next GSC window (~2026-08-13).**
+8. **Position follow-up (content depth):** several high-intent queries rank poorly on thin/near-miss pages —
+   e.g. "finantsjuhtimine" pos 52, "tootehaldus" pos 79, "küberturvalisus" pos 88, "haridusjuhtimine" pos 8.5
+   (page-1 but 0 clicks). Consider dedicated field/topic depth or intro copy where a matching page is thin.
+9. **Irrelevant-query noise:** job-board queries ("tööpakkumised hiiumaal/põlvamaal" etc) leak impressions via
+   `/maakond/*` pages — confirm these pages serve *learning+labour context*, not job listings, so intent matches.
+
 Cross-repo note: mkval deploys on merge→main (Vercel); the AMOS konto backend deploys are host-side
 (Codex). AMOS is a busy multi-agent repo — check `origin/main` before building backend features (a
 parallel-build collision already happened: my #1341 closed in favour of Codex's #1342).
