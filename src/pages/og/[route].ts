@@ -31,6 +31,10 @@ const contentPages: Record<string, { title: string; description: string }> = {
     title: "Kes maksab mikrokvalifikatsiooni eest?",
     description: "Kolm rada: Töötukassa, tööandja või ise — ja kuidas igaüht küsida."
   },
+  koolitaja: {
+    title: "Mikrokraadid koolide kaupa — kõik koolitajad",
+    description: "Kõik Eesti mikrokraade ja mikrokvalifikatsioone pakkuvad koolid ühes kohas. Vali kool ja vaata kõiki selle programme."
+  },
   koolitajale: {
     title: "Koolitajale — kuidas pakkuda mikrokvalifikatsiooni",
     description: "Ametlik raamistik, sammud pakkujaks saamiseks ja võimalus lisada oma programm registrisse."

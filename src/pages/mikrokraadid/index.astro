@@ -4,12 +4,14 @@ import { organization } from "../../data/organizationSchema";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
-import { catalog, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
+import { catalog, providersWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 import { ehisFetchedAt, ehisProgrammeCount, ehisProviderCount } from "../../data/ehisFacts";
 
+const providerSlug = new Map(providersWithSlug.map((p) => [p.provider, p.slug]));
 const universityEntries = catalog.filter((entry) => entry.providerType !== "erakool");
 const byProvider = [...new Set(universityEntries.map((entry) => entry.provider))].map((provider) => ({
   provider,
+  slug: providerSlug.get(provider) ?? null,
   entries: universityEntries.filter((entry) => entry.provider === provider)
 }));
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
@@ -83,10 +85,11 @@ const schema = {
           <div class="section-head compact-head">
             <span class="kicker">Koolide kaupa</span>
             <h2>Mikrokraadid Eesti kõrgkoolides.</h2>
+            <p>Vaata kõiki koole korraga <a href="/koolitaja/">mikrokraadid koolide kaupa</a> lehel, või vali kool allpool.</p>
           </div>
-          {byProvider.map(({ provider, entries }) => (
+          {byProvider.map(({ provider, slug, entries }) => (
             <div class="provider-block">
-              <h3>{provider} — {entries.length} mikrokraadi</h3>
+              <h3>{slug ? <a href={`/koolitaja/${slug}/`}>{provider}</a> : provider} — {entries.length} mikrokraadi</h3>
               <ul class="check">
                 {entries.slice(0, 8).map((entry) => (
                   <li>
@@ -95,7 +98,7 @@ const schema = {
                   </li>
                 ))}
               </ul>
-              {entries.length > 8 && <p><a href="/kataloog/">Vaata kõiki {provider} programme kataloogist →</a></p>}
+              {slug && <p><a href={`/koolitaja/${slug}/`}>Vaata kõiki {provider} mikrokraade →</a></p>}
             </div>
           ))}
         </div>
