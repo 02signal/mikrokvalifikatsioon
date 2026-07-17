@@ -1,0 +1,204 @@
+---
+import Seo from "../../components/Seo.astro";
+import CategoryMark from "../../components/CategoryMark.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { catalog, providersWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
+import { parsePriceEur } from "../../data/courseSchema";
+import { ehisProgrammeCount, ehisProviderCount } from "../../data/ehisFacts";
+
+const SITE = "https://mikrokvalifikatsioon.ee";
+const canonicalPath = "/koolitaja/";
+const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
+const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
+
+// Üks rida iga kooli kohta: programmide arv, EAP-vahemik, hinnavahemik ja
+// kaetud valdkonnad. Andmed arvutatakse build-ajal reaalsest kataloogist.
+type ProviderRow = {
+  provider: string;
+  slug: string;
+  count: number;
+  type: string | null;
+  minEcts: number | null;
+  maxEcts: number | null;
+  minPrice: number | null;
+  maxPrice: number | null;
+  freeCount: number;
+  fields: string[];
+};
+
+const rows: ProviderRow[] = providersWithSlug
+  .map(({ provider, slug }) => {
+    const entries = catalog.filter((e) => e.provider === provider);
+    const prices = entries.map((e) => parsePriceEur(e.priceText)).filter((p): p is number => p != null && p > 0);
+    const ectsVals = entries.map((e) => e.ects).filter((n): n is number => n != null);
+    const fields = [...new Set(entries.map((e) => e.field).filter((f) => f && f !== "muu"))];
+    return {
+      provider,
+      slug,
+      count: entries.length,
+      type: entries.find((e) => e.providerType)?.providerType ?? null,
+      minEcts: ectsVals.length ? Math.min(...ectsVals) : null,
+      maxEcts: ectsVals.length ? Math.max(...ectsVals) : null,
+      minPrice: prices.length ? Math.min(...prices) : null,
+      maxPrice: prices.length ? Math.max(...prices) : null,
+      freeCount: entries.filter((e) => parsePriceEur(e.priceText) === 0).length,
+      fields
+    };
+  })
+  .sort((a, b) => b.count - a.count || a.provider.localeCompare(b.provider, "et"));
+
+const providerCount = rows.length;
+const programmeCount = catalog.length;
+const universityCount = rows.filter((r) => r.type === "ülikool").length;
+
+const ectsText = (r: ProviderRow) =>
+  r.minEcts != null && r.maxEcts != null ? (r.minEcts === r.maxEcts ? `${r.minEcts} EAP` : `${r.minEcts}–${r.maxEcts} EAP`) : "—";
+const priceText = (r: ProviderRow) =>
+  r.minPrice != null && r.maxPrice != null
+    ? (r.minPrice === r.maxPrice ? `${r.minPrice} €` : `${r.minPrice}–${r.maxPrice} €`) + (r.freeCount > 0 ? `, ${r.freeCount} rahastatud` : "")
+    : "kooli lehel";
+
+const title = `Mikrokraadid koolide kaupa — ${providerCount} koolitajat ühes kohas`;
+const description = `Kõik Eesti mikrokraade ja mikrokvalifikatsioone pakkuvad koolid ühes kohas: ${providerCount} koolitajat, ${programmeCount} programmi. Vali kool ja vaata kõiki selle programme — maht (EAP), hind ja valdkonnad kõrvuti.`;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": `${SITE}/#organization`, name: "Mikrokvalifikatsioon.ee", legalName: "Ettevõtluskeskus OÜ", url: `${SITE}/` },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Koolitajad", item: `${SITE}${canonicalPath}` }
+      ]
+    },
+    {
+      "@type": "ItemList",
+      name: "Mikrokraade ja mikrokvalifikatsioone pakkuvad koolid Eestis",
+      numberOfItems: rows.length,
+      itemListElement: rows.map((r, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: r.provider,
+        item: `${SITE}/koolitaja/${r.slug}/`
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title={title}
+      description={description}
+      canonicalPath={canonicalPath}
+      ogTitle="Mikrokraadid koolide kaupa — kõik koolitajad ühes kohas"
+      ogDescription={`${providerCount} kooli, ${programmeCount} programmi. Vali kool ja vaata kõiki selle mikrokraade — maht, hind ja valdkonnad kõrvuti.`}
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <span>Koolitajad</span>
+          </nav>
+          <CategoryMark kind="provider" />
+          <span class="eyebrow">Koolitajad</span>
+          <h1>Mikrokraadid ja mikrokvalifikatsioonid koolide kaupa</h1>
+          <p>
+            Kõik {providerCount} Eesti kooli, kes pakuvad mikrokraade ja mikrokvalifikatsioone —
+            sh {universityCount} kõrgkooli. Vali kool ja näed kõiki selle programme ühel lehel:
+            maht (EAP), hind, õppevorm ja valdkonnad kõrvuti. Kokku {programmeCount} programmi.
+          </p>
+          <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}. Ametlik EHIS faktikiht: {ehisProgrammeCount} õppekava {ehisProviderCount} pakkujalt.</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner">
+          <div class="compare-wrap">
+            <table class="field-table">
+              <thead>
+                <tr><th>Kool</th><th>Programme</th><th>Maht</th><th>Hind</th><th>Valdkonnad</th></tr>
+              </thead>
+              <tbody>
+                {rows.map((r) => (
+                  <tr>
+                    <td>
+                      <a href={`/koolitaja/${r.slug}/`} data-track-event="cta_click" data-track-label="hub_to_provider">{r.provider}</a>
+                      {r.type ? <span class="ptype"> {r.type}</span> : ""}
+                    </td>
+                    <td>{r.count}</td>
+                    <td>{ectsText(r)}</td>
+                    <td>{priceText(r)}</td>
+                    <td>{r.fields.slice(0, 4).join(", ")}{r.fields.length > 4 ? " jt" : ""}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="field-help">Iga kooli nimi viib lehele, kus on selle kooli kõik mikrokraadid ja mikrokvalifikatsioonid koos mahu, hinna, õppevormi ja õpiväljunditega.</p>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Vaata ka</span>
+            <h2>Muud teed valikuni</h2>
+          </div>
+          <p class="chips">
+            <a class="chip" href="/mikrokraadid/">Mikrokraadid Eestis — ülevaade</a>
+            <a class="chip" href="/kataloog/">Filtreeritav kataloog</a>
+            <a class="chip" href="/mikrokvalifikatsioonide-vordlus/">Võrdle programme kõrvuti</a>
+            <a class="chip" href="/mikrokvalifikatsiooni-valimine/">Valimise teejuht</a>
+          </p>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Ei tea, milline kool sobib? Tee suunatest või ava kataloog.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="hub_suunatest">Tee suunatest</a>
+              <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="hub_kataloog">Ava kogu kataloog</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="hub_email">info@mikrokvalifikatsioon.ee</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="hub_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Koolitajad" />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .compare-wrap { overflow-x: auto; }
+      .field-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); border-radius: 10px; min-width: 720px; }
+      .field-table th, .field-table td { border-bottom: 1px solid var(--line); padding: 12px 14px; text-align: left; vertical-align: top; font-size: 0.95rem; }
+      .field-table thead th { background: #212121; color: #fff; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.02em; }
+      .field-table tbody tr:last-child td { border-bottom: 0; }
+      .field-table td a { color: var(--teal); font-weight: 700; }
+      .ptype { color: #5a6b80; font-size: 0.82rem; text-transform: lowercase; }
+      .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 0; }
+      .chip { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 0.9rem; color: #212121; }
+    </style>
+  </body>
+</html>

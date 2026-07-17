@@ -26,6 +26,25 @@ const ectsVals = entries.map((e) => e.ects).filter((n): n is number => n != null
 const minEcts = ectsVals.length ? Math.min(...ectsVals) : null;
 const maxEcts = ectsVals.length ? Math.max(...ectsVals) : null;
 
+// "Sarnased programmid teistes koolides": sama valdkond, teine pakkuja =
+// võrdlus-intent (meie tugevaim väärtuspakkumine) ja staatilised siselingid,
+// mis jagavad autoriteeti ning aitavad kasutajal kõrvale võrrelda. No-JS: kõik
+// arvutatakse build-ajal. Piirdume kooli kõige esindatumate valdkondadega, et
+// linke jääks 5–8 (mitte massilinkimine).
+const providerFieldsRanked = [...new Set(entries.map((e) => e.field))]
+  .filter((f) => f && f !== "muu")
+  .map((field) => ({ field, count: entries.filter((e) => e.field === field).length }))
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 3)
+  .map((x) => x.field);
+const relatedByField = providerFieldsRanked
+  .map((field) => ({
+    field,
+    slug: fieldsWithSlug.find((f) => f.field === field)?.slug ?? null,
+    items: catalog.filter((e) => e.provider !== provider && e.field === field).slice(0, 3)
+  }))
+  .filter((g) => g.items.length > 0);
+
 const SITE = "https://mikrokvalifikatsioon.ee";
 const slug = providersWithSlug.find((p) => p.provider === provider)?.slug as string;
 const canonicalPath = `/koolitaja/${slug}/`;
@@ -52,7 +71,7 @@ const schema = {
       "@type": "BreadcrumbList",
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
-        { "@type": "ListItem", position: 2, name: "Kataloog", item: `${SITE}/kataloog/` },
+        { "@type": "ListItem", position: 2, name: "Koolitajad", item: `${SITE}/koolitaja/` },
         { "@type": "ListItem", position: 3, name: provider, item: `${SITE}${canonicalPath}` }
       ]
     },
@@ -87,7 +106,7 @@ const schema = {
       <section class="report-hero simple-report-hero">
         <div class="section-inner">
           <nav class="crumbs" aria-label="Asukoht">
-            <a href="/">Avaleht</a> › <a href="/kataloog/">Kataloog</a> › <span>{provider}</span>
+            <a href="/">Avaleht</a> › <a href="/koolitaja/">Koolitajad</a> › <span>{provider}</span>
           </nav>
           <CategoryMark kind="provider" />
           <span class="eyebrow">Kool</span>
@@ -138,6 +157,33 @@ const schema = {
             <p class="chips">
               {fieldsCovered.map((f) => <a class="chip" href={`/valdkond/${f.slug}/`}>{f.field} <b>{entries.filter((e) => e.field === f.field).length}</b></a>)}
             </p>
+          </div>
+        </section>
+      )}
+
+      {relatedByField.length > 0 && (
+        <section class="white">
+          <div class="section-inner">
+            <div class="section-head compact-head">
+              <span class="kicker">Sarnased teistes koolides</span>
+              <h2>Sama valdkonna mikrokraadid teistes koolides</h2>
+              <p>Võrdle {provider} programme sama valdkonna omadega mujalt — sõltumatu register näitab kõik kõrvuti.</p>
+            </div>
+            {relatedByField.map((group) => (
+              <div class="provider-block">
+                <h3>{group.slug ? <a href={`/valdkond/${group.slug}/`}>{group.field}</a> : group.field}</h3>
+                <ul class="check">
+                  {group.items.map((entry) => (
+                    <li>
+                      <a href={`/kataloog/${entry.slug}/`} data-track-event="cta_click" data-track-label="provider_related_detail">{entry.name}</a>
+                      {` — ${entry.provider}`}{entry.ects ? `, ${entry.ects} EAP` : ""}
+                    </li>
+                  ))}
+                </ul>
+                {group.slug && <p><a href={`/valdkond/${group.slug}/`}>Vaata kõiki {group.field} mikrokraade kõrvuti →</a></p>}
+              </div>
+            ))}
+            <p class="field-help">Vaata ka <a href="/koolitaja/">kõik koolid ühes kohas</a> või <a href="/mikrokraadid/">mikrokraadid Eestis</a>.</p>
           </div>
         </section>
       )}
