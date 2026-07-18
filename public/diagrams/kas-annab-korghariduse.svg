@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="t d" width="640" height="360">
+  <title id="t">Mikrokraad ei ole kraad, aga EAP-d kanduvad kraadiõppesse</title>
+  <desc id="d">Mikrokraad ei ole kõrgharidust andev kraad ega diplom — see lõpeb tunnistusega, mitte bakalaureuse- või magistrikraadiga. Kuid mikrokraad on kõrghariduse tasemel ja annab EAP-sid (ainepunkte), mida saab sageli hiljem kraadiõppes arvestada.</desc>
+  <rect width="640" height="360" fill="#ffffff"/>
+  <g font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif">
+    <text x="44" y="52" font-size="14" letter-spacing="2.5" font-weight="700" fill="#7a8798">KAS KRAAD?</text>
+    <text x="44" y="96" font-size="31" font-weight="800" fill="#1a2733">Ei kraad — aga samm selle poole</text>
+    <text x="44" y="128" font-size="16" fill="#5a6b80">tunnistus, mitte bakalaureus või magister</text>
+
+    <rect x="44" y="184" width="220" height="84" rx="12" fill="#2f9e95"/>
+    <text x="154" y="222" font-size="19" font-weight="800" fill="#ffffff" text-anchor="middle">MIKROKRAAD</text>
+    <text x="154" y="244" font-size="12.5" fill="#d8f0ec" text-anchor="middle">tunnistus · kõrghar. tasemel</text>
+
+    <text x="330" y="216" font-size="26" font-weight="700" fill="#9aa7b4" text-anchor="middle">→</text>
+    <text x="330" y="242" font-size="12.5" font-weight="700" fill="#227b73" text-anchor="middle">EAP-d kanduvad</text>
+
+    <rect x="396" y="184" width="200" height="84" rx="12" fill="#eaf6f4"/>
+    <text x="496" y="222" font-size="19" font-weight="800" fill="#227b73" text-anchor="middle">KRAADIÕPE</text>
+    <text x="496" y="244" font-size="12.5" fill="#5a8f89" text-anchor="middle">bakalaureus / magister</text>
+
+    <text x="44" y="316" font-size="15" fill="#5a6b80">Kraadi ise ei anna, aga <tspan font-weight="700" fill="#1a2733">EAP-sid saab sageli arvestada</tspan>.</text>
+    <text x="596" y="346" font-size="12" fill="#9aa7b4" text-anchor="end">mikrokvalifikatsioon.ee</text>
+  </g>
+</svg>
