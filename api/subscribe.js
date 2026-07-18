@@ -181,7 +181,9 @@ export default async function handler(req, res) {
         interest_topic: topic,
         field: fundingRoute ? `rahastus_${fundingRoute}` : field,
         ...(outcomes && outcomes.length ? { outcomes } : {}),
-        consent_purpose: 'course_offers',
+        // B2B/provider capture consents to B2B outreach, not learner course offers
+        // (both are ratified consent purposes in amos.outreach.lead_capture/v1).
+        consent_purpose: topic === 'b2b_koolitus' ? 'b2b_outreach' : 'course_offers',
         source_site: sourceSite,
         captured_at: new Date().toISOString(),
       }),

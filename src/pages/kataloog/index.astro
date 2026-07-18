@@ -205,7 +205,7 @@ const schema = {
             <h2>Ei leidnud sobivat? Ütle, mida otsid.</h2>
             <p>Kui sulle vajalikku mikrokvalifikatsiooni veel pole, anna teada. Kogume nõudlust ja teavitame sind, kui selline lisandub.</p>
           </div>
-          <form class="lead-form" data-demand-form data-webhook-url={import.meta.env.PUBLIC_SITE_LEAD_WEBHOOK_URL || ""}>
+          <form class="lead-form" data-demand-form data-site-lead-form data-source-site="mikrokvalifikatsioon.ee">
             <div class="form-grid">
               <div class="field full">
                 <label for="demandSkill">Mis oskust või teemat otsid? *</label>
@@ -411,12 +411,13 @@ const schema = {
         event.preventDefault();
         if (!demandForm.reportValidity()) return;
         const payload = Object.fromEntries(new FormData(demandForm).entries());
-        const webhookUrl = demandForm.getAttribute("data-webhook-url") || "";
         demandTrack("demand_request", { skill: String(payload.skill || "").slice(0, 100), field: String(payload.field || "kõik"), has_email: payload.email ? "jah" : "ei" });
+        // AMOS ratifitseeritud sissevool — ainult kui e-mail on antud (soovi saab saata ka ilma).
         let sent = false;
-        if (webhookUrl) {
+        const demandEmail = String(payload.email || "").trim();
+        if (demandEmail) {
           try {
-            const r = await fetch(webhookUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ form: "demand_request", site: "mikrokvalifikatsioon.ee", ...payload }) });
+            const r = await fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind: "topic_subscribe", topic: "mikrokvalifikatsioon", email: demandEmail, field: String(payload.skill || payload.field || "").slice(0, 64), source_site: "mikrokvalifikatsioon_ee" }) });
             sent = r.ok;
           } catch { sent = false; }
         }

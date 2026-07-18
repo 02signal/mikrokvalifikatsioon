@@ -273,32 +273,32 @@ const schema = {
       form?.addEventListener("submit", async (event) => {
         event.preventDefault();
         if (!form.reportValidity()) return;
-        const webhookUrl = form.getAttribute("data-webhook-url") || "";
         const payload = Object.fromEntries(new FormData(form).entries());
         track("lead_form_submit_attempt", { form_name: "koolitaja_lisa_programm", source_site: "mikrokvalifikatsioon.ee" });
-        let sent = false;
-        if (webhookUrl) {
+        // Koolitaja kontakt B2B-nimekirja (AMOS ratifitseeritud b2b_koolitus teema, b2b_outreach
+        // nõusolek). Programmi detailid (nimi, link) lähevad e-kirjaga — ingress neid ei kanna,
+        // ja inimene vaatab allika üle enne kataloogi lisamist.
+        let captured = false;
+        if (payload.email) {
           try {
-            const response = await fetch(webhookUrl, {
+            const r = await fetch("/api/subscribe", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ form: "koolitaja_lisa_programm", site: "mikrokvalifikatsioon.ee", ...payload })
+              body: JSON.stringify({ kind: "topic_subscribe", topic: "b2b_koolitus", email: payload.email, field: payload.field || null, source_site: "mikrokvalifikatsioon_ee" })
             });
-            sent = response.ok;
+            captured = r.ok;
           } catch {
-            sent = false;
+            captured = false;
           }
         }
-        if (!sent) {
-          const body = encodeURIComponent(
-            `Programm: ${payload.programmName || ""}\nKool/koolitaja: ${payload.providerName || ""}\nLink: ${payload.programUrl || ""}\nValdkond: ${payload.field || "-"}\nMärkused: ${payload.notes || "-"}\nKontakt: ${payload.email || ""}`
-          );
-          window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Lisa programm registrisse")}&body=${body}`;
-        }
-        track("lead_form_submit", { form_name: "koolitaja_lisa_programm", source_site: "mikrokvalifikatsioon.ee", delivery: sent ? "webhook" : "mailto" });
-        if (note) note.textContent = sent
-          ? "Aitäh! Saime programmi info kätte ja lisame selle pärast allika kontrolli."
-          : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
+        const body = encodeURIComponent(
+          `Programm: ${payload.programmName || ""}\nKool/koolitaja: ${payload.providerName || ""}\nLink: ${payload.programUrl || ""}\nValdkond: ${payload.field || "-"}\nMärkused: ${payload.notes || "-"}\nKontakt: ${payload.email || ""}`
+        );
+        window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Lisa programm registrisse")}&body=${body}`;
+        track("lead_form_submit", { form_name: "koolitaja_lisa_programm", source_site: "mikrokvalifikatsioon.ee", delivery: captured ? "amos_list+mailto" : "mailto" });
+        if (note) note.textContent = captured
+          ? "Avasime e-kirja programmi detailidega — vajuta Saada. Su kontakti panime juba kirja."
+          : "Avasime e-kirja programmi detailidega — vajuta saatmiseks Saada.";
       });
     </script>
   </body>

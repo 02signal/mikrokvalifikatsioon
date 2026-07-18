@@ -239,27 +239,25 @@ const langAlternates = [
       form?.addEventListener("submit", async (event) => {
         event.preventDefault();
         if (!form.reportValidity()) return;
-        const webhookUrl = form.getAttribute("data-webhook-url") || "";
         const payload = Object.fromEntries(new FormData(form).entries());
         track("lead_form_submit_attempt", { form_name: "en_notify", source_site: "mikrokvalifikatsioon.ee/en", role: String(payload.role || "") });
+        // AMOS ratified ingress (topic_subscribe); source normalised to mikrokvalifikatsioon_ee.
         let sent = false;
-        if (webhookUrl) {
-          try {
-            const response = await fetch(webhookUrl, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ form: "en_notify", site: "mikrokvalifikatsioon.ee/en", ...payload })
-            });
-            sent = response.ok;
-          } catch {
-            sent = false;
-          }
+        try {
+          const response = await fetch("/api/subscribe", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ kind: "topic_subscribe", topic: "mikrokvalifikatsioon", email: payload.email, source_site: "mikrokvalifikatsioon_ee" })
+          });
+          sent = response.ok;
+        } catch {
+          sent = false;
         }
         if (!sent) {
           const body = encodeURIComponent(`Role: ${payload.role || "-"}\nEmail: ${payload.email || "-"}\nLooking for: ${payload.message || "-"}`);
           window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Microcredentials register - notify me")}&body=${body}`;
         }
-        track("lead_form_submit", { form_name: "en_notify", source_site: "mikrokvalifikatsioon.ee/en", role: String(payload.role || ""), delivery: sent ? "webhook" : "mailto" });
+        track("lead_form_submit", { form_name: "en_notify", source_site: "mikrokvalifikatsioon.ee/en", role: String(payload.role || ""), delivery: sent ? "amos" : "mailto" });
         if (note) note.textContent = sent
           ? "Thanks! We've got your details and will be in touch."
           : "We opened an email draft — press send to finish.";
