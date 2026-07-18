@@ -116,6 +116,7 @@ const metaDescription =
       ogType="article"
       ogTitle={q.question}
       ogDescription={metaDescription}
+      ogImage={q.figure ? q.figure.src.replace(/\.svg$/, ".og.png") : undefined}
       jsonLd={schema}
     />
   </head>
