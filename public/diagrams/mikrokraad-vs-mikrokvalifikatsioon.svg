@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="mkTitle mkDesc" width="640" height="360">
+  <title id="mkTitle">Mikrokraad on üks mikrokvalifikatsiooni liik</title>
+  <desc id="mkDesc">Mikrokvalifikatsioon on katusmõiste igale lühikesele tunnustatud õppele ühe oskuse kohta. Mikrokraad on selle ülikooli pakutav liik, mis annab EAP-sid (ainepunkte). Iga mikrokraad on mikrokvalifikatsioon, aga mitte iga mikrokvalifikatsioon ei ole mikrokraad.</desc>
+  <rect x="0" y="0" width="640" height="360" fill="#ffffff"/>
+  <g font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif">
+    <text x="44" y="52" font-size="14" letter-spacing="2.5" font-weight="700" fill="#7a8798">MÕISTED</text>
+    <text x="44" y="92" font-size="29" font-weight="800" fill="#1a2733">Mikrokraad on üks liik</text>
+    <text x="44" y="118" font-size="16" fill="#5a6b80">mikrokvalifikatsioonist</text>
+
+    <!-- Pesastatud: mikrokraad mahub mikrokvalifikatsiooni sisse -->
+    <rect x="44" y="140" width="552" height="150" rx="16" fill="#f1f5f4" stroke="#cfe0dd"/>
+    <text x="66" y="167" font-size="13" letter-spacing="1.5" font-weight="700" fill="#6d8a86">MIKROKVALIFIKATSIOON</text>
+    <text x="66" y="187" font-size="13.5" fill="#7d8b98">katusmõiste — iga lühike tunnustatud õpe ühe oskuse kohta</text>
+    <rect x="66" y="202" width="300" height="70" rx="12" fill="#2f9e95"/>
+    <text x="216" y="235" font-size="21" font-weight="800" fill="#ffffff" text-anchor="middle">MIKROKRAAD</text>
+    <text x="216" y="257" font-size="12.5" fill="#d8f0ec" text-anchor="middle">ülikooli oma · annab EAP-d</text>
+
+    <text x="44" y="328" font-size="16" fill="#5a6b80">Iga mikrokraad on mikrokvalifikatsioon — <tspan font-weight="700" fill="#1a2733">aga mitte vastupidi.</tspan></text>
+    <text x="596" y="348" font-size="12" fill="#9aa7b4" text-anchor="end">mikrokvalifikatsioon.ee</text>
+  </g>
+</svg>

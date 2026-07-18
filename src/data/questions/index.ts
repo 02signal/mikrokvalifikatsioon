@@ -22,6 +22,12 @@ export type QuestionEntry = {
   seoTitle?: string;
   /** 1–3 väljavõetavat lauset; kuvatakse rasvaselt esimesena (AI-tsiteeritav). */
   shortAnswer: string;
+  /**
+   * Valikuline selgitav joonis (Knaflic-stiilis SVG /public/diagrams/-is): üks
+   * selge sõnum, minimaalne kaunistus. Kuvatakse lühivastuse järel ja annab
+   * ImageObject struktuurandmed (SEO + GEO + Google Images visuaalotsing).
+   */
+  figure?: { src: string; alt: string; caption: string; width: number; height: number };
   /** Toetav sisu lõikudena (HTML-vaba, loomulik eesti keel). */
   body: string[];
   /** Seotud lingid edasiliikumiseks (ankur + tee). */
@@ -203,6 +209,13 @@ export const questions: QuestionEntry[] = [
     slug: "mis-on-eap",
     question: "Mis on EAP?",
     seoTitle: "Mis on EAP? 1 EAP = 26 tundi õppetööd | Mikrokvalifikatsioon.ee",
+    figure: {
+      src: "/diagrams/eap-26-tundi.svg",
+      alt: "Joonis: 1 EAP võrdub umbes 26 tundi õppija tööd (loengud ja iseseisev töö); mikrokraad on tavaliselt 6–30 EAP ehk umbes 156–780 tundi.",
+      caption: "1 EAP ≈ 26 tundi õppija tööd — loengud ja iseseisev töö kokku. Mikrokraad tavaliselt 6–30 EAP.",
+      width: 640,
+      height: 360
+    },
     shortAnswer:
       `EAP on Euroopa ainepunkt (ECTS — European Credit Transfer System), õppemahu ühik. ` +
       `1 EAP võrdub umbes 26 tunni õppija tööga, mis hõlmab nii loenguid kui iseseisvat tööd. ` +
@@ -221,6 +234,13 @@ export const questions: QuestionEntry[] = [
   {
     slug: "mikrokraad-vs-mikrokvalifikatsioon",
     question: "Mikrokraad vs mikrokvalifikatsioon — mis vahe on?",
+    figure: {
+      src: "/diagrams/mikrokraad-vs-mikrokvalifikatsioon.svg",
+      alt: "Joonis: mikrokraad on üks mikrokvalifikatsiooni liik — ülikooli pakutav, annab EAP-d. Iga mikrokraad on mikrokvalifikatsioon, aga mitte vastupidi.",
+      caption: "Mikrokvalifikatsioon on katusmõiste; mikrokraad on selle ülikooli-liik, mis annab EAP-d. Iga mikrokraad on mikrokvalifikatsioon — aga mitte vastupidi.",
+      width: 640,
+      height: 360
+    },
     shortAnswer:
       `Mikrokvalifikatsioon on katusmõiste igale lühikesele tunnustatud õppele ühe oskuse kohta. ` +
       `Mikrokraad on selle ülikooli versioon: see annab EAP-sid (ainepunkte), mida saab sageli hiljem kraadiõppes arvestada, ja vähemalt pool õppekavast on kõrghariduse tasemel. ` +

@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "test:wire": "node --test scripts/*.test.mjs",
-    "build": "node --test scripts/*.test.mjs && ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "build": "node scripts/rasterize-diagrams.mjs && node --test scripts/*.test.mjs && ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "diagrams": "node scripts/rasterize-diagrams.mjs",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview"
   },
   "dependencies": {
