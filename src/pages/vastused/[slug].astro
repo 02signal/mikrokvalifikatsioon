@@ -48,7 +48,8 @@ const schema = {
       inLanguage: "et",
       isPartOf: { "@id": `${SITE}/#organization` },
       dateModified: catalogUpdatedAt,
-      mainEntityOfPage: `${SITE}${path}`
+      mainEntityOfPage: `${SITE}${path}`,
+      ...(q.figure ? { primaryImageOfPage: { "@id": `${SITE}${path}#figure` } } : {})
     },
     {
       "@type": "BreadcrumbList",
@@ -73,7 +74,25 @@ const schema = {
           }
         }
       ]
-    }
+    },
+    // Selgitav joonis ImageObject-ina — annab Google Images / GEO jaoks masinloetava
+    // pildikonteksti (pealkiri, kirjeldus, litsents, seos lehega).
+    ...(q.figure ? [{
+      "@type": "ImageObject",
+      "@id": `${SITE}${path}#figure`,
+      // Raster (PNG) on kanooniline indekseeritav pilt Google Images'i jaoks.
+      url: `${SITE}${q.figure.src.replace(/\.svg$/, ".png")}`,
+      contentUrl: `${SITE}${q.figure.src.replace(/\.svg$/, ".png")}`,
+      caption: q.figure.caption,
+      description: q.figure.alt,
+      width: q.figure.width * 2,
+      height: q.figure.height * 2,
+      encodingFormat: "image/png",
+      inLanguage: "et",
+      isPartOf: { "@id": `${SITE}${path}#webpage` },
+      creator: { "@id": `${SITE}/#organization` },
+      license: "https://creativecommons.org/licenses/by/4.0/"
+    }] : [])
   ]
 };
 
@@ -118,6 +137,16 @@ const metaDescription =
 
       <section class="white">
         <div class="section-inner narrow">
+          {q.figure && (
+            <figure class="vastused-figure">
+              {/* SVG-allikas kuvamiseks (terav, väike); PNG on indekseeritav <img> Google Images'i jaoks. */}
+              <picture>
+                <source srcset={q.figure.src} type="image/svg+xml" />
+                <img src={q.figure.src.replace(/\.svg$/, ".png")} alt={q.figure.alt} width={q.figure.width} height={q.figure.height} loading="lazy" decoding="async" />
+              </picture>
+              <figcaption>{q.figure.caption}</figcaption>
+            </figure>
+          )}
           {q.body.map((para) => (
             <p class="vastused-body">{para}</p>
           ))}
@@ -180,6 +209,9 @@ const metaDescription =
         color: rgba(255, 255, 255, 0.7);
       }
       .vastused-crumb a { color: var(--teal); font-weight: 700; }
+      .vastused-figure { margin: 0 0 24px; }
+      .vastused-figure img { display: block; width: 100%; height: auto; max-width: 560px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+      .vastused-figure figcaption { margin-top: 8px; font-size: 0.9rem; color: #5a6b80; line-height: 1.45; }
       .vastused-short {
         font-size: 1.18rem;
         line-height: 1.55;

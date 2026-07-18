@@ -8,3 +8,6 @@ CLAUDE.local.md
 
 # Brand source kit (served copies live in public/)
 media/
+
+# Explainer diagrams: SVG is source of truth; PNG is a build artifact (npm run diagrams)
+public/diagrams/*.png
