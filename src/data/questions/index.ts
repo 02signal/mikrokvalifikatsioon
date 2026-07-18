@@ -323,6 +323,13 @@ export const questions: QuestionEntry[] = [
   {
     slug: "kuidas-mikrokraadile-kandideerida",
     question: "Kuidas mikrokraadile kandideerida?",
+    figure: {
+      src: "/diagrams/kuidas-kandideerida.svg",
+      alt: "Joonis: mikrokraadile kandideerimine kolmes sammus — 1) vali programm, 2) kontrolli eeldusi ja tähtaega, 3) registreeru kooli enda lehel.",
+      caption: "Kolm sammu: vali programm → kontrolli eeldusi ja tähtaega → registreeru. Lõplik registreerimine käib alati kooli enda lehel.",
+      width: 640,
+      height: 360
+    },
     shortAnswer:
       `Mikrokraadile kandideerimiseks vali kataloogist sobiv programm, kontrolli eeldusi ja tähtaega ning registreeru kooli enda lehel. ` +
       `Osa mikrokraade nõuab varasemat kõrgharidust, osa on avatud kõigile — nõue on iga programmi juures. ` +
@@ -402,6 +409,13 @@ export const questions: QuestionEntry[] = [
   {
     slug: "kas-mikrokvalifikatsiooni-saab-labida-veebis",
     question: "Kas mikrokvalifikatsiooni saab läbida veebis või töö kõrvalt?",
+    figure: {
+      src: "/diagrams/oppevorm.svg",
+      alt: "Joonis: mitu mikrokvalifikatsiooni saab läbida veebis, hübriidis või kohapeal — paljud on veebi- või hübriidõppes ja sobivad töö kõrvale.",
+      caption: "Mitu programmi igas õppevormis. Veebis või hübriidis saab õppida töö kõrvalt.",
+      width: 640,
+      height: 360
+    },
     shortAnswer:
       `Jah — paljud mikrokvalifikatsioonid on disainitud töötavale inimesele ja neid saab läbida veebis või hübriidõppes. ` +
       `Registris on ${onlineOrBlendedCount} programmi ${programmeCount}-st veebi- või hübriidõppes (${onlineCount} täielikult veebis, ${blendedCount} hübriidis); enamik ülejäänutest toimub kohapeal. ` +
@@ -438,6 +452,13 @@ export const questions: QuestionEntry[] = [
   {
     slug: "kas-mikrokvalifikatsioon-on-ehises-tunnustatud",
     question: "Kas mikrokvalifikatsioon on EHIS-es ja ametlikult tunnustatud?",
+    figure: {
+      src: "/diagrams/ehis-tunnustatud.svg",
+      alt: "Joonis: mikrokvalifikatsioonid on EHIS-es (Eesti Hariduse Infosüsteem) registreeritud õppekavad — riiklik register; näidatud registreeritud õppekavade ja pakkujate arv.",
+      caption: "Mikrokvalifikatsioonid on EHIS-es registreeritud õppekavad (riiklik register). Tunnistus tõendab kinnitatud õppekava läbimist.",
+      width: 640,
+      height: 360
+    },
     shortAnswer:
       `Jah — mikrokvalifikatsioonid on Eesti Hariduse Infosüsteemis (EHIS) registreeritud õppekavad ja seega ametlikult tunnustatud õpe. ` +
       `EHIS-es on praegu ${ehisProgrammeCount} registreeritud mikrokvalifikatsiooni õppekava ${ehisProviderCount} pakkujalt; meie võrreldav kataloog koondab neist ${programmeCount} õppijale kasutatavat kirjet ja kuvab sobitatud ametlikud andmed otse EHIS-ist. ` +
@@ -499,6 +520,13 @@ export const questions: QuestionEntry[] = [
   {
     slug: "populaarseimad-mikrokvalifikatsiooni-valdkonnad",
     question: "Millised on populaarseimad mikrokvalifikatsiooni valdkonnad?",
+    figure: {
+      src: "/diagrams/valdkonnad.svg",
+      alt: "Joonis: populaarseimad mikrokvalifikatsiooni valdkonnad programmide arvu järgi (top 5), suurim esile tõstetud.",
+      caption: "Enim pakutavad valdkonnad programmide arvu järgi. Iga valdkonda saab vaadata eraldi valdkonnalehel.",
+      width: 640,
+      height: 360
+    },
     shortAnswer:
       `Registri ${programmeCount} programmi jagunevad ${fieldCountExclMuu} valdkonna vahel ja enim pakutavad on ${etList(topFields.map((f) => `${f.field} (${f.count} programmi)`))}. ` +
       `Need kolm katavad suure osa kogu valikust. ` +

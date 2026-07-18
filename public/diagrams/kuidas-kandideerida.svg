@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="t d" width="640" height="360">
+  <title id="t">Mikrokraadile kandideerimine kolmes sammus</title>
+  <desc id="d">Mikrokraadile kandideerimiseks: 1) vali sobiv programm kataloogist või suunatestist; 2) kontrolli vastuvõtu eeldusi ja registreerimise tähtaega; 3) registreeru kooli enda lehel. Lõplik ja siduv registreerimine käib alati ülikooli või kooli enda lehel.</desc>
+  <rect width="640" height="360" fill="#ffffff"/>
+  <g font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif">
+    <text x="44" y="52" font-size="14" letter-spacing="2.5" font-weight="700" fill="#7a8798">KANDIDEERIMINE</text>
+    <text x="44" y="94" font-size="31" font-weight="800" fill="#1a2733">Kolm sammu kohani</text>
+
+    <circle cx="140" cy="180" r="27" fill="#2f9e95"/>
+    <text x="140" y="189" font-size="24" font-weight="800" fill="#ffffff" text-anchor="middle">1</text>
+    <text x="140" y="240" font-size="15.5" font-weight="700" fill="#1a2733" text-anchor="middle">Vali programm</text>
+    <text x="140" y="262" font-size="12.5" fill="#7a8798" text-anchor="middle">kataloogist või testist</text>
+
+    <text x="230" y="188" font-size="24" font-weight="700" fill="#c2ccd6" text-anchor="middle">→</text>
+
+    <circle cx="320" cy="180" r="27" fill="#2f9e95"/>
+    <text x="320" y="189" font-size="24" font-weight="800" fill="#ffffff" text-anchor="middle">2</text>
+    <text x="320" y="240" font-size="15.5" font-weight="700" fill="#1a2733" text-anchor="middle">Kontrolli eeldusi</text>
+    <text x="320" y="262" font-size="12.5" fill="#7a8798" text-anchor="middle">ja tähtaega</text>
+
+    <text x="410" y="188" font-size="24" font-weight="700" fill="#c2ccd6" text-anchor="middle">→</text>
+
+    <circle cx="500" cy="180" r="27" fill="#2f9e95"/>
+    <text x="500" y="189" font-size="24" font-weight="800" fill="#ffffff" text-anchor="middle">3</text>
+    <text x="500" y="240" font-size="15.5" font-weight="700" fill="#1a2733" text-anchor="middle">Registreeru</text>
+    <text x="500" y="262" font-size="12.5" fill="#7a8798" text-anchor="middle">kooli enda lehel</text>
+
+    <text x="44" y="320" font-size="15" fill="#5a6b80">Lõplik registreerimine käib alati <tspan font-weight="700" fill="#1a2733">kooli enda lehel</tspan>.</text>
+    <text x="596" y="348" font-size="12" fill="#9aa7b4" text-anchor="end">mikrokvalifikatsioon.ee</text>
+  </g>
+</svg>
