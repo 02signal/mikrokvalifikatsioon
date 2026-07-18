@@ -172,6 +172,13 @@ export const questions: QuestionEntry[] = [
   {
     slug: "kui-palju-mikrokraad-maksab",
     question: "Kui palju mikrokraad maksab?",
+    figure: {
+      src: "/diagrams/hind.svg",
+      alt: "Joonis: mikrokraadi hinnavahemik — tüüpiline vahemik (25.–75. protsentiil), mediaan ja avaldatud hindade äärmused registri andmetest.",
+      caption: "Tüüpiline hind on keskmine pool kõigist hindadest (25.–75. protsentiil); punkt on mediaan. Sõltub mahust (EAP) ja koolist.",
+      width: 640,
+      height: 360
+    },
     shortAnswer:
       `Mikrokraad maksab Eestis enamasti ${priceTypicalText} (tüüpiline vahemik, mediaan ${priceMedian != null ? fmtEur(priceMedian) : "~1 440 €"}). ` +
       `Registris avaldatud hinnad ulatuvad ${priceMin != null ? fmtEur(priceMin) : "~300 €"}-st ${priceMax != null ? fmtEur(priceMax) : "~4 000 €"}-ni, sõltuvalt mahust (EAP) ja koolist. ` +
@@ -190,6 +197,13 @@ export const questions: QuestionEntry[] = [
   {
     slug: "mitu-eap-d-on-mikrokraadil",
     question: "Mitu EAP-d on mikrokraadil?",
+    figure: {
+      src: "/diagrams/eap-jaotus.svg",
+      alt: "Joonis: mitu mikrokraadi jääb igasse EAP-vahemikku (6–11, 12–18, 19–24, 25–33 EAP); kõige sagedasem maht on esile tõstetud.",
+      caption: "Mikrokraadi maht EAP-vahemike kaupa; esile tõstetud on kõige sagedasem vahemik. 1 EAP ≈ 26 tundi.",
+      width: 640,
+      height: 360
+    },
     shortAnswer:
       `Mikrokraadil on Eestis tavaliselt ${ectsRangeText}, mediaan ${ectsMedian} EAP. ` +
       `Kõige sagedasem maht on ${ectsCommonBucket ? ectsCommonBucket.label : "12–18 EAP"} — see katab registris ${ectsCommonBucket ? ectsCommonBucket.count : ""} programmi. ` +
