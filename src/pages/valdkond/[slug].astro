@@ -378,20 +378,18 @@ const schema = { "@context": "https://schema.org", "@graph": wantedSchema };
           event.preventDefault();
           if (!form.reportValidity()) return;
           const email = String(new FormData(form).get("email") || "");
-          const webhookUrl = form.getAttribute("data-webhook-url") || "";
           track("field_subscribe", { field });
+          // AMOS ratifitseeritud sissevool (topic_subscribe); valdkond läheb `field`-i.
           let sent = false;
-          if (webhookUrl) {
-            try {
-              const r = await fetch(webhookUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ form: "field_subscribe", site: "mikrokvalifikatsioon.ee", field, email }) });
-              sent = r.ok;
-            } catch { sent = false; }
-          }
+          try {
+            const r = await fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind: "topic_subscribe", topic: "mikrokvalifikatsioon", email, field, source_site: "mikrokvalifikatsioon_ee" }) });
+            sent = r.ok;
+          } catch { sent = false; }
           if (!sent) {
             const body = encodeURIComponent("Valdkond: " + field + "\nE-mail: " + email);
             window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Teavitus valdkonnast: " + field)}&body=${body}`;
           }
-          track("lead_form_submit", { form_name: "field_subscribe", field, delivery: sent ? "webhook" : "mailto" });
+          track("lead_form_submit", { form_name: "field_subscribe", field, delivery: sent ? "amos" : "mailto" });
           if (note) note.textContent = sent ? "Aitäh! Teavitame sind selle valdkonna uudistest." : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
           form.reset();
         });

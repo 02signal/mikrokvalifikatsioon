@@ -19,6 +19,20 @@ The konto unified-account + brand + email are all LIVE end-to-end (see the 2026-
 5. Apply the animated `Logo` at the konto save-confirmation moment ("Sinu valikud on hoitud") — strongest brand moment.
 6. Self-host Sora (woff2) instead of the Google Fonts link in `Seo.astro`.
 
+**Lead capture — 2026-07-18 (site done, owner switches pending):**
+10. **Done 2026-07-18** — audit found the main lead forms captured nothing (unset
+    `PUBLIC_SITE_LEAD_WEBHOOK_URL` → silent `mailto:` fallback). Migrated all 6 forms
+    (suunatest, kataloog demand, valdkond, kataloog/[slug] interest, en, koolitajale) to the
+    ratified `/api/subscribe` → AMOS ingress; `b2b_koolitus`+`b2b_outreach` for the provider
+    contact. See `docs/lead-capture-go-live-runbook.md`. No regression until AMOS on.
+11. **Owner/ops go-live (blocks real capture):** set Vercel `AMOS_TOPIC_CAPTURE_URL` +
+    `AMOS_CAPTURE_TOKEN`; un-gate AMOS ingress; provision Listmonk lists + Twenty
+    `personbrandisuhted`. Details in the runbook.
+12. **AMOS code (Codex):** map `topic_subscribe`→learner and `b2b_koolitus`→b2b_buyer/provider
+    role in `service.mjs` `ACCOUNT_KIND_MAP`; per-topic Listmonk lists; enable `OUTREACH_SEND_MODE`.
+13. **GA nicety:** `lead_form_start` uses one hardcoded `form_name` (`Analytics.astro`) — make it
+    per-surface so start events attribute to the right form.
+
 **SEO/GEO — CTR uplift 2026-07-16 (done + follow-ups):**
 7. **Done 2026-07-16** — 28-day GSC review found page-1 impressions with near-zero clicks (title/snippet
    problem, not ranking): `/koolitaja/tartu-ulikool` 270 impr @ 0.74%, `/koolitaja/taltech` 94 @ 1.06%,

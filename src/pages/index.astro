@@ -640,27 +640,26 @@ const schema = {
       form?.addEventListener("submit", async (event) => {
         event.preventDefault();
         if (!form.reportValidity()) return;
-        const webhookUrl = form.getAttribute("data-webhook-url") || "";
         const payload = Object.fromEntries(new FormData(form).entries());
         track("lead_form_submit_attempt", { form_name: "suunatest_vorm", source_site: "mikrokvalifikatsioon.ee" });
+        // AMOS-i ratifitseeritud sissevool (api/subscribe → topic_subscribe → double-opt-in).
+        // Kui backend/env pole seatud → 503 → mailto varuvariant (leadi ei kaota).
         let sent = false;
-        if (webhookUrl) {
-          try {
-            const response = await fetch(webhookUrl, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ form: "suunatest", site: "mikrokvalifikatsioon.ee", ...payload })
-            });
-            sent = response.ok;
-          } catch {
-            sent = false;
-          }
+        try {
+          const response = await fetch("/api/subscribe", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ kind: "topic_subscribe", topic: "mikrokvalifikatsioon", email: payload.email, field: payload.field || null, source_site: "mikrokvalifikatsioon_ee" })
+          });
+          sent = response.ok;
+        } catch {
+          sent = false;
         }
         if (!sent) {
           const body = encodeURIComponent(`Suunatesti vastus:\n${payload.suunatestSummary || ""}\n\nTaust: ${payload.message || "-"}\nE-mail: ${payload.email || "-"}`);
           window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Suunatest - mikrokvalifikatsioon.ee")}&body=${body}`;
         }
-        track("lead_form_submit", { form_name: "suunatest_vorm", source_site: "mikrokvalifikatsioon.ee", delivery: sent ? "webhook" : "mailto" });
+        track("lead_form_submit", { form_name: "suunatest_vorm", source_site: "mikrokvalifikatsioon.ee", delivery: sent ? "amos" : "mailto" });
         if (noteEl) noteEl.textContent = sent
           ? "Aitäh! Saatsime valiku teele ja vastame ühe tööpäeva jooksul."
           : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";

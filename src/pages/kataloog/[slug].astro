@@ -474,20 +474,18 @@ const schema = {
           event.preventDefault();
           if (!form.reportValidity()) return;
           const email = String(new FormData(form).get("email") || "");
-          const webhookUrl = form.getAttribute("data-webhook-url") || "";
           track("lead_form_submit_attempt", { form_name: "interest_waitlist", programme_slug: slug });
+          // AMOS ratifitseeritud sissevool (topic_subscribe); programmi valdkond läheb `field`-i.
           let sent = false;
-          if (webhookUrl) {
-            try {
-              const r = await fetch(webhookUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ form: "interest_waitlist", site: "mikrokvalifikatsioon.ee", programme_slug: slug, field, provider, email }) });
-              sent = r.ok;
-            } catch { sent = false; }
-          }
+          try {
+            const r = await fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind: "topic_subscribe", topic: "mikrokvalifikatsioon", email, field, source_site: "mikrokvalifikatsioon_ee" }) });
+            sent = r.ok;
+          } catch { sent = false; }
           if (!sent) {
             const body = encodeURIComponent("E-mail: " + email + "\nProgramm: " + slug + " (" + provider + ")");
             window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Huvi programmi vastu: " + slug)}&body=${body}`;
           }
-          track("lead_form_submit", { form_name: "interest_waitlist", programme_slug: slug, delivery: sent ? "webhook" : "mailto" });
+          track("lead_form_submit", { form_name: "interest_waitlist", programme_slug: slug, delivery: sent ? "amos" : "mailto" });
           const msg = box.querySelector("[data-interest-msg]");
           if (msg) msg.innerHTML = sent ? "<strong>Aitäh!</strong> Teavitame sind, kui midagi muutub." : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
         });
