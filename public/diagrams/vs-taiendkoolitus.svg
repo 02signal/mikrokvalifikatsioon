@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="t d" width="640" height="360">
+  <title id="t">Mikrokvalifikatsioon vs täiendkoolitus</title>
+  <desc id="d">Mikrokvalifikatsioon on EHIS-es registreeritud õppekava kinnitatud mahu (EAP), õpiväljundite ja tunnistusega. Tavaline täiendkoolitus on vabamas vormis, sageli lühem ega pruugi anda ainepunkte. Mikrokvalifikatsioon on seega tõendatum ja ülekantavam.</desc>
+  <rect width="640" height="360" fill="#ffffff"/>
+  <g font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif">
+    <text x="44" y="52" font-size="14" letter-spacing="2.5" font-weight="700" fill="#7a8798">VÕRDLUS</text>
+    <text x="44" y="92" font-size="29" font-weight="800" fill="#1a2733">Registreeritud õpe vs vabam koolitus</text>
+
+    <rect x="44" y="122" width="262" height="164" rx="14" fill="#eaf6f4" stroke="#cfe4e0"/>
+    <text x="64" y="150" font-size="14" letter-spacing="0.5" font-weight="800" fill="#227b73">MIKROKVALIFIKATSIOON</text>
+    <text x="64" y="182" font-size="15" fill="#2a4a46">✓&#160;&#160;EHIS-registreeritud</text>
+    <text x="64" y="212" font-size="15" fill="#2a4a46">✓&#160;&#160;EAP ainepunktid</text>
+    <text x="64" y="242" font-size="15" fill="#2a4a46">✓&#160;&#160;tunnistus + õpiväljundid</text>
+    <text x="64" y="270" font-size="13" fill="#5a8f89">tõendatud ja ülekantav</text>
+
+    <rect x="334" y="122" width="262" height="164" rx="14" fill="#f5f7f9" stroke="#e4e9ee"/>
+    <text x="354" y="150" font-size="14" letter-spacing="0.5" font-weight="800" fill="#7a8798">TÄIENDKOOLITUS</text>
+    <text x="354" y="182" font-size="15" fill="#5a6b80">vabam vorm</text>
+    <text x="354" y="212" font-size="15" fill="#5a6b80">sageli ei anna EAP-d</text>
+    <text x="354" y="242" font-size="15" fill="#5a6b80">lühem, vähem formaalne</text>
+    <text x="354" y="270" font-size="13" fill="#9aa7b4">hea kiireks sissejuhatuseks</text>
+
+    <text x="44" y="322" font-size="15" fill="#5a6b80">Mikrokvalifikatsioon on <tspan font-weight="700" fill="#1a2733">tõendatum ja ülekantavam</tspan> — CV-s selgelt loetav.</text>
+    <text x="596" y="348" font-size="12" fill="#9aa7b4" text-anchor="end">mikrokvalifikatsioon.ee</text>
+  </g>
+</svg>

@@ -154,6 +154,13 @@ export const questions: QuestionEntry[] = [
   {
     slug: "kui-kaua-mikrokraad-kestab",
     question: "Kui kaua mikrokraad kestab?",
+    figure: {
+      src: "/diagrams/kui-kaua-kestab.svg",
+      alt: "Joonis: mikrokraad kestab tavaliselt 1–2 semestrit töö kõrvalt — kuud, mitte aastad; maht 6–30 EAP ehk umbes 156–780 tundi.",
+      caption: "Tavaliselt 1–2 semestrit töö kõrvalt — lühemad ühe, mahukamad kahe semestriga. 6–30 EAP ≈ 156–780 tundi.",
+      width: 640,
+      height: 360
+    },
     shortAnswer:
       `Mikrokraad kestab tavaliselt üks kuni kaks semestrit töö kõrvalt — kuud, mitte aastad. ` +
       `Registris on tüüpiline maht ${ectsRangeText}, mis tähendab umbes ${hoursLo}–${hoursHi} tundi õppija tööd kokku (1 EAP ≈ 26 tundi). ` +
@@ -291,6 +298,13 @@ export const questions: QuestionEntry[] = [
   {
     slug: "kas-mikrokraad-annab-korghariduse",
     question: "Kas mikrokraad annab kõrghariduse või kraadi?",
+    figure: {
+      src: "/diagrams/kas-annab-korghariduse.svg",
+      alt: "Joonis: mikrokraad ei ole kraad (lõpeb tunnistusega), aga annab EAP-sid, mida saab sageli hiljem kraadiõppes arvestada.",
+      caption: "Mikrokraad lõpeb tunnistusega, mitte kraadiga — aga EAP-sid saab sageli hiljem kraadiõppes arvestada.",
+      width: 640,
+      height: 360
+    },
     shortAnswer:
       `Ei — mikrokraad ei ole kõrgharidust andev kraad ega diplom. ` +
       `See on lühike kõrghariduse tasemel õpe ühe oskuse kohta, mis lõpeb tunnistusega, mitte bakalaureuse- ega magistrikraadiga. ` +
@@ -345,6 +359,13 @@ export const questions: QuestionEntry[] = [
   {
     slug: "kas-tooandja-saab-mikrokvalifikatsiooni-rahastada",
     question: "Kas tööandja saab mikrokvalifikatsiooni rahastada?",
+    figure: {
+      src: "/diagrams/rahastus-kolm-rada.svg",
+      alt: "Joonis: õppetasule on kolm rahastusrada — õppija ise, tööandja koolituseelarve või Töötukassa toetus.",
+      caption: "Kolm rahastusrada: sina ise, tööandja koolituseelarve või Töötukassa. Osa programme on sihtrühmale eraldi rahastatud.",
+      width: 640,
+      height: 360
+    },
     shortAnswer:
       `Jah — tööandja koolituseelarve on üks kolmest peamisest rahastusrajast (tööandja, Töötukassa või ise). ` +
       `Paljud ettevõtted katavad töötaja mikrokvalifikatsiooni õppetasu täielikult või osaliselt, sest oskus jääb ettevõttesse ja õpe käib töö kõrvalt. ` +
@@ -435,6 +456,13 @@ export const questions: QuestionEntry[] = [
   {
     slug: "mikrokvalifikatsioon-vs-taiendkoolitus",
     question: "Mille poolest erineb mikrokvalifikatsioon täiendkoolitusest?",
+    figure: {
+      src: "/diagrams/vs-taiendkoolitus.svg",
+      alt: "Joonis: mikrokvalifikatsioon on EHIS-registreeritud õppekava EAP-de ja tunnistusega; täiendkoolitus on vabamas vormis ega pruugi anda ainepunkte.",
+      caption: "Mikrokvalifikatsioon: EHIS-registreeritud, EAP ainepunktid, tunnistus. Täiendkoolitus on vabam ega pruugi anda EAP-d.",
+      width: 640,
+      height: 360
+    },
     shortAnswer:
       `Mikrokvalifikatsioon on EHIS-es registreeritud õppekava kinnitatud mahu (EAP), õpiväljundite ja tunnistusega; tavaline täiendkoolitus on vabamas vormis ega pruugi olla riiklikus registris ega anda ainepunkte. ` +
       `Mikrokvalifikatsioon on seega tõendatum ja ülekantavam: ülikooli mikrokraadi EAP-sid saab sageli hiljem kraadiõppes arvestada. ` +
