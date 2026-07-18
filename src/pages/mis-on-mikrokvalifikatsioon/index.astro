@@ -54,7 +54,7 @@ const schema = {
     },
     {
       "@type": "Article",
-      image: "https://mikrokvalifikatsioon.ee/og/mis-on-mikrokvalifikatsioon.png",
+      image: "https://mikrokvalifikatsioon.ee/diagrams/mikrokraad-vs-mikrokvalifikatsioon.png",
       headline: "Mis on mikrokvalifikatsioon? Lihtne selgitus",
       description: "Mikrokvalifikatsioon, mikrokraad, kutsetunnistus ja sertifikaat — mis vahe neil on ja millal millist valida.",
       inLanguage: "et",
@@ -86,6 +86,7 @@ const schema = {
       ogType="article"
       ogTitle="Mis on mikrokvalifikatsioon? Lihtne selgitus"
       ogDescription="Mikrokvalifikatsioon vs mikrokraad vs kutsetunnistus — lihtne võrdlus ja vastused korduvatele küsimustele."
+      ogImage="/diagrams/mikrokraad-vs-mikrokvalifikatsioon.og.png"
       jsonLd={schema}
     />
   </head>
@@ -115,6 +116,12 @@ const schema = {
             <span class="kicker">Neli mõistet, üks loogika</span>
             <h2>Mikrokvalifikatsioon, mikrokraad, kutsetunnistus, sertifikaat — mis vahe on?</h2>
           </div>
+          <figure style="margin:0 auto 26px;max-width:560px;">
+            <picture>
+              <source srcset="/diagrams/mikrokraad-vs-mikrokvalifikatsioon.svg" type="image/svg+xml" />
+              <img src="/diagrams/mikrokraad-vs-mikrokvalifikatsioon.png" alt="Joonis: mikrokraad on üks mikrokvalifikatsiooni liik — ülikooli pakutav, annab EAP-d. Iga mikrokraad on mikrokvalifikatsioon, aga mitte vastupidi." width="640" height="360" loading="lazy" decoding="async" style="display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:12px;" />
+            </picture>
+          </figure>
           <div class="measure-list">
             <article class="measure-card">
               <div>

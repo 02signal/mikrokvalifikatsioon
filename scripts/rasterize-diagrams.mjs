@@ -22,16 +22,28 @@ if (!existsSync(DIR)) {
 const OG_W = 1200;
 const OG_H = 630;
 
+// Walk recursively so per-field/per-page diagrams in subfolders (e.g.
+// diagrams/valdkond/<slug>.svg from an Astro endpoint) are rasterised too.
+function svgFiles(dir) {
+  const out = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...svgFiles(full));
+    else if (entry.name.endsWith(".svg")) out.push(full);
+  }
+  return out;
+}
+
 let count = 0;
-for (const file of readdirSync(DIR).filter((f) => f.endsWith(".svg"))) {
-  const svg = readFileSync(path.join(DIR, file));
-  const base = file.replace(/\.svg$/, "");
+for (const svgPath of svgFiles(DIR)) {
+  const svg = readFileSync(svgPath);
+  const base = svgPath.replace(/\.svg$/, "");
 
   // On-page raster: 2× the SVG's intrinsic size (density 144 = 72×2).
   await sharp(svg, { density: 144 })
     .flatten({ background: "#ffffff" })
     .png({ compressionLevel: 9 })
-    .toFile(path.join(DIR, `${base}.png`));
+    .toFile(`${base}.png`);
 
   // OG card: render the diagram to fit within a padded 1200×630 white canvas.
   const inner = await sharp(svg, { density: 180 })
@@ -41,9 +53,9 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith(".svg"))) {
   await sharp({ create: { width: OG_W, height: OG_H, channels: 4, background: "#ffffff" } })
     .composite([{ input: inner, gravity: "center" }])
     .png({ compressionLevel: 9 })
-    .toFile(path.join(DIR, `${base}.og.png`));
+    .toFile(`${base}.og.png`);
 
   count += 1;
-  process.stdout.write(`rasterised ${file} → ${base}.png + ${base}.og.png\n`);
+  process.stdout.write(`rasterised ${path.relative(DIR, svgPath)} → .png + .og.png\n`);
 }
 process.stdout.write(`Done: ${count} diagram(s).\n`);
