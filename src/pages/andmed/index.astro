@@ -91,7 +91,8 @@ const schema = {
       variableMeasured: ["EHIS õppekava kood", "programmi nimi", "pakkuja", "pakkuja tüüp", "valdkond", "maht (EAP)", "õpiväljundid", "hind", "õppevorm", "keel", "vastuvõtt"],
       distribution: [
         { "@type": "DataDownload", name: "Õppijale võrreldav kasutajakataloog", encodingFormat: "application/json", contentUrl: "https://mikrokvalifikatsioon.ee/catalog.json" },
-        { "@type": "DataDownload", name: "EHIS ametlik faktikiht", encodingFormat: "application/json", contentUrl: "https://mikrokvalifikatsioon.ee/ehis-catalog.json" }
+        { "@type": "DataDownload", name: "EHIS ametlik faktikiht", encodingFormat: "application/json", contentUrl: "https://mikrokvalifikatsioon.ee/ehis-catalog.json" },
+        { "@type": "DataDownload", name: "Credential Commons -vormis Linked Data (JSON-LD)", encodingFormat: "application/ld+json", contentUrl: "https://mikrokvalifikatsioon.ee/catalog.cc.jsonld" }
       ]
     }
   ]
@@ -126,9 +127,16 @@ const schema = {
           <div class="actions">
             <a class="btn btn-primary" href="/ehis-catalog.json" data-track-event="cta_click" data-track-label="andmed_ehis_json">Ava EHIS faktikiht</a>
             <a class="btn btn-secondary" href="/catalog.json" data-track-event="cta_click" data-track-label="andmed_catalog_json">Ava võrreldav kataloog</a>
+            <a class="btn btn-secondary" href="/catalog.cc.jsonld" data-track-event="cta_click" data-track-label="andmed_cc_jsonld">Ava Linked Data (JSON-LD)</a>
             <a class="btn btn-secondary" href="/kuidas-koostame/" data-track-event="cta_click" data-track-label="andmed_metoodika">Kuidas andmed kogume</a>
           </div>
-          <p class="report-date">EHIS snapshot: {ehisFetchedAtText}. Võrreldav kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
+          <p class="report-date">
+            EHIS snapshot: {ehisFetchedAtText}. Võrreldav kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}
+          </p>
+          <p class="report-date">
+            Masinloetav <strong>Linked Data</strong> järgib avatud <a href="https://credentialcommons.org/" rel="noopener">Credential Commons</a> profiili
+            (iga programm on <code>cc:MicroCredential</code>) — nii saab andmeid teistes süsteemides ja AI-teenustes koostöövõimeliselt taaskasutada.
+          </p>
         </div>
       </section>
 
