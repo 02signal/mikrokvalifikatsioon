@@ -8,6 +8,7 @@
     "test:wire": "node --test scripts/*.test.mjs",
     "build": "node --test scripts/*.test.mjs && ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build && node scripts/rasterize-diagrams.mjs",
     "diagrams": "node scripts/rasterize-diagrams.mjs",
+    "validate:cc": "npx --yes credential-commons validate dist/catalog.cc.jsonld --profile micro-credential",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview"
   },
   "dependencies": {

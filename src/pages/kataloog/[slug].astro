@@ -5,7 +5,7 @@ import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
 import { catalog, providersWithSlug, type CatalogEntryWithSlug } from "../../data/catalog";
-import { toCourse, outboundUrl } from "../../data/courseSchema";
+import { toCourse, outboundUrl, toCredentialCommons, CC_CONTEXT } from "../../data/courseSchema";
 import { comparisonsFor } from "../../data/comparisons";
 import { ehisAttribution } from "../../data/ehisFacts";
 import { intakeDatesFor, intakeDatesFetchedAt } from "../../data/intakeDates";
@@ -120,6 +120,11 @@ const schema = {
     toCourse(entry)
   ]
 };
+
+// Credential Commons cc:MicroCredential — the STRUCTURE/interop layer for this
+// programme (parallel to the schema.org Course above, which feeds Google). A
+// separate block because it uses the Credential Commons @context.
+const ccCredential = { "@context": CC_CONTEXT, ...toCredentialCommons(entry) };
 ---
 
 <!doctype html>
@@ -133,6 +138,8 @@ const schema = {
       ogDescription={entry.summary}
       jsonLd={schema}
     />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(ccCredential)} />
+    <link rel="alternate" type="application/ld+json" href="/catalog.cc.jsonld" />
   </head>
   <body>
     <Nav />
