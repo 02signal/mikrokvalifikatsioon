@@ -193,6 +193,15 @@ started, by design. AMOS PRs: #1190/#1197/#1200/#1205/#1209/#1225/#1226/#1232. m
 - Next: GA4 exploration / Looker Studio board (top interest_signal by programme, top demand_request skills) + n8n routing of `interest_waitlist`/`demand_request` to a demand list. Optional phase 2: public "X huvitatud" social-proof counter (needs a small datastore, e.g. Vercel KV).
 
 ## Data freshness / AMOS
+
+- **Done in code 2026-07-24 — canonical Credential Commons consumer:** human pages
+  remain on the trusted feed, while `/catalog.cc.jsonld` now mirrors a receipt-bound
+  warehouse graph. The committed default is now a coordinated feed+graph+receipt
+  pair; canonical AMOS `program.id` values are the public slugs. Remote use is
+  opt-in and fails the build (rather than mixing generations) when timeout,
+  content-type, hash/profile/run/feed identity checks fail. **Ops follow-up:** set
+  the three `PUBLIC_CATALOG_CC_*` Vercel variables only after the AMOS public release
+  URLs are live; then verify graph and receipt against the same weekly feed generation.
 - **Gap audit (2026-07-01):** the catalog is a static, manually-committed snapshot (last data
   commit `55ae782`, 2026-06-24; the on-page "kontrollitud" date is hardcoded `2026-06-12`).
   `PUBLIC_CATALOG_FEED_URL`/`PUBLIC_CATALOG_FEED_TRUSTED` are unset everywhere on this side, so

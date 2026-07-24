@@ -5,17 +5,14 @@ import "../styles/global.css";
 import Nav from "../components/Nav.astro";
 import Faq from "../components/Faq.astro";
 import { catalog, catalogUpdatedAt } from "../data/catalog";
-import { ehisFetchedAt, ehisProgrammeCount, ehisProviderCount, matchForCatalogEntry } from "../data/ehisFacts";
+import { ehisFetchedAt, ehisProgrammeCount, ehisProviderCount } from "../data/ehisFacts";
 
 const emailHref = "mailto:info@mikrokvalifikatsioon.ee?subject=Mikrokvalifikatsioonide%20uudised";
 const ehisFetchedAtDate = ehisFetchedAt.slice(0, 10);
 
-// EHIS-i autoriteet: arvuta build-ajal, kui mitme kataloogi programmi faktid on
-// ametliku EHIS-i registriga sobitatud (exact | strong — st mitte "none"). Number
-// EI ole kõvasti sisse kirjutatud, vaid tuleb andmetest, et püsiks alati täpne.
-const ehisVerifiedCount = catalog.filter(
-  (entry) => matchForCatalogEntry(entry).confidence !== "none"
-).length;
+// Use the retained match decision instead of rematching the EHIS-normalized
+// display name (two official curricula may legitimately share that name).
+const ehisVerifiedCount = catalog.filter((entry) => entry.ehis.authoritative).length;
 const catalogTotalCount = catalog.length;
 const homeFaq = [
   {

@@ -5,6 +5,7 @@ import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
 import { catalog, providers, fields, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 import { parsePriceEur } from "../../data/courseSchema";
+import { credentialCommonsRelease } from "../../data/credentialCommons";
 import {
   ehisAttribution,
   ehisFetchedAt,
@@ -20,6 +21,7 @@ import {
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
 const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
 const ehisFetchedAtText = ehisFetchedAt.split("-").reverse().join(".");
+const ccCount = credentialCommonsRelease.nodesById.size;
 
 const byField = fields
   .map((field) => ({ field, count: catalog.filter((entry) => entry.field === field).length }))
@@ -135,7 +137,7 @@ const schema = {
           </p>
           <p class="report-date">
             Masinloetav <strong>Linked Data</strong> järgib avatud <a href="https://credentialcommons.org/" rel="noopener">Credential Commons</a> profiili
-            (iga programm on <code>cc:MicroCredential</code>) — nii saab andmeid teistes süsteemides ja AI-teenustes koostöövõimeliselt taaskasutada.
+            ({ccCount} vastavuskontrolli läbinud kirjet on <code>cc:MicroCredential</code>) — nii saab andmeid teistes süsteemides ja AI-teenustes koostöövõimeliselt taaskasutada.
             <a href="/andmestandard/">Arendajatele ja asutustele →</a>
           </p>
         </div>

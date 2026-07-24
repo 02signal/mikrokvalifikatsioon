@@ -3,10 +3,11 @@ import Seo from "../../components/Seo.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
-import { catalog } from "../../data/catalog";
+import { credentialCommonsRelease } from "../../data/credentialCommons";
 
 const SITE = "https://mikrokvalifikatsioon.ee";
 const path = "/andmestandard/";
+const ccCount = credentialCommonsRelease.nodesById.size;
 
 const schema = {
   "@context": "https://schema.org",
@@ -39,11 +40,11 @@ const schema = {
   <head>
     <Seo
       title="Avatud andmestandard — Credential Commons | Mikrokvalifikatsioon.ee"
-      description="Meie kataloog on avaldatud avatud, masinloetava standardi järgi (Credential Commons). Iga programm on cc:MicroCredential — arendajad, asutused ja AI saavad andmed otse ja koostöövõimeliselt kasutada."
+      description="Vastavuskontrolli läbinud kataloogikirjed on avaldatud avatud, masinloetava standardi järgi (Credential Commons)."
       canonicalPath={path}
       ogType="website"
       ogTitle="Avatud andmestandard — Credential Commons"
-      ogDescription="Kataloog masinloetava Linked Data'na, avatud standardi järgi. Iga programm on cc:MicroCredential."
+      ogDescription="Vastavuskontrolli läbinud kataloogikirjed masinloetava Linked Data'na, avatud standardi järgi."
       jsonLd={schema}
     />
   </head>
@@ -58,7 +59,7 @@ const schema = {
           <p>
             Kogu kataloog on avaldatud <strong>masinloetava Linked Data'na</strong> avatud
             standardi <a href="https://credentialcommons.org" rel="noopener">Credential&nbsp;Commons</a>
-            järgi. Iga programm on <code>cc:MicroCredential</code> — nii saavad teised
+            järgi. Vastavuskontrolli läbinud kirjed on <code>cc:MicroCredential</code> — nii saavad teised
             asutused, AI-teenused ja andmetööriistad andmed <strong>otse ja koostöövõimeliselt</strong>
             kasutada, ilma iga saiti eraldi kraapimata.
           </p>
@@ -72,8 +73,8 @@ const schema = {
             <h2>Kust andmed kätte saab.</h2>
           </div>
           <ul class="check">
-            <li><strong>Kogu kataloog</strong> ({catalog.length} programmi): <a href="/catalog.cc.jsonld"><code>/catalog.cc.jsonld</code></a></li>
-            <li><strong>Üks programm</strong>: <code>/kataloog/&lt;slug&gt;/credential.jsonld</code> — iga programmi leht viitab oma krediidile <code>rel="alternate"</code>-ga</li>
+            <li><strong>Vastavuskontrolli läbinud kirjed</strong> ({ccCount} programmi): <a href="/catalog.cc.jsonld"><code>/catalog.cc.jsonld</code></a></li>
+            <li><strong>Üks programm</strong>: <code>/kataloog/&lt;slug&gt;/credential.jsonld</code> — ainult CC-profiili läbinud programmi leht viitab oma krediidile <code>rel="alternate"</code>-ga</li>
             <li><strong>JSON-LD kontekst</strong>: <a href="https://credentialcommons.org/profiles/context/haridus.jsonld"><code>credentialcommons.org/…/haridus.jsonld</code></a></li>
           </ul>
           <p class="report-date">
