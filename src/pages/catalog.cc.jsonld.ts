@@ -1,19 +1,10 @@
-import { catalog, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
-import { toCredentialCommons, CC_CONTEXT } from "../data/courseSchema";
+import { credentialCommonsRelease } from "../data/credentialCommons";
 
-// Credential Commons -conformant representation of the whole catalogue, served
-// from mikrokvalifikatsioon.ee's own domain. STRUCTURE layer (interop), separate
-// from the human pages and their marketing copy: each programme is a
-// `cc:MicroCredential` against the shared Credential Commons profile, reusable by
-// other institutions, AI agents and Linked Data tools.
-// Validate: npx credential-commons validate <file> --profile micro-credential
+// The warehouse emits the canonical CC graph. Keep its bytes intact: this site
+// is a public mirror, not a second feed→CC transformation.
 export async function GET() {
   return new Response(
-    JSON.stringify(
-      { "@context": CC_CONTEXT, checkedAt: catalogCheckedAt, dataUpdatedAt: catalogUpdatedAt, "@graph": catalog.map(toCredentialCommons) },
-      null,
-      2
-    ),
+    credentialCommonsRelease.graphText,
     {
       headers: {
         "Content-Type": "application/ld+json; charset=utf-8",

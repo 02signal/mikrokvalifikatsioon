@@ -13,6 +13,10 @@ export type CatalogField =
   | "muu";
 
 export type CatalogEntry = {
+  /** AMOS programme_ref; when present this is the canonical public catalogue slug. */
+  id?: string | null;
+  /** Public feed lifecycle state; absent means active for legacy source files. */
+  status?: string | null;
   name: string;
   provider: string;
   providerType: ProviderType;

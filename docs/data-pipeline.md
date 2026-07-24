@@ -285,3 +285,33 @@ Owner repos: AMOS + this repo.
 - Document manual recovery: unset env var or restore previous-good feed.
 
 Done when: production uses the feed, but can return to the snapshot path quickly.
+
+## Credential Commons canonical mirror (2026-07-24)
+
+The human catalogue remains the validated AMOS feed consumer. Its Credential Commons
+surface is different: `/catalog.cc.jsonld` mirrors the warehouse canonical graph rather
+than building a second graph from page-feed fields.
+
+- Enable remote CC only with all three Vercel variables:
+  `PUBLIC_CATALOG_CC_TRUSTED=1`, `PUBLIC_CATALOG_CC_URL`, and
+  `PUBLIC_CATALOG_CC_RECEIPT_URL`.
+- The committed fallback is a **coordinated pair**: `catalog-feed.json`, graph and
+  receipt under `src/data/catalog/credential-commons-lkg/` are from one run. The
+  feed's canonical `program.id` is the public catalogue slug and must match every
+  graph `@id`; name-derived slugs are legacy/manual-only.
+- The older per-provider JSON files are not a facts fallback. Their historical
+  slug algorithm supplies only a bounded canonical-id → provider/name identity
+  alias for EHIS matching when the current identity has no match after a listing
+  title changes. Every URL, description, intake, price, outcome and other public
+  fact still comes from the active AMOS feed; valid current matches take
+  precedence and new ids outside the crosswalk use their current identity.
+- A build accepts the remote graph only when its exact byte hash, HTTP content types,
+  CC profile pins, receipt run/date/counts, and source feed hash/generation match the
+  already-active trusted catalogue feed. A remote timeout, fetch failure or mismatch
+  while that trusted feed is active is **fail-closed**: the build fails and keeps the
+  previous deployment, rather than combining it with the committed pair.
+- The LKG pair is used only in committed/default catalogue mode. It is not an
+  interchangeable fallback for a different live feed generation.
+- The profile gate may omit incomplete rows (for example missing EAP). The site must
+  not synthesize a `cc:MicroCredential` for such a detail page; its schema.org
+  `Course` remains available.

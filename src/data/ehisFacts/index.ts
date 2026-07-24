@@ -322,9 +322,14 @@ export interface EhisOverride {
 /** Compute the authoritative EHIS facts override for a catalog entry. On a
  * matched entry, returns the FACTS patch (name/EAP/language from EHIS) plus the
  * õppekavarühm, provenance, and the EHIS official outcomes carried SEPARATELY
- * (so the school's own outcomes/summary/goal are preserved for a dual view). On
- * `none`, returns an empty patch and `authoritative: false`. */
-export function ehisOverrideFor(entry: CatalogEntry): EhisOverride {
+ * (so the school's own outcomes/summary/goal are preserved for a dual view).
+ * `factFallback` lets callers match with a historical identity while keeping
+ * every missing official fact anchored to the current catalog row. On `none`,
+ * returns an empty patch and `authoritative: false`. */
+export function ehisOverrideFor(
+  entry: CatalogEntry,
+  factFallback: CatalogEntry = entry
+): EhisOverride {
   const match = matchForCatalogEntry(entry);
   const c = match.curriculum;
   if (!c) {
@@ -345,13 +350,13 @@ export function ehisOverrideFor(entry: CatalogEntry): EhisOverride {
 
   const officialName = c.name_et.replace(/\s+/g, " ").trim();
   const ehisOutcomes = c.outcomes && c.outcomes.length > 0 ? c.outcomes : null;
-  const language = ehisLanguageToCatalog(c.languages) ?? entry.language ?? null;
+  const language = ehisLanguageToCatalog(c.languages) ?? factFallback.language ?? null;
 
   return {
     // FACTS only — descriptive layer left to the school's own fields.
     patch: {
-      name: officialName || entry.name,
-      ects: c.eap ?? entry.ects ?? null,
+      name: officialName || factFallback.name,
+      ects: c.eap ?? factFallback.ects ?? null,
       language,
     },
     ehis: {

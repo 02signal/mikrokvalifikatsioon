@@ -102,31 +102,3 @@ export function toCourse(entry: CatalogEntryWithSlug): Record<string, unknown> {
 
   return course;
 }
-
-/** Published Credential Commons JSON-LD context (open interop layer). */
-export const CC_CONTEXT = "https://credentialcommons.org/profiles/context/haridus.jsonld";
-
-/**
- * Credential Commons `cc:MicroCredential` node for one entry — the STRUCTURE /
- * interoperability layer, parallel to `toCourse` (which feeds Google). Returned
- * WITHOUT `@context`; the caller wraps it (single node on a page, or a `@graph`
- * in /catalog.cc.jsonld). Validate with `npx credential-commons validate`.
- */
-export function toCredentialCommons(entry: CatalogEntryWithSlug): Record<string, unknown> {
-  const node: Record<string, unknown> = {
-    "@type": "MicroCredential",
-    "@id": detailUrl(entry),
-    name: entry.name
-  };
-  if (entry.summary) node.summary = entry.summary;
-  if (entry.url) node.url = entry.url;
-  if (entry.field) node.field = entry.field;
-  if (entry.language) node.language = entry.language;
-  if (entry.ects != null) node.ectsCredits = entry.ects;
-  if (entry.provider) node.provider = { "@type": "Organization", name: entry.provider };
-  const outcomes = cleanOutcomeTexts(entry);
-  if (outcomes.length) node.learningOutcome = outcomes;
-  if (entry.registrationDeadline) node.registrationDeadline = entry.registrationDeadline;
-  if (entry.startDate) node.startDate = entry.startDate;
-  return node;
-}
