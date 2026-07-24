@@ -139,7 +139,7 @@ const ccCredential = { "@context": CC_CONTEXT, ...toCredentialCommons(entry) };
       jsonLd={schema}
     />
     <script type="application/ld+json" is:inline set:html={JSON.stringify(ccCredential)} />
-    <link rel="alternate" type="application/ld+json" href="/catalog.cc.jsonld" />
+    <link rel="alternate" type="application/ld+json" href={`${canonicalPath}credential.jsonld`} title="Credential Commons" />
   </head>
   <body>
     <Nav />

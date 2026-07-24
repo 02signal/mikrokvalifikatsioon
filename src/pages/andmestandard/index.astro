@@ -1,0 +1,121 @@
+---
+import Seo from "../../components/Seo.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import Nav from "../../components/Nav.astro";
+import { catalog } from "../../data/catalog";
+
+const SITE = "https://mikrokvalifikatsioon.ee";
+const path = "/andmestandard/";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Andmestandard", item: `${SITE}${path}` }
+      ]
+    },
+    {
+      "@type": "Dataset",
+      name: "Mikrokvalifikatsioon.ee — Credential Commons avaandmed",
+      description: "Eesti mikrokvalifikatsioonide kataloog masinloetava Linked Data'na, Credential Commons cc:MicroCredential profiili järgi.",
+      url: `${SITE}${path}`,
+      inLanguage: "et",
+      license: "https://creativecommons.org/licenses/by/4.0/",
+      isAccessibleForFree: true,
+      distribution: [
+        { "@type": "DataDownload", name: "Kogu kataloog (JSON-LD)", encodingFormat: "application/ld+json", contentUrl: `${SITE}/catalog.cc.jsonld` }
+      ]
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Avatud andmestandard — Credential Commons | Mikrokvalifikatsioon.ee"
+      description="Meie kataloog on avaldatud avatud, masinloetava standardi järgi (Credential Commons). Iga programm on cc:MicroCredential — arendajad, asutused ja AI saavad andmed otse ja koostöövõimeliselt kasutada."
+      canonicalPath={path}
+      ogType="website"
+      ogTitle="Avatud andmestandard — Credential Commons"
+      ogDescription="Kataloog masinloetava Linked Data'na, avatud standardi järgi. Iga programm on cc:MicroCredential."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner narrow">
+          <span class="eyebrow">Arendajatele ja asutustele</span>
+          <h1>Meie andmed on avatud standardi järgi.</h1>
+          <p>
+            Kogu kataloog on avaldatud <strong>masinloetava Linked Data'na</strong> avatud
+            standardi <a href="https://credentialcommons.org" rel="noopener">Credential&nbsp;Commons</a>
+            järgi. Iga programm on <code>cc:MicroCredential</code> — nii saavad teised
+            asutused, AI-teenused ja andmetööriistad andmed <strong>otse ja koostöövõimeliselt</strong>
+            kasutada, ilma iga saiti eraldi kraapimata.
+          </p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Otspunktid</span>
+            <h2>Kust andmed kätte saab.</h2>
+          </div>
+          <ul class="check">
+            <li><strong>Kogu kataloog</strong> ({catalog.length} programmi): <a href="/catalog.cc.jsonld"><code>/catalog.cc.jsonld</code></a></li>
+            <li><strong>Üks programm</strong>: <code>/kataloog/&lt;slug&gt;/credential.jsonld</code> — iga programmi leht viitab oma krediidile <code>rel="alternate"</code>-ga</li>
+            <li><strong>JSON-LD kontekst</strong>: <a href="https://credentialcommons.org/profiles/context/haridus.jsonld"><code>credentialcommons.org/…/haridus.jsonld</code></a></li>
+          </ul>
+          <p class="report-date">
+            Litsents: <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+            Struktureeritud faktid; nimi ja lõplik info on alati kooli enda lehel.
+          </p>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Kontrolli vastavust</span>
+            <h2>Valideeri avatud tööriistaga.</h2>
+          </div>
+          <pre class="codeblock">npx credential-commons validate fail.jsonld --profile micro-credential</pre>
+          <p>
+            Sama tööriistaga saad valideerida ka <strong>oma</strong> tunnistuse- või õppekava-andmed.
+            Credential Commons on avatud (Apache-2.0 kood, CC-BY profiilid) — kasuta, forki, arenda edasi:
+            <a href="https://github.com/credential-commons/credential-commons" rel="noopener">GitHub</a>.
+          </p>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Avatud standard</span>
+            <h2>Ehitatud avatud standardile, mida me kasutame ja toetame.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="https://credentialcommons.org" rel="noopener" data-track-event="partner_site_click" data-track-label="andmestandard_cc">Credential Commons</a>
+              <a class="btn btn-secondary" href="/andmed/" data-track-event="cta_click" data-track-label="andmestandard_andmed">Avaandmed ja turukaart</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Avatud andmestandard" />
+
+    <style>
+      .codeblock { background: #0f1b24; color: #e6edf3; padding: 14px 16px; border-radius: 10px; overflow-x: auto; font-size: 0.9rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; margin: 0 0 14px; }
+    </style>
+  </body>
+</html>
