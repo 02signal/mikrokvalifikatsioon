@@ -1,0 +1,35 @@
+name: cc-validate
+# Non-blocking Credential Commons conformance report for the published catalogue.
+# Builds the site and validates dist/catalog.cc.jsonld against the micro-credential
+# profile. It does NOT gate deploys — it surfaces data-quality gaps (missing ECTS,
+# missing outcomes) so drift is visible. Real deploys run on Vercel.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/data/**"
+      - "src/pages/catalog.cc.jsonld.ts"
+      - "src/pages/kataloog/**"
+  pull_request:
+    paths:
+      - "src/data/**"
+      - "src/pages/catalog.cc.jsonld.ts"
+      - "src/pages/kataloog/**"
+  workflow_dispatch:
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm ci || npm install
+      - name: Build site
+        run: npx astro build
+      - name: Credential Commons conformance (non-blocking)
+        continue-on-error: true
+        run: |
+          echo "## Credential Commons conformance — catalog.cc.jsonld" >> "$GITHUB_STEP_SUMMARY"
+          npx --yes credential-commons validate dist/catalog.cc.jsonld --profile micro-credential | tee -a "$GITHUB_STEP_SUMMARY"
