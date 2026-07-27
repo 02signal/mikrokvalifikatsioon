@@ -1,0 +1,350 @@
+---
+import Seo from "../../../components/Seo.astro";
+import { organization } from "../../../data/organizationSchema";
+import Footer from "../../../components/Footer.astro";
+import "../../../styles/global.css";
+import Nav from "../../../components/Nav.astro";
+
+const officialCheckedAt = "27.07.2026";
+
+// HAKA hindab asutuse ÕPPEKAVARÜHMA võimekust (mitte üksikut mikrokvalifikatsiooni).
+// 8 valdkonda, 27 kriteeriumi, 3-astmeline skaala (vastab / vastab osaliselt / ei vasta).
+// Kaks valdkonda (6.2 ja 6.5) käivad otseselt õppekava ANDMETE kohta — need on täpselt
+// see osa, kus masinloetav standard (Credential Commons) aitab õpiväljundid, mahu, taseme
+// ja hindamiskriteeriumid korrastatult paika panna. Ülejäänud kuus valdkonda käivad
+// asutuse võimekuse, protsessi, koolitajate ja ressursside kohta — neid andmestandard ei asenda.
+const domains = [
+  {
+    code: "6.1",
+    title: "Õppekavaarendus",
+    isData: false,
+    what: "Kuidas õppekava sünnib ja uueneb — kas see tugineb konkreetsele vajadusele (nt tööturu, kutsestandardi või valdkonna sisendile), mitte ainult sisetunnetusele.",
+    show: "Näita kirjalikult, kust õppekava idee tuli, kes seda arendas (koolitajad, eksperdid, tööandjad) ja kuidas tagasiside jõuab järgmisesse versiooni."
+  },
+  {
+    code: "6.2",
+    title: "Õppekava",
+    isData: true,
+    what: "Kas õppekava kõik osad räägivad sama lugu: nimi, eesmärk, sisu, õpiväljundid ja hindamine on omavahel kooskõlas.",
+    show: "Õpiväljundid peavad olema sõnastatud nii, et need on saavutatavad ja hinnatavad (mitte üldsõnalised). Maht, tase ja sisu peavad kajastuma samamoodi nii õppekavas kui veebilehel."
+  },
+  {
+    code: "6.3",
+    title: "Õppeprotsessi kavandamine",
+    isData: false,
+    what: "Kas õppija saab enne alustamist selgelt teada eesmärgi, õpiväljundid, meetodid ja hindamise; kas mitme koolitaja koostöö on läbi mõeldud.",
+    show: "Kirjelda eesmärk ja hindamine juba veebis ja esimesel kohtumisel. Mitme koolitaja puhul dokumenteeri, kes vastutab terviku eest."
+  },
+  {
+    code: "6.4",
+    title: "Õppeprotsessi läbiviimine",
+    isData: false,
+    what: "Kas õppemeetodid sobivad sihtrühmale ja õpiväljunditele ning kas õppija saab õppimise ajal jooksvat, edasiviivat tagasisidet.",
+    show: "Kirjelda, mis pedagoogilist mudelit kasutad ja kuidas täpselt tagasisidet annad — mitte ainult „anname tagasisidet“."
+  },
+  {
+    code: "6.5",
+    title: "Hindamine ja lõpudokumendid",
+    isData: true,
+    what: "Kas igal õpiväljundil on selge hindamiskriteerium ja -meetod, kas lõpetamise tingimused on üheselt mõistetavad ja tunnistus vastab nõuetele.",
+    show: "Tee tabel: iga õpiväljund, selle hindamismeetod ja hindamiskriteerium. Ilma selle tabelita ei saa väita, et hindamine on objektiivne."
+  },
+  {
+    code: "6.6",
+    title: "Koolitajate kompetentsus ja professionaalne areng",
+    isData: false,
+    what: "Kas igal koolitajal on tõendatud nii erialane kui täiskasvanute koolitaja pädevus (sh digipädevus), kas info koolitajate kohta on avalik, ja kas nende tööd hinnatakse ja arendatakse regulaarselt.",
+    show: "Avalda iga koolitaja nimi ja kvalifikatsioon (haridus, erialane kogemus, koolituskogemus, digipädevus) samas struktuuris. Näita, kuidas ja kui tihti koolitajate tulemuslikkust hindad ja arendad."
+  },
+  {
+    code: "6.7",
+    title: "Kvaliteedijuhtimine",
+    isData: false,
+    what: "Kas asutusel on toimiv, dokumenteeritud kvaliteedisüsteem koos mõõdetavate eesmärkidega ja kas tagasiside ring on suletud (kogud → analüüsid → muudad → tõendad).",
+    show: "Pea üks kvaliteedidokument ühes kohas veebis, kuupäevaga. Sõnasta mõõdetav eesmärk ja too üks konkreetne näide muudatusest, mille tagasiside käivitas."
+  },
+  {
+    code: "6.8",
+    title: "Ressursid",
+    isData: false,
+    what: "Kas koolitajaid, tuge ja administreerimist on piisavalt ja jätkusuutlikult ning kas õppekeskkond on turvaline ja ligipääsetav.",
+    show: "Kirjelda varuplaan (kes asendab, kui koolitaja ära jääb) ja ligipääsetavuse olukord ausalt — mis on tagatud ja mis mitte."
+  }
+];
+
+const faqItems = [
+  {
+    question: "Kas HAKA hindab minu ühte mikrokvalifikatsiooni või kogu kooli?",
+    answer: "HAKA hindab asutuse õppekavarühma võimekust tervikuna, mitte ühte konkreetset mikrokvalifikatsiooni. Positiivne otsus annab 5-aastase õiguse pakkuda õppekavarühmas mikrokvalifikatsioone; iga uus õppekava registreeritakse eraldi EHIS-es."
+  },
+  {
+    question: "Mitu valdkonda ja kriteeriumi hindamisel on?",
+    answer: "Kaheksa valdkonda ja kokku 27 kriteeriumi, hinnatuna 3-astmelisel skaalal: vastab / vastab osaliselt / ei vasta. Positiivseks otsuseks peavad kõik kaheksa valdkonda vastama nõuetele."
+  },
+  {
+    question: "Mis maksab HAKA hindamine ja registreerimine?",
+    answer: "Õppekavarühma kvaliteedihindamine: riigilõiv suurusjärgus 1450 €. Lisaks iga õppekava EHIS-esse registreerimine: suurusjärgus 100 € õppekava kohta. Täpsed summad kontrolli alati ametlikust allikast."
+  },
+  {
+    question: "Miks aitab avatud andmestandard (Credential Commons) HAKA hindamisel?",
+    answer: "Kahes kaheksast valdkonnast (6.2 Õppekava ja 6.5 Hindamine) vaadatakse otseselt õppekava andmeid: õpiväljundeid, mahtu, taset ja hindamiskriteeriume. Masinloetav standard aitab need korrastatult, järjepidevalt ja kontrollitavalt kirja panna — nii et sama info klapib õppekavas, veebis ja eneseanalüüsis. Ülejäänud kuut valdkonda (protsess, koolitajad, kvaliteedijuhtimine, ressursid) standard ei asenda — need tõendab ikka asutus ise."
+  }
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    organization,
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
+        { "@type": "ListItem", position: 2, name: "Koolitajale", item: "https://mikrokvalifikatsioon.ee/koolitajale/" },
+        { "@type": "ListItem", position: 3, name: "Kuidas ehitada HAKA-le vastavat mikrokvalifikatsiooni", item: "https://mikrokvalifikatsioon.ee/koolitajale/kuidas-ehitada/" }
+      ]
+    },
+    {
+      "@type": "Article",
+      image: "https://mikrokvalifikatsioon.ee/og/kuidas-ehitada.png",
+      headline: "Kuidas ehitada HAKA nõuetele vastavat mikrokvalifikatsiooni",
+      description: "Praktiline juhend koolitajale ja asutusele: mida HAKA õppekavarühma kvaliteedihindamine tegelikult vaatab, 8 valdkonda lihtsas keeles ja kuidas avatud andmestandard aitab õppekava andmed korda saada.",
+      inLanguage: "et",
+      datePublished: "2026-07-27",
+      dateModified: "2026-07-27",
+      author: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      mainEntityOfPage: "https://mikrokvalifikatsioon.ee/koolitajale/kuidas-ehitada/"
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer }
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Kuidas ehitada HAKA-le vastavat mikrokvalifikatsiooni | Koolitajale"
+      description="Praktiline juhend koolitajale ja asutusele: mida HAKA õppekavarühma kvaliteedihindamine tegelikult vaatab, 8 valdkonda lihtsas keeles ja kuidas avatud andmestandard aitab õppekava andmed korda saada."
+      canonicalPath="/koolitajale/kuidas-ehitada/"
+      ogType="article"
+      ogTitle="Kuidas ehitada HAKA-le vastavat mikrokvalifikatsiooni"
+      ogDescription="8 valdkonda lihtsas keeles ja kust andmestandard aitab, kust mitte."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <a href="/koolitajale/">Koolitajale</a> › <span>Kuidas ehitada</span>
+          </nav>
+          <span class="eyebrow">Koolitajale ja asutusele · praktiline juhend</span>
+          <h1>Mikrokvalifikatsiooni.ee ei ole ainult õppija kataloog. See aitab ka sul kvaliteetne mikrokvalifikatsioon ehitada.</h1>
+          <p>
+            Enamik koolitajaid tuleb siia lehele õppija poolelt: kus näidata oma programmi.
+            Aga see leht on mõeldud sulle teistpidi — kui asud ise mikrokvalifikatsiooni
+            koostama ja tahad juba enne HAKA hindamist teada, mida hindaja tegelikult vaatab
+            ja kus lihtne avatud tööriist su tööd kergemaks teeb.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#8-valdkonda" data-track-event="cta_click" data-track-label="ehita_hero_valdkonnad">Vaata 8 valdkonda</a>
+            <a class="btn btn-secondary" href="#andmestandard" data-track-event="cta_click" data-track-label="ehita_hero_andmestandard">Kus andmestandard aitab</a>
+          </div>
+          <p class="report-date">Ametlike allikate põhjal koostatud kokkuvõte. Kontrollitud: {officialCheckedAt}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">HAKA reaalsus</span>
+            <h2>Mida HAKA tegelikult hindab — ja mida mitte.</h2>
+            <p>
+              Levinud eksiarvamus: HAKA justkui kinnitaks ühte konkreetset mikrokvalifikatsiooni.
+              Tegelikult hindab HAKA <strong>asutuse õppekavarühma võimekust</strong> tervikuna —
+              kas sinu asutus suudab selles õppekavarühmas mikrokvalifikatsioone kvaliteetselt
+              pakkuda. Läbimine annab <strong>5-aastase õiguse</strong>; iga konkreetne õppekava
+              registreeritakse siis eraldi EHIS-es.
+            </p>
+          </div>
+          <div class="grid-3">
+            <article class="card">
+              <span class="stat">8 valdkonda</span>
+              <h3>27 kriteeriumi</h3>
+              <p>3-astmeline skaala: vastab / vastab osaliselt / ei vasta. Positiivseks otsuseks peavad kõik kaheksa valdkonda vastama.</p>
+            </article>
+            <article class="card">
+              <span class="stat">5 aastat</span>
+              <h3>Õiguse kestus</h3>
+              <p>Positiivne hindamisotsus kehtib õppekavarühma kohta 5 aastat — mitte ühe programmi kohta.</p>
+            </article>
+            <article class="card">
+              <span class="stat">1450 € + 100 €</span>
+              <h3>Riigilõivud</h3>
+              <p>Õppekavarühma hindamine suurusjärgus 1450 €. Iga õppekava EHIS-esse registreerimine lisaks suurusjärgus 100 €.</p>
+            </article>
+          </div>
+          <p class="notice">
+            Summad ja tähtajad muutuvad — kontrolli alati ametlikust allikast enne otsuse tegemist (viited lehe lõpus).
+          </p>
+        </div>
+      </section>
+
+      <section id="8-valdkonda" class="ice">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Praktiline kontrollnimekiri</span>
+            <h2>8 valdkonda — mida hindaja vaatab ja mida sina pead näitama.</h2>
+            <p>Numbrid (6.1–6.8) on standardi enda valdkonnanumbrid, et sul oleks lihtne oma eneseanalüüsi vastu kontrollida.</p>
+          </div>
+          <div class="measure-list">
+            {domains.map((d) => (
+              <article class="measure-card">
+                <div>
+                  <span class={`status-tag ${d.isData ? "status-green" : "status-blue"}`}>
+                    {d.code} {d.isData ? "· andmestandardi valdkond" : "· asutuse võimekus"}
+                  </span>
+                  <h3>{d.title}</h3>
+                  <p><strong>Mida hindaja vaatab:</strong> {d.what}</p>
+                  <p><strong>Mida sina näitad:</strong> {d.show}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="andmestandard" class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Kaks valdkonda kaheksast</span>
+            <h2>Kus avatud andmestandard aitab — ja kus mitte.</h2>
+          </div>
+          <p>
+            Kaheksast valdkonnast <strong>kaks käivad otseselt õppekava andmete kohta</strong>:
+            <strong>6.2 Õppekava</strong> (kas õpiväljundid on saavutatavad ja hinnatavad, kas
+            nimi, eesmärk, sisu ja õpiväljundid räägivad sama lugu) ja <strong>6.5 Hindamine ja
+            lõpudokumendid</strong> (kas igal õpiväljundil on selge hindamiskriteerium ja -meetod).
+          </p>
+          <p>
+            Täpselt need kaks valdkonda on koht, kus masinloetav avatud standard
+            <a href="https://credentialcommons.org" rel="noopener">Credential&nbsp;Commons</a>
+            päriselt aitab: see sunnib sind kirja panema õpiväljundid, mahu, taseme ja
+            hindamiskriteeriumid ühes korrastatud, kontrollitavas vormis — nii et sama info
+            klapib täht-täheliselt õppekavas, sinu veebilehel ja eneseanalüüsi vormis. See on
+            täpselt see „dokumentide vaheline triiv“, mis kõige sagedamini kvaliteedimärgi maksab.
+          </p>
+          <p class="callout">
+            <strong>Aus piir:</strong> andmestandard aitab paika panna <em>mida</em> õppija õpib ja
+            kuidas seda mõõdad (6.2, 6.5). See ei asenda ülejäänud kuute valdkonda —
+            õppekavaarendust, õppeprotsessi, koolitajate pädevust, kvaliteedijuhtimist ega
+            ressursse. Neid tõendab ikka asutus ise, oma tegevuse ja dokumentidega.
+          </p>
+          <div class="inline-actions">
+            <a class="btn btn-primary" href="/andmestandard/" data-track-event="cta_click" data-track-label="ehita_andmestandard_leht">Vaata avatud andmestandardit</a>
+            <a class="btn btn-secondary" href="https://credentialcommons.org" rel="noopener" data-track-event="partner_site_click" data-track-label="ehita_cc_link">Credential Commons</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Valdkond 6.6</span>
+            <h2>Koolitaja kompetents — sagedane lünk.</h2>
+          </div>
+          <p>
+            Iga koolitaja kohta peab olema tõendatud <strong>nii erialane pädevus kui
+            täiskasvanute koolitaja pädevus</strong> (sh digipädevus). Info peab olema
+            <strong>avalik</strong> — koolitaja nimi ja kvalifikatsioon samas ühtses stiilis —
+            ja koolitajate tulemuslikkust ning arengut tuleb hinnata <strong>regulaarselt</strong>,
+            mitte ainult ühekordselt värbamisel.
+          </p>
+          <ul class="check">
+            <li>Iga koolitaja: haridus + erialane kogemus + koolituskogemus (aastad, teemad) + digipädevus.</li>
+            <li>Sama struktuur ka külalislektoritel — mitte ainult põhikoolitajatel.</li>
+            <li>Dokumenteeritud, kuidas ja kui tihti koolitajate tööd hindad ja arendad.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Ametlikud allikad</span>
+            <h2>Kõik täpsed nõuded ja vormid — otse HAKA-lt.</h2>
+            <p>See leht on praktiline kokkuvõte, mitte ametlik juhis. Siduvad nõuded, vormid ja tähtajad kinnitab alati ametlik allikas.</p>
+          </div>
+          <ul class="check">
+            <li>
+              <a href="https://haka.ee/wp-content/uploads/Taienduskoolitusasutuste-oppekavaruhma-kvaliteedihindamise-nouded-ja-korraldus.pdf" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="ehita_standard_pdf">
+                HAKA standard (PDF): täienduskoolitusasutuste õppekavarühma kvaliteedihindamise nõuded ja korraldus
+              </a>
+            </li>
+            <li>
+              <a href="https://haka.ee/wp-content/uploads/Taienduskoolitusasutuste-oppekavaruhma-kvaliteedihindamise-eneseanaluusiaruande-vorm-06.10.25.pdf" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="ehita_eneseanaluus_vorm">
+                Eneseanalüüsi aruande vorm (PDF)
+              </a>
+            </li>
+            <li>
+              <a href="https://haka.ee/mikrokvalifikatsioonioppe-labiviimine/" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="ehita_haka_leht">
+                HAKA: mikrokvalifikatsiooniõppe läbiviimine
+              </a>
+            </li>
+            <li>
+              <a href="https://www.hm.ee/mikrokvalifikatsioonid" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="ehita_htm_leht">
+                Haridus- ja Teadusministeerium: mikrokvalifikatsioonid
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Kaks teed edasi — vali see, mis sulle praegu vajalik.</h2>
+            <p>
+              Kas tahad kõigepealt läbi käia täieliku ettevalmistuse kontrollnimekirja koos
+              tüüpvigadega, või on programm juba valmis ja soovid selle registrisse lisada?
+            </p>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/koolitajale/kvaliteedihindamine/" data-track-event="cta_click" data-track-label="ehita_bottom_kvaliteedihindamine">8 valdkonna kontrollnimekiri ja tüüpvead →</a>
+              <a class="btn btn-secondary" href="/koolitajale/#lisa-programm" data-track-event="cta_click" data-track-label="ehita_bottom_lisa">Lisa oma programm registrisse</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="ehita_email">info@mikrokvalifikatsioon.ee</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="ehita_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Kuidas ehitada mikrokvalifikatsiooni" />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .callout {
+        margin-top: 14px; padding: 14px 18px; background: #fff;
+        border: 1px solid #d9e3ea; border-left: 4px solid #54c247; border-radius: 10px;
+      }
+    </style>
+  </body>
+</html>
