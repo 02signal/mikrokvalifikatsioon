@@ -1,0 +1,165 @@
+---
+import Seo from "../../../components/Seo.astro";
+import { organization } from "../../../data/organizationSchema";
+import Footer from "../../../components/Footer.astro";
+import "../../../styles/global.css";
+import Nav from "../../../components/Nav.astro";
+import SubscribeForm from "../../../components/SubscribeForm.astro";
+
+const officialCheckedAt = "28.07.2026";
+
+const steps = [
+  {
+    n: "1",
+    title: "Registreeri õppekava (EHIS)",
+    body: "Kui õppekavarühmal on õigus, registreeri iga õppekava EHIS-es (riigilõiv ~100 €). Ilma registreeringuta ei ole see ametlik mikrokvalifikatsioon."
+  },
+  {
+    n: "2",
+    title: "Pane hind ja maht paika",
+    body: "Täishind ja rahastatud hind, maht EAP-des, vastuvõtu suurus. Kasuta hinnastamise ja tasuvuse loogikat."
+  },
+  {
+    n: "3",
+    title: "Tee programm nähtavaks",
+    body: "EHIS + oma veebileht (selged õpiväljundid, maht, tase, hind) + meie kataloog. Avatud andmestandardis (Credential Commons) kirje teeb su programmi loetavaks ka AI-assistentidele, kes koolitusi otsivad."
+  },
+  {
+    n: "4",
+    title: "Käivita esimene voor",
+    body: "Vastuvõtu tähtaeg, lihtne registreerimine, kohordi suurus. Kogu esimesest voorust tagasiside — see toidab järgmist versiooni (ja HAKA valdkonda 6.7)."
+  }
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    organization,
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
+        { "@type": "ListItem", position: 2, name: "Koolitajale", item: "https://mikrokvalifikatsioon.ee/koolitajale/" },
+        { "@type": "ListItem", position: 3, name: "Turule toomine", item: "https://mikrokvalifikatsioon.ee/koolitajale/turule-toomine/" }
+      ]
+    },
+    {
+      "@type": "Article",
+      headline: "Mikrokvalifikatsiooni turule toomine",
+      description: "Valmis mikrokvalifikatsiooni turule toomine samm-sammult: EHIS-registreerimine, hinnastus, nähtavus ja esimene voor.",
+      inLanguage: "et",
+      datePublished: "2026-07-28",
+      dateModified: "2026-07-28",
+      author: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      mainEntityOfPage: "https://mikrokvalifikatsioon.ee/koolitajale/turule-toomine/"
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Mikrokvalifikatsiooni turule toomine | Koolitajale"
+      description="Valmis mikrokvalifikatsiooni turule toomine samm-sammult: EHIS-registreerimine, hinnastus, nähtavus (sh avatud andmestandard) ja esimene voor. Praktiline juhend koolitajale."
+      canonicalPath="/koolitajale/turule-toomine/"
+      ogType="article"
+      ogTitle="Programm valmis — kuidas see turule tuua"
+      ogDescription="EHIS → hind → nähtavus → esimene voor."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <a href="/koolitajale/">Koolitajale</a> › <span>Turule toomine</span>
+          </nav>
+          <span class="eyebrow">Koolitajale ja asutusele · praktiline juhend</span>
+          <h1>Programm valmis — kuidas see turule tuua.</h1>
+          <p>
+            Kui õppekava ja kvaliteet on paigas, jääb neli sammu: registreeri, hinnasta, tee
+            nähtavaks ja käivita esimene voor. Lihtne kontrollnimekiri, et miski ei jääks tegemata.
+          </p>
+          <p class="report-date">Suunav kokkuvõte; ametlikud nõuded ja tähtajad kinnitab alati ametlik allikas. Kontrollitud: {officialCheckedAt}</p>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">Neli sammu</span>
+            <h2>Registreeri → hinnasta → tee nähtavaks → käivita.</h2>
+          </div>
+          <div class="measure-list">
+            {steps.map((s) => (
+              <article class="measure-card">
+                <div>
+                  <span class="status-tag status-blue">{s.n}. samm</span>
+                  <h3>{s.title}</h3>
+                  <p>{s.body}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Nähtavus lähemalt</span>
+            <h2>Kus su programmi otsitakse — ja kuidas see leitakse.</h2>
+          </div>
+          <ul class="check">
+            <li><strong>Oma veebileht:</strong> õpiväljundid, maht, tase, hind, vastuvõtt — samas sõnastuses mis õppekavas.</li>
+            <li><strong>Meie kataloog:</strong> <a href="/koolitajale/#lisa-programm">lisa oma programm</a> võrreldavasse kataloogi.</li>
+            <li><strong>Avatud andmestandard:</strong> <a href="/andmestandard/">Credential Commons</a> teeb kirje masinloetavaks — nii saavad seda lugeda ka AI-assistendid, kes koolitusi soovitavad.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Juhend e-postiga</span>
+            <h2>Telli koolitaja checklist'id ja uued juhendid.</h2>
+          </div>
+          <SubscribeForm submitLabel="Telli koolitaja juhendus →" idPrefix="turule" captureSite="mkval_koolitaja" channel="turule_toomine" />
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Seotud juhendid</span>
+            <h2>Vaata ka.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/koolitajale/hinnastamine/" data-track-event="cta_click" data-track-label="turule_hinnastamine">Hinnastamine ja tasuvus</a>
+              <a class="btn btn-secondary" href="/koolitajale/kvaliteedihindamine/" data-track-event="cta_click" data-track-label="turule_kvaliteet">Kvaliteedihindamine</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="turule_email">info@mikrokvalifikatsioon.ee</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="turule_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Turule toomine" />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+    </style>
+  </body>
+</html>

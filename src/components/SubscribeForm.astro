@@ -1,0 +1,60 @@
+---
+// Listmonk-native subscribe form (AMOS pattern B — the ratified "right place":
+// the <form> POSTs CROSS-ORIGIN to Listmonk's own /subscription/form; Listmonk
+// does double opt-in, honeypot and rate limiting natively — zero custom public
+// backend. See AMOS docs/architecture/amos-outreach-and-survey-architecture-adr.md
+// (D1) and infra/public-web/subscribe-form-section.mjs.
+//
+// FAIL-SOFT: renders a soft mailto CTA until the owner provisions the Listmonk
+// list UUID(s) in env — so the page is never broken. Set:
+//   PUBLIC_LISTMONK_CAPTURE_BASE_URL  (default https://liitu.ettevotluskeskus.ee)
+//   PUBLIC_LISTMONK_LIST_KOOLITAJA    (the trainer topic list UUID — owner input)
+//   PUBLIC_LISTMONK_LIST_NEWSLETTER   (optional general EVK newsletter list UUID)
+//
+// Consent copy is the RATIFIED ET wording (do not reword — legal). The trainer
+// audience's exact consent purpose + list is an owner/contract decision (see the
+// AMOS Codex spec); this uses `newsletter` (required) + `course_offers` (optional).
+const {
+  submitLabel = "Telli koolitaja juhendus →",
+  idPrefix = "koolitaja",
+  captureSite = "mkval_koolitaja",
+  channel = "checklist_page",
+} = Astro.props;
+
+const captureBaseUrl = (import.meta.env.PUBLIC_LISTMONK_CAPTURE_BASE_URL || "https://liitu.ettevotluskeskus.ee").replace(/\/+$/, "");
+const listKoolitaja = import.meta.env.PUBLIC_LISTMONK_LIST_KOOLITAJA || "";
+const listNewsletter = import.meta.env.PUBLIC_LISTMONK_LIST_NEWSLETTER || "";
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+const configured = UUID.test(listKoolitaja);
+const action = `${captureBaseUrl}/subscription/form`;
+const emailId = `${idPrefix}-subscribe-email`;
+---
+{configured ? (
+  <form class="subscribe-form" method="post" action={action} data-capture-site={captureSite} data-capture-channel={channel}>
+    <label class="sf-field" for={emailId}>Sinu e-posti aadress</label>
+    <input id={emailId} type="email" name="email" required maxlength="254" inputmode="email" autocomplete="email" autocapitalize="none" spellcheck="false" placeholder="eesnimi.perenimi@ettevote.ee" />
+    <div class="sf-honey" aria-hidden="true"><input type="text" name="nonce" tabindex="-1" autocomplete="off" /></div>
+    <label class="sf-consent"><input type="checkbox" name="l" value={listKoolitaja} required data-consent-purpose="newsletter" /><span>Soovin ka uudiskirja: praktilised lood, näited ja uued õppimisvõimalused. <span class="sf-req">Vajalik, et saame sulle saata.</span></span></label>
+    {UUID.test(listNewsletter) && (
+      <label class="sf-consent"><input type="checkbox" name="l" value={listNewsletter} data-consent-purpose="course_offers" /><span>Soovin saada koolituspakkumisi ja personaalse kutse, kui programm avaneb. <span class="sf-req">Vabatahtlik.</span></span></label>
+    )}
+    <button class="btn btn-primary sf-submit" type="submit" data-track-event="lead_form_submit" data-track-label={captureSite}>{submitLabel}</button>
+    <p class="sf-note">Saadame kõigepealt <b>kinnituskirja</b> — liitumine jõustub alles siis, kui kinnitad (topeltkinnitus). Aadressi ei jagata kellegagi ja igast kirjast saab loobuda ühe klikiga. <a href="/privaatsus">Privaatsus</a></p>
+  </form>
+) : (
+  <div class="subscribe-soft">
+    <p><strong>Telli koolitaja juhendus e-postiga.</strong> Kirjuta <a href="mailto:info@mikrokvalifikatsioon.ee?subject=Koolitaja%20juhendus" data-track-event="email_click" data-track-label="koolitaja_soft">info@mikrokvalifikatsioon.ee</a> ja saadame sulle checklist'id ning uued juhendid.</p>
+  </div>
+)}
+
+<style>
+  .subscribe-form { display: grid; gap: 10px; max-width: 520px; margin: 8px 0; }
+  .sf-field { font-weight: 600; }
+  .subscribe-form input[type="email"] { padding: 10px 12px; border: 1px solid #d9e3ea; border-radius: 8px; font: inherit; }
+  .sf-honey { position: absolute; left: -9999px; }
+  .sf-consent { display: flex; gap: 8px; align-items: flex-start; font-size: 0.9rem; color: #33475b; }
+  .sf-req { color: #7a8aa0; }
+  .sf-submit { margin-top: 2px; justify-self: start; }
+  .sf-note { font-size: 0.8rem; color: #5a6b80; margin: 2px 0 0; }
+  .subscribe-soft { border: 1px dashed #d9e3ea; border-radius: 10px; padding: 12px 16px; background: #fbfdff; }
+</style>
