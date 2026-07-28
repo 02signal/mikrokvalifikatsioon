@@ -1,0 +1,188 @@
+---
+import Seo from "../../../components/Seo.astro";
+import { organization } from "../../../data/organizationSchema";
+import Footer from "../../../components/Footer.astro";
+import "../../../styles/global.css";
+import Nav from "../../../components/Nav.astro";
+import SubscribeForm from "../../../components/SubscribeForm.astro";
+
+const officialCheckedAt = "28.07.2026";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    organization,
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
+        { "@type": "ListItem", position: 2, name: "Koolitajale", item: "https://mikrokvalifikatsioon.ee/koolitajale/" },
+        { "@type": "ListItem", position: 3, name: "Hinnastamine ja tasuvus", item: "https://mikrokvalifikatsioon.ee/koolitajale/hinnastamine/" }
+      ]
+    },
+    {
+      "@type": "Article",
+      headline: "Mikrokvalifikatsiooni hinnastamine ja tasuvus",
+      description: "Mida maksab mikrokvalifikatsiooni teha ja pidada, kuidas hinnastada ja millal see tasub ära — koos rahastusvõimalustega.",
+      inLanguage: "et",
+      datePublished: "2026-07-28",
+      dateModified: "2026-07-28",
+      author: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      mainEntityOfPage: "https://mikrokvalifikatsioon.ee/koolitajale/hinnastamine/"
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Mikrokvalifikatsiooni hinnastamine ja tasuvus | Koolitajale"
+      description="Mida maksab mikrokvalifikatsiooni teha ja pidada, kuidas hinnastada ja millal see tasub ära — koos rahastusvõimalustega (Töötukassa). Praktiline äriline juhend koolitajale."
+      canonicalPath="/koolitajale/hinnastamine/"
+      ogType="article"
+      ogTitle="Mikrokvalifikatsioon: mida maksab, mida küsida, millal tasub ära"
+      ogDescription="Kulud, hinnastamine, tasuvus ja rahastus — lihtsalt."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <a href="/koolitajale/">Koolitajale</a> › <span>Hinnastamine ja tasuvus</span>
+          </nav>
+          <span class="eyebrow">Koolitajale ja asutusele · äriline juhend</span>
+          <h1>Mikrokvalifikatsioon: mida maksab teha, mida küsida, millal tasub ära.</h1>
+          <p>
+            Enne kui õppekava ehitad, tasub numbrid paika panna: mis on ühekordsed kulud, mis
+            kordub iga vooruga, mis hinda turg kannab ja mitu õppijat viib tasuvuseni. See leht
+            on lihtne äriline kontrollnimekiri — mitte lubadus, vaid loogika, mille saad oma
+            numbritega täita.
+          </p>
+          <p class="report-date">Suunavad suurusjärgud; täpsed summad kontrolli ametlikust allikast. Kontrollitud: {officialCheckedAt}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">1 · Kulud</span>
+            <h2>Ühekordne kulu vs. see, mis kordub.</h2>
+          </div>
+          <div class="grid-3">
+            <article class="card">
+              <span class="stat">~1450 €</span>
+              <h3>HAKA hindamine (ühekordne)</h3>
+              <p>Õppekavarühma kvaliteedihindamise riigilõiv. Positiivne otsus kehtib <strong>5 aastat</strong> — jaga kulu nende aastate ja kõigi selle rühma õppekavade peale.</p>
+            </article>
+            <article class="card">
+              <span class="stat">~100 €</span>
+              <h3>EHIS-registreerimine (õppekava kohta)</h3>
+              <p>Iga õppekava registreerimine EHIS-es, kui õppekavarühmal on juba õigus.</p>
+            </article>
+            <article class="card">
+              <span class="stat">Muutuv</span>
+              <h3>Koolitaja aeg + materjalid</h3>
+              <p>Suurim tegelik kulu: ettevalmistus, läbiviimine, hindamine, materjalid. See kordub iga vooruga — arvesta tunni- või päevahind sisse.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">2 · Hinnastamine</span>
+            <h2>Kuidas hinda paika panna.</h2>
+          </div>
+          <ul class="check">
+            <li><strong>Alusta väärtusest, mitte kuludest.</strong> Mida õppija pärast oskab ja mida see talle (või ta tööandjale) väärt on.</li>
+            <li><strong>Vaata turgu.</strong> Sarnaste mikrokvalifikatsioonide hinnad ja maht (EAP) — sh <a href="/">meie kataloogist</a>.</li>
+            <li><strong>Seo hind mahuga (EAP), mitte tundidega.</strong> Nii on võrreldav ja arusaadav.</li>
+            <li><strong>Eralda kaks hinda:</strong> täishind vs. rahastatud õppija (allpool). Rahastus muudab vastuvõtu mahtu.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">3 · Tasuvus</span>
+            <h2>Mitu õppijat viib tasuvuseni.</h2>
+          </div>
+          <p>Lihtne loogika (täida oma numbritega):</p>
+          <p class="callout">
+            <strong>Õppijate arv tasuvuseni = ühekordne + püsikulu ÷ (hind ühele − muutuvkulu ühele).</strong>
+          </p>
+          <p>
+            Näide (illustratiivne, mitte lubadus): kui vooru püsikulu on 3000 €, hind õppijale
+            1200 € ja muutuvkulu õppija kohta 200 €, siis 3000 ÷ (1200 − 200) = <strong>3 õppijat</strong>
+            katab vooru; iga järgmine õppija on kasum. Pane oma päris numbrid — see on ainus
+            arvutus, mis ütleb, kas voor tasub ära.
+          </p>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">4 · Rahastus</span>
+            <h2>Rahastus kui hoob — rohkem õppijaid, madalam hind neile.</h2>
+          </div>
+          <p>
+            Kui õppija koolitust rahastatakse, langeb tema jaoks hind — ja vastuvõtt kasvab.
+            <strong>Alates septembrist rahastab Töötukassa digiturunduse ja veterinaaria teemalisi
+            mikrokvalifikatsioone</strong>; eesmärk on kasvatada nende õppekavade arvu, mida
+            mikrokvalifikatsioonina rahastatakse. Kui su teema sinna sobib või sobima hakkab,
+            arvesta see oma hinnastamise ja mahu plaani.
+          </p>
+          <p class="notice">Rahastuse tingimused ja rahastatavad teemad muutuvad — kontrolli alati ametlikust allikast (Töötukassa) enne otsuse tegemist.</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Juhend e-postiga</span>
+            <h2>Telli koolitaja checklist'id ja uued juhendid.</h2>
+            <p>Saadame hinnastamise, kvaliteedihindamise ja turule toomise juhendid ning uued lood, kui midagi olulist muutub.</p>
+          </div>
+          <SubscribeForm submitLabel="Telli koolitaja juhendus →" idPrefix="hinnastamine" captureSite="mkval_koolitaja" channel="hinnastamine" />
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Järgmine samm</span>
+            <h2>Numbrid paigas? Vaata, kuidas programm turule tuua.</h2>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="/koolitajale/turule-toomine/" data-track-event="cta_click" data-track-label="hinnastamine_turule">Turule toomine →</a>
+              <a class="btn btn-secondary" href="/koolitajale/kvaliteedihindamine/" data-track-event="cta_click" data-track-label="hinnastamine_kvaliteet">Kvaliteedihindamise checklist</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="hinnastamine_email">info@mikrokvalifikatsioon.ee</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="hinnastamine_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Hinnastamine ja tasuvus" />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+    </style>
+  </body>
+</html>
