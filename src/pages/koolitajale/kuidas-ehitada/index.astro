@@ -72,10 +72,23 @@ const domains = [
   }
 ];
 
+const buildSteps = [
+  { name: "Määra vajadus ja sihtrühm", text: "Sõnasta, mis konkreetset tööturu või ühiskonna vajadust mikrokvalifikatsioon katab ja kellele see mõeldud on. See on alus, millele kõik ülejäänud sammud toetuvad." },
+  { name: "Sõnasta õpiväljundid", text: "Kirjelda, mida õppija õppimise järel oskab — aktiivses tegusõnas ja mõõdetavalt, mitte üldsõnaliselt." },
+  { name: "Määra maht (EAP) ja tase", text: "Arvuta maht ainepunktides (1 EAP = 26 astronoomilist tundi) ja määra Eesti kvalifikatsiooniraamistiku tase, millele õpiväljundid vastavad." },
+  { name: "Kavanda hindamine iga õpiväljundi kohta", text: "Määra igale õpiväljundile selge hindamismeetod ja -kriteerium — ilma selleta ei saa väita, et hindamine on objektiivne." },
+  { name: "Vormista õppekava", text: "Pane nimi, eesmärk, sisu, õpiväljundid, maht ja hindamine kirja nii, et need räägivad sama lugu õppekavas ja veebilehel." },
+  { name: "Registreeri EHIS-es", text: "Kui asutusel on õppekavarühmas HAKA positiivne otsus või olemasolev õppeõigus, registreeri konkreetne õppekava Eesti Hariduse Infosüsteemis (EHIS)." }
+];
+
 const faqItems = [
   {
     question: "Kas HAKA hindab minu ühte mikrokvalifikatsiooni või kogu kooli?",
     answer: "HAKA hindab asutuse õppekavarühma võimekust tervikuna, mitte ühte konkreetset mikrokvalifikatsiooni. Positiivne otsus annab 5-aastase õiguse pakkuda õppekavarühmas mikrokvalifikatsioone; iga uus õppekava registreeritakse eraldi EHIS-es."
+  },
+  {
+    question: "Kas HAKA mikrokvalifikatsiooni nõuded eeldavad ka EHIS-registreerimist?",
+    answer: "Jah. HAKA positiivne otsus annab õppekavarühmas õiguse mikrokvalifikatsioone pakkuda, aga iga konkreetne õppekava tuleb lisaks registreerida EHIS-es (riigilõiv suurusjärgus 100 €). Ilma registreeringuta ei ole tegu ametliku mikrokvalifikatsiooniga."
   },
   {
     question: "Mitu valdkonda ja kriteeriumi hindamisel on?",
@@ -114,6 +127,18 @@ const schema = {
       author: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
       publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
       mainEntityOfPage: "https://mikrokvalifikatsioon.ee/koolitajale/kuidas-ehitada/"
+    },
+    {
+      "@type": "HowTo",
+      name: "Kuidas ehitada HAKA-le vastav mikrokvalifikatsioon",
+      description: "Kuues sammus mikrokvalifikatsiooni ülesehituseni: vajadusest ja sihtrühmast õpiväljundite, mahu, hindamise ja õppekava kaudu EHIS-registreerimiseni.",
+      inLanguage: "et",
+      step: buildSteps.map((s, index) => ({
+        "@type": "HowToStep",
+        position: index + 1,
+        name: s.name,
+        text: s.text
+      }))
     },
     {
       "@type": "FAQPage",
@@ -309,6 +334,23 @@ const schema = {
       </section>
 
       <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Viimane samm</span>
+            <h2>EHIS-registreerimine ja tegevusluba.</h2>
+          </div>
+          <p>
+            Kui õppekavarühmal on HAKA positiivne otsus (või asutusel on selles valdkonnas juba
+            varasem õppeõigus), tuleb konkreetne õppekava registreerida Eesti Hariduse
+            Infosüsteemis (EHIS); registreerimisega kaasneb riigilõiv suurusjärgus 100 €. Ilma
+            selle registreeringuta ei ole tegu ametliku mikrokvalifikatsiooniga, ükskõik kui hea
+            õppekava sisu muidu on. Täpsed vormid, tähtajad ja riigilõivu suuruse kontrolli alati
+            ametlikust allikast (viited allpool).
+          </p>
+        </div>
+      </section>
+
+      <section class="ice">
         <div class="section-inner narrow">
           <div class="section-head compact-head">
             <span class="kicker">Ametlikud allikad</span>

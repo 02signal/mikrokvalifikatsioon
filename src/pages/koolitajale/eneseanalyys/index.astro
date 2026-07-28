@@ -1,0 +1,245 @@
+---
+import Seo from "../../../components/Seo.astro";
+import { organization } from "../../../data/organizationSchema";
+import Footer from "../../../components/Footer.astro";
+import "../../../styles/global.css";
+import Nav from "../../../components/Nav.astro";
+
+const officialCheckedAt = "28.07.2026";
+
+const coverage = [
+  { code: "6.1", title: "Õppekavaarendus", note: "Kust õppekava idee tuli ja kuidas see uueneb." },
+  { code: "6.2", title: "Õppekava", note: "Kas nimi, eesmärk, sisu, õpiväljundid ja hindamine räägivad sama lugu." },
+  { code: "6.3", title: "Õppeprotsessi kavandamine", note: "Kas õppija teab enne algust eesmärki, õpiväljundeid ja hindamist." },
+  { code: "6.4", title: "Õppeprotsessi läbiviimine", note: "Kas meetodid sobivad sihtrühmale ja tagasiside on jooksev." },
+  { code: "6.5", title: "Hindamine ja lõpudokumendid", note: "Kas igal õpiväljundil on selge hindamiskriteerium ja -meetod." },
+  { code: "6.6", title: "Koolitajate kompetentsus", note: "Kas iga koolitaja pädevus on tõendatud ja avalik." },
+  { code: "6.7", title: "Kvaliteedijuhtimine", note: "Kas tagasiside ring on suletud: kogud → analüüsid → muudad → tõendad." },
+  { code: "6.8", title: "Ressursid", note: "Kas koolitajaid, tuge ja turvalist õppekeskkonda on piisavalt." }
+];
+
+const mistakes = [
+  "Üldsõnalisus konkreetsuse asemel — „me peame seda oluliseks“ ilma tõendita, mis näitaks, kuidas see päriselt välja näeb.",
+  "Väited ilma tõendita — iga väide peab viitama konkreetsele dokumendile, näitele või protsessile, mitte jääma lubaduseks.",
+  "Vastuolu veebilehe või õppekavaga — kui eneseanalüüs kirjeldab midagi teisiti kui asutuse veebileht või õppekava, loeb hindaja seda riskiks.",
+  "Sama jutt korratud mitmes valdkonnas, selle asemel et iga valdkonna kohta eraldi ja täpselt kirjutada.",
+  "Tähemärgipiirangu ületamine või vastupidi — vastus nii lühike, et sisu ei jõua kohale."
+];
+
+const faqItems = [
+  {
+    question: "Kas eneseanalüüs on lisadokument või hindamise alus?",
+    answer: "Eneseanalüüs on hindamise alusdokument, mitte lisamaterjal. Hindaja loeb selle põhjal, kas asutus vastab kõigile kaheksale valdkonnale — kõik muu (õppekava, veebileht, tõendid) peab eneseanalüüsi väiteid toetama, mitte sellele vastu rääkima."
+  },
+  {
+    question: "Mitu valdkonda peab eneseanalüüs katma?",
+    answer: "Kõik kaheksa HAKA hindamisvaldkonda ja kokku 27 kriteeriumi. Iga kriteeriumi kohta tuleb kirjutada eraldi, tõenduspõhiselt — mitte ühte üldist teksti valdkonna kohta."
+  },
+  {
+    question: "Kust leian ametliku eneseanalüüsi vormi?",
+    answer: "Ametlik eneseanalüüsi aruande vorm on avaldatud HAKA veebilehel (PDF). See leht on praktiline abimaterjal vormi täitmiseks, mitte vormi asendus — kontrolli alati kehtivat vormi ametlikust allikast."
+  },
+  {
+    question: "Mis vahe on eneseanalüüsil ja kontrollnimekirjal?",
+    answer: "Kontrollnimekiri aitab enne esitamist kiiresti üle vaadata, kas kõik on korras (nt mahud klapivad, tõendid olemas). Eneseanalüüs on ise sisuline dokument, mida hindaja loeb ja mille alusel otsuse teeb."
+  }
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    organization,
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Avaleht", item: "https://mikrokvalifikatsioon.ee/" },
+        { "@type": "ListItem", position: 2, name: "Koolitajale", item: "https://mikrokvalifikatsioon.ee/koolitajale/" },
+        { "@type": "ListItem", position: 3, name: "Eneseanalüüs", item: "https://mikrokvalifikatsioon.ee/koolitajale/eneseanalyys/" }
+      ]
+    },
+    {
+      "@type": "Article",
+      headline: "Eneseanalüüs: HAKA hindamise alusdokument",
+      description: "Miks eneseanalüüs on HAKA kvaliteedihindamise alusdokument (mitte lisamaterjal), mida see peab katma, millised tõendid lisada ja tüüpvead, mis maksavad kvaliteedimärgi.",
+      inLanguage: "et",
+      datePublished: "2026-07-28",
+      dateModified: "2026-07-28",
+      author: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
+      mainEntityOfPage: "https://mikrokvalifikatsioon.ee/koolitajale/eneseanalyys/"
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer }
+      }))
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo
+      title="Eneseanalüüs HAKA hindamiseks | Koolitajale"
+      description="Miks eneseanalüüs on HAKA kvaliteedihindamise alusdokument, mida see peab katma (8 valdkonda), millised tõendid lisada ja tüüpvead, mis maksavad kvaliteedimärgi."
+      canonicalPath="/koolitajale/eneseanalyys/"
+      ogType="article"
+      ogTitle="Eneseanalüüs: HAKA hindamise alusdokument"
+      ogDescription="Mida eneseanalüüs peab katma, millised tõendid lisada ja tüüpvead, mida vältida."
+      jsonLd={schema}
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht">
+            <a href="/">Avaleht</a> › <a href="/koolitajale/">Koolitajale</a> › <span>Eneseanalüüs</span>
+          </nav>
+          <span class="eyebrow">Koolitajale ja asutusele · praktiline juhend</span>
+          <h1>Eneseanalüüs: HAKA hindamise alusdokument</h1>
+          <p>
+            Paljud koolitajad käsitlevad eneseanalüüsi kui üht paberit paljudest. Tegelikult on
+            see hindamise <strong>alusdokument</strong> — sellest loeb hindaja, kas asutus vastab
+            kaheksale HAKA hindamisvaldkonnale, ja kõik muu (õppekava, veebileht, tõendid) peab
+            selle väiteid toetama.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#mida-katab" data-track-event="cta_click" data-track-label="ea_hero_katab">Mida eneseanalüüs peab katma</a>
+            <a class="btn btn-secondary" href="#tuupvead" data-track-event="cta_click" data-track-label="ea_hero_tuupvead">Vaata tüüpvigu</a>
+          </div>
+          <p class="report-date">Ametlike allikate põhjal koostatud kokkuvõte. Kontrollitud: {officialCheckedAt}</p>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Miks eneseanalüüs, mitte lisadokument</span>
+            <h2>Eneseanalüüs on hindamise alus — mitte lisamaterjal juurde.</h2>
+            <p>
+              Eneseanalüüsi aruanne on dokument, mille põhjal HAKA hindaja teeb oma hinnangu
+              iga kriteeriumi kohta. See ei ole kaaskiri õppekavale — see on peamine tekst, mida
+              hindaja loeb ja mille vastu ta kõiki teisi dokumente (õppekava, veebileht, tõendid)
+              kontrollib. Kui eneseanalüüsis öeldut ei ole tõenditega kaetud või kui see läheb
+              vastuollu asutuse veebilehe või õppekavaga, loeb hindaja seda riskiks — ükskõik kui
+              hea sisu tegelikkuses on.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="mida-katab" class="ice">
+        <div class="section-inner">
+          <div class="section-head compact-head">
+            <span class="kicker">8 valdkonda</span>
+            <h2>Eneseanalüüs katab samad kaheksa valdkonda, mida hindaja hindab.</h2>
+            <p>Täpsem kirjeldus igast valdkonnast ja tüüpvigadest on eraldi lehel — 8 valdkonna kontrollnimekirjas.</p>
+          </div>
+          <div class="measure-list">
+            {coverage.map((c) => (
+              <article class="measure-card">
+                <div>
+                  <span class="status-tag status-blue">{c.code}</span>
+                  <h3>{c.title}</h3>
+                  <p>{c.note}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+          <div class="inline-actions">
+            <a class="btn btn-primary" href="/koolitajale/kvaliteedihindamine/" data-track-event="cta_click" data-track-label="ea_katab_kvaliteedihindamine">HAKA mikrokvalifikatsiooni hindamine: 8 valdkonda →</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Enne kirjutamist</span>
+            <h2>Millised tõendid eneseanalüüsile lisada.</h2>
+          </div>
+          <p>
+            Iga väide eneseanalüüsis peab olema tõenduspõhine: „X on tagatud, mille tõendiks on
+            Y.“ Praktikas tähendab see viidet konkreetsele dokumendile, protsessikirjeldusele,
+            statistikale või näitele — mitte üldist lubadust. Kasulikud tõendid valdkondade
+            kaupa:
+          </p>
+          <ul class="check">
+            <li>Õppekava ja veebileht, kus nimi, eesmärk, sisu, õpiväljundid ja hindamine kajastuvad sama sõnastusega.</li>
+            <li>Tabel: iga õpiväljund × hindamismeetod × hindamiskriteerium.</li>
+            <li>Koolitajate kvalifikatsiooni koondtabel (haridus, kogemus, digipädevus) samas struktuuris kõigi kohta.</li>
+            <li>Kvaliteedidokument ühes kohas veebis, kuupäevaga, koos ühe konkreetse näitega tagasisidest tingitud muudatusest.</li>
+            <li>Ligipääsetavuse ja ressursside aus kirjeldus — mis on tagatud ja mis mitte.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="tuupvead" class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Sagedased lõksud</span>
+            <h2>Tüüpvead, mis maksavad kvaliteedimärgi.</h2>
+          </div>
+          <ul class="check warn-list">
+            {mistakes.map((m) => <li>{m}</li>)}
+          </ul>
+        </div>
+      </section>
+
+      <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Seos kontrollnimekirjaga</span>
+            <h2>Kirjuta eneseanalüüs, siis kontrolli kontrollnimekirjaga.</h2>
+            <p>
+              Kõigepealt kirjuta eneseanalüüs sisuliselt valmis, valdkond valdkonna haaval,
+              tõenditega. Seejärel kasuta 8 valdkonna kontrollnimekirja kiireks eelkontrolliks
+              enne esitamist — kas mahud klapivad, kas tõendid on olemas ja kas keel on läbivalt
+              sama.
+            </p>
+          </div>
+          <div class="inline-actions">
+            <a class="btn btn-primary" href="/koolitajale/kvaliteedihindamine/" data-track-event="cta_click" data-track-label="ea_bottom_kvaliteedihindamine">8 valdkonna kontrollnimekiri ja tüüpvead →</a>
+            <a class="btn btn-secondary" href="/koolitajale/kuidas-ehitada/" data-track-event="cta_click" data-track-label="ea_bottom_ehitada">Kuidas ehitada HAKA nõuetele vastav mikrokvalifikatsioon →</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="navy">
+        <div class="section-inner contact">
+          <div>
+            <span class="kicker">Ametlikud allikad</span>
+            <h2>Eneseanalüüsi ametlik vorm ja täpsed nõuded — otse HAKA-lt.</h2>
+            <p>See leht on praktiline abimaterjal, mitte ametlik juhis. Siduvad nõuded, vorm ja tähtajad kinnitab alati ametlik allikas.</p>
+            <div class="inline-actions">
+              <a class="btn btn-primary" href="https://haka.ee/wp-content/uploads/Taienduskoolitusasutuste-oppekavaruhma-kvaliteedihindamise-eneseanaluusiaruande-vorm-06.10.25.pdf" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="ea_vorm_pdf">Eneseanalüüsi aruande vorm (PDF)</a>
+              <a class="btn btn-secondary" href="https://haka.ee/mikrokvalifikatsioonioppe-labiviimine/" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="ea_haka_leht">HAKA: mikrokvalifikatsiooniõppe läbiviimine</a>
+            </div>
+          </div>
+          <aside class="contact-card">
+            <h3>Kontakt</h3>
+            <p>Ettevõtluskeskus OÜ</p>
+            <p><a href="mailto:info@mikrokvalifikatsioon.ee" data-track-event="email_click" data-track-label="ea_email">info@mikrokvalifikatsioon.ee</a></p>
+            <p><a href="tel:+37258180435" data-track-event="phone_click" data-track-label="ea_phone">+372 5818 0435</a></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <Footer label="Eneseanalüüs HAKA hindamiseks" />
+
+    <style>
+      .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
+      .crumbs a { color: #5a6b80; }
+      .crumbs span { color: #212121; }
+      .warn-list li::marker { color: #b4540a; }
+    </style>
+  </body>
+</html>
