@@ -5,7 +5,7 @@ import Footer from "../../../components/Footer.astro";
 import "../../../styles/global.css";
 import Nav from "../../../components/Nav.astro";
 
-const officialCheckedAt = "13.06.2026";
+const officialCheckedAt = "28.07.2026";
 
 const domains = [
   {
@@ -60,7 +60,7 @@ const domains = [
 
 const mistakes = [
   "Mahuarvestus ei klapi — akadeemilised ja astronoomilised tunnid segamini, või kontaktõpe + iseseisev töö ei summeeru kogumahuks.",
-  "Dokumentidevaheline triiv — õpiväljundite arv, moodulite nimed või mahud erinevad õppekavas, veebis ja eneseanalüüsis.",
+  "Dokumendid ei klapi omavahel — õpiväljundite arv, moodulite nimed või mahud erinevad õppekavas, veebis ja eneseanalüüsis.",
   "Üldsõnaline, tõendita eneseanalüüs — „me peame seda oluliseks“ konkreetse tõendi asemel.",
   "Kohustuslikud väljad õhukesed või täitmata (nt õppekeskkonna kirjeldus jääb juhendtekstiks).",
   "Puuduvad kohustuslikud lisad — taotlust ei menetleta, ükskõik kui hea on sisu.",
@@ -174,10 +174,19 @@ const schema = {
             <h2>Kaheksa valdkonda, 27 kriteeriumi — ja üks kuldne reegel.</h2>
           </div>
           <p>
-            Hindamine jaguneb <strong>kaheksaks valdkonnaks</strong> ja kokku 27 kriteeriumiks.
-            Positiivseks otsuseks peavad <strong>kõik kaheksa valdkonda</strong> vastama nõuetele;
-            otsus kehtib viis aastat. Mitu „vastab osaliselt“ hinnangut võivad langetada terve
-            valdkonna ja koos sellega otsuse.
+            Hindamine jaguneb <strong>kaheksaks valdkonnaks</strong> ja kokku 27 kriteeriumiks. Iga
+            kriteeriumi ja valdkonda hinnatakse <strong>kolmeastmelisel skaalal: vastab / vastab
+            osaliselt / ei vasta</strong>. Positiivseks otsuseks peavad <strong>kõik kaheksa
+            valdkonda</strong> vastama nõuetele; otsus kehtib viis aastat. Mitu „vastab osaliselt“
+            hinnangut võivad langetada terve valdkonna ja koos sellega otsuse.
+            <br />Riigilõivud (suurusjärgus): õppekavarühma hindamine ~1450 €, iga õppekava
+            EHIS-registreerimine ~100 € — täpsed summad kontrolli ametlikust allikast.
+          </p>
+          <p class="callout" style="border-left-color:#e0a500;background:#fffdf5;">
+            <strong>NB — mida HAKA hindab:</strong> mitte üht õppekava, vaid su <strong>asutuse
+            õppekavarühma võimekust</strong> tervikuna. Üks hea õppekava on vajalik, aga
+            <strong>üksi ei piisa</strong> — hinnatakse, kas su asutus suudab kvaliteeti
+            järjepidevalt tagada.
           </p>
           <p class="callout">
             <strong>Kuldne reegel:</strong> kui midagi on <em>osaliselt</em> täidetud, loeb hindaja
