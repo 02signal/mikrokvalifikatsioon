@@ -12,6 +12,8 @@ test("provider checklist uses one Listmonk-native double-opt-in audience", () =>
   assert.match(component, /action=\{action\}/);
   assert.match(component, /name="l" value=\{listKoolitaja\} required data-consent-purpose="newsletter"/);
   assert.equal((component.match(/name="l"/g) || []).length, 1);
+  assert.match(component, /Soovin saada e-postiga mikrokvalifikatsiooni koolitaja kontrollnimekirju/);
+  assert.doesNotMatch(component, /Soovin ka uudiskirja/);
 });
 
 test("click is measured honestly as an attempt, not a confirmed subscription", () => {
