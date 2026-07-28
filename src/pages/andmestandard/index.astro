@@ -9,6 +9,21 @@ const SITE = "https://mikrokvalifikatsioon.ee";
 const path = "/andmestandard/";
 const ccCount = credentialCommonsRelease.nodesById.size;
 
+const faqItems = [
+  {
+    question: "Mis vahe on Credential Commonsil ja EHIS-el?",
+    answer: "EHIS on Eesti riiklik register, kus konkreetne õppekava ja tunnistus ametlikult registreeritakse — see on siduv, ametlik allikas. Credential Commons on avatud, masinloetav andmestandard (Linked Data formaat), mis kirjeldab sama õppekava infot nii, et teised süsteemid, koolid ja AI-tööriistad saavad seda otse ja koostöövõimeliselt lugeda. Standard ei asenda EHIS-t ega HAKA hindamist — see on lisakiht, mis teeb sama sisu masinloetavaks."
+  },
+  {
+    question: "Kuidas viia oma õppekava andmed sellesse standardisse?",
+    answer: "Pane kirja põhi (nimi, õpiväljundid, maht, tase, hindamiskriteeriumid), seejärel vii see cc:MicroCredential profiili vormi — kas lase AI-abilisel see oma Wordi- või Exceli-failist kokku panna, valideeri avatud tööriistaga (vt allpool) või küsi meilt abi."
+  },
+  {
+    question: "Kas kataloog on avaandmetena kasutatav?",
+    answer: "Jah. Vastavuskontrolli läbinud kirjed on avaldatud CC BY 4.0 litsentsiga JSON-LD failina (/catalog.cc.jsonld) ja iga programmi kohta eraldi (/kataloog/<slug>/credential.jsonld). Andmeid tohib vabalt kasutada, taaskasutada ja edasi arendada litsentsi tingimustel."
+  }
+];
+
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
@@ -30,6 +45,14 @@ const schema = {
       distribution: [
         { "@type": "DataDownload", name: "Kogu kataloog (JSON-LD)", encodingFormat: "application/ld+json", contentUrl: `${SITE}/catalog.cc.jsonld` }
       ]
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer }
+      }))
     }
   ]
 };
@@ -140,6 +163,25 @@ const schema = {
             Credential Commons on avatud (Apache-2.0 kood, CC-BY profiilid) — kasuta, forki, arenda edasi:
             <a href="https://github.com/credential-commons/credential-commons" rel="noopener">GitHub</a>.
           </p>
+        </div>
+      </section>
+
+      <section class="ice">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Küsimused arendajale</span>
+            <h2>Levinud küsimused andmestandardi kohta.</h2>
+          </div>
+          <div class="measure-list">
+            {faqItems.map((item) => (
+              <article class="measure-card">
+                <div>
+                  <h3>{item.question}</h3>
+                  <p>{item.answer}</p>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
