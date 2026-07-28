@@ -22,8 +22,8 @@ const {
 } = Astro.props;
 
 const captureBaseUrl = (import.meta.env.PUBLIC_LISTMONK_CAPTURE_BASE_URL || "https://liitu.ettevotluskeskus.ee").replace(/\/+$/, "");
-const listKoolitaja = import.meta.env.PUBLIC_LISTMONK_LIST_KOOLITAJA || "";
-const listNewsletter = import.meta.env.PUBLIC_LISTMONK_LIST_NEWSLETTER || "";
+const listKoolitaja = import.meta.env.PUBLIC_LISTMONK_LIST_KOOLITAJA || "d1615885-494d-42b7-b2e1-c51ec2530893";
+const listNewsletter = import.meta.env.PUBLIC_LISTMONK_LIST_NEWSLETTER || "71669060-5e8e-4473-a2d5-0e0c92806077";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const configured = UUID.test(listKoolitaja);
 const action = `${captureBaseUrl}/subscription/form`;
