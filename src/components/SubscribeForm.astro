@@ -11,10 +11,11 @@
 //   PUBLIC_LISTMONK_CAPTURE_BASE_URL  (default https://liitu.ettevotluskeskus.ee)
 //   PUBLIC_LISTMONK_LIST_KOOLITAJA    (the trainer topic list UUID — owner input)
 //
-// Consent copy is the RATIFIED ET wording (do not reword — legal). One explicit
-// promise maps to one trainer/provider list and the AMOS `newsletter` purpose.
-// Do not reuse a general EVK list under a different checkbox purpose: Listmonk's
-// public endpoint receives only email + list UUIDs, not the data-* metadata.
+// One explicit public promise maps to one trainer/provider list and the AMOS
+// `newsletter` machine purpose. The label must describe that bounded provider
+// guidance promise; it must not imply a second/general newsletter. Do not reuse
+// a general EVK list under this checkbox: Listmonk's public endpoint receives
+// only email + list UUIDs, not the data-* metadata.
 const {
   submitLabel = "Telli koolitaja juhendus →",
   idPrefix = "koolitaja",
@@ -36,7 +37,7 @@ const emailId = `${idPrefix}-subscribe-email`;
     <label class="sf-field" for={emailId}>Sinu e-posti aadress</label>
     <input id={emailId} type="email" name="email" required maxlength="254" inputmode="email" autocomplete="email" autocapitalize="none" spellcheck="false" placeholder="eesnimi.perenimi@ettevote.ee" />
     <div class="sf-honey" aria-hidden="true"><input type="text" name="nonce" tabindex="-1" autocomplete="off" /></div>
-    <label class="sf-consent"><input type="checkbox" name="l" value={listKoolitaja} required data-consent-purpose="newsletter" /><span>Soovin ka uudiskirja: praktilised lood, näited ja uued õppimisvõimalused. <span class="sf-req">Vajalik, et saame sulle saata.</span></span></label>
+    <label class="sf-consent"><input type="checkbox" name="l" value={listKoolitaja} required data-consent-purpose="newsletter" /><span>Soovin saada e-postiga mikrokvalifikatsiooni koolitaja kontrollnimekirju, juhendeid ja olulisi valdkonna uuendusi. <span class="sf-req">Vajalik, et saame need mulle saata.</span></span></label>
     <button class="btn btn-primary sf-submit" type="submit" data-track-event="lead_form_submit_attempt" data-track-label={captureSite}>{submitLabel}</button>
     <p class="sf-note">Saadame kõigepealt <b>kinnituskirja</b> — liitumine jõustub alles siis, kui kinnitad (topeltkinnitus). Aadressi ei jagata kellegagi ja igast kirjast saab loobuda ühe klikiga. <a href="/privaatsus">Privaatsus</a></p>
   </form>
