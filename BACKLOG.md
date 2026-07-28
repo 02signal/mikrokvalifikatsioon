@@ -32,6 +32,14 @@ The konto unified-account + brand + email are all LIVE end-to-end (see the 2026-
     role in `service.mjs` `ACCOUNT_KIND_MAP`; per-topic Listmonk lists; enable `OUTREACH_SEND_MODE`.
 13. **GA nicety:** `lead_form_start` uses one hardcoded `form_name` (`Analytics.astro`) — make it
     per-surface so start events attribute to the right form.
+14. **mkval koolitaja checklist (2026-07-28):** the two checklist pages use one dedicated
+    Listmonk double-opt-in trainer/provider audience. The required checkbox maps exactly to
+    `newsletter`; the earlier optional general-list/course-offers mismatch was removed before
+    activation. `lead_form_submit_attempt` is honest click intent; confirmed membership is
+    measured in Listmonk. AMOS owns the 15-minute confirmed→Twenty `provider/prospect`
+    projection. Per the owner's 2026-07-28 decision, AMOS also emits one idempotent
+    post-confirmation attention email to `info@ettevotluskeskus.ee`; FreeScout may surface
+    that email, but Twenty remains the durable CRM and no duplicate contact is created.
 
 **SEO/GEO — CTR uplift 2026-07-16 (done + follow-ups):**
 7. **Done 2026-07-16** — 28-day GSC review found page-1 impressions with near-zero clicks (title/snippet
