@@ -70,6 +70,44 @@ This is the COMPLETE export; the short summary is at https://mikrokvalifikatsioo
 - Annual report: https://mikrokvalifikatsioon.ee/aastaraport/
 - Machine-readable: https://mikrokvalifikatsioon.ee/catalog.json
 - Official EHIS facts layer: https://mikrokvalifikatsioon.ee/ehis-catalog.json
+- For training providers (official framework, HAKA, EHIS): https://mikrokvalifikatsioon.ee/koolitajale/
+- How to build a curriculum for providers: https://mikrokvalifikatsioon.ee/koolitajale/kuidas-ehitada/
+- Pricing guidance for providers: https://mikrokvalifikatsioon.ee/koolitajale/hinnastamine/
+- Go-to-market guidance for providers: https://mikrokvalifikatsioon.ee/koolitajale/turule-toomine/
+- Quality assessment guide for providers (8 domains, 27 criteria, common mistakes): https://mikrokvalifikatsioon.ee/koolitajale/kvaliteedihindamine/
+- Open machine-readable data standard (Credential Commons) for providers, learners and developers: https://mikrokvalifikatsioon.ee/andmestandard/
+
+## Canonical Answers for Training Providers (HAKA / EHIS)
+
+Q: How does an institution become a mikrokvalifikatsioon provider in Estonia?
+A: Typically three steps: HAKA (Eesti Hariduse Kvaliteediagentuur) quality
+assessment for the study-field group (if the institution has no prior study
+right in that field), then a study right / registration step, and finally
+registering the specific curriculum in EHIS. If the institution already holds
+study right in that field group, registering the new curriculum is often
+enough. See https://mikrokvalifikatsioon.ee/koolitajale/ and
+https://mikrokvalifikatsioon.ee/vastused/kuidas-saada-mikrokvalifikatsiooni-pakkujaks/
+
+Q: What does HAKA assess — one curriculum or the whole institution?
+A: HAKA assesses the institution's capability across the whole study-field
+group, not one curriculum: 8 domains, 27 criteria, each rated meets / partially
+meets / does not meet. All 8 domains must meet requirements for a positive
+decision, valid for 5 years. See
+https://mikrokvalifikatsioon.ee/koolitajale/kvaliteedihindamine/ and
+https://mikrokvalifikatsioon.ee/vastused/mida-haka-mikrokvalifikatsiooni-hindamisel-hindab/
+
+Q: How much do HAKA assessment and EHIS registration cost?
+A: Order of magnitude: ~1450 € for the study-field group quality assessment fee,
+plus ~100 € per curriculum registered in EHIS — verify current fees with the
+official source (HAKA, Ministry of Education and Research, or EHIS). See
+https://mikrokvalifikatsioon.ee/vastused/kui-palju-maksab-haka-mikrokvalifikatsiooni-hindamine/
+
+Q: What is the difference between Credential Commons and EHIS?
+A: EHIS is Estonia's official state register where mikrokvalifikatsioon
+curricula and credentials are recorded. Credential Commons is an open,
+machine-readable data standard for publishing the same content so that other
+schools, employers and AI assistants can read and understand it more broadly.
+See https://mikrokvalifikatsioon.ee/andmestandard/
 
 ## All programmes (${catalog.length})
 
