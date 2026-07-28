@@ -54,7 +54,7 @@ const schema = {
     <main class="report-page simple-report">
       <section class="report-hero simple-report-hero">
         <div class="section-inner narrow">
-          <span class="eyebrow">Arendajatele ja asutustele</span>
+          <span class="eyebrow">Koolitajale, õppijale, arendajale ja AI-le</span>
           <h1>Meie andmed on avatud standardi järgi.</h1>
           <p>
             Kogu kataloog on avaldatud <strong>masinloetava Linked Data'na</strong> avatud
@@ -67,6 +67,50 @@ const schema = {
       </section>
 
       <section class="white">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Kellele ja miks</span>
+            <h2>Miks avatud standard sulle kasu toob.</h2>
+          </div>
+          <p>
+            Sina kirjeldad õppekava <em>korra</em> — edasi loeb sama kirjet
+            <strong>järgmine kool ja tööandja</strong> (võivad seda tunnistada),
+            <strong>õppija</strong> (võtab tunnistuse kaasa) ja <strong>AI-abilised</strong>,
+            kes koolitusi otsivad ja soovitavad. Üks kord korralikult kirja pandud — kõik loevad,
+            ilma iga saiti eraldi läbi käimata.
+          </p>
+          <div class="grid-3">
+            <article class="card">
+              <h3>Koolitajale / asutusele</h3>
+              <p>Sama info, mida HAKA jaoks (valdkonnad 6.2 ja 6.5) niikuinii vajad, saab kujule,
+                mis klapib õppekavas, veebis ja eneseanalüüsis. <strong>NB:</strong> HAKA hindab su
+                <strong>asutuse võimekust</strong>, mitte üht õppekava.
+                <a href="/koolitajale/kuidas-ehitada/">Kuidas ehitada →</a></p>
+            </article>
+            <article class="card">
+              <h3>Õppijale</h3>
+              <p>Sa ei pea midagi seadistama — kui su kool avaldab tunnistuse selles standardis, on
+                see <strong>ülekantav ja arusaadav</strong>: järgmine kool või tööandja saab seda
+                lugeda ja mõista.</p>
+            </article>
+            <article class="card">
+              <h3>Arendajale / AI-le</h3>
+              <p>Väike, masinloetav standard: loe kontekst + AGENTS.md, kaardista, valideeri, avalda.
+                AI-agent teeb selle su Wordi- või Exceli-failist minutitega.</p>
+            </article>
+          </div>
+          <div class="callout">
+            <strong>Kolm sammu liitumiseks:</strong>
+            <ol class="steps-list">
+              <li><strong>Pane kirja põhi</strong> — nimi, õpiväljundid, maht, tase ja iga õpiväljundi hindamiskriteerium.</li>
+              <li><strong>Vii standardvormi</strong> — lase AI-abilisel see failist kokku panna või küsi meilt; tulemust saab <strong>tasuta</strong> üle kontrollida (tööriist allpool).</li>
+              <li><strong>Avalda ühes kohas</strong> — teised koolid, tööandjad ja otsingud loevad seda automaatselt.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section class="ice">
         <div class="section-inner narrow">
           <div class="section-head compact-head">
             <span class="kicker">Otspunktid</span>
@@ -84,7 +128,7 @@ const schema = {
         </div>
       </section>
 
-      <section class="ice">
+      <section class="white">
         <div class="section-inner narrow">
           <div class="section-head compact-head">
             <span class="kicker">Kontrolli vastavust</span>
@@ -117,6 +161,8 @@ const schema = {
 
     <style>
       .codeblock { background: #0f1b24; color: #e6edf3; padding: 14px 16px; border-radius: 10px; overflow-x: auto; font-size: 0.9rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; margin: 0 0 14px; }
+      .steps-list { margin: 8px 0 2px; padding-left: 22px; }
+      .steps-list li { margin: 8px 0; }
     </style>
   </body>
 </html>
