@@ -143,9 +143,11 @@ const metaDescription =
         <div class="section-inner narrow">
           {q.figure && (
             <figure class="vastused-figure">
-              {/* SVG-allikas kuvamiseks (terav, väike); PNG on indekseeritav <img> Google Images'i jaoks. */}
+              {/* Kitsal ekraanil püstine variant (lai joonis kahaneks telefonis loetamatuks),
+                  siis lai SVG (terav igas suuruses); PNG on indekseeritav <img> Google Images'i jaoks. */}
               <picture>
-                <source srcset={q.figure.src} type="image/svg+xml" />
+                {q.figure.stacked && <source media="(max-width: 640px)" srcset={q.figure.stacked} type="image/svg+xml" width={400} height={640} />}
+                <source srcset={q.figure.src} type="image/svg+xml" width={q.figure.width} height={q.figure.height} />
                 <img src={q.figure.src.replace(/\.svg$/, ".png")} alt={q.figure.alt} width={q.figure.width} height={q.figure.height} loading="lazy" decoding="async" />
               </picture>
               <figcaption>{q.figure.caption}</figcaption>
@@ -214,7 +216,10 @@ const metaDescription =
       }
       .vastused-crumb a { color: var(--teal); font-weight: 700; }
       .vastused-figure { margin: 0 0 24px; }
-      .vastused-figure img { display: block; width: 100%; height: auto; max-width: 560px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+      /* Joonis saab terve lugemisveeru laiuse. 560 px kitsendus tegi teksti
+         joonise sees ~9 px suuruseks — meie lugeja on sageli 60+. */
+      .vastused-figure img { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+      @media (max-width: 640px) { .vastused-figure img { max-width: 420px; margin: 0 auto; } }
       .vastused-figure figcaption { margin-top: 8px; font-size: 0.9rem; color: #5a6b80; line-height: 1.45; }
       .vastused-short {
         font-size: 1.18rem;

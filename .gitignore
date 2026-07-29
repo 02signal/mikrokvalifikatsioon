@@ -11,3 +11,6 @@ media/
 
 # Explainer diagrams: SVG is source of truth; PNG is a build artifact (npm run diagrams)
 public/diagrams/*.png
+
+# Jooniste eelvaade (scripts/preview-diagrams.mjs) — ehitusväljund, mitte lähtekood.
+tmp/
