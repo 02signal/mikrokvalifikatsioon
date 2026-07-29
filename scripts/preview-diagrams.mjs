@@ -5,7 +5,8 @@
 //
 // Katab nii käsitsi kirjeldatud joonised (src/data/diagrams.ts) kui andmepõhised
 // (src/data/diagrams-data.ts: hind, eap-jaotus, valdkonnad, oppevorm,
-// ehis-tunnustatud + üks valdkond/<slug> näidis päris kataloogist).
+// ehis-tunnustatud + üks valdkond/<slug> näidis päris kataloogist) kui
+// koolitajale/HAKA joonised (src/data/diagrams-koolitaja.ts).
 //
 //   node scripts/preview-diagrams.mjs           # kõik
 //   node scripts/preview-diagrams.mjs eap-26-tundi
@@ -21,6 +22,7 @@ import { pathToFileURL } from "node:url";
 const OUT = "tmp/diagrams";
 const BUNDLE = "tmp/.diagram-bundle.mjs";
 const DATA_BUNDLE = "tmp/.diagram-data-bundle.mjs";
+const KOOLITAJA_BUNDLE = "tmp/.diagram-koolitaja-bundle.mjs";
 mkdirSync(OUT, { recursive: true });
 
 await build({
@@ -37,6 +39,14 @@ await build({
   format: "esm",
   platform: "node",
   outfile: DATA_BUNDLE,
+  logLevel: "silent",
+});
+await build({
+  entryPoints: ["src/data/diagrams-koolitaja.ts"],
+  bundle: true,
+  format: "esm",
+  platform: "node",
+  outfile: KOOLITAJA_BUNDLE,
   logLevel: "silent",
 });
 await build({
@@ -60,6 +70,9 @@ const { diagrams } = await import(`${pathToFileURL(path.resolve(BUNDLE)).href}?t
 const { dataDiagrams, fieldDiagram } = await import(
   `${pathToFileURL(path.resolve(DATA_BUNDLE)).href}?t=${process.hrtime.bigint()}`
 );
+const { koolitajaDiagrams } = await import(
+  `${pathToFileURL(path.resolve(KOOLITAJA_BUNDLE)).href}?t=${process.hrtime.bigint()}`
+);
 const { renderWide, renderStacked } = await import(
   `${pathToFileURL(path.resolve("tmp/.diagram-lib.mjs")).href}?t=${process.hrtime.bigint()}`
 );
@@ -74,7 +87,7 @@ const fieldSample = sampleField
   ? { ...fieldDiagram(sampleField.field), id: `valdkond-${sampleField.slug}` }
   : null;
 
-const allDiagrams = [...diagrams, ...dataDiagrams(), ...(fieldSample ? [fieldSample] : [])];
+const allDiagrams = [...diagrams, ...dataDiagrams(), ...koolitajaDiagrams, ...(fieldSample ? [fieldSample] : [])];
 
 const only = process.argv.slice(2);
 const list = only.length ? allDiagrams.filter((d) => only.includes(d.id)) : allDiagrams;
@@ -98,6 +111,7 @@ for (const d of list) {
 
 rmSync(BUNDLE, { force: true });
 rmSync(DATA_BUNDLE, { force: true });
+rmSync(KOOLITAJA_BUNDLE, { force: true });
 rmSync("tmp/.diagram-lib.mjs", { force: true });
 rmSync("tmp/.catalog-bundle.mjs", { force: true });
 process.stdout.write(`\n${list.length} joonis(t) → ${OUT}/\n`);

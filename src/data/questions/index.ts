@@ -565,6 +565,14 @@ export const questions: QuestionEntry[] = [
   {
     slug: "kuidas-saada-mikrokvalifikatsiooni-pakkujaks",
     question: "Kuidas saab õppeasutus mikrokvalifikatsiooni pakkujaks?",
+    figure: {
+      src: "/diagrams/pakkujaks-saamise-sammud.svg",
+      alt: "Joonis: mikrokvalifikatsiooni pakkujaks saamine kolmes sammus — HAKA hindab õppekavarühma, tegevusluba või registreerimine, registreeri õppekava EHIS-es.",
+      caption: "Kolm sammu pakkujaks saamiseni: HAKA hindamine, tegevusluba/registreerimine, EHIS-registreerimine.",
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/pakkujaks-saamise-sammud.svg"
+    },
     shortAnswer:
       `Uude õppekavarühma sisenedes on tee kolmeastmeline: HAKA (Eesti Hariduse Kvaliteediagentuur) kvaliteedihindamine õppekavarühma kaupa, seejärel tegevusluba või registreerimine ja lõpuks õppekava enda registreerimine Eesti Hariduse Infosüsteemis (EHIS). ` +
       `Kui sinu asutusel on samas õppekavarühmas juba varasem õppeõigus, piisab sageli ainult uue õppekava registreerimisest EHIS-es. ` +
@@ -583,6 +591,14 @@ export const questions: QuestionEntry[] = [
   {
     slug: "mida-haka-mikrokvalifikatsiooni-hindamisel-hindab",
     question: "Mida HAKA hindab — ühte õppekava või kogu kooli?",
+    figure: {
+      src: "/diagrams/haka-hindab-oppekavaruhma.svg",
+      alt: "Joonis: HAKA hindab kogu õppekavarühma võimekust (8 valdkonda, 27 kriteeriumi), mitte üht õppekava — üks hea õppekava on vajalik, aga üksi ei piisa.",
+      caption: "HAKA hindab asutuse kogu õppekavarühma võimekust, mitte üht õppekava eraldi.",
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/haka-hindab-oppekavaruhma.svg"
+    },
     shortAnswer:
       `HAKA ei hinda üht õppekava, vaid asutuse võimekust tervele õppekavarühmale kvaliteeti järjepidevalt tagada. ` +
       `Hindamine jaguneb kaheksaks valdkonnaks ja kokku 27 kriteeriumiks, igaüht hinnatakse kolmeastmelisel skaalal: vastab / vastab osaliselt / ei vasta. ` +
@@ -601,6 +617,14 @@ export const questions: QuestionEntry[] = [
   {
     slug: "mis-on-haka-eneseanalyys",
     question: "Mis on eneseanalüüs ja kas see on kohustuslik?",
+    figure: {
+      src: "/diagrams/eneseanalyys-vaide-toend.svg",
+      alt: "Joonis: eneseanalüüsis muudab väide + konkreetne tõend selle usutavaks — hindaja saab seda kontrollida; üldsõnaline väide ilma tõendita ei loe.",
+      caption: "Väide + konkreetne tõend teeb eneseanalüüsi usutavaks; üldsõnaline väide ei loe.",
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/eneseanalyys-vaide-toend.svg"
+    },
     shortAnswer:
       `Eneseanalüüs on hindamise alusdokument, mille asutus ise koostab enne HAKA kvaliteedihindamist — see on kohustuslik osa taotlusest. ` +
       `Selles kirjeldab asutus ise, kuidas ta iga kriteeriumi täidab, ja toob iga väite kohta konkreetse tõendi. ` +
@@ -619,6 +643,14 @@ export const questions: QuestionEntry[] = [
   {
     slug: "kui-palju-maksab-haka-mikrokvalifikatsiooni-hindamine",
     question: "Kui palju HAKA hindamine ja registreerimine maksavad?",
+    figure: {
+      src: "/diagrams/haka-hinnad-kaks-tasu.svg",
+      alt: "Joonis: kaks eri riigilõivu — suurusjärgus 1450 € õppekavarühma hindamine (kord viie aasta jooksul) ja suurusjärgus 100 € iga õppekava registreerimine EHIS-es.",
+      caption: "Suurusjärgu numbrid: hindamine ~1450 € (kord rühma kohta), registreerimine ~100 € (iga õppekava kohta).",
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/haka-hinnad-kaks-tasu.svg"
+    },
     shortAnswer:
       `Suurusjärgus: õppekavarühma kvaliteedihindamine maksab riigilõivuna umbes 1450 €, ja iga õppekava registreerimine EHIS-es lisaks umbes 100 €. ` +
       `Need on suurusjärgu numbrid, mitte lõplik hinnakiri — täpsed ja ajakohased summad kontrolli alati ametlikust allikast (HAKA, Haridus- ja Teadusministeerium või EHIS). ` +
@@ -637,6 +669,14 @@ export const questions: QuestionEntry[] = [
   {
     slug: "haka-mikrokvalifikatsiooni-hindamise-tuupvead",
     question: "Millised on levinuimad vead HAKA hindamiseks valmistumisel?",
+    figure: {
+      src: "/diagrams/haka-tuupvead-kolm.svg",
+      alt: "Joonis: kolm kõige sagedasemat viga HAKA hindamiseks valmistumisel — maht ei klapi, dokumendid ei klapi omavahel, väide ilma tõendita.",
+      caption: "Kolm sagedasemat lõksu: maht ei klapi, dokumendid ei klapi, väide ilma tõendita.",
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/haka-tuupvead-kolm.svg"
+    },
     shortAnswer:
       `Kõige sagedasemad vead on mahuarvestuse mittevastavus (akadeemilised ja astronoomilised tunnid segamini), dokumendid, mis ei klapi omavahel (õppekava, veebileht ja eneseanalüüs räägivad erinevat juttu), ning üldsõnaline eneseanalüüs ilma konkreetse tõendita. ` +
       `Lisaks langetatakse hindeid sageli sellepärast, et tagasisidet kogutakse, aga ei analüüsita ega kasutata, ja koolitajate pädevus pole avalikult tõendatud. ` +
@@ -655,6 +695,14 @@ export const questions: QuestionEntry[] = [
   {
     slug: "kuidas-arvutada-oppekava-eap-mahtu",
     question: "Kuidas arvutada õppekava EAP-mahtu õigesti?",
+    figure: {
+      src: "/diagrams/eap-mahu-arvutus.svg",
+      alt: "Joonis: näide EAP-mahu arvutamisest — 208 akadeemilist tundi × 0,75 = 156 astronoomilist tundi; 156 ÷ 26 = 6 EAP.",
+      caption: "Näide: 208 akadeemilist tundi × 0,75 = 156 astronoomilist tundi; 156 ÷ 26 = 6 EAP.",
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/eap-mahu-arvutus.svg"
+    },
     shortAnswer:
       `1 EAP (Euroopa ainepunkt) võrdub 26 astronoomilise tunniga õppija tööd; 1 akadeemiline tund (45 minutit) võrdub 0,75 astronoomilise tunniga. ` +
       `Kontaktõppe ja iseseisva töö tunnid tuleb kõigepealt viia samasse ühikusse (astronoomilised tunnid) ja alles siis liita kokku kogumahuks. ` +
@@ -673,6 +721,14 @@ export const questions: QuestionEntry[] = [
   {
     slug: "kas-koolitaja-vajab-taiskasvanud-koolitaja-kutset",
     question: "Kas mu koolitajad vajavad täiskasvanud koolitaja kutset?",
+    figure: {
+      src: "/diagrams/koolitaja-kutse-pole-kohustuslik.svg",
+      alt: "Joonis: seaduse järgi ei ole täiskasvanud koolitaja kutse kohustuslik, aga HAKA hindamisel on koolitaja pädevus eraldi valdkond ja kutse on üks tõend paljude seas.",
+      caption: "Kutse pole seadusest kohustuslik; HAKA hindab koolitaja pädevust ja kutse on üks võimalik tõend.",
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/koolitaja-kutse-pole-kohustuslik.svg"
+    },
     shortAnswer:
       `Seaduse järgi ei ole täiskasvanud koolitaja kutse kohustuslik. ` +
       `HAKA kvaliteedihindamisel on koolitajate kompetentsus aga eraldi hindamisvaldkond, ja täiskasvanud koolitaja kutse (Andras, EKR tase 5 või 6) on üks tõend, mida hindaja saab arvesse võtta osana koolitaja pädevuse kirjeldusest. ` +
@@ -691,6 +747,14 @@ export const questions: QuestionEntry[] = [
   {
     slug: "credential-commons-vs-ehis",
     question: "Mis vahe on Credential Commonsil ja EHIS-el?",
+    figure: {
+      src: "/diagrams/ehis-vs-credential-commons.svg",
+      alt: "Joonis: EHIS on Eesti riiklik register ja kohustuslik samm; Credential Commons on avatud masinloetav andmestandard, mis täiendab EHIS-t, mitte ei asenda seda.",
+      caption: "EHIS on kohustuslik riiklik register; Credential Commons on täiendav masinloetav kiht, mitte asendus.",
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/ehis-vs-credential-commons.svg"
+    },
     shortAnswer:
       `EHIS (Eesti Hariduse Infosüsteem) on Eesti riiklik register, kuhu mikrokvalifikatsiooni õppekavad ja tunnistused ametlikult kantakse. ` +
       `Credential Commons on avatud, masinloetav andmestandard, mille järgi sama sisu saab avaldada nii, et see on loetav ja mõistetav ka väljaspool riiklikku registrit — näiteks AI-abilistele ja kolmandate osapoolte rakendustele. ` +
