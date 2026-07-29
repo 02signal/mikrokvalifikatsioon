@@ -304,36 +304,47 @@ function renderSteps(b: Extract<Body, { kind: "steps" }>, z: Zone, t: Scale, mod
     const r = 32;
     const count = steps.length;
     const colW = Math.min(z.w / count - 16, 280);
-    const laid = steps.map((s) => ({
-      label: wrap(s.label, colW, t.body, true),
-      sub: s.sub ? wrap(s.sub, colW, t.sub) : [],
-    }));
+    // Kahanda sildikirja, kuni ring + silt + alamsilt mahuvad kere alasse.
+    // Muidu jookseb pikem alamsilt jalusejoonest läbi.
+    const gapBelow = 38;
+    let bodySize = t.body;
+    let subSize = t.sub;
+    const layout = (bs: number, ss: number) =>
+      steps.map((s) => ({ label: wrap(s.label, colW, bs, true), sub: s.sub ? wrap(s.sub, colW, ss) : [] }));
+    const blockH = (l: ReturnType<typeof layout>, bs: number, ss: number): number =>
+      Math.max(...l.map((x) => x.label.length * bs * 1.32 + (x.sub.length ? 8 + x.sub.length * ss * 1.25 : 0)));
+    let laid = layout(bodySize, subSize);
+    while (bodySize > t.sub * 0.85 && 32 * 2 + gapBelow + blockH(laid, bodySize, subSize) > z.h) {
+      bodySize -= 0.5;
+      subSize = Math.max(t.sub * 0.8, subSize - 0.4);
+      laid = layout(bodySize, subSize);
+    }
     // Jaota ringid servast servani, aga hoia nii palju sisse, et KESKELE joondatud
     // sildid ei jookseks veerisest välja.
     const half = Math.max(
       r,
-      ...laid.map((l) => Math.max(...[...l.label, ...l.sub].map((s) => textWidth(s, t.body, true) / 2), r)),
+      ...laid.map((l) => Math.max(...[...l.label, ...l.sub].map((s) => textWidth(s, bodySize, true) / 2), r)),
     );
     const step = count > 1 ? (z.w - half * 2) / (count - 1) : 0;
     const cxOf = (i: number): number => (count > 1 ? z.x + half + step * i : z.x + z.w / 2);
-    const gap = 38;
-    const textH = Math.max(
-      ...laid.map((l) => l.label.length * t.body * 1.32 + (l.sub.length ? 8 + l.sub.length * t.sub * 1.25 : 0)),
-    );
+    const textH = blockH(laid, bodySize, subSize);
     // Kogu plokk keskele — nii ei jookse alumine silt jalusejoonest läbi.
-    const cy = z.y + Math.max(r, (z.h - (r * 2 + gap + textH)) / 2 + r);
+    const cy = z.y + Math.max(r, (z.h - (r * 2 + gapBelow + textH)) / 2 + r);
+    // Alamsildid ühele joonele: kui üks silt murdub kahele reale, ei tohi selle
+    // veeru alamsilt teistest allapoole vajuda.
+    const maxLabelLines = Math.max(...laid.map((l) => l.label.length));
     return steps
       .map((_s, i) => {
         const cx = cxOf(i);
         const l = laid[i];
         const arr = i < count - 1 ? arrow(cx + r + 16, cy, step - r * 2 - 32, "right") : "";
-        const labelTop = cy + r + gap;
+        const labelTop = cy + r + gapBelow;
         return (
           `<circle cx="${n(cx)}" cy="${n(cy)}" r="${r}" fill="${C.green}"/>` +
           text(cx, cy + r * 0.36, String(i + 1), { size: r * 1.06, weight: 800, fill: C.white, anchor: "middle" }) +
           arr +
-          block(cx, labelTop, l.label, { size: t.body, weight: 700, fill: C.ink, anchor: "middle" }).svg +
-          block(cx, labelTop + l.label.length * t.body * 1.32 + 8, l.sub, { size: t.sub, fill: C.muted, anchor: "middle" }).svg
+          block(cx, labelTop, l.label, { size: bodySize, weight: 700, fill: C.ink, anchor: "middle" }).svg +
+          block(cx, labelTop + maxLabelLines * bodySize * 1.32 + 8, l.sub, { size: subSize, fill: C.muted, anchor: "middle" }).svg
         );
       })
       .join("");
@@ -460,7 +471,11 @@ function renderNested(b: Extract<Body, { kind: "nested" }>, z: Zone, t: Scale, m
   const subLines = b.outer.sub ? wrap(b.outer.sub, z.w - pad * 2, t.sub) : [];
   // Päis + pesastatud kast + võrdne polster igas suunas.
   const headH = labelSize * 1.2 + (subLines.length ? 10 + subLines.length * t.sub * 1.3 : 0);
-  const innerH = Math.max(wide ? 104 : 96, Math.min(wide ? 118 : 110, z.h - pad * 2 - headH - 18));
+  // Sisemine kast peab mahtuma sellesse, mis päisest üle jääb. Varem oli siin
+  // kindel alammõõt, mis pikema pealkirja või deck'i korral surus kasti raamist
+  // välja ja jalusejoonest läbi.
+  const innerAvail = z.h - pad * 2 - headH - 18;
+  const innerH = Math.max(56, Math.min(wide ? 118 : 110, innerAvail));
   const h = Math.min(z.h, pad * 2 + headH + 18 + innerH);
   const y = z.y + (z.h - h) / 2;
   const innerY = y + pad + headH + 18;
