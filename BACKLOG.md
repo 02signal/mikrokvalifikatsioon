@@ -1,5 +1,33 @@
 # Mikrokvalifikatsioon.ee Backlog
 
+## Resume point — 2026-07-29 (current)
+
+**Lead capture is LIVE and works for real people.** The koolitaja `SubscribeForm` (PR #98, refined by
+#99/#100) posts pattern-B to Listmonk **list 13** `d1615885-494d-42b7-b2e1-c51ec2530893` (public,
+double opt-in) + newsletter `71669060-5e8e-4473-a2d5-0e0c92806077`. Verified end-to-end (POST → HTTP
+200 → "Confirm subscription" mail accepted by Resend). **Listmonk SMTP had regressed (535) and was
+re-fixed** with a fresh ettevotluskeskus Resend sending key — this also unblocked all EVK Listmonk
+email (newsletter, konto magic-link).
+
+**Follow-ups discovered this session:**
+- **Welcome-email on confirm (owner wants "enter → confirm → GET the checklist"):** today confirm only
+  adds the person to the list; nothing is auto-delivered. There is no welcome campaign on list 13, and
+  the opt-in mail uses Listmonk's GLOBAL default template (per-brand content there is not clean). PLAN:
+  a separate welcome email to newly-confirmed list-13 subscribers, deliverable = links to the existing
+  public guide pages (/koolitajale/hinnastamine, /turule-toomine, /eneseanalyys, /kvaliteedihindamine);
+  PDF optional later. Mechanism = a small list-13 trigger (AMOS n8n-ops or host poller) sending a new tx
+  template. AWAITING owner pick (links vs PDF). Note: those checklists are already public pages.
+- **Twenty provider layer** + **info@evk per-lead signal** — still pending (AMOS-side; owner gate off).
+  Listmonk already fires a built-in admin notification on subscribe, which could feed info@evk with a
+  recipient config — but that is global/noisy, so a per-list signal via the AMOS producer is cleaner.
+- **OG/GEO gaps:** the 8 new koolitaja/HAKA answers in `src/data/questions/index.ts` have NO `figure:`,
+  and the 5 koolitaja pages (hinnastamine, turule-toomine, eneseanalyys, kvaliteedihindamine,
+  kuidas-ehitada) have NO `ogImage`. The `astro-og-canvas` + `scripts/rasterize-diagrams.mjs` pipeline
+  already exists — just add self-contained SVG diagrams + wire `figure:`/`ogImage` (auto → 1200×630
+  og.png). Cross-repo visual plan with sample cards (CC "two trees", mkval "HAKA hindab asutust", mkval
+  "payback"): artifact `https://claude.ai/code/artifact/048e1849-edb9-4047-b395-26c82b153d82`. Priority
+  P2 here (the CC og:image foundation is P1, tracked in the credential-commons repo).
+
 ## Next steps (resume point — 2026-06-29)
 
 The konto unified-account + brand + email are all LIVE end-to-end (see the 2026-06-29 entry under
