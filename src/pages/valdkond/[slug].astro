@@ -133,8 +133,8 @@ wantedSchema.push({
   contentUrl: `${SITE}${figBase}.png`,
   caption: `${fieldCap}: ${entries.length} mikrokraadi ja mikrokvalifikatsiooni ${providersInField.length} koolist${ectsRangeText ? `, maht ${ectsRangeText}` : ""}${priceRangeText ? `, hind ${priceRangeText}` : ""}.`,
   description: `${fieldCap} valdkonna profiil: programmide arv, EAP-maht ja hinnavahemik registri andmetel.`,
-  width: 1280,
-  height: 720,
+  width: 1920,
+  height: 1008,
   encodingFormat: "image/png",
   inLanguage: "et",
   isPartOf: { "@id": `${SITE}${canonicalPath}#webpage` },
@@ -181,8 +181,9 @@ const schema = { "@context": "https://schema.org", "@graph": wantedSchema };
         <div class="section-inner">
           <figure style="margin:0 auto 22px;max-width:520px;">
             <picture>
-              <source srcset={`${figBase}.svg`} type="image/svg+xml" />
-              <img src={`${figBase}.png`} alt={`Joonis: ${fieldCap} valdkonna profiil — ${entries.length} programmi ${providersInField.length} koolist${ectsRangeText ? `, maht ${ectsRangeText}` : ""}${priceRangeText ? `, hind ${priceRangeText}` : ""}.`} width="640" height="360" loading="lazy" decoding="async" style="display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:12px;" />
+              <source media="(max-width: 640px)" srcset={`/diagrams/stacked/valdkond/${fieldSlug}.svg`} type="image/svg+xml" width={400} height={640} />
+              <source srcset={`${figBase}.svg`} type="image/svg+xml" width={960} height={504} />
+              <img src={`${figBase}.png`} alt={`Joonis: ${fieldCap} valdkonna profiil — ${entries.length} programmi ${providersInField.length} koolist${ectsRangeText ? `, maht ${ectsRangeText}` : ""}${priceRangeText ? `, hind ${priceRangeText}` : ""}.`} width="960" height="504" loading="lazy" decoding="async" style="display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:12px;" />
             </picture>
           </figure>
           <div class="compare-wrap">

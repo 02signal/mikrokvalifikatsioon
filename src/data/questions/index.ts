@@ -187,8 +187,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/hind.svg",
       alt: "Joonis: mikrokraadi hinnavahemik — tüüpiline vahemik (25.–75. protsentiil), mediaan ja avaldatud hindade äärmused registri andmetest.",
       caption: "Tüüpiline hind on keskmine pool kõigist hindadest (25.–75. protsentiil); punkt on mediaan. Sõltub mahust (EAP) ja koolist.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/hind.svg"
     },
     shortAnswer:
       `Mikrokraad maksab Eestis enamasti ${priceTypicalText} (tüüpiline vahemik, mediaan ${priceMedian != null ? fmtEur(priceMedian) : "~1 440 €"}). ` +
@@ -212,8 +213,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/eap-jaotus.svg",
       alt: "Joonis: mitu mikrokraadi jääb igasse EAP-vahemikku (6–11, 12–18, 19–24, 25–33 EAP); kõige sagedasem maht on esile tõstetud.",
       caption: "Mikrokraadi maht EAP-vahemike kaupa; esile tõstetud on kõige sagedasem vahemik. 1 EAP ≈ 26 tundi.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/eap-jaotus.svg"
     },
     shortAnswer:
       `Mikrokraadil on Eestis tavaliselt ${ectsRangeText}, mediaan ${ectsMedian} EAP. ` +
@@ -422,8 +424,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/oppevorm.svg",
       alt: "Joonis: mitu mikrokvalifikatsiooni saab läbida veebis, hübriidis või kohapeal — paljud on veebi- või hübriidõppes ja sobivad töö kõrvale.",
       caption: "Mitu programmi igas õppevormis. Veebis või hübriidis saab õppida töö kõrvalt.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/oppevorm.svg"
     },
     shortAnswer:
       `Jah — paljud mikrokvalifikatsioonid on disainitud töötavale inimesele ja neid saab läbida veebis või hübriidõppes. ` +
@@ -465,8 +468,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/ehis-tunnustatud.svg",
       alt: "Joonis: mikrokvalifikatsioonid on EHIS-es (Eesti Hariduse Infosüsteem) registreeritud õppekavad — riiklik register; näidatud registreeritud õppekavade ja pakkujate arv.",
       caption: "Mikrokvalifikatsioonid on EHIS-es registreeritud õppekavad (riiklik register). Tunnistus tõendab kinnitatud õppekava läbimist.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/ehis-tunnustatud.svg"
     },
     shortAnswer:
       `Jah — mikrokvalifikatsioonid on Eesti Hariduse Infosüsteemis (EHIS) registreeritud õppekavad ja seega ametlikult tunnustatud õpe. ` +
@@ -534,8 +538,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/valdkonnad.svg",
       alt: "Joonis: populaarseimad mikrokvalifikatsiooni valdkonnad programmide arvu järgi (top 5), suurim esile tõstetud.",
       caption: "Enim pakutavad valdkonnad programmide arvu järgi. Iga valdkonda saab vaadata eraldi valdkonnalehel.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/valdkonnad.svg"
     },
     shortAnswer:
       `Registri ${programmeCount} programmi jagunevad ${fieldCountExclMuu} valdkonna vahel ja enim pakutavad on ${etList(topFields.map((f) => `${f.field} (${f.count} programmi)`))}. ` +

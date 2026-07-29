@@ -3,6 +3,10 @@
 // ja rasterdab need PNG-ks kausta tmp/diagrams/, et kujundust saaks päris pildina
 // üle vaadata ilma tervet saiti ehitamata.
 //
+// Katab nii käsitsi kirjeldatud joonised (src/data/diagrams.ts) kui andmepõhised
+// (src/data/diagrams-data.ts: hind, eap-jaotus, valdkonnad, oppevorm,
+// ehis-tunnustatud + üks valdkond/<slug> näidis päris kataloogist).
+//
 //   node scripts/preview-diagrams.mjs           # kõik
 //   node scripts/preview-diagrams.mjs eap-26-tundi
 //
@@ -16,6 +20,7 @@ import { pathToFileURL } from "node:url";
 
 const OUT = "tmp/diagrams";
 const BUNDLE = "tmp/.diagram-bundle.mjs";
+const DATA_BUNDLE = "tmp/.diagram-data-bundle.mjs";
 mkdirSync(OUT, { recursive: true });
 
 await build({
@@ -27,6 +32,14 @@ await build({
   logLevel: "silent",
 });
 await build({
+  entryPoints: ["src/data/diagrams-data.ts"],
+  bundle: true,
+  format: "esm",
+  platform: "node",
+  outfile: DATA_BUNDLE,
+  logLevel: "silent",
+});
+await build({
   entryPoints: ["src/lib/diagram.ts"],
   bundle: true,
   format: "esm",
@@ -34,14 +47,37 @@ await build({
   outfile: "tmp/.diagram-lib.mjs",
   logLevel: "silent",
 });
+await build({
+  entryPoints: ["src/data/catalog/index.ts"],
+  bundle: true,
+  format: "esm",
+  platform: "node",
+  outfile: "tmp/.catalog-bundle.mjs",
+  logLevel: "silent",
+});
 
 const { diagrams } = await import(`${pathToFileURL(path.resolve(BUNDLE)).href}?t=${process.hrtime.bigint()}`);
+const { dataDiagrams, fieldDiagram } = await import(
+  `${pathToFileURL(path.resolve(DATA_BUNDLE)).href}?t=${process.hrtime.bigint()}`
+);
 const { renderWide, renderStacked } = await import(
   `${pathToFileURL(path.resolve("tmp/.diagram-lib.mjs")).href}?t=${process.hrtime.bigint()}`
 );
+const { fieldsWithSlug } = await import(
+  `${pathToFileURL(path.resolve("tmp/.catalog-bundle.mjs")).href}?t=${process.hrtime.bigint()}`
+);
+
+// Üks päris valdkond näidiseks (esimene tähestikulises fieldsWithSlug loendis) —
+// piisab kujunduse kontrolliks ilma kõiki ~9 valdkonda renderdamata.
+const sampleField = fieldsWithSlug[0];
+const fieldSample = sampleField
+  ? { ...fieldDiagram(sampleField.field), id: `valdkond-${sampleField.slug}` }
+  : null;
+
+const allDiagrams = [...diagrams, ...dataDiagrams(), ...(fieldSample ? [fieldSample] : [])];
 
 const only = process.argv.slice(2);
-const list = only.length ? diagrams.filter((d) => only.includes(d.id)) : diagrams;
+const list = only.length ? allDiagrams.filter((d) => only.includes(d.id)) : allDiagrams;
 
 for (const d of list) {
   for (const [suffix, svg] of [
@@ -61,5 +97,7 @@ for (const d of list) {
 }
 
 rmSync(BUNDLE, { force: true });
+rmSync(DATA_BUNDLE, { force: true });
 rmSync("tmp/.diagram-lib.mjs", { force: true });
+rmSync("tmp/.catalog-bundle.mjs", { force: true });
 process.stdout.write(`\n${list.length} joonis(t) → ${OUT}/\n`);
