@@ -139,6 +139,7 @@ const schema = {
       ogType="article"
       ogTitle="Kvaliteedihindamine: 8 valdkonda ja kuidas valmistuda"
       ogDescription="Mida hindaja vaatab, tüüpvead ja praktiline ettevalmistus — mikrokvalifikatsiooni koolitajale."
+      ogImage="/diagrams/kvaliteedihindamine-kuldne-reegel.og.png"
       jsonLd={schema}
     />
   </head>
@@ -193,6 +194,14 @@ const schema = {
             seda praktikas <em>täitmata</em>. Sihi seda, et iga kriteerium oleks selgelt „vastab“ —
             mitte „peaaegu“.
           </p>
+          <figure class="koolitaja-figure">
+            <picture>
+              <source media="(max-width: 640px)" srcset="/diagrams/stacked/kvaliteedihindamine-kuldne-reegel.svg" type="image/svg+xml" width={400} height={640} />
+              <source srcset="/diagrams/kvaliteedihindamine-kuldne-reegel.svg" type="image/svg+xml" width={960} height={504} />
+              <img src="/diagrams/kvaliteedihindamine-kuldne-reegel.png" alt="Joonis: HAKA 3-astmelisel skaalal loetakse „vastab osaliselt“ praktikas „ei vasta“ — sihi iga kriteeriumi puhul selget vastab." width={960} height={504} loading="lazy" decoding="async" />
+            </picture>
+            <figcaption>„Vastab osaliselt“ loetakse hindamisel praktikas täitmata — sihi selget „vastab“.</figcaption>
+          </figure>
         </div>
       </section>
 
@@ -324,6 +333,10 @@ const schema = {
         border: 1px solid #d9e3ea; border-left: 4px solid #54c247; border-radius: 10px;
       }
       .warn-list li::marker { color: #b4540a; }
+      .koolitaja-figure { margin: 20px 0 0; }
+      .koolitaja-figure img { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+      @media (max-width: 640px) { .koolitaja-figure img { max-width: 420px; margin: 0 auto; } }
+      .koolitaja-figure figcaption { margin-top: 8px; font-size: 0.9rem; color: #5a6b80; line-height: 1.45; }
     </style>
   </body>
 </html>

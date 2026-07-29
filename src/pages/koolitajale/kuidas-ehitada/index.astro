@@ -162,6 +162,7 @@ const schema = {
       ogType="article"
       ogTitle="Kuidas ehitada HAKA-le vastavat mikrokvalifikatsiooni"
       ogDescription="8 valdkonda lihtsas keeles ja kust andmestandard aitab, kust mitte."
+      ogImage="/diagrams/kuidas-ehitada-kaks-kaheksast.og.png"
       jsonLd={schema}
     />
   </head>
@@ -269,6 +270,14 @@ const schema = {
             nimi, eesmärk, sisu ja õpiväljundid räägivad sama lugu) ja <strong>6.5 Hindamine ja
             lõpudokumendid</strong> (kas igal õpiväljundil on selge hindamiskriteerium ja -meetod).
           </p>
+          <figure class="koolitaja-figure">
+            <picture>
+              <source media="(max-width: 640px)" srcset="/diagrams/stacked/kuidas-ehitada-kaks-kaheksast.svg" type="image/svg+xml" width={400} height={640} />
+              <source srcset="/diagrams/kuidas-ehitada-kaks-kaheksast.svg" type="image/svg+xml" width={960} height={504} />
+              <img src="/diagrams/kuidas-ehitada-kaks-kaheksast.png" alt="Joonis: kaheksast HAKA hindamisvaldkonnast on kaks (6.2 Õppekava ja 6.5 Hindamine) andmevaldkonnad, kus avatud andmestandard aitab; ülejäänud kuut tõendab asutus ise." width={960} height={504} loading="lazy" decoding="async" />
+            </picture>
+            <figcaption>6.2 ja 6.5 on andmevaldkonnad, kus andmestandard aitab; ülejäänud kuus on asutuse enda tõendada.</figcaption>
+          </figure>
           <p>
             Täpselt need kaks valdkonda on koht, kus masinloetav avatud standard
             <a href="https://credentialcommons.org" rel="noopener">Credential&nbsp;Commons</a>
@@ -418,6 +427,10 @@ const schema = {
       }
       .steps-list { margin: 8px 0 4px; padding-left: 22px; }
       .steps-list li { margin: 10px 0; }
+      .koolitaja-figure { margin: 20px 0 0; }
+      .koolitaja-figure img { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+      @media (max-width: 640px) { .koolitaja-figure img { max-width: 420px; margin: 0 auto; } }
+      .koolitaja-figure figcaption { margin-top: 8px; font-size: 0.9rem; color: #5a6b80; line-height: 1.45; }
     </style>
   </body>
 </html>
