@@ -3,9 +3,10 @@
 // lugeja on sageli 60+. Sama sõnum, teine paigutus.
 import { diagrams } from "../../../data/diagrams";
 import { dataDiagrams } from "../../../data/diagrams-data";
+import { koolitajaDiagrams } from "../../../data/diagrams-koolitaja";
 import { renderStacked, svgResponse, type Diagram } from "../../../lib/diagram";
 
-const allDiagrams: Diagram[] = [...diagrams, ...dataDiagrams()];
+const allDiagrams: Diagram[] = [...diagrams, ...dataDiagrams(), ...koolitajaDiagrams];
 
 export function getStaticPaths() {
   return allDiagrams.map((d) => ({ params: { id: d.id }, props: { d } }));

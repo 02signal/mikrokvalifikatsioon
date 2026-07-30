@@ -3,9 +3,10 @@
 // Kirjeldus tuleb src/data/diagrams.ts-ist, kujundus src/lib/diagram.ts-ist.
 import { diagrams } from "../../data/diagrams";
 import { dataDiagrams } from "../../data/diagrams-data";
+import { koolitajaDiagrams } from "../../data/diagrams-koolitaja";
 import { renderWide, svgResponse, type Diagram } from "../../lib/diagram";
 
-const allDiagrams: Diagram[] = [...diagrams, ...dataDiagrams()];
+const allDiagrams: Diagram[] = [...diagrams, ...dataDiagrams(), ...koolitajaDiagrams];
 
 export function getStaticPaths() {
   return allDiagrams.map((d) => ({ params: { id: d.id }, props: { d } }));
