@@ -225,6 +225,13 @@ export type Diagram = {
 /* ── Kere renderdajad ─────────────────────────────────────────────────────── */
 
 type Zone = { x: number; y: number; w: number; h: number };
+
+/** Ülemine serv nii, et `count` rida kõrgusega `h` istuks kere alas KESKEL.
+ *  Püstisel lõuendil (400×640) on kere ala lühema sisu jaoks liiga kõrge — üleval
+ *  joondatud read jätsid kuni kolmandiku pinnast tühjaks jalusejoone kohale. */
+function stackTop(z: Zone, count: number, h: number, gap: number): number {
+  return z.y + Math.max(0, (z.h - (h * count + gap * (count - 1))) / 2);
+}
 type Scale = { kicker: number; headline: number; deck: number; label: number; sub: number; body: number; takeaway: number; foot: number };
 
 /** Silt + alamsilt kasti keskel. */
@@ -271,7 +278,9 @@ function renderEquation(b: Extract<Body, { kind: "equation" }>, z: Zone, t: Scal
 
 function renderFlow(b: Extract<Body, { kind: "flow" }>, z: Zone, t: Scale, mode: Mode): string {
   if (mode === "wide") {
-    const midW = 168;
+    // Keskmine vahe peab mahutama sildi ("EAP-d kanduvad edasi" on 191 px, kindel
+    // 168 px jättis 23 px mõlemasse kasti sisse jooksma). Vahe kasvab sildi järgi.
+    const midW = Math.max(168, b.via ? textWidth(b.via, t.sub, true) + 28 : 0);
     const w = (z.w - midW) / 2;
     const h = Math.min(z.h, 148);
     const y = z.y + (z.h - h) / 2;
@@ -389,10 +398,11 @@ function renderCards(b: Extract<Body, { kind: "cards" }>, z: Zone, t: Scale, mod
       .join("");
   }
   const gap = 14;
-  const h = Math.min(96, (z.h - gap * (cards.length - 1)) / cards.length);
+  const h = Math.min(112, (z.h - gap * (cards.length - 1)) / cards.length);
+  const top0 = stackTop(z, cards.length, h, gap);
   return cards
     .map((c, i) => {
-      const y = z.y + (h + gap) * i;
+      const y = top0 + (h + gap) * i;
       const on = c.emphasis === true;
       return (
         box(z.x, y, z.w, h, { fill: on ? C.green : C.ice, stroke: on ? undefined : C.iceLine, r: R.lg }) +
@@ -479,7 +489,13 @@ function renderNested(b: Extract<Body, { kind: "nested" }>, z: Zone, t: Scale, m
   const h = Math.min(z.h, pad * 2 + headH + 18 + innerH);
   const y = z.y + (z.h - h) / 2;
   const innerY = y + pad + headH + 18;
-  const innerW = wide ? (z.w - pad * 2) * 0.58 : z.w - pad * 2;
+  // Pesastatud kast peab jääma nähtavalt VÄIKSEMAKS kui ümbritsev — see ongi
+  // sisaldumise mõte. Aga kindel 58% jättis ilma deck'i-reata joonisel paremale
+  // suure tühja ala ja kast luges poolikuna. Nüüd kasvab kast oma sisu järgi.
+  const avail = z.w - pad * 2;
+  const innerNeed =
+    Math.max(textWidth(b.inner.label, t.label, true), b.inner.sub ? textWidth(b.inner.sub, t.sub) : 0) + 64;
+  const innerW = wide ? Math.min(avail * 0.8, Math.max(avail * 0.52, innerNeed)) : avail;
   return (
     box(z.x, y, z.w, h, { fill: C.paper, stroke: C.line, r: R.lg }) +
     text(z.x + pad, y + pad + labelSize, b.outer.label, { size: labelSize, weight: 800, fill: C.ink2, tracking: 1.2 }) +
@@ -492,15 +508,24 @@ function renderNested(b: Extract<Body, { kind: "nested" }>, z: Zone, t: Scale, m
 function renderRange(b: Extract<Body, { kind: "range" }>, z: Zone, t: Scale, mode: Mode): string {
   const span = Math.max(1, b.max - b.min);
   const pos = (v: number): number => z.x + ((Math.min(b.max, Math.max(b.min, v)) - b.min) / span) * z.w;
-  const y = z.y + (mode === "wide" ? 74 : 96);
-  const sw = mode === "wide" ? 18 : 13;
+  // Püstisel lõuendil on riba jämedam ja sildid suuremad — õhuke horisontaalriba
+  // portree-kaadris luges poolikuna, ka keskele joondatult.
+  const sw = mode === "wide" ? 18 : 24;
+  const edge = mode === "wide" ? t.sub : t.body;
+  // Ribal on sisu nii peal (vahemiku silt) kui all (otspunktid + mediaan). Varem
+  // oli riba y kindel arv ja mediaani silt jooksis laial kujul jalusejoonest läbi.
+  // Nüüd mõõdame ploki ära ja hoiame ta kere alas.
+  const above = sw + 12 + t.sub;
+  const below = sw + edge * 1.5 + t.body * 1.9;
+  const centred = z.y + above + Math.max(0, (z.h - (above + below)) / 2);
+  const y = Math.min(centred, z.y + z.h - below - 2);
   const a = pos(b.band[0]);
   const c = pos(b.band[1]);
   let out =
     `<line x1="${n(z.x)}" y1="${n(y)}" x2="${n(z.x + z.w)}" y2="${n(y)}" stroke="${C.line}" stroke-width="${sw}" stroke-linecap="round"/>` +
     `<line x1="${n(a)}" y1="${n(y)}" x2="${n(c)}" y2="${n(y)}" stroke="${C.green}" stroke-width="${sw}" stroke-linecap="round"/>` +
-    text(z.x, y + sw + t.sub * 1.5, b.minLabel, { size: t.sub, fill: C.faint }) +
-    text(z.x + z.w, y + sw + t.sub * 1.5, b.maxLabel, { size: t.sub, fill: C.faint, anchor: "end" });
+    text(z.x, y + sw + edge * 1.5, b.minLabel, { size: edge, fill: C.faint }) +
+    text(z.x + z.w, y + sw + edge * 1.5, b.maxLabel, { size: edge, fill: C.faint, anchor: "end" });
   if (b.bandLabel) {
     const mid = Math.min(z.x + z.w - textWidth(b.bandLabel, t.sub, true) / 2, Math.max(z.x + textWidth(b.bandLabel, t.sub, true) / 2, (a + c) / 2));
     out += text(mid, y - sw - 10, b.bandLabel, { size: t.sub, weight: 700, fill: C.greenDeep, anchor: "middle" });
@@ -510,22 +535,23 @@ function renderRange(b: Extract<Body, { kind: "range" }>, z: Zone, t: Scale, mod
     const lx = Math.min(z.x + z.w - textWidth(b.marker.label, t.body, true) / 2, Math.max(z.x + textWidth(b.marker.label, t.body, true) / 2, mx));
     out +=
       `<circle cx="${n(mx)}" cy="${n(y)}" r="${n(sw * 0.66)}" fill="${C.white}" stroke="${C.ink}" stroke-width="4"/>` +
-      text(lx, y + sw + t.body * 3, b.marker.label, { size: t.body, weight: 800, fill: C.ink, anchor: "middle" });
+      text(lx, y + sw + edge * 1.5 + t.body * 1.7, b.marker.label, { size: t.body, weight: 800, fill: C.ink, anchor: "middle" });
   }
   return out;
 }
 
 function renderBars(b: Extract<Body, { kind: "bars" }>, z: Zone, t: Scale, mode: Mode): string {
   const bars = b.bars;
-  const gap = mode === "wide" ? 14 : 10;
-  const h = Math.min(mode === "wide" ? 48 : 34, (z.h - gap * (bars.length - 1)) / bars.length);
+  const gap = mode === "wide" ? 14 : 12;
+  const h = Math.min(mode === "wide" ? 48 : 46, (z.h - gap * (bars.length - 1)) / bars.length);
   const labelW = mode === "wide" ? Math.min(300, z.w * 0.34) : z.w * 0.42;
   const trackX = z.x + labelW + 16;
   const trackW = z.w - labelW - 16;
   const max = Math.max(...bars.map((x) => x.value), 0.0001);
+  const top0 = stackTop(z, bars.length, h, gap);
   return bars
     .map((bar, i) => {
-      const y = z.y + (h + gap) * i;
+      const y = top0 + (h + gap) * i;
       const w = Math.max(6, (bar.value / max) * (trackW - 74));
       const on = bar.emphasis !== false;
       const size = fitSize(bar.label, labelW, t.body, t.sub * 0.9, false);
