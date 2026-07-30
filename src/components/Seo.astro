@@ -1,5 +1,6 @@
 ---
 import Analytics from "./Analytics.astro";
+import { ogPages } from "../data/ogPages";
 
 // Üks koht kogu <head> SEO/GEO märgenditele, et lehed püsiks järjepidevad.
 // Lõpetab <Analytics />-iga (nõusolek + jälgimine + küpsiseriba).
@@ -41,9 +42,14 @@ const xDefault = langAlternates?.find((a) => a.lang === "et")?.path ?? canonical
 
 const canonical = new URL(canonicalPath, SITE).href;
 // Per-lehe OG: tuletame võtme canonical-tee viimasest segmendist (sama loogika
-// kui /og/[route].png.ts pages-võtmed). Leht võib ogImage'i ka käsitsi üle kirjutada.
+// kui og/[route].ts pages-võtmed, mõlemad loevad neid ühisest src/data/ogPages.ts
+// registrist). Leht võib ogImage'i ka käsitsi üle kirjutada.
 const ogKey = canonicalPath.replace(/^\/+|\/+$/g, "").split("/").pop() || "home";
-const resolvedOgImage = ogImage ?? `/og/${ogKey}.png`;
+// Kaart genereeritakse AINULT registreeritud võtmetele — vt ogPages.ts. Kui
+// leht ei ole registris (nt uus lehetüüp, mida keegi unustas lisada), langeme
+// turvaliselt tagasi saidi vaikekaardile, selle asemel et viidata 404-le.
+const hasOgCard = ogKey in ogPages;
+const resolvedOgImage = ogImage ?? (hasOgCard ? `/og/${ogKey}.png` : "/og-default.png");
 const image = new URL(resolvedOgImage, SITE).href;
 const ogT = ogTitle ?? title;
 const ogD = ogDescription ?? description;
