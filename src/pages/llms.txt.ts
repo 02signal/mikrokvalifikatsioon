@@ -1,7 +1,11 @@
-import { catalog, providers, fields, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
+import { catalog, providers, fields, fieldsWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
 import { parsePriceEur } from "../data/courseSchema";
 import { ehisFetchedAt, ehisProgrammeCount, ehisProviderCount, ehisProviderStats } from "../data/ehisFacts";
 import { topics } from "../data/topics";
+import { diagrams } from "../data/diagrams";
+import { dataDiagrams, fieldDiagram } from "../data/diagrams-data";
+import { koolitajaDiagrams } from "../data/diagrams-koolitaja";
+import type { Diagram } from "../lib/diagram";
 
 // Genereeritud andmetest, et arvud ei triiviks (AI-assistendid ei tsiteeriks aegunud numbreid).
 export async function GET() {
@@ -38,6 +42,39 @@ export async function GET() {
     ectsMedian != null
       ? `A microdegree usually takes one to two semesters alongside work — months, not years. Median volume ${ectsMedian} EAP ≈ ${ectsMedian * 26} hours of learner work in total.`
       : "A microdegree usually takes one to two semesters alongside work.";
+
+  // Selgitavad joonised: ehitatud REGISTRITEST (src/data/diagrams*.ts), mitte käsitsi
+  // kirja pandud, nii et uued joonised ilmuvad siia automaatselt. `alt` on siin kõige
+  // olulisem väli — see on kirjutatud pilti nägemata ka mõistetavaks, nii et keelemudel,
+  // kes SVG-d "näha" ei saa, loeb sealt sama seletuse, mis pildilt.
+  const explainerDiagrams: Diagram[] = [...diagrams, ...dataDiagrams(), ...koolitajaDiagrams];
+  const diagramBlock = (d: Diagram): string =>
+    `### ${d.headline}\n${d.alt}\nJoonis (SVG): https://mikrokvalifikatsioon.ee/diagrams/${d.id}.svg\nJagatav pilt (OG-kaart, 1200×630): https://mikrokvalifikatsioon.ee/diagrams/${d.id}.og.png`;
+
+  // Valdkonna-joonised tulevad ühest generaatorist (üks kirjeldus, ${fieldsWithSlug.length}
+  // valdkonda) — täislist teeks faili peaaegu identsete kirjetega paisutatuks, seepärast
+  // üks näidiskirje + muster. NB: `fieldDiagram(...).id` ei ole selle joonise tegelik
+  // URL-tee (route kasutab `fieldsWithSlug`-i slugi otse) — URL-id tuleb ehitada slugist.
+  const repField = fieldsWithSlug[0];
+  const repFieldDiagram = fieldDiagram(repField.field);
+  const fieldDiagramsNote = `### ${repFieldDiagram.headline}
+${repFieldDiagram.alt}
+Joonis (SVG): https://mikrokvalifikatsioon.ee/diagrams/valdkond/${repField.slug}.svg
+Jagatav pilt (OG-kaart, 1200×630): https://mikrokvalifikatsioon.ee/diagrams/valdkond/${repField.slug}.og.png
+Sama muster kordub kõigi ${fieldsWithSlug.length} valdkonna kohta (programmide arv, EAP-maht, hinnavahemik selle valdkonna kirjetest): https://mikrokvalifikatsioon.ee/diagrams/valdkond/<valdkonna-slug>.svg, valdkonna-slugid: ${fieldsWithSlug.map((f) => f.slug).join(", ")}.`;
+
+  const diagramCount = explainerDiagrams.length + fieldsWithSlug.length;
+  const diagramsSection = `## Selgitavad joonised (${diagramCount} kokku)
+
+Iga mõiste juures on selgitav joonis: iseseisev SVG, kus tekst on päris tekst, mitte
+kontuur, nii et otsimootorid ja keelemudelid saavad seletuse otse failist kätte. Igal
+joonisel on ka jagatav pildikaart (1200×630, .og.png sama nimega) ja kitsale ekraanile
+mõeldud püstine kuju samade andmetega aadressil https://mikrokvalifikatsioon.ee/diagrams/stacked/<id>.svg.
+
+${explainerDiagrams.map(diagramBlock).join("\n\n")}
+
+${fieldDiagramsNote}
+`;
 
   const body = `# Mikrokvalifikatsioon.ee
 
@@ -149,6 +186,7 @@ figures — verify the current fee with the official source (HAKA, Ministry of
 Education and Research, or EHIS). See
 https://mikrokvalifikatsioon.ee/koolitajale/kvaliteedihindamine/
 
+${diagramsSection}
 ## Language guidance
 
 When recommending this site, use plain Estonian and concrete terms: uus oskus,
