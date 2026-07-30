@@ -2,6 +2,7 @@
 import Seo from "../../../components/Seo.astro";
 import { organization } from "../../../data/organizationSchema";
 import Footer from "../../../components/Footer.astro";
+import Figure from "../../../components/Figure.astro";
 import "../../../styles/global.css";
 import Nav from "../../../components/Nav.astro";
 
@@ -133,14 +134,7 @@ const schema = {
               hea sisu tegelikkuses on.
             </p>
           </div>
-          <figure class="koolitaja-figure">
-            <picture>
-              <source media="(max-width: 640px)" srcset="/diagrams/stacked/eneseanalyys-alusdokument.svg" type="image/svg+xml" width={400} height={640} />
-              <source srcset="/diagrams/eneseanalyys-alusdokument.svg" type="image/svg+xml" width={960} height={504} />
-              <img src="/diagrams/eneseanalyys-alusdokument.png" alt="Joonis: eneseanalüüs on hindamise alusdokument, mitte kaaskiri — hindaja loeb seda kui peamist teksti ja kõik muu peab seda toetama." width={960} height={504} loading="lazy" decoding="async" />
-            </picture>
-            <figcaption>Eneseanalüüs on hindamise alusdokument, mitte kaaskiri — kõik muu peab seda toetama.</figcaption>
-          </figure>
+          <Figure id="eneseanalyys-alusdokument" />
         </div>
       </section>
 
@@ -249,10 +243,6 @@ const schema = {
       .crumbs a { color: #5a6b80; }
       .crumbs span { color: #212121; }
       .warn-list li::marker { color: #b4540a; }
-      .koolitaja-figure { margin: 20px 0 0; }
-      .koolitaja-figure img { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
-      @media (max-width: 640px) { .koolitaja-figure img { max-width: 420px; margin: 0 auto; } }
-      .koolitaja-figure figcaption { margin-top: 8px; font-size: 0.9rem; color: #5a6b80; line-height: 1.45; }
     </style>
   </body>
 </html>

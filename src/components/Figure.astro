@@ -1,0 +1,91 @@
+---
+// Korduvkasutatav selgitava joonise kuvamine: <picture> lai (960×504) + kitsale
+// ekraanile eraldi püstine (400×640) kompositsioon + PNG <img> (indekseeritav
+// Google Images'i jaoks) + <figcaption>. Kujundus tuleb src/lib/diagram.ts-ist,
+// see komponent ainult renderdab juba valmis SVG/PNG failid ühtse markup'iga —
+// üks koht, mis parandab kõiki lehti korraga.
+//
+// `id` on ka failitee: /diagrams/<id>.svg, /diagrams/stacked/<id>.svg, /diagrams/<id>.png.
+// Enamiku joonise jaoks piisab ainult id-st — alt/caption loetakse registrist
+// (src/data/diagrams*.ts). Valdkonna profiil-joonised (`/diagrams/valdkond/<slug>.svg`)
+// ei ela püsiregistris (need arvutatakse iga valdkonna kohta build-ajal), nii et
+// nende jaoks antakse alt/caption otse ette — `id` jääb ikka failitee tuletamiseks.
+import { diagrams } from "../data/diagrams";
+import { dataDiagrams } from "../data/diagrams-data";
+import { koolitajaDiagrams } from "../data/diagrams-koolitaja";
+
+export interface Props {
+  /** Diagrami id (registrist) või failitee segment, nt "valdkond/it-ja-andmed". */
+  id: string;
+  /** Kuva kohe, ilma laisa laadimiseta — kasuta ülalt nähtava (above-the-fold) joonise jaoks. */
+  priority?: boolean;
+  /** Ülekirjutab registrist tuletatud alt-teksti. Kohustuslik, kui `id` pole registris. */
+  alt?: string;
+  /** Ülekirjutab registrist tuletatud pildiallkirja. Kohustuslik, kui `id` pole registris. */
+  caption?: string;
+  class?: string;
+}
+
+const registry = new Map([...diagrams, ...dataDiagrams(), ...koolitajaDiagrams].map((d) => [d.id, d]));
+
+const { id, priority = false, alt: altOverride, caption: captionOverride, class: className } = Astro.props;
+const fromRegistry = registry.get(id);
+const alt = altOverride ?? fromRegistry?.alt;
+const caption = captionOverride ?? fromRegistry?.caption;
+
+if (!alt || !caption) {
+  throw new Error(
+    `<Figure id="${id}"> — diagrami ei leitud registrist ja alt/caption pole otse antud. ` +
+      `Kas registreerisid joonise src/data/diagrams*.ts-is, või anna alt+caption otse propina (nt valdkonna joonised).`
+  );
+}
+---
+
+<figure class:list={["diagram-figure", className]}>
+  {/* Kitsal ekraanil püstine variant (lai joonis kahaneks telefonis loetamatuks),
+      siis lai SVG (terav igas suuruses); PNG on indekseeritav <img> Google Images'i jaoks.
+      Iga <source> kannab OMA width/height — muidu sunnib brauser mõlemale sama
+      kuvasuhte ja püstine kuju läheb pigistatuks. */}
+  <picture>
+    <source media="(max-width: 640px)" srcset={`/diagrams/stacked/${id}.svg`} type="image/svg+xml" width={400} height={640} />
+    <source srcset={`/diagrams/${id}.svg`} type="image/svg+xml" width={960} height={504} />
+    <img
+      src={`/diagrams/${id}.png`}
+      alt={alt}
+      width={960}
+      height={504}
+      loading={priority ? "eager" : "lazy"}
+      decoding={priority ? "sync" : "async"}
+    />
+  </picture>
+  <figcaption>{caption}</figcaption>
+</figure>
+
+<style>
+  /* Joonis saab terve lugemisveeru laiuse — diagramm väärib rohkem ruumi kui
+     proosarida, nii et me ei piira teda mõne konkreetse leheveeru laiusega. */
+  .diagram-figure {
+    margin: 0 0 24px;
+  }
+  .diagram-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+  }
+  @media (max-width: 640px) {
+    .diagram-figure img {
+      max-width: 420px;
+      margin: 0 auto;
+    }
+  }
+  .diagram-figure figcaption {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+</style>

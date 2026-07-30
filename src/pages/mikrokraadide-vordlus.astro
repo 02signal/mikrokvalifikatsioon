@@ -3,6 +3,7 @@ import Seo from "../components/Seo.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import Faq from "../components/Faq.astro";
+import Figure from "../components/Figure.astro";
 import "../styles/global.css";
 import { catalog, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
 import { fieldStats, ectsRangeText, priceRangeText } from "../lib/fieldComparison";
@@ -180,6 +181,7 @@ const schema = {
       ogType="article"
       ogTitle="Mikrokraadide võrdlus — ülikoolide mikrokraadid kõrvuti"
       ogDescription="EAP, hind, kestus ja õppevorm ühes tabelis. Kuidas mikrokraade võrrelda ja kuidas valida."
+      ogImage="/diagrams/mikrokraad-vs-mikrokvalifikatsioon.og.png"
       jsonLd={schema}
     />
     <style is:global>
@@ -246,6 +248,7 @@ const schema = {
 
       <section class="white">
         <div class="section-inner narrow">
+          <Figure id="mikrokraad-vs-mikrokvalifikatsioon" priority />
           <div class="section-head compact-head">
             <span class="kicker">Mille järgi võrrelda</span>
             <h2>Kuus asja, mida mikrokraadi juures kõrvutada.</h2>
