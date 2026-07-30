@@ -3,6 +3,7 @@ import Seo from "../../components/Seo.astro";
 import CategoryMark from "../../components/CategoryMark.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
+import Figure from "../../components/Figure.astro";
 import "../../styles/global.css";
 import { catalog, fieldsWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 import { parsePriceEur, toCourse } from "../../data/courseSchema";
@@ -52,7 +53,13 @@ const SITE = "https://mikrokvalifikatsioon.ee";
 const fieldSlug = fieldsWithSlug.find((f) => f.field === field)?.slug ?? "";
 const canonicalPath = `/valdkond/${fieldSlug}/`;
 // Andmepõhine valdkonna profiil-joonis (üks SVG valdkonna kohta): SEO + GEO + OG.
+// <Figure id="valdkond/<slug>"> tuletab sellest samast id-st failitee (nii nagu
+// registris olevad joonised) — aga see joonis pole registris (arvutatakse iga
+// valdkonna kohta build-ajal), nii et alt/caption antakse otse ette.
 const figBase = `/diagrams/valdkond/${fieldSlug}`;
+const figureId = `valdkond/${fieldSlug}`;
+const figureAlt = `Joonis: ${fieldCap} valdkonna profiil — ${entries.length} programmi ${providersInField.length} koolist${ectsRangeText ? `, maht ${ectsRangeText}` : ""}${priceRangeText ? `, hind ${priceRangeText}` : ""}.`;
+const figureCaption = `${fieldCap}: ${entries.length} mikrokraadi ja mikrokvalifikatsiooni ${providersInField.length} koolist${ectsRangeText ? `, maht ${ectsRangeText}` : ""}${priceRangeText ? `, hind ${priceRangeText}` : ""}.`;
 
 // Extractable intent intro (1–2 lauset) — kuvatud lehel JA WebPage.description'is,
 // et AI-assistendid ja otsing saaksid valdkonna kokkuvõtte kohe kätte.
@@ -131,7 +138,7 @@ wantedSchema.push({
   "@id": `${SITE}${canonicalPath}#figure`,
   url: `${SITE}${figBase}.png`,
   contentUrl: `${SITE}${figBase}.png`,
-  caption: `${fieldCap}: ${entries.length} mikrokraadi ja mikrokvalifikatsiooni ${providersInField.length} koolist${ectsRangeText ? `, maht ${ectsRangeText}` : ""}${priceRangeText ? `, hind ${priceRangeText}` : ""}.`,
+  caption: figureCaption,
   description: `${fieldCap} valdkonna profiil: programmide arv, EAP-maht ja hinnavahemik registri andmetel.`,
   width: 1920,
   height: 1008,
@@ -179,13 +186,7 @@ const schema = { "@context": "https://schema.org", "@graph": wantedSchema };
 
       <section class="white">
         <div class="section-inner">
-          <figure style="margin:0 auto 22px;max-width:520px;">
-            <picture>
-              <source media="(max-width: 640px)" srcset={`/diagrams/stacked/valdkond/${fieldSlug}.svg`} type="image/svg+xml" width={400} height={640} />
-              <source srcset={`${figBase}.svg`} type="image/svg+xml" width={960} height={504} />
-              <img src={`${figBase}.png`} alt={`Joonis: ${fieldCap} valdkonna profiil — ${entries.length} programmi ${providersInField.length} koolist${ectsRangeText ? `, maht ${ectsRangeText}` : ""}${priceRangeText ? `, hind ${priceRangeText}` : ""}.`} width="960" height="504" loading="lazy" decoding="async" style="display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:12px;" />
-            </picture>
-          </figure>
+          <Figure id={figureId} alt={figureAlt} caption={figureCaption} />
           <div class="compare-wrap">
             <table class="field-table">
               <thead>

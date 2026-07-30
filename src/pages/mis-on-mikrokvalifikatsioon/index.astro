@@ -2,6 +2,7 @@
 import Seo from "../../components/Seo.astro";
 import { organization } from "../../data/organizationSchema";
 import Footer from "../../components/Footer.astro";
+import Figure from "../../components/Figure.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
 import { catalog, providers } from "../../data/catalog";
@@ -116,13 +117,7 @@ const schema = {
             <span class="kicker">Neli mõistet, üks loogika</span>
             <h2>Mikrokvalifikatsioon, mikrokraad, kutsetunnistus, sertifikaat — mis vahe on?</h2>
           </div>
-          <figure style="margin:0 auto 26px;max-width:560px;">
-            <picture>
-              <source media="(max-width: 640px)" srcset="/diagrams/stacked/mikrokraad-vs-mikrokvalifikatsioon.svg" type="image/svg+xml" width="400" height="640" />
-              <source srcset="/diagrams/mikrokraad-vs-mikrokvalifikatsioon.svg" type="image/svg+xml" width="960" height="504" />
-              <img src="/diagrams/mikrokraad-vs-mikrokvalifikatsioon.png" alt="Joonis: mikrokraad on üks mikrokvalifikatsiooni liik — ülikooli pakutav, annab EAP-d. Iga mikrokraad on mikrokvalifikatsioon, aga mitte vastupidi." width="960" height="504" loading="lazy" decoding="async" style="display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:12px;" />
-            </picture>
-          </figure>
+          <Figure id="mikrokraad-vs-mikrokvalifikatsioon" />
           <div class="measure-list">
             <article class="measure-card">
               <div>

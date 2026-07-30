@@ -2,6 +2,7 @@
 import Seo from "../components/Seo.astro";
 import Footer from "../components/Footer.astro";
 import Faq from "../components/Faq.astro";
+import Figure from "../components/Figure.astro";
 import "../styles/global.css";
 import Nav from "../components/Nav.astro";
 import { catalog, providers, catalogCheckedAt } from "../data/catalog";
@@ -179,6 +180,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
       ogType="article"
       ogTitle="Mikrokvalifikatsioonide võrdlus"
       ogDescription="Kuidas võrrelda mikrokvalifikatsioone: hind, maht, kestus, õppevorm ja kes maksab — reaalsete Eesti näidetega."
+      ogImage="/diagrams/mikrokraad-vs-mikrokvalifikatsioon.og.png"
       jsonLd={schema}
     />
   </head>
@@ -218,6 +220,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
             mikrokvalifikatsioon, aga mitte vastupidi. Pikem selgitus on lehel
             <a href="/mis-on-mikrokvalifikatsioon/">Mis on mikrokvalifikatsioon?</a>
           </p>
+          <Figure id="mikrokraad-vs-mikrokvalifikatsioon" priority />
           <p>
             See leht keskendub eelkõige rakenduskõrgkoolide ja koolitusettevõtete praktilistele
             mikrokvalifikatsioonidele. Ülikoolide mikrokraade saad eraldi võrrelda lehel

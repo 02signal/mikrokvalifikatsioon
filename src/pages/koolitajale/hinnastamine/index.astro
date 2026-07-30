@@ -2,6 +2,7 @@
 import Seo from "../../../components/Seo.astro";
 import { organization } from "../../../data/organizationSchema";
 import Footer from "../../../components/Footer.astro";
+import Figure from "../../../components/Figure.astro";
 import "../../../styles/global.css";
 import Nav from "../../../components/Nav.astro";
 import SubscribeForm from "../../../components/SubscribeForm.astro";
@@ -127,14 +128,7 @@ const schema = {
             katab vooru; iga järgmine õppija on kasum. Pane oma päris numbrid — see on ainus
             arvutus, mis ütleb, kas voor tasub ära.
           </p>
-          <figure class="koolitaja-figure">
-            <picture>
-              <source media="(max-width: 640px)" srcset="/diagrams/stacked/hinnastamine-tasuvuse-naide.svg" type="image/svg+xml" width={400} height={640} />
-              <source srcset="/diagrams/hinnastamine-tasuvuse-naide.svg" type="image/svg+xml" width={960} height={504} />
-              <img src="/diagrams/hinnastamine-tasuvuse-naide.png" alt="Joonis: illustratiivne tasuvuse näide — vooru püsikulu 3000 €, hind 1200 €, muutuvkulu 200 € — kolmas õppija katab vooru, edasi tuleb kasum." width={960} height={504} loading="lazy" decoding="async" />
-            </picture>
-            <figcaption>Näide: vooru püsikulu 3000 €, hind 1200 €, muutuvkulu 200 € — kolmas õppija katab vooru.</figcaption>
-          </figure>
+          <Figure id="hinnastamine-tasuvuse-naide" />
         </div>
       </section>
 
@@ -192,10 +186,6 @@ const schema = {
       .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }
       .crumbs a { color: #5a6b80; }
       .crumbs span { color: #212121; }
-      .koolitaja-figure { margin: 20px 0 0; }
-      .koolitaja-figure img { display: block; width: 100%; height: auto; max-width: 100%; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
-      @media (max-width: 640px) { .koolitaja-figure img { max-width: 420px; margin: 0 auto; } }
-      .koolitaja-figure figcaption { margin-top: 8px; font-size: 0.9rem; color: #5a6b80; line-height: 1.45; }
     </style>
   </body>
 </html>
