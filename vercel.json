@@ -521,6 +521,421 @@
       "permanent": true
     },
     {
+      "source": "/vordlus/ebs-digitaalse-toote-disain-ja-arendus-2-vs-taltech-cyber-threats-ai-and-malware-2/",
+      "destination": "/kataloog/ebs-digitaalse-toote-disain-ja-arendus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-digitaalse-toote-disain-ja-arendus-2-vs-taltech-technology-law/",
+      "destination": "/kataloog/ebs-digitaalse-toote-disain-ja-arendus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-digitaalse-toote-disain-ja-arendus-vs-taltech-technology-law-2/",
+      "destination": "/kataloog/ebs-digitaalse-toote-disain-ja-arendus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-digitaalse-toote-disain-ja-arendus-vs-tartu-ulikool-loovettevotluse-projektijuhtimise-mikrokraadiprogramm/",
+      "destination": "/kataloog/ebs-digitaalse-toote-disain-ja-arendus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-digitaalse-toote-disain-ja-arendus-vs-tartu-ulikool-loovettevotluse-projektijuhtimise-mikrokraadiprogramm-2/",
+      "destination": "/kataloog/ebs-digitaalse-toote-disain-ja-arendus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-digitaalse-toote-disain-ja-arendus-vs-tartu-ulikool-majanduspoliitika-kujundamine-digiajastul/",
+      "destination": "/kataloog/ebs-digitaalse-toote-disain-ja-arendus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-digitaalsete-toodete-protsesside-ja-operatsioonide-juhtimine-vs-taltech-cyber-threats-ai-and-malware/",
+      "destination": "/kataloog/ebs-digitaalsete-toodete-protsesside-ja-operatsioonide-juhtimine/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-digitoodete-eestvedamine-ja-muudatuste-juhtimine-vs-tartu-ulikool-loovettevotluse-projektijuhtimise-mikrokraadiprogramm/",
+      "destination": "/kataloog/ebs-digitoodete-eestvedamine-ja-muudatuste-juhtimine/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-2-vs-taltech-rahatarkus-ja-investeerimine-2/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-2-vs-taltech-strateegiline-juhtimine-ja-poliitikaanaluus-avalikus-2/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-auditeerimise-baasteadmised-2/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-contemporary-topics-in-accounting-and-finance-2/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-hoonete-energiatohususe-modelleerimine-s25/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-personali-varbamine-s25/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-investeeringud-ja-ettevotte-rahandus-2-vs-taltech-business-management-for-a-digital-and-sustainable-2/",
+      "destination": "/kataloog/ebs-investeeringud-ja-ettevotte-rahandus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-investeeringud-ja-ettevotte-rahandus-2-vs-taltech-intellectual-property-law-in-the-eu-digital-single-2/",
+      "destination": "/kataloog/ebs-investeeringud-ja-ettevotte-rahandus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-investeeringud-ja-ettevotte-rahandus-vs-taltech-intellectual-property-law-in-the-eu-digital-single/",
+      "destination": "/kataloog/ebs-investeeringud-ja-ettevotte-rahandus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-investeeringud-ja-ettevotte-rahandus-vs-taltech-intellectual-property-law-in-the-eu-digital-single-2/",
+      "destination": "/kataloog/ebs-investeeringud-ja-ettevotte-rahandus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-investeeringud-ja-ettevotte-rahandus-vs-taltech-toitlustuskorralduse-akadeemia-2/",
+      "destination": "/kataloog/ebs-investeeringud-ja-ettevotte-rahandus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine-vs-tartu-ulikool-loovuse-ja-enesearengu-mikrokraadiprogramm/",
+      "destination": "/kataloog/ebs-jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-juhtimine-ja-turundus-rahvusvahelises-arikeskkonnas-vs-tartu-ulikool-loovettevotluse-projektijuhtimise-mikrokraadiprogramm/",
+      "destination": "/kataloog/ebs-juhtimine-ja-turundus-rahvusvahelises-arikeskkonnas/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-juhtimine-ja-turundus-rahvusvahelises-arikeskkonnas-vs-tartu-ulikool-loovuse-ja-enesearengu-mikrokraadiprogramm/",
+      "destination": "/kataloog/ebs-juhtimine-ja-turundus-rahvusvahelises-arikeskkonnas/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-juhtimise-ja-eestvedamise-abc-2-vs-tallinna-ulikool-heaolu-kujundamine-ja-ennetav-psuhhosotsiaalne-praktika/",
+      "destination": "/kataloog/tallinna-ulikool-heaolu-kujundamine-ja-ennetav-psuhhosotsiaalne-praktika/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-juhtimise-ja-eestvedamise-abc-2-vs-taltech-strateegiline-juhtimisarvestus-ja-finantsjuhtimine-2/",
+      "destination": "/kataloog/ebs-juhtimise-ja-eestvedamise-abc/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-juhtimise-ja-eestvedamise-abc-vs-taltech-programmeerimine-i-2/",
+      "destination": "/kataloog/ebs-juhtimise-ja-eestvedamise-abc/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-juhtimise-ja-eestvedamise-abc-vs-taltech-strateegiline-juhtimisarvestus-ja-finantsjuhtimine-2/",
+      "destination": "/kataloog/ebs-juhtimise-ja-eestvedamise-abc/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-juhtimise-ja-eestvedamise-abc-vs-tartu-ulikool-loovettevotja-mikrokraadiprogramm/",
+      "destination": "/kataloog/ebs-juhtimise-ja-eestvedamise-abc/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-juhtimise-ja-eestvedamise-abc-vs-tartu-ulikool-mikrokraad-soorituspsuhholoogia-praktikule/",
+      "destination": "/kataloog/ebs-juhtimise-ja-eestvedamise-abc/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-juhtimise-ja-eestvedamise-abc-vs-tartu-ulikool-mikrokraadiprogramm-histoloogia-histoloogilise-tehnika-alustega/",
+      "destination": "/kataloog/ebs-juhtimise-ja-eestvedamise-abc/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-juhtimise-ja-eestvedamise-abc-vs-tartu-ulikool-mikrokraadiprogramm-riigihangete-korraldamine/",
+      "destination": "/kataloog/ebs-juhtimise-ja-eestvedamise-abc/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-juhtimise-ja-eestvedamise-abc-vs-tartu-ulikool-mikrokraadiprogramm-riigihangete-korraldamine-2/",
+      "destination": "/kataloog/ebs-juhtimise-ja-eestvedamise-abc/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-strateegiline-finantsjuhtimine-tooriistad-analuus-ja-otsuste-tegemine-2-vs-tartu-ulikool-loovettevotluse-projektijuhtimise-mikrokraadiprogramm-2/",
+      "destination": "/kataloog/ebs-strateegiline-finantsjuhtimine-tooriistad-analuus-ja-otsuste-tegemine/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-strateegiline-finantsjuhtimine-tooriistad-analuus-ja-otsuste-tegemine-vs-tartu-ulikool-loovettevotluse-projektijuhtimise-mikrokraadiprogramm/",
+      "destination": "/kataloog/ebs-strateegiline-finantsjuhtimine-tooriistad-analuus-ja-otsuste-tegemine/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-strateegiline-finantsjuhtimine-tooriistad-analuus-ja-otsuste-tegemine-vs-tartu-ulikool-loovettevotluse-projektijuhtimise-mikrokraadiprogramm-2/",
+      "destination": "/kataloog/ebs-strateegiline-finantsjuhtimine-tooriistad-analuus-ja-otsuste-tegemine/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-teenusedisain-turunduses-vs-taltech-ariprotsesside-juhtimine-tehisintellekti-abil-2/",
+      "destination": "/kataloog/ebs-teenusedisain-turunduses/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-teenusedisain-turunduses-vs-tartu-ulikool-informaatikaopetaja-erialaained-2/",
+      "destination": "/kataloog/ebs-teenusedisain-turunduses/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/eesti-kunstiakadeemia-museoloogia-mikrokraad-vs-tallinna-ulikool-huvikaitse-ja-poliitkonkurents/",
+      "destination": "/kataloog/eesti-kunstiakadeemia-museoloogia-mikrokraad/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/eesti-kunstiakadeemia-museoloogia-mikrokraad-vs-tartu-ulikool-ruumiline-planeerimine-ja-keskkond/",
+      "destination": "/kataloog/eesti-kunstiakadeemia-museoloogia-mikrokraad/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-tehnikakorgkool-finantsarvestuse-ja-maksunduse-abc-vs-tartu-ulikool-teenuste-arendamine-ja-turundus/",
+      "destination": "/kataloog/tallinna-tehnikakorgkool-finantsarvestuse-ja-maksunduse-abc/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-tehnikakorgkool-teabehalduse-alused-vs-tartu-ulikool-turundus-sotsiaalmeedias-ja-brandijuhtimine-mikroettevotetele/",
+      "destination": "/kataloog/tallinna-tehnikakorgkool-teabehalduse-alused/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-andmepohine-projektijuhtimine-vs-taltech-chip-design/",
+      "destination": "/kataloog/tallinna-ulikool-andmepohine-projektijuhtimine/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-andmepohine-projektijuhtimine-vs-taltech-chip-design-2/",
+      "destination": "/kataloog/tallinna-ulikool-andmepohine-projektijuhtimine/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-andragoogika-alused-2026-2027-vs-taltech-chip-design-2/",
+      "destination": "/kataloog/tallinna-ulikool-andragoogika-alused/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-andragoogika-alused-2026-2027-vs-tartu-ulikool-digitoote-innovatsioon/",
+      "destination": "/kataloog/tartu-ulikool-digitoote-innovatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-andragoogika-alused-2026-2027-vs-tartu-ulikool-digitoote-innovatsioon-2/",
+      "destination": "/kataloog/tallinna-ulikool-andragoogika-alused/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-andragoogika-alused-2026-2027-vs-tartu-ulikool-mikrokraadiprogramm-ruumiline-planeerimine-ja-keskkond/",
+      "destination": "/kataloog/tallinna-ulikool-andragoogika-alused/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-hariduspsuhholoogia-klassiruumis-vs-taltech-ariprotsessid-digitaaluhiskonnas/",
+      "destination": "/kataloog/tallinna-ulikool-hariduspsuhholoogia-klassiruumis/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-hariduspsuhholoogia-klassiruumis-vs-taltech-mehitamata-susteemid-2/",
+      "destination": "/kataloog/tallinna-ulikool-hariduspsuhholoogia-klassiruumis/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-hariduspsuhholoogia-klassiruumis-vs-taltech-tehisintellekt-andmekaeve-ja-masinope-2/",
+      "destination": "/kataloog/tallinna-ulikool-hariduspsuhholoogia-klassiruumis/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-infotehnoloogia-haldamine-vs-taltech-it-juhtimine-ja-ariarhitektuur/",
+      "destination": "/kataloog/tallinna-ulikool-infotehnoloogia-haldamine/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-inimesekeskne-sekkumispraktika-trauma-ja-kiindumusteooria-ning-usaldussuhted-vs-tartu-ulikool-heaolu-mootmine-ja-mojutamine/",
+      "destination": "/kataloog/tallinna-ulikool-inimesekeskne-sekkumispraktika-trauma-ja-kiindumusteooria-ning-usaldussuhted/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-kodanikuharidus-vs-tartu-ulikool-informaatika-didaktika/",
+      "destination": "/kataloog/tallinna-ulikool-kodanikuharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-lepingu-ja-haldusoigus-vs-tartu-ulikool-haldusoigus-praktikutele/",
+      "destination": "/kataloog/tallinna-ulikool-lepingu-ja-haldusoigus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-hooneautomaatika-ja-tehnosusteemid-2/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-oppimine-ja-opetamine-tervishoiuasutuses-vs-tartu-ulikool-fuusika-opetamine-pohikoolis-8-klassi-kursused-parnus/",
+      "destination": "/kataloog/tallinna-ulikool-oppimine-ja-opetamine-tervishoiuasutuses/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-oppimine-ja-opetamine-tervishoiuasutuses-vs-tartu-ulikool-fuusika-opetamine-pohikoolis-9-klassi-kursused/",
+      "destination": "/kataloog/tallinna-ulikool-oppimine-ja-opetamine-tervishoiuasutuses/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-riigikaitseopetuse-mikrokraad-2026-vs-taltech-chip-design-2/",
+      "destination": "/kataloog/tallinna-ulikool-riigikaitseopetus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-riigikaitseopetuse-mikrokraad-2026-vs-taltech-hoonete-elektri-ja-automaatikatehnika/",
+      "destination": "/kataloog/taltech-hoonete-elektri-ja-automaatikatehnika/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-riigikaitseopetuse-mikrokraad-2026-vs-taltech-it-juhtimine-ja-ariarhitektuur/",
+      "destination": "/kataloog/taltech-it-juhtimine-ja-ariarhitektuur/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-riigikaitseopetuse-mikrokraad-2026-vs-taltech-it-juhtimine-ja-ariarhitektuur-2/",
+      "destination": "/kataloog/tallinna-ulikool-riigikaitseopetus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-riigikaitseopetuse-mikrokraad-2026-vs-taltech-turundus/",
+      "destination": "/kataloog/taltech-turundus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-riigikaitseopetuse-mikrokraad-2026-vs-taltech-turundus-2/",
+      "destination": "/kataloog/tallinna-ulikool-riigikaitseopetus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-riigikaitseopetuse-mikrokraad-2026-vs-tartu-ulikool-andmeteadus/",
+      "destination": "/kataloog/tartu-ulikool-andmeteadus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-riigikaitseopetuse-mikrokraad-2026-vs-tartu-ulikool-digitoote-innovatsioon/",
+      "destination": "/kataloog/tartu-ulikool-digitoote-innovatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-riigikaitseopetuse-mikrokraad-2026-vs-tartu-ulikool-digitoote-innovatsioon-2/",
+      "destination": "/kataloog/tallinna-ulikool-riigikaitseopetus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-riigikaitseopetuse-mikrokraad-2026-vs-tartu-ulikool-infotehnoloogia-alused/",
+      "destination": "/kataloog/tartu-ulikool-infotehnoloogia-alused/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-riigikaitseopetuse-mikrokraad-2026-vs-tartu-ulikool-infotehnoloogia-alused-2/",
+      "destination": "/kataloog/tallinna-ulikool-riigikaitseopetus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-riigikaitseopetuse-mikrokraad-2026-vs-tartu-ulikool-mikrokraadiprogramm-andmeanaluus/",
+      "destination": "/kataloog/tallinna-ulikool-riigikaitseopetus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-riigikaitseopetuse-mikrokraad-2026-vs-tartu-ulikool-mikrokraadiprogramm-andmeanaluus-2/",
+      "destination": "/kataloog/tallinna-ulikool-riigikaitseopetus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-riigikaitseopetuse-mikrokraad-2026-vs-tartu-ulikool-susteemianaluus/",
+      "destination": "/kataloog/tartu-ulikool-susteemianaluus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-riigikaitseopetuse-mikrokraad-2026-vs-tartu-ulikool-tehisaru-meetodid/",
+      "destination": "/kataloog/tartu-ulikool-tehisaru-meetodid/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-riigikaitseopetuse-mikrokraad-2026-vs-tartu-ulikool-tehisaru-meetodid-2/",
+      "destination": "/kataloog/tallinna-ulikool-riigikaitseopetus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-tehisintellekt-taienduskoolituse-arendamisel-ja-karjaarinoustamises-vs-tartu-ulikool-informaatika-didaktika/",
+      "destination": "/kataloog/tallinna-ulikool-tehisintellekt-taienduskoolituse-arendamisel-ja-karjaarinoustamises/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/taltech-ariprotsessid-digitaaluhiskonnas-2-vs-tartu-ulikool-haldusoigus-praktikutele/",
+      "destination": "/kataloog/tartu-ulikool-haldusoigus-praktikutele/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/taltech-ariprotsessid-digitaaluhiskonnas-vs-tartu-ulikool-haldusoigus-praktikutele/",
+      "destination": "/kataloog/tartu-ulikool-haldusoigus-praktikutele/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/taltech-chip-design-vs-tartu-ulikool-infotehnoloogia-alused/",
+      "destination": "/kataloog/tartu-ulikool-infotehnoloogia-alused/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/taltech-chip-design-vs-tartu-ulikool-mikrokraadiprogramm-andmeanaluus/",
+      "destination": "/kataloog/taltech-kiibidisain/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/taltech-chip-design-vs-tartu-ulikool-susteemianaluus/",
+      "destination": "/kataloog/tartu-ulikool-susteemianaluus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/taltech-it-juhtimine-ja-ariarhitektuur-vs-tartu-ulikool-susteemianaluus/",
+      "destination": "/kataloog/taltech-it-juhtimine-ja-ariarhitektuur/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/taltech-kiibidisain-vs-tartu-ulikool-susteemianaluus/",
+      "destination": "/kataloog/taltech-kiibidisain/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/taltech-teenusedisain-vs-tartu-ulikool-disainiuuringud-teenuste-disainis/",
+      "destination": "/kataloog/taltech-teenusedisain/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/taltech-teenusedisain-vs-tartu-ulikool-videomangude-narratiivid/",
+      "destination": "/kataloog/taltech-teenusedisain/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/taltech-turundus-2-vs-tartu-ulikool-andmeteadus/",
+      "destination": "/kataloog/tartu-ulikool-andmeteadus/",
+      "permanent": true
+    },
+    {
       "source": "/(.*)",
       "has": [
         {
