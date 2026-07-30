@@ -100,7 +100,12 @@ const metaTail = [
   entry.format,
   entry.provider
 ].filter(Boolean).join(" · ");
-const description = `${entry.summary} ${metaTail}.`.replace(/\s+/g, " ").trim().slice(0, 300);
+// Alusta kirjeldust õppekava NIMEGA. `summary` on sama kogu programmirühma peale
+// ("Õpetajate akadeemia … programmid") ja metaTail on õdedel-vendadel samuti sama,
+// nii et ilma nimeta said kümme eri lehte identse kirjelduse. Nimi on ainus osa,
+// mis neid eristab — ja kirjeldus peakski ütlema, MIS sellel lehel on.
+const descLead = entry.summary.startsWith(entry.name) ? entry.summary : `${entry.name} — ${entry.summary}`;
+const description = `${descLead} ${metaTail}.`.replace(/\s+/g, " ").trim().slice(0, 300);
 // Hoia pealkiri alla 70 tähemärgi: nimi + pakkuja kui mahub, muidu ainult nimi;
 // väga pikk nimi lõigatakse sõnapiiril + „…".
 const fullTitle = `${entry.name} – ${entry.provider}`;

@@ -15,7 +15,22 @@ export function getStaticPaths() {
 const { cmp } = Astro.props as { cmp: Comparison };
 const { a, b } = cmp;
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
-const clip = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1).trimEnd() + "…" : s);
+// Lühenda KESKELT, mitte lõpust. Kui üks nimi on teise algus — "Rohelised
+// energiatehnoloogiad" ja "Rohelised energiatehnoloogiad ja soojusmajandus" —
+// annab lõpust lõikamine kahele ERI lehele täpselt sama pealkirja. Keskelt
+// lõikamine hoiab alles just selle osa, mis neid eristab.
+const clip = (s: string, n: number): string => {
+  if (s.length <= n) return s;
+  // Hoia saba TERVE sõnana, kui see mahub — "Rohelis…energiatehnoloogiad" loeb
+  // paremini kui "Rohelised energi…hnoloogiad". Kui viimane sõna on liiga pikk,
+  // lõika saba tähe pealt.
+  const lastWord = s.slice(s.lastIndexOf(" ") + 1);
+  const room = n - 1;
+  const headLen = lastWord.length <= room - 6 ? room - lastWord.length : Math.ceil(room * 0.6);
+  const head = s.slice(0, headLen).trimEnd();
+  const tail = s.slice(s.length - (room - head.length)).trimStart();
+  return `${head}…${tail}`;
+};
 
 const fieldSlug = fieldsWithSlug.find((f) => f.field === a.field)?.slug;
 const aProvSlug = providersWithSlug.find((p) => p.provider === a.provider)?.slug;
