@@ -2,6 +2,7 @@
 import Seo from "../../components/Seo.astro";
 import { organization } from "../../data/organizationSchema";
 import Footer from "../../components/Footer.astro";
+import Figure from "../../components/Figure.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
 import { catalog, providersWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
@@ -87,6 +88,8 @@ const schema = {
             <h2>Mikrokraadid Eesti kõrgkoolides.</h2>
             <p>Vaata kõiki koole korraga <a href="/koolitaja/">mikrokraadid koolide kaupa</a> lehel, või vali kool allpool.</p>
           </div>
+          <p>Igal real allpool on kirjas ka maht ehk EAP — nii saad kohe aru, kui palju aega üks mikrokraad päriselt võtab.</p>
+          <Figure id="eap-26-tundi" />
           {byProvider.map(({ provider, slug, entries }) => (
             <div class="provider-block">
               <h3>{slug ? <a href={`/koolitaja/${slug}/`}>{provider}</a> : provider} — {entries.length} mikrokraadi</h3>
@@ -101,6 +104,8 @@ const schema = {
               {slug && <p><a href={`/koolitaja/${slug}/`}>Vaata kõiki {provider} mikrokraade →</a></p>}
             </div>
           ))}
+          <p>Hinnad on kooliti erinevad — nii näeb välja tüüpilise mikrokraadi hind kogu turu peale kokku.</p>
+          <Figure id="hind" />
         </div>
       </section>
 
@@ -110,6 +115,7 @@ const schema = {
             <span class="kicker">Mis vahe on?</span>
             <h2>Mikrokraad, mikrokvalifikatsioon, kutsetunnistus — lihtne vahe.</h2>
           </div>
+          <Figure id="mikrokraad-vs-mikrokvalifikatsioon" />
           <div class="simple-cards">
             <article>
               <strong>1</strong>
