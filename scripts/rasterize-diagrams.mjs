@@ -45,17 +45,21 @@ for (const svgPath of svgFiles(DIR)) {
     .png({ compressionLevel: 9 })
     .toFile(`${base}.png`);
 
-  // OG card: render the diagram to fit within a padded 1200×630 white canvas.
-  const inner = await sharp(svg, { density: 180 })
-    .resize(1120, 588, { fit: "inside", background: "#ffffff" })
-    .png()
-    .toBuffer();
-  await sharp({ create: { width: OG_W, height: OG_H, channels: 4, background: "#ffffff" } })
-    .composite([{ input: inner, gravity: "center" }])
-    .png({ compressionLevel: 9 })
-    .toFile(`${base}.og.png`);
+  // OG card. Wide diagrams are authored at 960×504 — exactly the 1200×630 ratio —
+  // so "contain" fills the frame edge to edge with no white letterbox. Diagrams
+  // authored at another ratio still come out as a valid, padded 1200×630 card.
+  // The narrow (stacked) variants are on-page only: a portrait card gets cropped
+  // by every social network, so they deliberately get no .og.png.
+  const isStacked = svgPath.includes(`${path.sep}stacked${path.sep}`);
+  if (!isStacked) {
+    await sharp(svg, { density: 180 })
+      .resize(OG_W, OG_H, { fit: "contain", background: "#ffffff" })
+      .flatten({ background: "#ffffff" })
+      .png({ compressionLevel: 9 })
+      .toFile(`${base}.og.png`);
+  }
 
   count += 1;
-  process.stdout.write(`rasterised ${path.relative(DIR, svgPath)} → .png + .og.png\n`);
+  process.stdout.write(`rasterised ${path.relative(DIR, svgPath)} → .png${isStacked ? "" : " + .og.png"}\n`);
 }
 process.stdout.write(`Done: ${count} diagram(s).\n`);

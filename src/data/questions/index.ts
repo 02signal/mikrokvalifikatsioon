@@ -23,11 +23,14 @@ export type QuestionEntry = {
   /** 1–3 väljavõetavat lauset; kuvatakse rasvaselt esimesena (AI-tsiteeritav). */
   shortAnswer: string;
   /**
-   * Valikuline selgitav joonis (Knaflic-stiilis SVG /public/diagrams/-is): üks
-   * selge sõnum, minimaalne kaunistus. Kuvatakse lühivastuse järel ja annab
-   * ImageObject struktuurandmed (SEO + GEO + Google Images visuaalotsing).
+   * Valikuline selgitav joonis (Knaflic-stiilis SVG): üks selge sõnum, minimaalne
+   * kaunistus. Kuvatakse lühivastuse järel ja annab ImageObject struktuurandmed
+   * (SEO + GEO + Google Images visuaalotsing).
+   *
+   * `stacked` on sama joonise püstine variant kitsale ekraanile — lai joonis
+   * kahaneks telefonis loetamatuks (vt `src/lib/diagram.ts`).
    */
-  figure?: { src: string; alt: string; caption: string; width: number; height: number };
+  figure?: { src: string; alt: string; caption: string; width: number; height: number; stacked?: string };
   /** Toetav sisu lõikudena (HTML-vaba, loomulik eesti keel). */
   body: string[];
   /** Seotud lingid edasiliikumiseks (ankur + tee). */
@@ -158,8 +161,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/kui-kaua-kestab.svg",
       alt: "Joonis: mikrokraad kestab tavaliselt 1–2 semestrit töö kõrvalt — kuud, mitte aastad; maht 6–30 EAP ehk umbes 156–780 tundi.",
       caption: "Tavaliselt 1–2 semestrit töö kõrvalt — lühemad ühe, mahukamad kahe semestriga. 6–30 EAP ≈ 156–780 tundi.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/kui-kaua-kestab.svg"
     },
     shortAnswer:
       `Mikrokraad kestab tavaliselt üks kuni kaks semestrit töö kõrvalt — kuud, mitte aastad. ` +
@@ -183,8 +187,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/hind.svg",
       alt: "Joonis: mikrokraadi hinnavahemik — tüüpiline vahemik (25.–75. protsentiil), mediaan ja avaldatud hindade äärmused registri andmetest.",
       caption: "Tüüpiline hind on keskmine pool kõigist hindadest (25.–75. protsentiil); punkt on mediaan. Sõltub mahust (EAP) ja koolist.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/hind.svg"
     },
     shortAnswer:
       `Mikrokraad maksab Eestis enamasti ${priceTypicalText} (tüüpiline vahemik, mediaan ${priceMedian != null ? fmtEur(priceMedian) : "~1 440 €"}). ` +
@@ -208,8 +213,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/eap-jaotus.svg",
       alt: "Joonis: mitu mikrokraadi jääb igasse EAP-vahemikku (6–11, 12–18, 19–24, 25–33 EAP); kõige sagedasem maht on esile tõstetud.",
       caption: "Mikrokraadi maht EAP-vahemike kaupa; esile tõstetud on kõige sagedasem vahemik. 1 EAP ≈ 26 tundi.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/eap-jaotus.svg"
     },
     shortAnswer:
       `Mikrokraadil on Eestis tavaliselt ${ectsRangeText}, mediaan ${ectsMedian} EAP. ` +
@@ -234,8 +240,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/eap-26-tundi.svg",
       alt: "Joonis: 1 EAP võrdub umbes 26 tundi õppija tööd (loengud ja iseseisev töö); mikrokraad on tavaliselt 6–30 EAP ehk umbes 156–780 tundi.",
       caption: "1 EAP ≈ 26 tundi õppija tööd — loengud ja iseseisev töö kokku. Mikrokraad tavaliselt 6–30 EAP.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/eap-26-tundi.svg"
     },
     shortAnswer:
       `EAP on Euroopa ainepunkt (ECTS — European Credit Transfer System), õppemahu ühik. ` +
@@ -259,8 +266,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/mikrokraad-vs-mikrokvalifikatsioon.svg",
       alt: "Joonis: mikrokraad on üks mikrokvalifikatsiooni liik — ülikooli pakutav, annab EAP-d. Iga mikrokraad on mikrokvalifikatsioon, aga mitte vastupidi.",
       caption: "Mikrokvalifikatsioon on katusmõiste; mikrokraad on selle ülikooli-liik, mis annab EAP-d. Iga mikrokraad on mikrokvalifikatsioon — aga mitte vastupidi.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/mikrokraad-vs-mikrokvalifikatsioon.svg"
     },
     shortAnswer:
       `Mikrokvalifikatsioon on katusmõiste igale lühikesele tunnustatud õppele ühe oskuse kohta. ` +
@@ -302,8 +310,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/kas-annab-korghariduse.svg",
       alt: "Joonis: mikrokraad ei ole kraad (lõpeb tunnistusega), aga annab EAP-sid, mida saab sageli hiljem kraadiõppes arvestada.",
       caption: "Mikrokraad lõpeb tunnistusega, mitte kraadiga — aga EAP-sid saab sageli hiljem kraadiõppes arvestada.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/kas-annab-korghariduse.svg"
     },
     shortAnswer:
       `Ei — mikrokraad ei ole kõrgharidust andev kraad ega diplom. ` +
@@ -327,8 +336,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/kuidas-kandideerida.svg",
       alt: "Joonis: mikrokraadile kandideerimine kolmes sammus — 1) vali programm, 2) kontrolli eeldusi ja tähtaega, 3) registreeru kooli enda lehel.",
       caption: "Kolm sammu: vali programm → kontrolli eeldusi ja tähtaega → registreeru. Lõplik registreerimine käib alati kooli enda lehel.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/kuidas-kandideerida.svg"
     },
     shortAnswer:
       `Mikrokraadile kandideerimiseks vali kataloogist sobiv programm, kontrolli eeldusi ja tähtaega ning registreeru kooli enda lehel. ` +
@@ -370,8 +380,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/rahastus-kolm-rada.svg",
       alt: "Joonis: õppetasule on kolm rahastusrada — õppija ise, tööandja koolituseelarve või Töötukassa toetus.",
       caption: "Kolm rahastusrada: sina ise, tööandja koolituseelarve või Töötukassa. Osa programme on sihtrühmale eraldi rahastatud.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/rahastus-kolm-rada.svg"
     },
     shortAnswer:
       `Jah — tööandja koolituseelarve on üks kolmest peamisest rahastusrajast (tööandja, Töötukassa või ise). ` +
@@ -413,8 +424,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/oppevorm.svg",
       alt: "Joonis: mitu mikrokvalifikatsiooni saab läbida veebis, hübriidis või kohapeal — paljud on veebi- või hübriidõppes ja sobivad töö kõrvale.",
       caption: "Mitu programmi igas õppevormis. Veebis või hübriidis saab õppida töö kõrvalt.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/oppevorm.svg"
     },
     shortAnswer:
       `Jah — paljud mikrokvalifikatsioonid on disainitud töötavale inimesele ja neid saab läbida veebis või hübriidõppes. ` +
@@ -456,8 +468,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/ehis-tunnustatud.svg",
       alt: "Joonis: mikrokvalifikatsioonid on EHIS-es (Eesti Hariduse Infosüsteem) registreeritud õppekavad — riiklik register; näidatud registreeritud õppekavade ja pakkujate arv.",
       caption: "Mikrokvalifikatsioonid on EHIS-es registreeritud õppekavad (riiklik register). Tunnistus tõendab kinnitatud õppekava läbimist.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/ehis-tunnustatud.svg"
     },
     shortAnswer:
       `Jah — mikrokvalifikatsioonid on Eesti Hariduse Infosüsteemis (EHIS) registreeritud õppekavad ja seega ametlikult tunnustatud õpe. ` +
@@ -481,8 +494,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/vs-taiendkoolitus.svg",
       alt: "Joonis: mikrokvalifikatsioon on EHIS-registreeritud õppekava EAP-de ja tunnistusega; täiendkoolitus on vabamas vormis ega pruugi anda ainepunkte.",
       caption: "Mikrokvalifikatsioon: EHIS-registreeritud, EAP ainepunktid, tunnistus. Täiendkoolitus on vabam ega pruugi anda EAP-d.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/vs-taiendkoolitus.svg"
     },
     shortAnswer:
       `Mikrokvalifikatsioon on EHIS-es registreeritud õppekava kinnitatud mahu (EAP), õpiväljundite ja tunnistusega; tavaline täiendkoolitus on vabamas vormis ega pruugi olla riiklikus registris ega anda ainepunkte. ` +
@@ -524,8 +538,9 @@ export const questions: QuestionEntry[] = [
       src: "/diagrams/valdkonnad.svg",
       alt: "Joonis: populaarseimad mikrokvalifikatsiooni valdkonnad programmide arvu järgi (top 5), suurim esile tõstetud.",
       caption: "Enim pakutavad valdkonnad programmide arvu järgi. Iga valdkonda saab vaadata eraldi valdkonnalehel.",
-      width: 640,
-      height: 360
+      width: 960,
+      height: 504,
+      stacked: "/diagrams/stacked/valdkonnad.svg"
     },
     shortAnswer:
       `Registri ${programmeCount} programmi jagunevad ${fieldCountExclMuu} valdkonna vahel ja enim pakutavad on ${etList(topFields.map((f) => `${f.field} (${f.count} programmi)`))}. ` +
