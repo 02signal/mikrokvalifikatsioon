@@ -8,9 +8,12 @@ export default defineConfig({
   output: "static",
   integrations: [
     sitemap({
-      // /vordlus/ (indeks) on noindex utiliit (sõltub ?p= parameetritest) — sitemapist väljas.
+      // Sitemap tohib sisaldada AINULT indekseeritavaid lehti — noindex-leht
+      // sitemapis annab Search Console'is vea "Submitted URL marked noindex".
+      // Väljas: /vordlus/ (noindex utiliit, sõltub ?p= parameetritest) ning
+      // /konto/ + /konto/kinnita/ (isiklik ala, samuti noindex).
       // AGA /vordlus/<a>-vs-<b>/ võrduslehed on indekseeritavad → need jäävad sitemapi.
-      filter: (page) => !page.endsWith("/vordlus/"),
+      filter: (page) => !["/vordlus/", "/konto/", "/konto/kinnita/"].some((p) => page.endsWith(p)),
       changefreq: "weekly",
       // NB: hoia kuupäev kataloogi kontrollkuupäevaga kooskõlas (src/data/catalog/index.ts).
       lastmod: new Date("2026-06-12"),
