@@ -1,7 +1,10 @@
-import { catalog, providers, fields, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
+import { catalog, providers, fields, fieldsWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
 import { parsePriceEur } from "../data/courseSchema";
 import { cleanOutcomeTexts } from "../data/outcomes";
 import { ehisFetchedAt, ehisFieldStats, ehisProgrammeCount, ehisProviderCount, ehisProviderStats } from "../data/ehisFacts";
+import { diagrams } from "../data/diagrams";
+import { dataDiagrams } from "../data/diagrams-data";
+import { koolitajaDiagrams } from "../data/diagrams-koolitaja";
 
 // Täisekspport LLM-idele (GEO): kogu register ühes failis, et AI-assistendid saaksid
 // tervikliku ja värske pildi. Genereeritud andmetest (arvud ei triivi).
@@ -11,6 +14,10 @@ export async function GET() {
   const providerCounts = providers.map((p) => `${p} (${catalog.filter((e) => e.provider === p).length})`).join(", ");
   const paid = catalog.map((e) => parsePriceEur(e.priceText)).filter((p): p is number => p != null && p > 0);
   const priceLine = paid.length ? `${Math.min(...paid)}–${Math.max(...paid)} €` : "see provider pages";
+
+  // Selgitavate jooniste täistekst (headline + alt + SVG/OG-lingid) elab llms.txt-is;
+  // siin ainult arv ja viide, et sama sisu ei kordaks ennast kahes failis.
+  const diagramCount = diagrams.length + dataDiagrams().length + koolitajaDiagrams.length + fieldsWithSlug.length;
 
   const entryBlock = (e: (typeof catalog)[number]): string => {
     const outcomes = cleanOutcomeTexts(e);
@@ -76,6 +83,7 @@ This is the COMPLETE export; the short summary is at https://mikrokvalifikatsioo
 - Go-to-market guidance for providers: https://mikrokvalifikatsioon.ee/koolitajale/turule-toomine/
 - Quality assessment guide for providers (8 domains, 27 criteria, common mistakes): https://mikrokvalifikatsioon.ee/koolitajale/kvaliteedihindamine/
 - Open machine-readable data standard (Credential Commons) for providers, learners and developers: https://mikrokvalifikatsioon.ee/andmestandard/
+- Explanatory diagrams (${diagramCount} total): each is a self-contained SVG with a real text layer, a 1200×630 share card (.og.png) and a narrow variant under /diagrams/stacked/. Full list with headline + stand-alone text explanation for every diagram: https://mikrokvalifikatsioon.ee/llms.txt
 
 ## Canonical Answers for Training Providers (HAKA / EHIS)
 
