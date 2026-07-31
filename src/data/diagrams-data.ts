@@ -15,7 +15,7 @@
  * (`/diagrams/valdkond/<slug>.svg`), kasutades otse kataloogi kirjeid.
  */
 import { catalog } from "./catalog";
-import { parsePriceEur } from "./courseSchema";
+import { plausiblePriceEur } from "./priceGuard";
 import { questionStats } from "./questions";
 import type { Diagram } from "../lib/diagram";
 
@@ -175,7 +175,10 @@ export function fieldDiagram(field: string): Diagram {
   const ectsText =
     minEcts != null && maxEcts != null ? (minEcts === maxEcts ? `${minEcts} EAP` : `${minEcts}–${maxEcts} EAP`) : "kooli lehel";
 
-  const prices = entries.map((e) => parsePriceEur(e.priceText)).filter((p): p is number => p != null && p > 0);
+  // plausiblePriceEur (not parsePriceEur): a €/EAP outlier that is almost
+  // certainly a bad source reading must not define this field's diagram card
+  // (see src/data/priceGuard.ts).
+  const prices = entries.map((e) => plausiblePriceEur(e)).filter((p): p is number => p != null && p > 0);
   const minPrice = prices.length ? Math.min(...prices) : null;
   const maxPrice = prices.length ? Math.max(...prices) : null;
   const priceText =

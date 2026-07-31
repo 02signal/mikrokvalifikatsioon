@@ -1,5 +1,10 @@
 import type { CatalogEntryWithSlug } from "./catalog";
 import { cleanOutcomeTexts } from "./outcomes";
+import { plausiblePriceEur } from "./priceGuard";
+// Re-exported for the many existing consumers that import parsePriceEur from
+// this module — the parser itself lives in ./priceText (a leaf module) so
+// ./priceGuard can use it too without a circular import back through here.
+export { parsePriceEur } from "./priceText";
 
 export const SITE = "https://mikrokvalifikatsioon.ee";
 
@@ -20,17 +25,6 @@ export function outboundUrl(entry: CatalogEntryWithSlug, medium: string): string
     utm_content: entry.slug
   });
   return `${entry.url}${entry.url.includes("?") ? "&" : "?"}${params.toString()}`;
-}
-
-/**
- * Parsib hinna eurodes. Tundmatu/parsimatu = null (ära kunagi leiuta).
- * "tasuta" -> 0. "alates 1200 €" -> 1200 (esindushind).
- */
-export function parsePriceEur(text: string | null | undefined): number | null {
-  if (!text) return null;
-  if (/tasuta/i.test(text)) return 0;
-  const match = text.replace(/\s/g, "").match(/\d+(?:[.,]\d+)?/);
-  return match ? Number(match[0].replace(",", ".")) : null;
 }
 
 const COURSE_MODE: Record<string, string> = {
@@ -74,7 +68,11 @@ export function toCourse(entry: CatalogEntryWithSlug): Record<string, unknown> {
   const outcomes = cleanOutcomeTexts(entry);
   if (outcomes.length) course.teaches = outcomes;
 
-  const price = parsePriceEur(entry.priceText);
+  // plausiblePriceEur (not parsePriceEur): JSON-LD offers is a machine-readable
+  // claim to Google — a €/EAP outlier that is almost certainly a bad source
+  // reading does not belong there, even though the programme's own page still
+  // shows entry.priceText verbatim (see src/data/priceGuard.ts).
+  const price = plausiblePriceEur(entry);
   if (price != null) {
     course.offers = {
       "@type": "Offer",

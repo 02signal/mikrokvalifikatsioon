@@ -10,6 +10,7 @@
 // (turvaline, aga vähem eristuv).
 
 import { catalog, providersWithSlug, fieldsWithSlug } from "./catalog";
+import { plausiblePriceEur } from "./priceGuard";
 import { topics } from "./topics";
 import { careers } from "./careers";
 import { comparisons } from "./comparisons";
@@ -142,12 +143,16 @@ const contentPages: Record<string, OgPageEntry> = {
 };
 
 // Programmilehed: võti = slug, pealkiri = nimi, kirjeldus = pakkuja + maht + hind.
+// Hind jäetakse kaardilt VÄLJA, kui plausiblePriceEur peab seda kahtlaseks
+// (€/EAP ebausutavalt madal, vt src/data/priceGuard.ts) — jagatav kaart on
+// väide, mitte registri sõna-sõnaline peegeldus (see jääb programmi enda lehele).
 const programmePages = Object.fromEntries(
   catalog.map((entry) => {
+    const priceIsPlausible = plausiblePriceEur(entry) != null;
     const facts = [
       entry.provider,
       entry.ects != null ? `${entry.ects} EAP` : null,
-      entry.priceText
+      priceIsPlausible ? entry.priceText : null
     ].filter(Boolean).join(" · ");
     return [entry.slug, { title: entry.name, description: facts }];
   })

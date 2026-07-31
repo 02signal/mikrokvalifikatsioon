@@ -1,5 +1,6 @@
 import { catalog, providers, fields, fieldsWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
 import { parsePriceEur } from "../data/courseSchema";
+import { plausiblePriceEur } from "../data/priceGuard";
 import { ehisFetchedAt, ehisProgrammeCount, ehisProviderCount, ehisProviderStats } from "../data/ehisFacts";
 import { topics } from "../data/topics";
 import { diagrams } from "../data/diagrams";
@@ -14,8 +15,11 @@ export async function GET() {
     .map((field) => `${field} (${catalog.filter((entry) => entry.field === field).length})`)
     .join(", ");
 
+  // plausiblePriceEur (not parsePriceEur): a suspect €/EAP outlier must not
+  // define the catalogue floor we state to language models as fact (see
+  // src/data/priceGuard.ts).
   const paidPrices = catalog
-    .map((entry) => parsePriceEur(entry.priceText))
+    .map((entry) => plausiblePriceEur(entry))
     .filter((price): price is number => price != null && price > 0);
   const minPrice = paidPrices.length ? Math.min(...paidPrices) : null;
   const maxPrice = paidPrices.length ? Math.max(...paidPrices) : null;
