@@ -1,14 +1,30 @@
 // Anti-regression test for the price plausibility guard (src/data/priceGuard.ts).
 //
 // WHY: AMOS issue #2613 found one bad catalogue price — Tallinna Ülikool's
-// "Sooritus- ja spordipsühholoogia" states 75 € for 30 EAP (2.50 €/EAP),
-// against a catalogue median of ~146 €/EAP. AMOS PR #2614 adds a producer-side
-// review signal but deliberately does NOT correct the price (a human review
-// stays authoritative), so this value keeps shipping until someone checks the
-// TLÜ page. `plausiblePriceEur` mirrors AMOS's own threshold
+// "Sooritus- ja spordipsühholoogia" published 75 € for 30 EAP (2.50 €/EAP)
+// against a catalogue median of ~146 €/EAP. The TLÜ page states BOTH numbers:
+// "Koolituse hind 2250 eurot, 1 EAP on 75 eurot" — the parser took the unit
+// price into a field that means total. AMOS has since fixed it at source
+// (#2646 now recognises "Hind kokku / Maksumus kokku"; ambiguous cases stay in
+// review instead of shipping a guessed price), and production serves 2 250 €.
+//
+// The guard stays as DEFENCE IN DEPTH: it mirrors AMOS's own threshold
 // (`amos.mkval.price_integrity/v1`: min(20, catalogueMedian × 0.25) €/EAP) so
 // the site's own price CLAIMS (diagrams, teema/valdkond ranges, questionStats,
-// OG cards, structured data) aren't defined by this one suspect value.
+// OG cards, structured data, meta descriptions) can never be defined by a
+// suspect value that slips through upstream.
+//
+// TESTING NOTE — this is why the first version of this file was rejected in
+// review. It asserted that the guard withholds one NAMED live catalogue entry
+// at 75 €. When AMOS corrected the data, the test encoded a fact that had
+// become false, and blocked its own PR. A guard's behaviour is "withhold when
+// €/EAP is implausible" — that is a property of the FUNCTION, not of today's
+// data. Behaviour is therefore tested with synthetic fixtures, and the only
+// live-data assertion left is an invariant that cannot rot: the guard must stay
+// self-consistent and must not start withholding a large share of the
+// catalogue. Note also that production builds from a LIVE feed
+// (PUBLIC_CATALOG_FEED_URL when trusted); the committed snapshot can be days
+// behind, so any test keyed to a specific committed value is brittle by design.
 //
 // Zero deps (node:test). Node imports the .ts source directly (native
 // type-strip), mirroring outcome-ref.test.mjs / skill-match.test.mjs. Runs as
@@ -20,25 +36,57 @@ import { catalog } from "../src/data/catalog/index.ts";
 import { plausiblePriceEur, PRICE_PLAUSIBILITY_FLOOR_EUR_PER_EAP } from "../src/data/priceGuard.ts";
 import { parsePriceEur } from "../src/data/priceText.ts";
 
-const KNOWN_BAD_ID = "tallinna-ulikool-sooritus-ja-spordipsuhholoogia";
-
-test("the guard withholds the known AMOS #2613 outlier (TLÜ sooritus- ja spordipsühholoogia)", () => {
-  const entry = catalog.find((e) => e.id === KNOWN_BAD_ID);
-  assert.ok(entry, `fixture expects ${KNOWN_BAD_ID} to still be in the catalogue`);
-  assert.equal(entry.ects, 30, "test assumes the known 30 EAP volume — re-check the fixture if this changes");
-  assert.equal(parsePriceEur(entry.priceText), 75, "test assumes the known 75 € source value — re-check the fixture if this changes");
-  assert.equal(plausiblePriceEur(entry), null, "the guard must withhold this entry's price");
+test("withholds a unit-price-in-a-total-field value — the AMOS #2613 shape", () => {
+  // The real case, as a fixture: TLÜ published "1 EAP on 75 eurot" into a field
+  // that means the total. Kept as a synthetic entry so the test survives the
+  // source data being corrected — which is exactly what happened.
+  assert.equal(plausiblePriceEur({ priceText: "75 €", ects: 30 }), null);
 });
 
-test("the guard excludes NOTHING else at today's catalogue data", () => {
-  const withheld = catalog.filter((entry) => {
+test("withholds regardless of programme size, as long as €/EAP is implausible", () => {
+  // A small programme can carry the same defect; the guard must not depend on
+  // the volume being large.
+  assert.equal(plausiblePriceEur({ priceText: "50 €", ects: 6 }), null);
+  assert.equal(plausiblePriceEur({ priceText: "12 €", ects: 12 }), null);
+});
+
+test("keeps a genuinely cheap but plausible price", () => {
+  // Well below the catalogue median but far above the floor — a real bargain
+  // must NOT be silently withheld.
+  const floor = PRICE_PLAUSIBILITY_FLOOR_EUR_PER_EAP;
+  const justAbove = Math.ceil((floor + 1) * 10);
+  assert.equal(plausiblePriceEur({ priceText: `${justAbove} €`, ects: 10 }), justAbove);
+});
+
+test("every withheld live entry is genuinely below the floor (self-consistency)", () => {
+  // A live-data invariant that cannot rot: it asserts the guard agrees with its
+  // own threshold, not that any particular programme is priced any particular
+  // way. Names no entry and needs no update when the catalogue changes.
+  for (const entry of catalog) {
     const parsed = parsePriceEur(entry.priceText);
-    return parsed != null && parsed > 0 && plausiblePriceEur(entry) == null;
+    if (parsed == null || parsed <= 0 || !entry.ects) continue;
+    if (plausiblePriceEur(entry) != null) continue;
+    assert.ok(
+      parsed / entry.ects < PRICE_PLAUSIBILITY_FLOOR_EUR_PER_EAP,
+      `${entry.id} was withheld at ${(parsed / entry.ects).toFixed(2)} €/EAP but the floor is ${PRICE_PLAUSIBILITY_FLOOR_EUR_PER_EAP} — the guard contradicts itself`
+    );
+  }
+});
+
+test("the guard stays a last resort, not a bulk filter", () => {
+  // Canary: upstream (AMOS #2646) is the primary control, so this guard should
+  // only ever catch stragglers. If it starts withholding a large share of the
+  // catalogue, the threshold logic has regressed or the feed has broken —
+  // either way a human should look before the site quietly stops showing prices.
+  const priced = catalog.filter((e) => {
+    const p = parsePriceEur(e.priceText);
+    return p != null && p > 0 && e.ects;
   });
-  assert.deepEqual(
-    withheld.map((e) => e.id),
-    [KNOWN_BAD_ID],
-    "exactly one entry (the known AMOS #2613 outlier) should be withheld — a new withheld entry means either a new bad price or a threshold regression"
+  const withheld = priced.filter((e) => plausiblePriceEur(e) == null);
+  assert.ok(priced.length > 0, "expected at least some priced entries with a volume");
+  assert.ok(
+    withheld.length <= Math.max(3, Math.ceil(priced.length * 0.05)),
+    `guard withheld ${withheld.length} of ${priced.length} priced entries (${withheld.map((e) => e.id).join(", ")}) — that is too many for a last-resort net`
   );
 });
 
