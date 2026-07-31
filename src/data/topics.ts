@@ -25,7 +25,20 @@ export const TOPIC_DEFS: TopicDef[] = [
   { slug: "tehisintellekt", label: "Tehisintellekt (AI)", synonyms: ["AI", "masinõpe", "generatiivne tehisintellekt", "machine learning"], match: ["tehisintellekt", "tehisaru", "masinõpe", "machine learning", "artificial intel", "generatiiv", "tehisnärvi", "neurovõr"] },
   { slug: "projektijuhtimine", label: "Projektijuhtimine", synonyms: ["project management", "agiilne juhtimine", "scrum"], match: ["projektijuh", "projekti juht", "project manag", "agiil", "scrum"] },
   { slug: "juhtimine", label: "Juhtimine ja eestvedamine", synonyms: ["leadership", "eestvedamine", "liidrioskused"], match: ["juhtimi", "eestvedami", "leadership", "liidri", "meeskonna juht"] },
-  { slug: "raamatupidamine", label: "Raamatupidamine ja finants", synonyms: ["accounting", "maksundus", "arvestus", "finantsjuhtimine"], match: ["raamatupida", "finants", "maksund", "arvestus", "accounting", "eelarve"] },
+  // Silt juhib pealkirja, H1-i, kirjeldust ja KKK-d. Otsingunõudlus 45 päeva jooksul:
+  // "finantsjuhtimine" 47 näitamist (positsioon 51), "juhtimisarvestus" 11,
+  // "raamatupidamine" 2. Leht oli nimetatud kõige VÄIKSEMA nõudlusega mõiste järgi.
+  // Kataloogis on 9 finantsjuhtimise programmi 4 koolist, aga ainult 3 puhtalt
+  // raamatupidamise oma — ja needsamad 3 on ka finantsprogrammid. Eraldi lehte teha
+  // ei ole millestki: see jätaks mõlemad õhukeseks.
+  // Slug jääb SAMAKS. Töötavat aadressi ei vaheta me sildi ilu pärast — vt #111,
+  // kus 161 surnud URL-i tuli täpselt sellest, et aadressid muutusid.
+  // match[] on teadlikult LAI (otsib ka kokkuvõttest ja õpiväljunditest). Katsetasin
+  // kitsendamist ainult nimele+valdkonnale: see hävitaks 16 teemat 28-st, sh
+  // personalijuhtimise, mis on saidi parim leht (31% CTR positsioonilt 4). Lai vaste
+  // on see, mis 169 programmiga üldse 21 teemalehte kannab. Lisatud on ainult
+  // "rahandus" — ainus tüvi, mis toob uut sisu ilma müra lisamata.
+  { slug: "raamatupidamine", label: "Finantsjuhtimine", synonyms: ["raamatupidamine", "juhtimisarvestus", "finantsaruandlus", "rahandus", "maksundus", "accounting"], match: ["raamatupida", "finants", "rahandus", "maksund", "arvestus", "accounting", "eelarve"] },
   { slug: "turundus", label: "Turundus", synonyms: ["marketing", "digiturundus", "bränding", "sisuturundus"], match: ["turund", "marketing", "bränd", "reklaam", "sotsiaalmeedia"] },
   { slug: "muuk", label: "Müük ja kliendisuhted", synonyms: ["sales", "kliendihaldus", "läbirääkimised"], match: ["müügi", "müük", "sales", "kliendisuh", "kliendihald", "läbirääki"] },
   { slug: "personalijuhtimine", label: "Personalijuhtimine (HR)", synonyms: ["HR", "värbamine", "talendijuhtimine", "human resources"], match: ["personalijuh", "personali juht", "värbami", "human resource", "töösuhe", "talendijuh"] },
