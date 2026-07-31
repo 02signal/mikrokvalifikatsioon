@@ -29,6 +29,7 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { explicitPreviousIdAliases } from "./previous-ids.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -203,6 +204,10 @@ for (const entry of sorted) {
 const feed = loadJson("src/data/catalog/credential-commons-lkg/catalog-feed.json");
 const activePrograms = feed.programs.filter((p) => !p.status || p.status === "active");
 const liveIds = new Set(activePrograms.map((p) => p.id));
+// A v2 row that carries explicit lineage is AMOS's decision, not a hint. The
+// helper validates it before any name-derived alias is considered; old feeds
+// that omit both fields continue through the existing ledger/inference path.
+const explicitAliasToId = explicitPreviousIdAliases(activePrograms);
 
 // Sanity: the LKG feed's active id set must be the SAME catalogue as the
 // legacy-JSON-derived `currentCatalogSlugs` above (both describe "what
@@ -266,7 +271,7 @@ for (const [, group] of rawBaseGroups) {
   for (const p of group) ambiguousBases.set(computedIdByProgram.get(p), unanimousField);
 }
 
-const aliasToId = new Map(); // historical computed slug -> live id (only where they differ, never a collision group)
+const aliasToId = new Map(); // inferred computed slug -> live id (only where they differ, never a collision group)
 for (const p of activePrograms) {
   const computed = computedIdByProgram.get(p);
   if (ambiguousBases.has(computed)) continue;
@@ -281,6 +286,7 @@ const MIKROKRAADID = "/mikrokraadid/";
  * null when nothing about it is derivable from current data. */
 function resolveSlug(slug) {
   if (liveIds.has(slug)) return { id: slug, kind: "direct" };
+  if (explicitAliasToId.has(slug)) return { id: explicitAliasToId.get(slug), kind: "explicit-lineage" };
   if (ambiguousBases.has(slug)) {
     const f = ambiguousBases.get(slug);
     const fs = f ? slugify(f) : null;
@@ -295,6 +301,7 @@ function resolveSlug(slug) {
       const fs = f ? slugify(f) : null;
       return { destination: fs && liveFieldSlugs.has(fs) ? `/valdkond/${fs}/` : MIKROKRAADID, kind: "ambiguous-desuffixed", field: f };
     }
+    if (explicitAliasToId.has(stripped)) return { id: explicitAliasToId.get(stripped), kind: "explicit-lineage-desuffixed" };
     if (aliasToId.has(stripped)) return { id: aliasToId.get(stripped), kind: "alias-desuffixed" };
   }
   return null;

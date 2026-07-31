@@ -231,6 +231,14 @@ started, by design. AMOS PRs: #1190/#1197/#1200/#1205/#1209/#1225/#1226/#1232. m
 
 ## Data freshness / AMOS
 
+- **Code-ready 2026-07-31 — explicit AMOS programme-id lineage (AMOS #2613):**
+  the redirect generator prefers validated v2 `previousIds[]` +
+  `lineageDecisionRef` over name-based inference and fails closed on self,
+  active-id, duplicate, or cross-programme collisions. Old feeds keep the
+  existing ledger/inference fallback. A generator-level regression proves an
+  explicit alias wins a conflicting inferred alias. **Rollout remains
+  separate:** enable only with the corresponding AMOS v2 producer release and
+  owner-approved consumer deploy gate; no production deployment was performed.
 - **Done in code 2026-07-24 — canonical Credential Commons consumer:** human pages
   remain on the trusted feed, while `/catalog.cc.jsonld` now mirrors a receipt-bound
   warehouse graph. The committed default is now a coordinated feed+graph+receipt
