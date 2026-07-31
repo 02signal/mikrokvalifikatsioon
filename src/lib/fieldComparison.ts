@@ -5,7 +5,7 @@
 // stated, and "muu" (the catch-all) is excluded from per-field views.
 import type { CatalogEntryWithSlug } from "../data/catalog";
 import { slugify } from "../data/slug";
-import { parsePriceEur } from "../data/courseSchema";
+import { plausiblePriceEur } from "../data/priceGuard";
 
 export type FieldExample = { name: string; slug: string; provider: string };
 
@@ -52,8 +52,11 @@ export function fieldStats(entries: CatalogEntryWithSlug[]): FieldStat[] {
   const stats: FieldStat[] = [];
   for (const [field, list] of byField) {
     const ects = list.map((e) => e.ects).filter((n): n is number => n != null);
+    // plausiblePriceEur (not parsePriceEur): withholds a €/EAP outlier that is
+    // almost certainly a bad source reading so this field's price range isn't
+    // defined by one suspect value (see src/data/priceGuard.ts).
     const prices = list
-      .map((e) => parsePriceEur(e.priceText))
+      .map((e) => plausiblePriceEur(e))
       .filter((p): p is number => p != null && p > 0);
 
     const ranked = list

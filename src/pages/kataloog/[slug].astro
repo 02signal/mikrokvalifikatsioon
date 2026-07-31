@@ -6,6 +6,7 @@ import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
 import { catalog, providersWithSlug, type CatalogEntryWithSlug } from "../../data/catalog";
 import { toCourse, outboundUrl } from "../../data/courseSchema";
+import { plausiblePriceEur } from "../../data/priceGuard";
 import { credentialCommonsNodeFor, CC_CONTEXT } from "../../data/credentialCommons";
 import { comparisonsFor } from "../../data/comparisons";
 import { ehisAttribution } from "../../data/ehisFacts";
@@ -94,9 +95,13 @@ const facts = [
 const funding = fundingInfoFor(entry);
 const showFunding = hasFundingInfo(funding);
 
+// <meta name="description"> is a CLAIM in Google's results (same class as the
+// OG card / JSON-LD), so it uses the guarded price — unlike the <dl> below,
+// which mirrors the register verbatim and keeps entry.priceText untouched.
+const metaTailPriceIsPlausible = plausiblePriceEur(entry) != null;
 const metaTail = [
   entry.ects != null ? `${entry.ects} EAP` : null,
-  entry.priceText,
+  metaTailPriceIsPlausible ? entry.priceText : null,
   entry.format,
   entry.provider
 ].filter(Boolean).join(" · ");

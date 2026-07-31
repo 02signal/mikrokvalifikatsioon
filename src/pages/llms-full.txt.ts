@@ -1,5 +1,5 @@
 import { catalog, providers, fields, fieldsWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
-import { parsePriceEur } from "../data/courseSchema";
+import { plausiblePriceEur } from "../data/priceGuard";
 import { cleanOutcomeTexts } from "../data/outcomes";
 import { ehisFetchedAt, ehisFieldStats, ehisProgrammeCount, ehisProviderCount, ehisProviderStats } from "../data/ehisFacts";
 import { diagrams } from "../data/diagrams";
@@ -12,7 +12,10 @@ export async function GET() {
   const year = catalogUpdatedAt.slice(0, 4);
   const fieldCounts = fields.map((f) => `${f} (${catalog.filter((e) => e.field === f).length})`).join(", ");
   const providerCounts = providers.map((p) => `${p} (${catalog.filter((e) => e.provider === p).length})`).join(", ");
-  const paid = catalog.map((e) => parsePriceEur(e.priceText)).filter((p): p is number => p != null && p > 0);
+  // plausiblePriceEur (not parsePriceEur): same GEO surface as llms.txt — a
+  // suspect €/EAP outlier must not set the catalogue floor told to LLMs (see
+  // src/data/priceGuard.ts).
+  const paid = catalog.map((e) => plausiblePriceEur(e)).filter((p): p is number => p != null && p > 0);
   const priceLine = paid.length ? `${Math.min(...paid)}–${Math.max(...paid)} €` : "see provider pages";
 
   // Selgitavate jooniste täistekst (headline + alt + SVG/OG-lingid) elab llms.txt-is;

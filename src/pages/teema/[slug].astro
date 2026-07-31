@@ -7,6 +7,7 @@ import "../../styles/global.css";
 import { topics, topicOutcomes, type Topic } from "../../data/topics";
 import { fieldsWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 import { parsePriceEur, toCourse } from "../../data/courseSchema";
+import { plausiblePriceEur } from "../../data/priceGuard";
 
 export function getStaticPaths() {
   return topics.map((t) => ({ params: { slug: t.slug }, props: { topic: t } }));
@@ -19,7 +20,10 @@ const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
 const labelLower = topic.label.replace(/\s*\(.*?\)\s*/g, "").toLowerCase();
 
 const providersInTopic = [...new Set(entries.map((e) => e.provider))];
-const prices = entries.map((e) => parsePriceEur(e.priceText)).filter((p): p is number => p != null && p > 0);
+// plausiblePriceEur (not parsePriceEur): a €/EAP outlier that is almost
+// certainly a bad source reading must not define this topic's price range
+// (see src/data/priceGuard.ts).
+const prices = entries.map((e) => plausiblePriceEur(e)).filter((p): p is number => p != null && p > 0);
 const minPrice = prices.length ? Math.min(...prices) : null;
 const maxPrice = prices.length ? Math.max(...prices) : null;
 const freeCount = entries.filter((e) => parsePriceEur(e.priceText) === 0).length;

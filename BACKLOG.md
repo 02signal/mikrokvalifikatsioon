@@ -376,6 +376,18 @@ started, by design. AMOS PRs: #1190/#1197/#1200/#1205/#1209/#1225/#1226/#1232. m
 
 ## Next
 
+- **Price plausibility guard — extend to remaining aggregate surfaces (found while fixing AMOS #2613).**
+  `src/data/priceGuard.ts` (`plausiblePriceEur`) now protects the "hind" diagram, `/teema/` + `/valdkond/`
+  price ranges, `questionStats.price`, the affected programme's OG card, and JSON-LD `offers` from the
+  known bad TLÜ price (75 € for 30 EAP — AMOS #2613/#2614, human review stays authoritative, so this
+  value keeps shipping in the feed). NOT yet applied to a few other aggregate price-range surfaces that
+  are the same class of "claim" and would show the same contaminated floor: `aastaraport/index.astro`,
+  `andmed/index.astro`, `koolitaja/index.astro` (per-provider row ranges) and `koolitaja/[slug].astro`
+  (Tallinna Ülikool's own aggregate page would show min 75 €). Left out of this pass to keep the diff
+  scoped to the task's named surfaces — swap their `parsePriceEur` calls for `plausiblePriceEur` the same
+  way when touched next. Do NOT touch `catalog.json`/`llms-full.txt`'s per-entry `priceText` (verbatim
+  register mirror, same exception as the programme page body) or `oskused`/`konto`'s client-side
+  per-entry price display.
 - **Konto — turn the match-improved send ON (owner config, no code).** Create the Listmonk template +
   set `LISTMONK_KONTO_MATCH_IMPROVED_TEMPLATE_ID` (embargo-safe/neutral copy — "lisandus sobiv programm/
   kombinatsioon", never EVK's own; the code passes only `konto_url` + bounded counts); schedule

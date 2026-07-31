@@ -5,7 +5,7 @@
 // Ei dubleeri /kkk, /mis-on-mikrokvalifikatsioon ega /kes-maksab lehti — need
 // katavad sissejuhatuse ja rahastuse; siin on üksikküsimuste faktilehed.
 import { catalog, providers, catalogUpdatedAt } from "../catalog";
-import { parsePriceEur } from "../courseSchema";
+import { plausiblePriceEur } from "../priceGuard";
 import { ehisProgrammeCount, ehisProviderCount } from "../ehisFacts";
 
 export type QuestionEntry = {
@@ -62,8 +62,11 @@ for (const n of ects) {
 }
 const ectsCommonBucket = ectsBuckets.slice().sort((a, b) => b.count - a.count)[0] ?? null;
 
+// plausiblePriceEur (not parsePriceEur): withholds a €/EAP outlier that is
+// almost certainly a bad source reading (see src/data/priceGuard.ts) so the
+// site's own "hind" claims aren't defined by one suspect value.
 const prices = catalog
-  .map((e) => parsePriceEur(e.priceText))
+  .map((e) => plausiblePriceEur(e))
   .filter((p): p is number => p != null && p > 0)
   .sort((a, b) => a - b);
 const priceMin = prices.length ? prices[0] : null;
