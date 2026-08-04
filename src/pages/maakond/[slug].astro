@@ -59,12 +59,12 @@ const introText =
   `${region.formalName} (keskus ${region.seat}): ${allEntries.length} mikrokvalifikatsiooni ja mikrokraadi` +
   `${local.length > 0 ? ` — ${local.length} kohapeal ${localProviders.length} koolist` : ""}` +
   `${online.length > 0 ? `, ${online.length} veebis kättesaadav` : ""}.` +
-  (hasLabor ? ` Töötukassa andmetel on ${laborAsOf} kõrgeim nõudlus ametirühmas „${iscoLabel(topDemand!.isco_major_group)}".` : "");
+  (hasLabor ? ` avaandmete järgi on ${laborAsOf} kõrgeim nõudlus ametirühmas „${iscoLabel(topDemand!.isco_major_group)}".` : "");
 
 const title = `Õpe, töö ja palk ${region.name}l — mikrokvalifikatsioonid`;
 const description =
   `Mida saab ${region.name}l õppida, millised tööd on nõutud ja kui palju makstakse. ` +
-  `${allEntries.length} mikrokvalifikatsiooni ja mikrokraadi${hasLabor ? `, Töötukassa tööturunõudlus (${laborAsOf})` : ""}` +
+  `${allEntries.length} mikrokvalifikatsiooni ja mikrokraadi${hasLabor ? `, avalik tööturunõudlus (${laborAsOf})` : ""}` +
   `${regionalHourly != null ? " ja piirkondlik palgakontekst" : ""}.`;
 
 // ── KKK — ainult päris vastustega ──────────────────────────────────────────────
@@ -83,7 +83,7 @@ const faq: { q: string; a: string }[] = [
 if (hasLabor) {
   faq.push({
     q: `Millised tööd on ${region.name}l nõutud?`,
-    a: `Töötukassa avaandmetel on ${laborAsOf} ${region.name}l kõige rohkem avatud kohti ametirühmas `
+    a: `Avaandmetel on ${laborAsOf} ${region.name}l kõige rohkem avatud kohti ametirühmas `
       + `„${iscoLabel(topDemand!.isco_major_group)}" (${openingsBandText(topDemand!.openings_now_band)}). `
       + `Arvud on toodud vahemikena ametirühma tasemel — täpne nimekiri allpool. Üksikuid töökuulutusi me ei kuva.`
   });
@@ -170,7 +170,7 @@ const schema = { "@context": "https://schema.org", "@graph": graph };
       description={description}
       canonicalPath={canonicalPath}
       ogTitle={`Õpe, töö ja palk ${region.name}l`}
-      ogDescription={`${allEntries.length} mikrokvalifikatsiooni ja mikrokraadi, Töötukassa tööturunõudlus ja palk — ${region.formalName}.`}
+      ogDescription={`${allEntries.length} mikrokvalifikatsiooni ja mikrokraadi, avalik tööturunõudlus ja palk — ${region.formalName}.`}
       jsonLd={schema}
     />
   </head>
@@ -254,7 +254,7 @@ const schema = { "@context": "https://schema.org", "@graph": graph };
             <h2>Millised tööd on {region.name}l nõutud?</h2>
             {hasLabor ? (
               <p class="muted">
-                Ametlik Töötukassa avaandmestik näitab vabu töökohti <strong>ametirühma</strong> kaupa
+                Ametlik avaandmestik näitab vabu töökohti <strong>ametirühma</strong> kaupa
                 (mitte üksikrolli kaupa), {region.name}l, kuu seisuga {laborAsOf}. Arvud on vahemikena.
               </p>
             ) : (

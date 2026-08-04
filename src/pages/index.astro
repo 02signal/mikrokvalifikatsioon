@@ -25,7 +25,7 @@ const homeFaq = [
   },
   {
     question: "Kui palju see maksab ja kes maksab?",
-    answer: "Enamasti 700–1 800 €. Mõnda programmi rahastatakse sihtrühmale (nt Euroopa Liidu kaasrahastus või õpetajate akadeemia) — iga programmi juures on eraldi rahastuse ja sihtrühma info. Sageli ei pea sa ise maksma: tööandja koolituseelarve, Töötukassa toetused või ise. Hind on iga programmi juures kataloogis."
+    answer: "Enamasti 700–1 800 €. Mõnda programmi rahastatakse sihtrühmale (nt Euroopa Liidu kaasrahastus või õpetajate akadeemia) — iga programmi juures on eraldi rahastuse ja sihtrühma info. Sageli ei pea sa ise maksma: tööandja koolituseelarve, õppekava enda sihtrühma rahastus või ise. Hind on iga programmi juures kataloogis."
   },
   {
     question: "Kui kaua õpe kestab?",
@@ -297,7 +297,7 @@ const schema = {
             <li class="hub-card">
               <a href="/kes-maksab/" data-track-event="cta_click" data-track-label="home_hub_kesmaksab">
                 <span class="hub-name">Kes maksab</span>
-                <span class="hub-desc">Töötukassa, tööandja või ise — leia rahastuse rada.</span>
+                <span class="hub-desc">Tööandja, õppekava rahastus või ise — leia rahastuse rada.</span>
               </a>
             </li>
           </ul>
@@ -312,12 +312,12 @@ const schema = {
           </div>
           <div class="grid-3">
             <article class="card">
-              <h3>Töötukassa</h3>
-              <p>Koolituskaart ja töötava inimese õpitoetused võivad katta suure osa hinnast, kui oskus on nõudlusega valdkonnas.</p>
-            </article>
-            <article class="card">
               <h3>Tööandja</h3>
               <p>Kui uus oskus aitab praegust tööd paremini teha, on tööandja koolituseelarve sageli kõige kiirem tee.</p>
+            </article>
+            <article class="card">
+              <h3>Õppekava rahastus</h3>
+              <p>Osa õppekavadest on mõnele sihtrühmale juba kaetud või soodsam — küsi koolilt, kas sina kvalifitseerud.</p>
             </article>
             <article class="card">
               <h3>Ise makstes</h3>
@@ -560,8 +560,8 @@ const schema = {
       };
 
       const FUNDING_HINTS: Record<string, string> = {
-        tootan: "Kõige kiirem rada on tööandja koolituseelarve: vii talle konkreetne programm, hind ja arvutus, mida ettevõte võidab. Küsi ka Töötukassast, kas sinu olukorras on töötava inimese toetusi.",
-        tootu: "Sinu esimene aadress on Töötukassa: koolituskaart ja õppimise toetused on mõeldud just registreeritud töötule. Võta nõustajale kaasa konkreetse programmi nimi ja hind.",
+        tootan: "Kõige kiirem rada on tööandja koolituseelarve: vii talle konkreetne programm, hind ja arvutus, mida ettevõte võidab. Küsi ka koolilt, kas sellel õppekaval on sihtrühmale suunatud rahastust.",
+        tootu: "Vali kataloogist konkreetne programm ja võta nimi, maht ja hind kaasa. Küsi koolilt, kas õppekaval on sihtrühmale suunatud rahastust, ja uuri eraldi, mida sinu olukorras üldse toetatakse — konkreetse plaaniga saad kiirema vastuse.",
         ettevotja: "Ettevõtjana saad õppe sageli ettevõtte koolituskuluna arvestada. Kui plaanid suuremat arengut, uuri ka ettevõtluse arendamise toetusi."
       };
 

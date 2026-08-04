@@ -77,7 +77,7 @@ const faqItems = [
   {
     question: "Kas mikrokraadi õpe võib olla osaliselt rahastatud?",
     answer:
-      "Sageli jah. Kulu võib katta tööandja koolituseelarve, Töötukassa toetus (kui oled töötu või su oskused vajavad uuendamist) või osa programme on kindlale sihtrühmale soodsamad EL-i kaasrahastusel. Iga kirje hind on kataloogis; rahastusradadest räägib leht „Kes maksab?“."
+      "Sageli jah. Kulu võib katta tööandja koolituseelarve või õppekava enda sihtrühma rahastus — osa programme on kindlale sihtrühmale soodsamad EL-i kaasrahastusel. Iga kirje hind on kataloogis; rahastusradadest räägib leht „Kes maksab?“."
   },
   {
     question: "Millises valdkonnas on kõige rohkem mikrokraade?",
@@ -256,7 +256,7 @@ const schema = {
           <ul class="mkr-criteria">
             <li><strong>Ülikool ja sihtrühm</strong> — kes pakub ja kellele programm mõeldud on.</li>
             <li><strong>Maht (EAP)</strong> — Euroopa ainepunktid; 1 EAP ≈ 26 tundi õppija tööd. Registris on {withEcts.length} mikrokraadi avaldanud oma EAP-mahu.</li>
-            <li><strong>Hind</strong> — õppemaks; {withPrice.length} kirjet näitab hinda avalikult. Osa kulust võib katta tööandja või Töötukassa.</li>
+            <li><strong>Hind</strong> — õppemaks; {withPrice.length} kirjet näitab hinda avalikult. Osa kulust võib katta tööandja või õppekava enda rahastus.</li>
             <li><strong>Kestus</strong> — paarist nädalast kuni kahe semestrini töö kõrvalt.</li>
             <li><strong>Õppevorm</strong> — veebis, hübriid või kohapeal.</li>
             <li><strong>Eeldused</strong> — osa mikrokraade nõuab varasemat kõrgharidust; vaata iga programmi lehelt.</li>
@@ -355,7 +355,7 @@ const schema = {
           </div>
           <p class="notice">
             Hinnavahemik koondab valdkonna ülikoolide avaldatud hinnad; osa kulust võib katta
-            tööandja või Töötukassa (<a href="/kes-maksab/">kes maksab?</a>). Lõplik ja ametlik
+            tööandja või õppekava enda rahastus (<a href="/kes-maksab/">kes maksab?</a>). Lõplik ja ametlik
             hind on alati ülikooli enda lehel — metoodika on lehel <a href="/andmed/">Andmed</a>.
           </p>
         </div>
@@ -371,7 +371,7 @@ const schema = {
             <li><strong>Alusta oskusest, mitte koolist.</strong> Mõtle, millist konkreetset oskust tahad tõendada — siis sobib filtreerida valdkonna järgi, näiteks <a href="/valdkond/it-ja-andmed/">IT ja andmed</a> või <a href="/valdkond/majandus-ja-juhtimine/">majandus ja juhtimine</a>.</li>
             <li><strong>Vaata mahtu ja kestust koos.</strong> 24 EAP kahe semestriga on tuntav koormus töö kõrvalt; lühem 12–15 EAP programm mahub kiiremini graafikusse.</li>
             <li><strong>Kontrolli õppevormi ja eeldusi.</strong> Veebis või hübriid sobib töötavale inimesele; vaata ka, kas programm nõuab varasemat kõrgharidust.</li>
-            <li><strong>Võrdle hinda ja rahastust.</strong> Kõrvuta kuni kolm programmi ja kaalu, kas kulu katab tööandja, Töötukassa või sina ise (<a href="/kes-maksab/">kes maksab?</a>).</li>
+            <li><strong>Võrdle hinda ja rahastust.</strong> Kõrvuta kuni kolm programmi ja kaalu, kas kulu katab tööandja, õppekava enda rahastus või sina ise (<a href="/kes-maksab/">kes maksab?</a>).</li>
           </ol>
           <div class="actions">
             <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="mkr_vordlus_suunatest">Tee 2-minutiline suunatest</a>

@@ -48,7 +48,7 @@ const contentPages: Record<string, OgPageEntry> = {
   },
   "kes-maksab": {
     title: "Kes maksab mikrokvalifikatsiooni eest?",
-    description: "Kolm rada: Töötukassa, tööandja või ise — ja kuidas igaüht küsida."
+    description: "Kolm rada: tööandja, õppekava rahastus või ise — ja kuidas igaüht küsida."
   },
   koolitaja: {
     title: "Mikrokraadid koolide kaupa — kõik koolitajad",
@@ -114,7 +114,7 @@ const contentPages: Record<string, OgPageEntry> = {
   },
   maakond: {
     title: "Mikrokraadid maakonniti — õpe, tööturg, palk",
-    description: "Vali maakond ja vaata kohapealset õpet, veebiõpet, Töötukassa nõudlust ja palgakonteksti."
+    description: "Vali maakond ja vaata kohapealset õpet, veebiõpet, avalikku tööturunõudlust ja palgakonteksti."
   },
   ametiruhm: {
     title: "Ametirühmad: tööturu nõudlus ja sobiv õpe",
@@ -198,7 +198,7 @@ const questionPages = Object.fromEntries(
 // Maakonnalehed: võti = maakonna slug (/maakond/<slug>/). "maakond" (indeks) on
 // contentPages sees, siin ainult 15 üksikmaakonda.
 const regionPages = Object.fromEntries(
-  REGIONS.map((r) => [r.slug, { title: `${r.formalName} — õpe, tööturg, palk`, description: `Õppimisvõimalused, Töötukassa nõudlus ja palgakontekst ${r.name} kohta.` }])
+  REGIONS.map((r) => [r.slug, { title: `${r.formalName} — õpe, tööturg, palk`, description: `Õppimisvõimalused, avalik tööturunõudlus ja palgakontekst ${r.name} kohta.` }])
 );
 
 // Ametirühmalehed: võti = rühma slug (/ametiruhm/<slug>/). "ametiruhm" (indeks)

@@ -74,7 +74,7 @@ const faqItems = [
   {
     question: "Kes mikrokvalifikatsiooni kinni maksab?",
     answer:
-      "Kolm rada: tööandja koolituseelarve (kui oskus aitab praegust tööd), Töötukassa toetused (kui oled töötu või su oskused vajavad uuendamist) või ise makstes. Sobiva raja leiad lehelt /kes-maksab/."
+      "Kolm rada: tööandja koolituseelarve (kui oskus aitab praegust tööd), õppekava enda sihtrühma rahastus (kui kvalifitseerud) või ise makstes. Sobiva raja leiad lehelt /kes-maksab/."
   },
   {
     question: "Millises valdkonnas on kõige rohkem valikut?",
@@ -245,7 +245,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
             <article class="card">
               <span class="stat">1 · Hind</span>
               <h3>Mida õpe maksab?</h3>
-              <p>Vaata kooli avaldatud hinda. Pea meeles, et hinna võib katta tööandja või Töötukassa — vaata <a href="/kes-maksab/">kes maksab</a>.</p>
+              <p>Vaata kooli avaldatud hinda. Pea meeles, et osa hinnast võib katta tööandja või õppekava enda rahastus — vaata <a href="/kes-maksab/">kes maksab</a>.</p>
             </article>
             <article class="card">
               <span class="stat">2 · Maht (EAP)</span>
@@ -265,7 +265,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
             <article class="card">
               <span class="stat">5 · Kes maksab</span>
               <h3>Kuidas rahastada?</h3>
-              <p>Kolm rada: tööandja koolituseelarve, Töötukassa toetus või ise. <a href="/kes-maksab/">Leia oma rada</a>.</p>
+              <p>Kolm rada: tööandja koolituseelarve, õppekava enda rahastus või ise. <a href="/kes-maksab/">Leia oma rada</a>.</p>
             </article>
             <article class="card">
               <span class="stat">+ Tunnistus</span>
@@ -305,7 +305,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
                     <td>{fmtEap(e)}</td>
                     <td>{e.durationText ?? "kooli lehel"}</td>
                     <td>{fmtFormat(e)}</td>
-                    <td>tööandja, Töötukassa või ise</td>
+                    <td>tööandja, õppekava rahastus või ise</td>
                   </tr>
                 ))}
               </tbody>
@@ -397,7 +397,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
             <li><strong>Alusta oskusest, mitte koolist.</strong> Mõtle, millist konkreetset oskust soovid tõendada, ja filtreeri valdkonna järgi — näiteks <a href="/valdkond/majandus-ja-juhtimine/">majandus ja juhtimine</a> või <a href="/valdkond/it-ja-andmed/">IT ja andmed</a>.</li>
             <li><strong>Vaata mahtu ja kestust koos.</strong> Väiksem EAP-maht sobib kiiresse graafikusse töö kõrvalt; suurem maht annab põhjalikuma tulemuse, aga nõuab rohkem aega.</li>
             <li><strong>Kontrolli õppevormi.</strong> Veebis või hübriid sobib töötavale inimesele; kohapealne annab rohkem praktikat ja kontakti.</li>
-            <li><strong>Võrdle hinda ja rahastust.</strong> Märgi kataloogis kuni kolm programmi, vaata need <a href="/vordlus/">võrdlustööriistas</a> kõrvuti ja kaalu, kas kulu katab tööandja, Töötukassa või sina ise (<a href="/kes-maksab/">kes maksab?</a>).</li>
+            <li><strong>Võrdle hinda ja rahastust.</strong> Märgi kataloogis kuni kolm programmi, vaata need <a href="/vordlus/">võrdlustööriistas</a> kõrvuti ja kaalu, kas kulu katab tööandja, õppekava enda rahastus või sina ise (<a href="/kes-maksab/">kes maksab?</a>).</li>
           </ol>
           <p>
             Pikem otsustusraamistik (eesmärk → maht → rahastus → valdkond → võrdle → vali) ja kõik

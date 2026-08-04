@@ -381,8 +381,8 @@ const schema = {
                 <span><strong>Maksan ise.</strong> Näitame hinda ja võimalikku tasuvust - millal kulu end tagasi teenib.</span>
               </label>
               <label class="pm-acc-toggle">
-                <input type="radio" name="funding_route" value="tootukassa" data-funding />
-                <span><strong>Töötukassa kaudu.</strong> Anname märku programmidest, mille puhul Töötukassa toetus võib kõne alla tulla. Lõpliku otsuse teeb alati Töötukassa.</span>
+                <input type="radio" name="funding_route" value="toetus" data-funding />
+                <span><strong>Otsin toetust või soodustust.</strong> Anname märku programmidest, millel on sihtrühmale suunatud rahastust. Meie ei vahenda ega otsusta ühtegi toetust - seda teeb alati kool või meetme korraldaja.</span>
               </label>
               <label class="pm-acc-toggle">
                 <input type="radio" name="funding_route" value="tooandja" data-funding />
@@ -410,7 +410,7 @@ const schema = {
             </a>
             <a class="pm-next" href="/kes-maksab/" data-track-event="cta_click" data-track-label="account_next_kesmaksab">
               <span class="ic pm-ic-c" aria-hidden="true">€</span>
-              <div><h4>Kes maksab</h4><p>Töötukassa, tööandja, ise - mis sulle sobib.</p></div>
+              <div><h4>Kes maksab</h4><p>Tööandja, õppekava rahastus, ise - mis sulle sobib.</p></div>
             </a>
             <a class="pm-next" href="/mikrokvalifikatsioonide-vordlus/" data-track-event="cta_click" data-track-label="account_next_vordlus">
               <span class="ic pm-ic-d" aria-hidden="true">⚖</span>
@@ -489,7 +489,7 @@ const schema = {
 
       type PkgItem = { key: string; text: string; progs?: string[]; w?: number };
       type AccountPackage = { id: string; name: string; items: PkgItem[] };
-      type FundingRoute = "ise" | "tootukassa" | "tooandja" | null;
+      type FundingRoute = "ise" | "toetus" | "tooandja" | null;
       type AccountState = {
         email: string;
         consent: boolean;            // course_offers nõusolek (double-opt-in kinnitatud sild)
@@ -692,7 +692,7 @@ const schema = {
           }
           case "funding":
           case "funding_profile": {
-            // value = marsruut (ise/tootukassa/tooandja) -> rahastus_<route>.
+            // value = marsruut (ise/toetus/tooandja) -> rahastus_<route>.
             const ref = `rahastus_${value}`;
             return value && TARGET_REF_RE.test(ref) ? { kind: "funding", target_ref: ref } : null;
           }
@@ -1608,7 +1608,7 @@ const schema = {
       // Rahastus-marsruudi viide -> inimkeelne nimi (rahastus_ise -> "ise maksan").
       const FUNDING_LABEL: Record<string, string> = {
         rahastus_ise: "maksan ise",
-        rahastus_tootukassa: "Töötukassa kaudu",
+        rahastus_toetus: "otsin toetust või soodustust",
         rahastus_tooandja: "tööandja maksab",
       };
       const subLabel = (s: ServerSub): string => {
@@ -1727,7 +1727,7 @@ const schema = {
         });
       };
       $$("[data-funding]").forEach((el) => el.addEventListener("change", async (e) => {
-        const route = (e.target as HTMLInputElement).value as "ise" | "tootukassa" | "tooandja";
+        const route = (e.target as HTMLInputElement).value as "ise" | "toetus" | "tooandja";
         // REAL-PATH: toetuse profiil on serveri tellimus (kanooniline kind
         // "funding", target_ref "rahastus_<route>" - teisendus piiril).
         // POST /subscriptions; degradeerub graatsiliselt.
