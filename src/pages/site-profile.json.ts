@@ -61,7 +61,7 @@ export async function GET() {
       }
     ],
     importantCaveat:
-      "See ei ole riiklik register. Ametlik EHIS faktikiht on peegeldatud eraldi failis ehis-catalog.json; hind, vastuvõtt ja kooli kirjeldav info on iga kooli enda lehel (catalog.json url-väli). Toetuste tingimused kinnitab Töötukassa või tööandja.",
+      "See ei ole riiklik register. Ametlik EHIS faktikiht on peegeldatud eraldi failis ehis-catalog.json; hind, vastuvõtt ja kooli kirjeldav info on iga kooli enda lehel (catalog.json url-väli). Rahastuse ja soodustuste tingimused kinnitab alati kool, tööandja või vastava meetme korraldaja.",
     corePositioning:
       "Mikrokraad on üks mikrokvalifikatsiooni liik. Mikrokvalifikatsioon on katusmõiste; ülikoolide pakutavaid kutsutakse mikrokraadideks.",
     catalog: {
@@ -88,7 +88,7 @@ export async function GET() {
       { url: "https://mikrokvalifikatsioon.ee/kataloog/<slug>/", purpose: "Iga programmi oma leht: eesmärk, õpiväljundid, hindamine, hind, maht ja link kooli lehele (slug + pageUrl catalog.json-is)." },
       { url: "https://mikrokvalifikatsioon.ee/mikrokraadid/", purpose: "Mikrokraadikirjete ülevaade koolide kaupa, EHIS täiskihi viitega ja võrdlus teiste tunnistustega." },
       { url: "https://mikrokvalifikatsioon.ee/mis-on-mikrokvalifikatsioon/", purpose: "Definitsioon, võrdlus (mikrokraad, kutsetunnistus, sertifikaat) ja KKK." },
-      { url: "https://mikrokvalifikatsioon.ee/kes-maksab/", purpose: "Rahastuse teejuht: tööandja, Töötukassa, ise — kuidas igaüht küsida." },
+      { url: "https://mikrokvalifikatsioon.ee/kes-maksab/", purpose: "Rahastuse teejuht: tööandja, õppekava rahastus, ise — kuidas igaüht küsida." },
       { url: "https://mikrokvalifikatsioon.ee/kkk/", purpose: "Korduma kippuvad küsimused: definitsioonid, aeg, hind, rahastus, tunnustus ja koolitajale — FAQPage schemaga." },
       { url: "https://mikrokvalifikatsioon.ee/koolitajale/", purpose: "Koolitajale: ametlik raamistik (TKS, 5–30 EAP, HAKA, EHIS) ja vorm oma programmi registrisse lisamiseks." },
       { url: "https://mikrokvalifikatsioon.ee/koolitajale/kvaliteedihindamine/", purpose: "Praktiline juhend: kvaliteedihindamise 8 valdkonda, tüüpvead ja ettevalmistus koolitajale." },

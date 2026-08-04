@@ -37,8 +37,8 @@ function dmy(iso: string): string {
 const laborUpdated = dmy(laborGeneratedAt || laborCheckedAt);
 
 const title = "Mikrokvalifikatsioonid maakonniti: õpe, töökohad ja palk";
-const description = `Mida saab igas Eesti maakonnas õppida, millised tööd on nõutud ja kui palju makstakse — õpe, Töötukassa tööturunõudlus (${laborAsOf}) ja Statistikaameti palk koos. Kõik 15 maakonda.`;
-const introText = "Vali maakond ja näe ühes kohas: milliseid mikrokvalifikatsioone ja mikrokraade saab seal õppida (kohapeal või veebis), millised ametirühmad on Töötukassa andmetel nõutud ja milline on piirkondlik palgakontekst.";
+const description = `Mida saab igas Eesti maakonnas õppida, millised tööd on nõutud ja kui palju makstakse — õpe, avalik tööturunõudlus (${laborAsOf}) ja Statistikaameti palk koos. Kõik 15 maakonda.`;
+const introText = "Vali maakond ja näe ühes kohas: milliseid mikrokvalifikatsioone ja mikrokraade saab seal õppida (kohapeal või veebis), millised ametirühmad on avaandmete järgi nõutud ja milline on piirkondlik palgakontekst.";
 
 const schema = {
   "@context": "https://schema.org",
@@ -83,7 +83,7 @@ const schema = {
       description={description}
       canonicalPath={canonicalPath}
       ogTitle="Mikrokvalifikatsioonid maakonniti"
-      ogDescription="Õpe, Töötukassa tööturunõudlus ja palk — kõik 15 Eesti maakonda ühes vaates."
+      ogDescription="Õpe, avalik tööturunõudlus ja palk — kõik 15 Eesti maakonda ühes vaates."
       jsonLd={schema}
     />
   </head>
@@ -99,7 +99,7 @@ const schema = {
           <span class="eyebrow">Maakonniti</span>
           <h1>Õpe, töökohad ja palk — maakonniti</h1>
           <p>{introText}</p>
-          <p class="report-date">Kataloog kontrollitud: {checkedAtText}. Tööturu andmeseis: {laborAsOf} (Töötukassa feed uuendatud {laborUpdated}).</p>
+          <p class="report-date">Kataloog kontrollitud: {checkedAtText}. Tööturu andmeseis: {laborAsOf} (andmefeed uuendatud {laborUpdated}).</p>
         </div>
       </section>
 
@@ -117,14 +117,14 @@ const schema = {
                 </p>
                 <p class="region-demand">
                   {demand
-                    ? <>Töötukassa: kõrgeim nõudlus <strong>{demand}</strong> (ametirühma kohti, {laborAsOf}).</>
+                    ? <>Tööturg: kõrgeim nõudlus <strong>{demand}</strong> (ametirühma kohti, {laborAsOf}).</>
                     : <span class="muted">Eraldi tööturu andmeid napib.</span>}
                 </p>
               </li>
             ))}
           </ul>
           <p class="region-help">
-            Iga maakonna leht koondab kohapealse ja veebis kättesaadava õppe, Töötukassa nõudluse maakonniti
+            Iga maakonna leht koondab kohapealse ja veebis kättesaadava õppe, avaliku tööturunõudluse maakonniti
             (ametirühma tasemel) ja piirkondliku palgakonteksti.
           </p>
         </div>

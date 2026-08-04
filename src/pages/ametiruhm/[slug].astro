@@ -67,7 +67,7 @@ const salaryText = salary
     ? `brutopalga mediaan ${eur(salary.min)} €`
     : `brutopalga mediaan ${eur(salary.min)}–${eur(salary.max)} €`
   : "palgakontekst";
-const description = `${group.label} Eestis: ${demandText} (Töötukassa ${asOf}), ${salaryText} (Statistikaamet ${salaryMonthlyYear}) ning käsitsi kontrollitud õpitee — ${valdkondCards.length} valdkonda ja ${karjaarCards.length} karjäärirada sobivate mikrokvalifikatsioonide ja mikrokraadideni.`;
+const description = `${group.label} Eestis: ${demandText} (avaandmed ${asOf}), ${salaryText} (Statistikaamet ${salaryMonthlyYear}) ning käsitsi kontrollitud õpitee — ${valdkondCards.length} valdkonda ja ${karjaarCards.length} karjäärirada sobivate mikrokvalifikatsioonide ja mikrokraadideni.`;
 
 // ── FAQ (≥2 Q&A; toidab ka FAQPage JSON-LD-d) ───────────────────────────────────
 const faq: { question: string; answer: string }[] = [];
@@ -75,7 +75,7 @@ if (demand) {
   faq.push({
     question: `Kui nõutud on ${labelLower} Eestis?`,
     answer:
-      `Töötukassa avaandmete järgi (seis ${asOf}) on selle ametirühma nõudlus vähemalt ühes ` +
+      `Avaandmete järgi (seis ${asOf}) on selle ametirühma nõudlus vähemalt ühes ` +
       `maakonnas kuni ${openingsBandText(demand.topBand)} ja vabu kohti on ${demand.activeRegions} ` +
       `maakonnas ${demand.regionCount}-st (trend ${trendLabel(demand.trend)}). Arvud on toodud ` +
       `vahemikena ametirühma tasemel — see on ametliku avaandmestiku täpsus.`,
@@ -217,7 +217,7 @@ const schema = { "@context": "https://schema.org", "@graph": graph };
               <span class="kicker">Tööturg</span>
               <h2>Kui nõutud on {labelLower} Eestis?</h2>
               <p class="muted">
-                Ametlik Töötukassa avaandmestik näitab vabu töökohti <strong>ametirühma</strong>
+                Ametlik avaandmestik näitab vabu töökohti <strong>ametirühma</strong>
                 kaupa (mitte üksikrolli kaupa) ja <strong>maakonniti</strong>. Allolev riiklik
                 näitaja on agregeeritud maakondade üle: kõrgeim nõudlustase vähemalt ühes
                 maakonnas, kuu seisuga {asOf}.

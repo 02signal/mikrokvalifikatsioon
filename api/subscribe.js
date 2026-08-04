@@ -37,7 +37,7 @@ const KIND_ALIASES = {
   funding_profile: 'funding_profile_set',
 };
 const ACCOUNT_KINDS = new Set(['account_created', 'package_saved', 'reminder_subscribed', 'funding_profile_set', 'combo_waitlist']);
-const ALLOWED_FUNDING_ROUTES = new Set(['ise', 'tootukassa', 'tooandja']);
+const ALLOWED_FUNDING_ROUTES = new Set(['ise', 'toetus', 'tooandja']);
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Bounded outcome-package payload — never trust client size/length.

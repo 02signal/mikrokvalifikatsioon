@@ -197,10 +197,10 @@ export const questions: QuestionEntry[] = [
     shortAnswer:
       `Mikrokraad maksab Eestis enamasti ${priceTypicalText} (tüüpiline vahemik, mediaan ${priceMedian != null ? fmtEur(priceMedian) : "~1 440 €"}). ` +
       `Registris avaldatud hinnad ulatuvad ${priceMin != null ? fmtEur(priceMin) : "~300 €"}-st ${priceMax != null ? fmtEur(priceMax) : "~4 000 €"}-ni, sõltuvalt mahust (EAP) ja koolist. ` +
-      `Sageli ei maksa õppija kogu summat ise — tööandja või Töötukassa võib selle katta.`,
+      `Sageli ei maksa õppija kogu summat ise — tööandja koolituseelarve või õppekava enda sihtrühma rahastus võib osa katta.`,
     body: [
       `Hind sõltub kõige rohkem mahust: 12–18 EAP programm maksab vähem kui 24–30 EAP oma. Meie registris on hind avaldatud ${prices.length} programmil ${programmeCount}-st. Avaldatud hinnad ulatuvad ${priceMin != null ? fmtEur(priceMin) : "~300 €"}-st ${priceMax != null ? fmtEur(priceMax) : "~4 000 €"}-ni; tüüpiline (keskmine pool kõikidest hindadest) vahemik on ${priceTypicalText} ja mediaan ${priceMedian != null ? fmtEur(priceMedian) : "~1 440 €"}.`,
-      `Õppija ei pea sageli kogu summat ise maksma. Kolm rahastusrada on tööandja koolituseelarve, Töötukassa toetused ja ise makstes. Osa programme on lisaks kindlale sihtrühmale rahastatud (näiteks töötavatele õpetajatele EL-i kaasrahastusel) — need on kataloogis märgitud.`,
+      `Õppija ei pea sageli kogu summat ise maksma. Kolm rahastusrada on tööandja koolituseelarve, õppekava enda sihtrühma rahastus ja ise makstes. Osa programme on kindlale sihtrühmale rahastatud (näiteks töötavatele õpetajatele EL-i kaasrahastusel) — need on kataloogis märgitud.`,
       `Lõplik ja siduv hind on alati kooli enda registreerimislehel; meie register koondab avaldatud hinnad koos kontrollkuupäevaga. Kui kool pole hinda avaldanud, jätame välja, mitte ei leiuta.`
     ],
     relatedLinks: [
@@ -350,7 +350,7 @@ export const questions: QuestionEntry[] = [
     body: [
       `Samm 1 — vali programm. Kasuta filtreeritavat kataloogi (valdkond, kool, hind, maht) või tee avalehel 2-minutiline suunatest, mis pakub sulle sobivad programmid. Märgi kuni kolm ja võrdle neid kõrvuti.`,
       `Samm 2 — kontrolli eeldusi ja tähtaega. Vaata programmi lehelt, kas on vastuvõtu eeldusi (näiteks varasem kõrgharidus või töökogemus) ja millal on registreerimise tähtaeg ning õppe algus. Need on iga programmi juures kataloogis ja kooli lehel.`,
-      `Samm 3 — registreeru kooli lehel. Meie register suunab sind kooli enda registreerimislehele. Seal esitad andmed, valid rahastuse (ise, tööandja või Töötukassa kaudu) ja kinnitad osaluse. Meie ei vahenda registreerumist ega salvesta sinu andmeid.`
+      `Samm 3 — registreeru kooli lehel. Meie register suunab sind kooli enda registreerimislehele. Seal esitad andmed, valid rahastuse (ise või tööandja kaudu) ja kinnitad osaluse. Meie ei vahenda registreerumist ega salvesta sinu andmeid.`
     ],
     relatedLinks: [
       { label: "Registreerimine ja algusajad", href: "/registreerimine/" },
@@ -381,20 +381,20 @@ export const questions: QuestionEntry[] = [
     question: "Kas tööandja saab mikrokvalifikatsiooni rahastada?",
     figure: {
       src: "/diagrams/rahastus-kolm-rada.svg",
-      alt: "Joonis: õppetasule on kolm rahastusrada — õppija ise, tööandja koolituseelarve või Töötukassa toetus.",
-      caption: "Kolm rahastusrada: sina ise, tööandja koolituseelarve või Töötukassa. Osa programme on sihtrühmale eraldi rahastatud.",
+      alt: "Joonis: õppetasule on kolm rahastusrada — õppija ise, tööandja koolituseelarve või õppekava enda sihtrühma rahastus.",
+      caption: "Kolm rahastusrada: sina ise, tööandja koolituseelarve või õppekava enda rahastus. Osa programme on sihtrühmale eraldi rahastatud.",
       width: 960,
       height: 504,
       stacked: "/diagrams/stacked/rahastus-kolm-rada.svg"
     },
     shortAnswer:
-      `Jah — tööandja koolituseelarve on üks kolmest peamisest rahastusrajast (tööandja, Töötukassa või ise). ` +
+      `Jah — tööandja koolituseelarve on üks kolmest peamisest rahastusrajast (tööandja, õppekava enda rahastus või ise). ` +
       `Paljud ettevõtted katavad töötaja mikrokvalifikatsiooni õppetasu täielikult või osaliselt, sest oskus jääb ettevõttesse ja õpe käib töö kõrvalt. ` +
-      `Lisaks pakub Töötukassa täiendusõppe toetusi nii töötavatele kui tööd otsivatele inimestele.`,
+      `Kui tööandja ei kata, tasub koolilt küsida, kas õppekaval on sihtrühmale suunatud rahastust või soodustust.`,
     body: [
       `Tööandja rahastus on tavaline rada: õppetasu tasub ettevõte koolituseelarvest ja töötaja saab oskuse, mida saab kohe töös rakendada. See on tööandjale sageli soodsam ja kiirem kui uue inimese värbamine — eriti mikrokvalifikatsiooni puhul, mis on kitsas ja praktiline. Kokkulepe õppe ja võimaliku siduvusaja kohta sõlmitakse tööandjaga.`,
-      `Töötukassa on teine avalik rada. Töötukassa toetab täiendus- ja ümberõpet erinevate teenuste kaudu — näiteks töötava inimese tasemeõppes osalemise toetus või koolituskaart tööd otsivale inimesele. Tingimused ja sihtrühm sõltuvad konkreetsest teenusest ja need on kirjas Töötukassa enda lehel.`,
-      `Kolmas rada on ise tasumine. Sõltumata rajast on lõplik ja siduv õppetasu ning maksetingimused alati kooli enda registreerimislehel. Mõned programmid on lisaks kindlale sihtrühmale eraldi rahastatud (näiteks Euroopa Liidu kaasrahastusel) — see on iga programmi juures kataloogis märgitud.`
+      `Teine rada on õppekava enda rahastus. Osa õppekavadest on mõnele sihtrühmale juba osaliselt või täielikult kaetud — näiteks Euroopa Liidu kaasrahastusega või kooli enda programmiga. Tingimused ja sihtrühm sõltuvad konkreetsest õppekavast ning neid teab kõige täpsemini kool ise.`,
+      `Kolmas rada on ise tasumine — koos lihtsa tasuvusarvutusega. Sõltumata rajast on lõplik ja siduv õppetasu ning maksetingimused alati kooli enda registreerimislehel.`
     ],
     relatedLinks: [
       { label: "Kes maksab mikrokvalifikatsiooni eest?", href: "/kes-maksab/" },

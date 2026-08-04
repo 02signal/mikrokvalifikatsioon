@@ -50,7 +50,7 @@ function hindDiagram(): Diagram {
       maxLabel: fmtEur(max),
       bandLabel: "tüüpiline vahemik",
     },
-    takeaway: "Küsi kõigepealt tööandjalt või Töötukassalt — sageli ei maksa õppija kogu summat ise.",
+    takeaway: "Küsi kõigepealt tööandjalt ja koolilt — sageli ei maksa õppija kogu summat ise.",
     alt:
       `Registris avaldatud õppetasud ulatuvad ${fmtEur(min)}-st ${fmtEur(max)}-ni. Tüüpiline vahemik ` +
       `(25.–75. protsentiil) on ${fmtEur(p25)}–${fmtEur(p75)}, mediaan ${fmtEur(median)}. Hind sõltub mahust ` +

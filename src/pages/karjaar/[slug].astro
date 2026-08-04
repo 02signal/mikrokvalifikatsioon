@@ -43,7 +43,7 @@ const canonicalPath = `/karjaar/${career.slug}/`;
 const title = `${career.role} — karjäärirada ja õpe`;
 const laborPeriod = asOfText(laborCheckedAt);
 const laborGroup = iscoLabel(careerIsco);
-const description = `${career.role} karjäärirada: mida amet teeb, kuidas alustada ja läbi lüüa, milline õpe aitab ning mida näitab Töötukassa ${laborPeriod} ametirühma nõudlus. ${entries.length} sobivat mikrokvalifikatsiooni ja mikrokraadi.`;
+const description = `${career.role} karjäärirada: mida amet teeb, kuidas alustada ja läbi lüüa, milline õpe aitab ning mida näitab ${laborPeriod} ametirühma nõudlus. ${entries.length} sobivat mikrokvalifikatsiooni ja mikrokraadi.`;
 
 const faq = [
   { q: `Kas alustajana saab ${roleLower} tööd?`,
@@ -51,7 +51,7 @@ const faq = [
   { q: `Milline õpe aitab ${roleLower}na alustada?`,
     a: `Allpool on ${entries.length} sobivat mikrokvalifikatsiooni ja mikrokraadi${portfolio.length ? `, sealhulgas ${portfolio.length} portfoolio-sõbralikku, kus saab teha päris töid` : ""}. Vali õpe, mille väljund on midagi käegakatsutavat.` },
   { q: `Kes maksab ${roleLower} õppe eest?`,
-    a: `Sageli ei maksa õppija kõike ise: Töötukassa, tööandja koolituseelarve või õppija ise. Vaata lähemalt lehelt „Kes maksab?".` }
+    a: `Sageli ei maksa õppija kõike ise: tööandja koolituseelarve, õppekava enda rahastus või õppija ise. Vaata lähemalt lehelt „Kes maksab?".` }
 ];
 
 const schema = {

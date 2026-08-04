@@ -11,7 +11,7 @@ Read `CLAUDE.local.md` first if it exists — it contains owner-only publishing 
 
 ## Audience
 
-Write for an Estonian adult learner, 25-55, considering ümberõpe (career change) or täiendõpe (upskilling). Pragmatic, busy, often paying themselves or via Töötukassa. Not a 65+ owner — tone can be a notch more energetic than the digiteekaart family, but still plain Estonian.
+Write for an Estonian adult learner, 25-55, considering ümberõpe (career change) or täiendõpe (upskilling). Pragmatic, busy, often paying themselves or via an employer. Not a 65+ owner — tone can be a notch more energetic than the digiteekaart family, but still plain Estonian.
 
 Prefer concrete words: "uus oskus", "palk", "maksab", "kestab", "tasub ära", "tunnistus, mida tööandja tunneb". Avoid: "kompetentsimudel", "elukestev õpe" as filler, EU-jargon without translation.
 
@@ -26,7 +26,31 @@ One sentence that anchors all content and SEO: **"Mikrokraad on üks mikrokvalif
 
 ## Commercial Rule
 
-Every main page should answer: what skill the learner gets, how long it takes, what it costs, who can pay for it (ise / Töötukassa / tööandja), what it is worth (salary/role outcome), and the next safe step. Show money and payback logic wherever possible.
+Every main page should answer: what skill the learner gets, how long it takes, what it costs, who can pay for it (ise / tööandja / õppekava enda sihtrühma rahastus), what it is worth (salary/role outcome), and the next safe step. Show money and payback logic wherever possible.
+
+## Funding Copy — hard rule (2026-08-04)
+
+**Never name Eesti Töötukassa, "koolituskaart", or any Töötukassa service as a way to pay for
+training listed on this site.** Since 01.06.2025 the koolituskaart cooperation principles forbid
+implying *in any way* that Töötukassa funds a training provider's open-market courses; Töötukassa
+asked us in writing (03.08.2026) to remove such references. This covers page copy, meta/OG
+descriptions, JSON-LD, FAQ answers, diagram labels, `llms.txt`, and form option labels and values.
+
+Use instead, and only as far as it is true:
+
+- **tööandja koolituseelarve** — the fastest, most concrete route;
+- **õppekava enda sihtrühma rahastus** — some curricula are already covered for a target group
+  (EU co-funding, the school's own programme); tell the learner to ask the school;
+- **ise makstes** — with the payback calculation.
+
+The learner-value point is kept in the abstract on `/kes-maksab/`: support measures exist in
+Estonia, their conditions differ and change, **we neither broker nor promise any of them and do
+not claim that any public measure covers catalogue programmes** — go and ask, with a concrete
+programme, volume and price in hand.
+
+The one permitted use of the name is the **open-data source credit** for the vacancy statistics
+(`andmed.eesti.ee`, CC BY-NC 3.0), which the licence requires: the visible "Allikas:" line and the
+schema.org `Dataset` provenance. Do not extend it into titles, descriptions or marketing prose.
 
 ## Catalog Data Rules
 

@@ -103,12 +103,12 @@ export const diagrams: Diagram[] = [
       cards: [
         { label: "SINA ISE", sub: "otse koolile" },
         { label: "TÖÖANDJA", sub: "koolituseelarvest", emphasis: true },
-        { label: "TÖÖTUKASSA", sub: "täiendusõppe toetus" },
+        { label: "ÕPPEKAVA", sub: "sihtrühma rahastus" },
       ],
     },
     takeaway: "Küsi kõigepealt tööandjalt — koolituseelarve on kõige kiirem rada. Osa programme on sihtrühmale eraldi rahastatud.",
-    alt: "Mikrokvalifikatsiooni õppetasule on kolm peamist rada: õppija ise, tööandja koolituseelarve või Töötukassa toetus. Sageli ei maksa õppija kogu summat ise. Osa programme on kindlale sihtrühmale eraldi rahastatud, näiteks Euroopa Liidu kaasrahastusel.",
-    caption: "Kolm rada õppetasule: sina ise, tööandja koolituseelarve või Töötukassa.",
+    alt: "Mikrokvalifikatsiooni õppetasule on kolm peamist rada: õppija ise, tööandja koolituseelarve või õppekava enda sihtrühma rahastus. Sageli ei maksa õppija kogu summat ise. Osa programme on kindlale sihtrühmale eraldi rahastatud, näiteks Euroopa Liidu kaasrahastusel.",
+    caption: "Kolm rada õppetasule: sina ise, tööandja koolituseelarve või õppekava enda sihtrühma rahastus.",
   },
   {
     id: "vs-taiendkoolitus",

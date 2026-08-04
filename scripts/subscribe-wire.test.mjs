@@ -43,7 +43,7 @@ test("every capture/account kind forwards ONLY AMOS-allow-listed keys", async ()
     { kind: "deadline_reminder", email: "x@y.ee", slugs: ["a-tase-5", "b-tase-4"] }, // alias → reminder_subscribed
     { kind: "notify_list", email: "x@y.ee", field: "andmeanalüüs", combo: null },    // alias → combo_waitlist (valdkond)
     { kind: "notify_list", email: "x@y.ee", field: null, combo: ["SQL", "viz"] },    // combo_waitlist (kombinatsioon)
-    { kind: "funding_profile", email: "x@y.ee", funding_route: "tootukassa" },       // alias → funding_profile_set
+    { kind: "funding_profile", email: "x@y.ee", funding_route: "toetus" },           // alias → funding_profile_set
   ];
   for (const body of cases) {
     const { envelope } = await forward(body);
@@ -53,9 +53,9 @@ test("every capture/account kind forwards ONLY AMOS-allow-listed keys", async ()
 });
 
 test("funding band folds into the accepted `field` slot (not a rejected funding_route key)", async () => {
-  const { envelope } = await forward({ kind: "funding_profile", email: "x@y.ee", funding_route: "tootukassa" });
+  const { envelope } = await forward({ kind: "funding_profile", email: "x@y.ee", funding_route: "toetus" });
   assert.equal(envelope.kind, "funding_profile_set");
-  assert.equal(envelope.field, "rahastus_tootukassa");
+  assert.equal(envelope.field, "rahastus_toetus");
   assert.ok(!("funding_route" in envelope));
 });
 

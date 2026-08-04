@@ -109,7 +109,7 @@ Data updated: ${catalogUpdatedAt}. Public source facts checked: ${catalogChecked
 - Search by learning outcome / skill (which programmes teach a given skill): https://mikrokvalifikatsioon.ee/oskused/ (?q=keyword; per-programme outcomes also in catalog.json)
 - Microdegrees overview by university: https://mikrokvalifikatsioon.ee/mikrokraadid/
 - What is a mikrokvalifikatsioon (definitions + FAQ): https://mikrokvalifikatsioon.ee/mis-on-mikrokvalifikatsioon/
-- Who pays (Töötukassa, employer, self): https://mikrokvalifikatsioon.ee/kes-maksab/
+- Who pays (employer, programme-level target-group funding, self): https://mikrokvalifikatsioon.ee/kes-maksab/
 - FAQ (definitions, time, cost, funding, recognition, becoming a provider): https://mikrokvalifikatsioon.ee/kkk/
 - For training providers (official framework + add your programme): https://mikrokvalifikatsioon.ee/koolitajale/
 - Quality assessment guide for providers (8 domains, common mistakes, prep): https://mikrokvalifikatsioon.ee/koolitajale/kvaliteedihindamine/
@@ -155,8 +155,9 @@ Q: How much does a microdegree cost in Estonia?
 A: ${priceLine} Exact prices per programme: https://mikrokvalifikatsioon.ee/catalog.json
 
 Q: Who can pay for a mikrokvalifikatsioon?
-A: Often the learner does not pay everything: Töötukassa (koolituskaart and
-work-while-studying supports), the employer's training budget, or the learner.
+A: Often the learner does not pay everything: the employer's training budget,
+target-group funding attached to the programme itself (e.g. EU co-funding), or
+the learner.
 The site explains the options at https://mikrokvalifikatsioon.ee/kes-maksab/
 
 Q: Is this an official state register?
