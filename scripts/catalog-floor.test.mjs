@@ -29,12 +29,18 @@ import lkgFeed from "../src/data/catalog/credential-commons-lkg/catalog-feed.jso
 // non-regression), exercised below with fixtures.
 import {
   catalog,
+  catalogRetired,
   catalogSource,
   chooseCatalogSource,
+  committedActiveCount,
+  committedKnownIds,
+  committedRetired,
+  committedRetiredCount,
   declaredContentHashError,
   entryForEhisMatch,
   matchesJsonContentType,
-  recomputeCatalogContentHash
+  recomputeCatalogContentHash,
+  retiredEntriesError
 } from "../src/data/catalog/index.ts";
 import { matchForCatalogEntry } from "../src/data/ehisFacts/index.ts";
 
@@ -400,6 +406,245 @@ test("feed transport: only application/json (with optional charset) is accepted"
   assert.equal(matchesJsonContentType("application/json"), true);
   assert.equal(matchesJsonContentType("application/ld+json"), false);
   assert.equal(matchesJsonContentType(null), false);
+});
+
+// ── retired[] (AMOS-measured withdrawal) — non-regression accounts for it ────
+const retiredRow = (i, activeSet) => {
+  let id = `retired-${i}`;
+  while (activeSet.has(id)) id = `${id}-x`;
+  return {
+    id,
+    name: `Programm ${i}`,
+    provider: "X",
+    providerType: "ülikool",
+    field: "muu",
+    url: "https://example.ee/programm",
+    withdrawnOn: "2026-08-18"
+  };
+};
+// `chooseCatalogSource`'i tasandi testid (erinevalt paljasest `retiredEntriesError`-ist)
+// peavad simuleerima ka IDENTITEEDI kontrolli: retired[] id peab kuuluma
+// `committedKnownIds` hulka (programmid, mida sait on VAREM kommititult tundnud).
+// `retiredRow(1, ...)`/`retiredRow(2, ...)` toodavad deterministlikult "retired-1"/
+// "retired-2" — need "teatakse eelnevalt" fixture'ites, kus test ei uuri identiteeti ennast.
+const KNOWN_RETIRED_TEST_IDS = new Set(["retired-1", "retired-2"]);
+
+test("retiredEntriesError: a well-formed retired array is valid", () => {
+  const retired = [retiredRow(1, new Set())];
+  assert.equal(retiredEntriesError(retired, new Set()), null);
+});
+
+test("retiredEntriesError: an unlisted key (e.g. summary) rejects the whole row", () => {
+  const retired = [{ ...retiredRow(1, new Set()), summary: "leaked prose" }];
+  assert.match(retiredEntriesError(retired, new Set()) ?? "", /lubamatu väli/);
+});
+
+test("retiredEntriesError: malformed id rejects", () => {
+  const retired = [{ ...retiredRow(1, new Set()), id: "not a canonical id" }];
+  assert.match(retiredEntriesError(retired, new Set()) ?? "", /id on vigane/);
+});
+
+test("retiredEntriesError: duplicate ids within retired[] reject", () => {
+  const a = retiredRow(1, new Set());
+  const b = { ...retiredRow(2, new Set()), id: a.id };
+  assert.match(retiredEntriesError([a, b], new Set()) ?? "", /dubleeritud retired id/);
+});
+
+test("retiredEntriesError: an id colliding with an active programme rejects (tombstone XOR live, never both)", () => {
+  const row = retiredRow(1, new Set());
+  assert.match(retiredEntriesError([row], new Set([row.id])) ?? "", /kattub aktiivse/);
+});
+
+for (const [field, bad, matcher] of [
+  ["providerType", "school", /providerType/],
+  ["field", "made up field", /field/],
+  ["url", "ftp://example.ee", /url/],
+  ["withdrawnOn", "18.08.2026", /withdrawnOn/]
+]) {
+  test(`retiredEntriesError: invalid ${field} rejects`, () => {
+    const row = { ...retiredRow(1, new Set()), [field]: bad };
+    assert.match(retiredEntriesError([row], new Set()) ?? "", matcher);
+  });
+}
+
+test("source: an EXPLAINED decrease (active drops, retired[] accounts for exactly the gap) → feed accepted", () => {
+  // The actual production shape: C active programmes shrink to C-1, but the
+  // missing one reappears in retired[] with a measured withdrawal. Active +
+  // retired covers the committed floor exactly — this must NOT fall back.
+  const active = Array.from({ length: C - 1 }, (_, i) => canonicalRow(i));
+  const activeIds = new Set(active.map((p) => p.id));
+  const retired = [retiredRow(1, activeIds)];
+  const d = chooseCatalogSource({
+    feedUrl: "u",
+    trusted: true,
+    data: { programs: active, retired },
+    committedCount: C,
+    committedKnownIds: KNOWN_RETIRED_TEST_IDS
+  });
+  assert.equal(d.use, "feed", "an explained withdrawal must not trigger the non-regression fallback");
+  if (d.use === "feed") {
+    assert.equal(d.entries.length, C - 1);
+    assert.equal(d.retired.length, 1);
+  }
+});
+
+test("source: an UNEXPLAINED decrease still rejects even though retired[] is present but too small", () => {
+  // Two active entries vanish, but only one is accounted for in retired[] —
+  // the guard must still catch the unexplained one, proving it isn't a bare
+  // count comparison that a coincidental retired[] entry could satisfy by luck.
+  const active = Array.from({ length: C - 2 }, (_, i) => canonicalRow(i));
+  const activeIds = new Set(active.map((p) => p.id));
+  const retired = [retiredRow(1, activeIds)];
+  const d = chooseCatalogSource({
+    feedUrl: "u",
+    trusted: true,
+    data: { programs: active, retired },
+    committedCount: C,
+    committedKnownIds: KNOWN_RETIRED_TEST_IDS
+  });
+  assert.equal(d.use, "committed", "active + retired still short of the committed floor must reject");
+  if (d.use === "committed") assert.match(d.reason, /kaotaks kirjeid/);
+});
+
+test("source: an UNEXPLAINED decrease with NO retired[] at all still rejects (retired[] is optional, not a loophole)", () => {
+  const active = Array.from({ length: C - 1 }, (_, i) => canonicalRow(i));
+  const d = chooseCatalogSource({ feedUrl: "u", trusted: true, data: { programs: active }, committedCount: C });
+  assert.equal(d.use, "committed");
+  if (d.use === "committed") assert.match(d.reason, /kaotaks kirjeid/);
+});
+
+test("source: a malformed retired[] row (forbidden extra field) rejects the whole trusted feed", () => {
+  const active = Array.from({ length: C - 1 }, (_, i) => canonicalRow(i));
+  const activeIds = new Set(active.map((p) => p.id));
+  const retired = [{ ...retiredRow(1, activeIds), goalText: "leaked prose" }];
+  const d = chooseCatalogSource({ feedUrl: "u", trusted: true, data: { programs: active, retired }, committedCount: C });
+  assert.equal(d.use, "committed");
+  if (d.use === "committed") assert.match(d.reason, /retired\[\] on vigane/);
+});
+
+test("source: a retired id colliding with a live active id rejects the whole trusted feed", () => {
+  const active = Array.from({ length: C + 5 }, (_, i) => canonicalRow(i));
+  const retired = [{ ...retiredRow(1, new Set()), id: active[0].id }];
+  const d = chooseCatalogSource({ feedUrl: "u", trusted: true, data: { programs: active, retired }, committedCount: C });
+  assert.equal(d.use, "committed");
+  if (d.use === "committed") assert.match(d.reason, /kattub aktiivse/);
+});
+
+test("source: retired[] surviving unchanged alongside a growing feed is still accepted (not just the boundary case)", () => {
+  const active = Array.from({ length: C + 10 }, (_, i) => canonicalRow(i));
+  const activeIds = new Set(active.map((p) => p.id));
+  const retired = [retiredRow(1, activeIds), retiredRow(2, activeIds)];
+  const d = chooseCatalogSource({
+    feedUrl: "u",
+    trusted: true,
+    data: { programs: active, retired },
+    committedCount: C,
+    committedKnownIds: KNOWN_RETIRED_TEST_IDS
+  });
+  assert.equal(d.use, "feed");
+  if (d.use === "feed") assert.equal(d.retired.length, 2);
+});
+
+test("source: retired[] id never previously known (fabricated) rejects the whole trusted feed, even when the arithmetic floor is met", () => {
+  // The exact incident class this guard exists to catch: N real active
+  // programmes silently vanish, and retired[] is padded with N fabricated
+  // rows (ids/providers the site never committed) that satisfy the bare
+  // active+retired>=committedCount arithmetic. Identity linkage must reject
+  // this — a retired id must be a programme the committed snapshot already
+  // knew about (active or already-retired), not an invented string.
+  const DROPPED = 5;
+  const active = Array.from({ length: C - DROPPED }, (_, i) => canonicalRow(i));
+  const retired = Array.from({ length: DROPPED }, (_, i) => ({
+    id: `fabricated-${i}`,
+    name: `Väljamõeldud programm ${i}`,
+    provider: "Fake Kool",
+    providerType: "ülikool",
+    field: "muu",
+    url: "https://example.ee/fabricated",
+    withdrawnOn: "2026-08-18"
+  }));
+  const d = chooseCatalogSource({
+    feedUrl: "u",
+    trusted: true,
+    data: { programs: active, retired },
+    committedCount: C,
+    committedKnownIds // the REAL module export — none of "fabricated-0..4" are in it
+  });
+  assert.equal(d.use, "committed", "a feed padding retired[] with unknown ids must be rejected, not accepted");
+  if (d.use === "committed") assert.match(d.reason, /tundmatu programmi/);
+});
+
+test("source: a retired id already known from a PRIOR withdrawal (carried forward) is accepted", () => {
+  // committedKnownIds covers both currently-active AND already-retired ids —
+  // a feed that keeps re-reporting a programme retired in an earlier cycle
+  // must not be rejected just because that id is no longer active anywhere.
+  const priorRetiredId = "already-retired-earlier";
+  const knownIds = new Set([...KNOWN_RETIRED_TEST_IDS, priorRetiredId]);
+  const active = Array.from({ length: C }, (_, i) => canonicalRow(i));
+  const activeIds = new Set(active.map((p) => p.id));
+  const retired = [{ ...retiredRow(1, activeIds), id: priorRetiredId }];
+  const d = chooseCatalogSource({
+    feedUrl: "u",
+    trusted: true,
+    data: { programs: active, retired },
+    committedCount: C,
+    committedKnownIds: knownIds
+  });
+  assert.equal(d.use, "feed", "an id already known as retired from a prior cycle must be accepted");
+});
+
+test("committed LKG feed: retired[] wiring matches the raw committed JSON (whatever it says today)", () => {
+  // This documents TODAY's data only (this specific withdrawal was resolved via
+  // the old hand-edit path before this mechanism existed). It must never be
+  // read as "retired[] must be 0/empty" — that would forbid the mechanism from
+  // ever being used: the day AMOS ships a real retired[] entry, an assertion
+  // hardcoding 0 here would fail the build for the CORRECT, intended outcome.
+  // So this only checks internal consistency, never a specific count — but it
+  // cross-checks against the RAW imported `lkgFeed` JSON, not against another
+  // export (`committedRetired`) that index.ts defines as a direct alias of
+  // `committedRetiredCount`. `committedRetiredCount === committedRetired.length`
+  // would be a tautology (both sides trace to the same one-line definition in
+  // index.ts) that passes even if the JSON -> `committedRetired` wiring silently
+  // dropped a real retired[] row — it would prove nothing. Comparing against the
+  // raw JSON actually exercises that wiring. The general parsing rule (absence
+  // -> [], presence -> parsed and usable) is proven with fixtures against the
+  // real committed-snapshot loader in scripts/committed-lkg-retired.test.mjs.
+  const rawRetiredIds = (lkgFeed.retired ?? []).map((r) => r.id).sort();
+  assert.equal(committedRetiredCount, rawRetiredIds.length);
+  assert.deepEqual(committedRetired.map((r) => r.id).sort(), rawRetiredIds);
+  assert.deepEqual(catalogRetired.map((r) => r.id).sort(), rawRetiredIds);
+});
+
+test("catalogRetired never leaks into the active catalog (count, list, or slug collision)", () => {
+  const activeIds = new Set(catalog.map((e) => e.id));
+  for (const r of catalogRetired) {
+    assert.ok(!activeIds.has(r.id), `retired id ${r.id} must not also be an active catalog id`);
+  }
+  // No duplicate ids in the built active catalog — true regardless of which
+  // source (committed/feed) produced it, so it still holds once a trusted
+  // feed can legitimately grow the active set beyond the committed floor.
+  assert.equal(new Set(catalog.map((e) => e.id)).size, catalog.length, "active catalog must not contain duplicate ids");
+  // `catalog.length === committedActiveCount` ONLY holds because `node --test`
+  // has no `import.meta.env`, so this module always resolves `catalogSource`
+  // to "committed" here (verified: FEED_URL/FEED_TRUSTED are always undefined
+  // under plain node). It is NOT a general invariant — once a trusted, growing
+  // AMOS feed legitimately adds newly-approved programmes beyond the committed
+  // floor (the 41-pending-approval scenario this PR's id-churn fix exists to
+  // allow), `catalog.length` will correctly exceed `committedActiveCount`. Kept
+  // here only as a same-harness regression check for a same-file leak bug
+  // (e.g. accidentally concatenating `catalogRetired` into `catalog`).
+  if (catalogSource === "committed") {
+    assert.equal(catalog.length, committedActiveCount, "retired entries must never inflate the active catalog count");
+  }
+});
+
+test("committedKnownIds covers every real committed active + retired id (the identity-linkage base set)", () => {
+  for (const entry of catalog) {
+    assert.ok(committedKnownIds.has(entry.id), `committedKnownIds must contain active catalog id ${entry.id}`);
+  }
+  for (const r of catalogRetired) {
+    assert.ok(committedKnownIds.has(r.id), `committedKnownIds must contain retired id ${r.id}`);
+  }
 });
 
 // Visible during the build so the chosen source + counts are auditable in logs.

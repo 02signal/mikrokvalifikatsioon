@@ -1,16 +1,40 @@
 export type ProviderType = "ülikool" | "rakenduskõrgkool" | "erakool";
 
-export type CatalogField =
-  | "IT ja andmed"
-  | "tehnika ja tootmine"
-  | "ehitus"
-  | "energeetika"
-  | "majandus ja juhtimine"
-  | "õigus"
-  | "terviseteadus"
-  | "haridus"
-  | "disain ja loovus"
-  | "muu";
+export const CATALOG_FIELDS = [
+  "IT ja andmed",
+  "tehnika ja tootmine",
+  "ehitus",
+  "energeetika",
+  "majandus ja juhtimine",
+  "õigus",
+  "terviseteadus",
+  "haridus",
+  "disain ja loovus",
+  "muu"
+] as const;
+
+export type CatalogField = (typeof CATALOG_FIELDS)[number];
+
+export const PROVIDER_TYPES = ["ülikool", "rakenduskõrgkool", "erakool"] as const;
+
+/**
+ * Public-safe fields for a programme AMOS has MEASURED as withdrawn (feed.retired[]).
+ * Deliberately a small, closed set — matches AMOS's buildMkvalCatalogFeedV2 output
+ * exactly. NO summary/goalText/outcomes/assessmentText/price/intake/EAP: a withdrawn
+ * programme's public page must never look like a live, buyable offer.
+ */
+export type RetiredCatalogEntry = {
+  /** Identical to the id this programme had while active. */
+  id: string;
+  name: string;
+  provider: string;
+  providerType: ProviderType;
+  field: CatalogField;
+  /** The programme's own page — the one that 404'd/410'd. Informational only, never an outbound CTA. */
+  url: string;
+  /** ISO date (YYYY-MM-DD) — when AMOS measured the withdrawal (http_404/http_410 + confirmed). */
+  withdrawnOn: string;
+};
 
 export type CatalogEntry = {
   /** AMOS programme_ref; when present this is the canonical public catalogue slug. */

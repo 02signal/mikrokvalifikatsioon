@@ -1,4 +1,5 @@
-import type { CatalogEntry } from "../catalogSchema";
+import type { CatalogEntry, RetiredCatalogEntry } from "../catalogSchema.ts";
+import { CATALOG_FIELDS, PROVIDER_TYPES } from "../catalogSchema.ts";
 import lkgFeed from "./credential-commons-lkg/catalog-feed.json" with { type: "json" };
 import legacyTaltech from "./taltech.json" with { type: "json" };
 import legacyTartuYlikool from "./tartu-ylikool.json" with { type: "json" };
@@ -147,6 +148,50 @@ function canonicalIdError(entries: Array<{ id?: string | null }>, requireEveryId
   return null;
 }
 
+/**
+ * Public-safe fields a `feed.retired[]` row may carry — byte-identical with
+ * AMOS's buildMkvalCatalogFeedV2 output. An unlisted key (e.g. a stray
+ * `summary`/`goalText`/`price`) fails the WHOLE feed rather than being
+ * silently dropped: this is the concrete enforcement of "public-safe fields
+ * only, no new personal data" the design demands, not just trust in AMOS.
+ */
+const RETIRED_ENTRY_KEYS = new Set(["id", "name", "provider", "providerType", "field", "url", "withdrawnOn"]);
+
+/**
+ * Validate a `retired[]` array (from either the committed LKG feed or a
+ * trusted remote feed). `activeIds` is the SAME feed's active programme ids —
+ * a retired id must never collide with a currently-active one (an id can be
+ * a tombstone or a live page, never both). Returns an error string (reject
+ * the whole feed, same defense-in-depth posture as `canonicalIdError`) or
+ * `null` when every row is well-formed.
+ */
+export function retiredEntriesError(value: unknown, activeIds: Set<string>): string | null {
+  if (!Array.isArray(value)) return "retired ei ole massiiv";
+  const seen = new Set<string>();
+  for (const row of value) {
+    if (!isPlainObject(row)) return "retired kirje pole objekt";
+    const extra = Object.keys(row).filter((key) => !RETIRED_ENTRY_KEYS.has(key));
+    if (extra.length) return `retired kirjel on lubamatu väli: ${extra[0]}`;
+    if (typeof row.id !== "string" || !CANONICAL_PROGRAM_ID.test(row.id)) {
+      return `retired kirje id on vigane: ${String(row.id)}`;
+    }
+    if (seen.has(row.id)) return `dubleeritud retired id: ${row.id}`;
+    if (activeIds.has(row.id)) return `retired id kattub aktiivse programmiga: ${row.id}`;
+    seen.add(row.id);
+    if (typeof row.name !== "string" || !row.name.trim()) return `retired kirjel ${row.id} puudub name`;
+    if (typeof row.provider !== "string" || !row.provider.trim()) return `retired kirjel ${row.id} puudub provider`;
+    if (typeof row.providerType !== "string" || !(PROVIDER_TYPES as readonly string[]).includes(row.providerType)) {
+      return `retired kirjel ${row.id} on vigane providerType`;
+    }
+    if (typeof row.field !== "string" || !(CATALOG_FIELDS as readonly string[]).includes(row.field)) {
+      return `retired kirjel ${row.id} on vigane field`;
+    }
+    if (typeof row.url !== "string" || !/^https?:\/\//.test(row.url)) return `retired kirjel ${row.id} on vigane url`;
+    if (!isoDate(row.withdrawnOn)) return `retired kirjel ${row.id} on vigane withdrawnOn`;
+  }
+  return null;
+}
+
 type LkgFeed = {
   schemaVersion: string;
   generatedAt: string;
@@ -155,6 +200,9 @@ type LkgFeed = {
   contentHash: string;
   count: number;
   programs: Array<CatalogEntry & { status?: string }>;
+  /** Programmes AMOS has MEASURED as withdrawn (isMkvalMeasuredWithdrawal). Optional
+   * for backward compatibility with older committed snapshots; absent means `[]`. */
+  retired?: RetiredCatalogEntry[];
 };
 
 function requirePairedLkgFeed(value: unknown): LkgFeed {
@@ -172,6 +220,11 @@ function requirePairedLkgFeed(value: unknown): LkgFeed {
   if (hashError) throw new Error(`LKG kataloogifeedil ${hashError}`);
   const idError = canonicalIdError(feed.programs, true);
   if (idError) throw new Error(`LKG kataloogifeedil on ${idError}`);
+  if (feed.retired !== undefined) {
+    const activeIds = new Set(feed.programs.map((p) => p.id).filter((id): id is string => typeof id === "string"));
+    const retiredError = retiredEntriesError(feed.retired, activeIds);
+    if (retiredError) throw new Error(`LKG kataloogifeedi retired[] on vigane: ${retiredError}`);
+  }
   return feed as LkgFeed;
 }
 
@@ -183,9 +236,33 @@ const committedActive: CatalogEntry[] = activeOnly(committedEntries);
 /** Mitu kirjet on kommititud LKG snapshotis (aktiivsed) — feedi mitte-regressiooni alus. */
 export const committedActiveCount = committedActive.length;
 
+/** Programmid, mille AMOS on MÕÕTNUD mahavõetuks — kommititud snapshoti pool. */
+export const committedRetired: RetiredCatalogEntry[] = pairedLkgFeed.retired ?? [];
+/** Mitu retired-kirjet kommititud snapshotis — koos `committedActiveCount`-iga
+ * moodustab mitte-regressiooni PÕRANDA (aktiivsed + mahavõetud ei tohi kunagi kahaneda). */
+export const committedRetiredCount = committedRetired.length;
+
+/**
+ * Iga programmi id, mida see sait juba TEAB kommititud snapshotist — kas
+ * praegu aktiivsena või juba varem mahavõetuna. See on identiteedi-põhi
+ * `retired[]`-i usaldamiseks usaldatud feedis: mitte-regressiooni PÕRAND (vt
+ * `chooseCatalogSource`) kontrollib ainult ARVU (aktiivsed + mahavõetud >=
+ * kommititud), mis üksi ei tõesta, et retired[] kirjed on PÄRIS programmid —
+ * feed saaks võltsida N aktiivse kirje kadumise, täites `retired[]` sama
+ * palju VÄLJAMÕELDUD id-dega, ja põrand oleks siiski täidetud. Iga retired
+ * id peab kuuluma sellesse hulka, s.t olema programm, mida sait on VAREM
+ * kommititult tundnud — muidu on tegu tundmatu (võimalik võltsitud) väitega.
+ */
+const committedActiveIds = new Set(
+  committedActive.map((entry) => entry.id).filter((id): id is string => typeof id === "string")
+);
+const committedRetiredIds = new Set(committedRetired.map((entry) => entry.id));
+export const committedKnownIds = new Set<string>([...committedActiveIds, ...committedRetiredIds]);
+
 export type CatalogSourceName = "committed" | "feed";
 type FeedResult = {
   entries: CatalogEntry[];
+  retired: RetiredCatalogEntry[];
   checkedAt: string;
   updatedAt: string;
   contentHash: string | null;
@@ -197,6 +274,7 @@ type FeedResult = {
 function committedResult(): FeedResult {
   return {
     entries: committedActive,
+    retired: committedRetired,
     checkedAt: LOCAL_CHECKED_AT,
     updatedAt: isoDate(pairedLkgFeed.dataUpdatedAt) ?? LOCAL_CHECKED_AT,
     contentHash: pairedLkgFeed.contentHash,
@@ -207,7 +285,7 @@ function committedResult(): FeedResult {
 
 /** Allika-valiku otsus: kas KASUTA feedi (koos põhjusega) või kommititud snapshotti. */
 export type CatalogSourceDecision =
-  | { use: "feed"; entries: CatalogEntry[]; checkedAt: string; updatedAt: string; contentHash: string | null }
+  | { use: "feed"; entries: CatalogEntry[]; retired: RetiredCatalogEntry[]; checkedAt: string; updatedAt: string; contentHash: string | null }
   | { use: "committed"; reason: string };
 
 /**
@@ -216,17 +294,27 @@ export type CatalogSourceDecision =
  *   1) `feedUrl` on seatud, JA
  *   2) `trusted === true` (PUBLIC_CATALOG_FEED_TRUSTED=1, eksplitsiitne opt-in), JA
  *   3) feed on oodatud kujul (massiiv VÕI { programs: [...] } mitte-tühi), JA
- *   4) feedi aktiivsete kirjete arv >= kommititud snapshoti oma (MITTE-REGRESSIOON).
+ *   4) feedi aktiivsete + mahavõetud kirjete arv >= kommititud snapshoti oma
+ *      (MITTE-REGRESSIOON — vt allpool "4)"). AMOS-i MÕÕDETUD mahavõtt (feed.retired[])
+ *      arvestatakse kirjena, mis "kaob" programs[]-ist ilma kirjete kogu kadumiseta —
+ *      seletatud kahanemine ja katkine voog on nüüd eristatavad.
  * Iga muu juhul → kommititud snapshot, koos selge põhjusega.
  * `data` on juba parsitud JSON (massiiv VÕI objekt feedist), `null` kui fetch ebaõnnestus.
+ * `committedCount` = committedActiveCount + committedRetiredCount (mõlema poole summa —
+ * kutsuja vastutus, vt loadCatalogSource).
+ * `committedKnownIds` = committedKnownIds (kommititud snapshoti aktiivsete +
+ * mahavõetud id-de liit) — iga retired[] id PEAB siin sees olema (vt allpool),
+ * muidu ei tõesta arvuline põrand üksi, et mahavõtt puudutab PÄRIS, varem
+ * tuntud programmi, mitte võltsitud rida.
  */
 export function chooseCatalogSource(opts: {
   feedUrl: string | undefined;
   trusted: boolean;
   data: unknown;
   committedCount: number;
+  committedKnownIds: Set<string>;
 }): CatalogSourceDecision {
-  const { feedUrl, trusted, data, committedCount } = opts;
+  const { feedUrl, trusted, data, committedCount, committedKnownIds } = opts;
   if (!feedUrl) {
     return { use: "committed", reason: "feed URL pole seatud" };
   }
@@ -262,11 +350,39 @@ export function chooseCatalogSource(opts: {
   const idError = canonicalIdError(raw, true);
   if (idError) return { use: "committed", reason: `usaldatud feedil on ${idError}` };
   const entries = activeOnly(raw);
-  // MITTE-REGRESSIOON: usaldatud feed ei tohi kunagi kaotada kirjeid.
-  if (entries.length < committedCount) {
+  // `retired[]` — AMOS-i MÕÕDETUD mahavõtud. Puudumine tähendab lihtsalt "pole
+  // veel ühtegi", MITTE vigast kuju (vanem feed, tagasiühilduvus). Vale kuju
+  // (olemas, aga mitte massiiv) või vigane rida keeldub kogu feedist — sama
+  // sügavuti-kaitse põhimõte, mis kehtib `raw`/`id` valideerimisel ülal.
+  let retired: RetiredCatalogEntry[] = [];
+  if (obj && Object.hasOwn(obj, "retired")) {
+    const activeIds = new Set(raw.map((p) => p.id).filter((id): id is string => typeof id === "string"));
+    const retiredError = retiredEntriesError(obj.retired, activeIds);
+    if (retiredError) return { use: "committed", reason: `usaldatud feedi retired[] on vigane: ${retiredError}` };
+    retired = obj.retired as RetiredCatalogEntry[];
+    // IDENTITEEDI-PÕHI: iga retired id peab olema programm, mida see sait
+    // JUBA VAREM kommititult tundis (praegu aktiivsena või juba varem
+    // mahavõetuna) — mitte suvaline uus string. Ilma selleta saaks feed
+    // kaotada N PÄRIS aktiivset kirjet ja täita `retired[]` sama palju
+    // väljamõeldud ridadega: arvuline põrand allpool oleks täidetud, kuid
+    // väide ("see programm on mahavõetud") oleks kontrollimatu.
+    const unknownRow = retired.find((row) => !committedKnownIds.has(row.id));
+    if (unknownRow) {
+      return {
+        use: "committed",
+        reason: `usaldatud feedi retired[] väidab tundmatu programmi mahavõttu (id: ${unknownRow.id}) — pole varem kommititud kataloogis tuntud`
+      };
+    }
+  }
+  // MITTE-REGRESSIOON: usaldatud feed ei tohi kunagi kaotada kirjeid — aktiivsed +
+  // mahavõetud kokku peavad katma kommititud põranda. Nii annab AMOS-i SELETATUD
+  // kahanemine (programm liigub programs[]-ist retired[]-i) läbi täpselt, samas
+  // kui katkine voog (kirjed lihtsalt kaovad, ilma retired[] kirjeta) jääb kinni.
+  const floor = entries.length + retired.length;
+  if (floor < committedCount) {
     return {
       use: "committed",
-      reason: `usaldatud feed kaotaks kirjeid (${entries.length} < kommititud ${committedCount}) → keeldun`
+      reason: `usaldatud feed kaotaks kirjeid (${entries.length} aktiivset + ${retired.length} mahavõetut = ${floor} < kommititud ${committedCount}) → keeldun`
     };
   }
   const checkedAt = obj ? (isoDate(obj.checkedAt) ?? LOCAL_CHECKED_AT) : LOCAL_CHECKED_AT;
@@ -275,7 +391,7 @@ export function chooseCatalogSource(opts: {
   // AMOS-i `dataUpdatedAt` väli; kui puudub (vanem feed), taandu generatedAt-le.
   const updatedAt = obj ? (isoDate(obj.dataUpdatedAt) ?? isoDate(obj.generatedAt) ?? isoDate(obj.updatedAt) ?? checkedAt) : checkedAt;
   const contentHash = obj && typeof obj.contentHash === "string" ? (obj.contentHash as string) : null;
-  return { use: "feed", entries, checkedAt, updatedAt, contentHash };
+  return { use: "feed", entries, retired, checkedAt, updatedAt, contentHash };
 }
 
 /**
@@ -286,7 +402,7 @@ export function chooseCatalogSource(opts: {
  */
 async function loadCatalogSource(): Promise<FeedResult> {
   if (!FEED_URL || !FEED_TRUSTED) {
-    const decision = chooseCatalogSource({ feedUrl: FEED_URL, trusted: FEED_TRUSTED, data: null, committedCount: committedActiveCount });
+    const decision = chooseCatalogSource({ feedUrl: FEED_URL, trusted: FEED_TRUSTED, data: null, committedCount: committedActiveCount + committedRetiredCount, committedKnownIds });
     if (decision.use === "committed") console.warn(`[catalog] ${decision.reason}`);
     return committedResult();
   }
@@ -312,13 +428,13 @@ async function loadCatalogSource(): Promise<FeedResult> {
   } finally {
     clearTimeout(timeout);
   }
-  const decision = chooseCatalogSource({ feedUrl: FEED_URL, trusted: FEED_TRUSTED, data, committedCount: committedActiveCount });
+  const decision = chooseCatalogSource({ feedUrl: FEED_URL, trusted: FEED_TRUSTED, data, committedCount: committedActiveCount + committedRetiredCount, committedKnownIds });
   if (decision.use === "feed") {
-    console.log(`[catalog] usaldatud AMOS feed (mitte-regresseeruv): ${decision.entries.length} programmi (${FEED_URL})`);
+    console.log(`[catalog] usaldatud AMOS feed (mitte-regresseeruv): ${decision.entries.length} programmi, ${decision.retired.length} mahavõetut (${FEED_URL})`);
     const generatedAt = typeof (data as Record<string, unknown>).generatedAt === "string"
       ? (data as Record<string, string>).generatedAt
       : null;
-    return { entries: decision.entries, checkedAt: decision.checkedAt, updatedAt: decision.updatedAt, contentHash: decision.contentHash, generatedAt, source: "feed" };
+    return { entries: decision.entries, retired: decision.retired, checkedAt: decision.checkedAt, updatedAt: decision.updatedAt, contentHash: decision.contentHash, generatedAt, source: "feed" };
   }
   console.warn(`[catalog] ${decision.reason} → kasutan kommititud snapshotti (autoriteetne)`);
   return committedResult();
@@ -384,6 +500,16 @@ export const catalog: CatalogEntryWithSlug[] = sorted.map((entry) => {
 
 /** Slug -> kirje, programmilehe (getStaticPaths) ja masinliideste jaoks. */
 export const bySlug = new Map(catalog.map((entry) => [entry.slug, entry]));
+
+/** Kirje, mille AMOS on MÕÕTNUD mahavõetuks — koos oma slugiga (/kataloog/<id>/). Never
+ * merged into `catalog`/`bySlug`: jääb väljapoole aktiivsest kataloogist, loendustest,
+ * võrdlustest ja sitemapist — vt src/pages/kataloog/[slug].astro ja gen-slug-redirects.mjs. */
+export type RetiredCatalogEntryWithSlug = RetiredCatalogEntry & { slug: string };
+export const catalogRetired: RetiredCatalogEntryWithSlug[] = feed.retired
+  .slice()
+  .sort((a, b) => a.id.localeCompare(b.id))
+  .map((entry) => ({ ...entry, slug: entry.id }));
+export const retiredBySlug = new Map(catalogRetired.map((entry) => [entry.slug, entry]));
 
 export const providers = [...new Set(catalog.map((entry) => entry.provider))];
 export const fields = [...new Set(catalog.map((entry) => entry.field))].sort((a, b) => a.localeCompare(b, "et"));
