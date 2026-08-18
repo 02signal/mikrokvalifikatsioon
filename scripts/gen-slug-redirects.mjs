@@ -227,24 +227,38 @@ for (const entry of sorted) {
 // that omit both fields continue through the existing ledger/inference path.
 const explicitAliasToId = explicitPreviousIdAliases(activePrograms);
 
-// Sanity: the LKG feed's active+retired id set must be the SAME catalogue as
-// the legacy-JSON-derived `currentCatalogSlugs` above (both describe "what
-// /kataloog/ pages have EVER existed and still resolve to something real").
-// `retiredIds` is folded into the feed side deliberately: a programme moving
-// from `programs[]` to `retired[]` in the SAME AMOS release is a MODELED
-// transition (item C gives it a real page), not silent churn — so legacy
-// JSON never needs a matching hand-edit on a measured withdrawal. If the two
-// sides ever diverge for any OTHER reason, something is genuinely stale
-// (rebuild dist / resync a data source) — fail loudly rather than silently
-// redirecting into the wrong catalogue snapshot.
+// Sanity: what this guard actually protects is a single already-indexed
+// /kataloog/<id>/ URL from dying silently. That is a ONE-DIRECTIONAL claim —
+// "every id the legacy JSON still knows about must be EXPLAINED by the feed,
+// either as a live active programme or as a measured `retired[]` tombstone"
+// (see item C) — NOT set equality between the two sides.
+//
+// Equality was wrong in both directions:
+//   - `feed knows an id legacy doesn't` is normal, healthy GROWTH, not churn:
+//     a brand-new programme id the legacy JSON never had (candidates being
+//     approved over time), or a programme that already moved from
+//     `programs[]` to `retired[]` in an AMOS release AFTER the legacy JSON's
+//     matching hand-edit already dropped it (today's real state — the
+//     withdrawn id was removed from legacy JSON by the old manual path
+//     before this mechanism existed, then AMOS re-reports the SAME id as
+//     `retired[]`). Neither case leaves a URL without an explanation; failing
+//     the build on it would forbid the retired[] feature from ever being used
+//     and forbid the catalogue from ever growing.
+//   - `legacy knows an id the feed doesn't explain at all` (neither active
+//     nor retired) is the ONLY direction that means a live, possibly already-
+//     indexed /kataloog/<id>/ page is about to 404 with nothing in this run
+//     accounting for why — that is the actual failure this guard exists to
+//     catch, and it still must fail loudly.
 {
   const feedKnownIds = new Set([...liveIds, ...retiredIds]);
-  const onlyInFeed = [...feedKnownIds].filter((s) => !currentCatalogSlugs.has(s));
   const onlyInLegacy = [...currentCatalogSlugs].filter((s) => !feedKnownIds.has(s));
-  if (onlyInFeed.length || onlyInLegacy.length) {
-    console.error("[gen] id-churn: LKG feed id set (active+retired) != legacy-derived catalog slug set:");
-    if (onlyInFeed.length) console.error("  only in feed:", onlyInFeed.slice(0, 8));
-    if (onlyInLegacy.length) console.error("  only in legacy set:", onlyInLegacy.slice(0, 8));
+  const onlyInFeed = [...feedKnownIds].filter((s) => !currentCatalogSlugs.has(s));
+  if (onlyInFeed.length) {
+    console.log(`[gen] id-churn: feed knows ${onlyInFeed.length} id(s) legacy JSON does not (new programmes / already-legacy-dropped retirements) — not a failure:`, onlyInFeed.slice(0, 8));
+  }
+  if (onlyInLegacy.length) {
+    console.error("[gen] id-churn: legacy catalog knows id(s) the LKG feed no longer explains (neither active nor retired) — an already-indexed /kataloog/<id>/ page is about to die silently:");
+    console.error("  only in legacy set:", onlyInLegacy.slice(0, 8));
     process.exit(2);
   }
 }

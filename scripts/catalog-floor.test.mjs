@@ -34,6 +34,7 @@ import {
   chooseCatalogSource,
   committedActiveCount,
   committedKnownIds,
+  committedRetired,
   committedRetiredCount,
   declaredContentHashError,
   entryForEhisMatch,
@@ -592,12 +593,18 @@ test("source: a retired id already known from a PRIOR withdrawal (carried forwar
   assert.equal(d.use, "feed", "an id already known as retired from a prior cycle must be accepted");
 });
 
-test("committed LKG feed: retired[] parses cleanly (absent today is valid — optional, not required)", () => {
-  // The real committed snapshot has no retired[] yet (this specific withdrawal
-  // was resolved via the old hand-edit path before this mechanism existed) —
-  // absence must be treated as `[]`, never as malformed.
-  assert.equal(committedRetiredCount, 0);
-  assert.deepEqual(catalogRetired, []);
+test("committed LKG feed: today's real snapshot has no retired[] (an observation about today's data, not the rule)", () => {
+  // This documents TODAY's data only (this specific withdrawal was resolved via
+  // the old hand-edit path before this mechanism existed). It must never be
+  // read as "retired[] must be 0/empty" — that would forbid the mechanism from
+  // ever being used: the day AMOS ships a real retired[] entry, an assertion
+  // hardcoding 0 here would fail the build for the CORRECT, intended outcome.
+  // So this only checks internal consistency (whatever the committed feed
+  // actually says), never a specific count. The general parsing rule (absence
+  // -> [], presence -> parsed and usable) is proven with fixtures against the
+  // real committed-snapshot loader in scripts/committed-lkg-retired.test.mjs.
+  assert.equal(committedRetiredCount, committedRetired.length);
+  assert.deepEqual(catalogRetired.map((r) => r.id).sort(), committedRetired.map((r) => r.id).sort());
 });
 
 test("catalogRetired never leaks into the active catalog (count, list, or slug collision)", () => {
