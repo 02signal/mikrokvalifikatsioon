@@ -242,6 +242,23 @@ export const committedRetired: RetiredCatalogEntry[] = pairedLkgFeed.retired ?? 
  * moodustab mitte-regressiooni PÕRANDA (aktiivsed + mahavõetud ei tohi kunagi kahaneda). */
 export const committedRetiredCount = committedRetired.length;
 
+/**
+ * Iga programmi id, mida see sait juba TEAB kommititud snapshotist — kas
+ * praegu aktiivsena või juba varem mahavõetuna. See on identiteedi-põhi
+ * `retired[]`-i usaldamiseks usaldatud feedis: mitte-regressiooni PÕRAND (vt
+ * `chooseCatalogSource`) kontrollib ainult ARVU (aktiivsed + mahavõetud >=
+ * kommititud), mis üksi ei tõesta, et retired[] kirjed on PÄRIS programmid —
+ * feed saaks võltsida N aktiivse kirje kadumise, täites `retired[]` sama
+ * palju VÄLJAMÕELDUD id-dega, ja põrand oleks siiski täidetud. Iga retired
+ * id peab kuuluma sellesse hulka, s.t olema programm, mida sait on VAREM
+ * kommititult tundnud — muidu on tegu tundmatu (võimalik võltsitud) väitega.
+ */
+const committedActiveIds = new Set(
+  committedActive.map((entry) => entry.id).filter((id): id is string => typeof id === "string")
+);
+const committedRetiredIds = new Set(committedRetired.map((entry) => entry.id));
+export const committedKnownIds = new Set<string>([...committedActiveIds, ...committedRetiredIds]);
+
 export type CatalogSourceName = "committed" | "feed";
 type FeedResult = {
   entries: CatalogEntry[];
@@ -285,14 +302,19 @@ export type CatalogSourceDecision =
  * `data` on juba parsitud JSON (massiiv VÕI objekt feedist), `null` kui fetch ebaõnnestus.
  * `committedCount` = committedActiveCount + committedRetiredCount (mõlema poole summa —
  * kutsuja vastutus, vt loadCatalogSource).
+ * `committedKnownIds` = committedKnownIds (kommititud snapshoti aktiivsete +
+ * mahavõetud id-de liit) — iga retired[] id PEAB siin sees olema (vt allpool),
+ * muidu ei tõesta arvuline põrand üksi, et mahavõtt puudutab PÄRIS, varem
+ * tuntud programmi, mitte võltsitud rida.
  */
 export function chooseCatalogSource(opts: {
   feedUrl: string | undefined;
   trusted: boolean;
   data: unknown;
   committedCount: number;
+  committedKnownIds: Set<string>;
 }): CatalogSourceDecision {
-  const { feedUrl, trusted, data, committedCount } = opts;
+  const { feedUrl, trusted, data, committedCount, committedKnownIds } = opts;
   if (!feedUrl) {
     return { use: "committed", reason: "feed URL pole seatud" };
   }
@@ -338,6 +360,19 @@ export function chooseCatalogSource(opts: {
     const retiredError = retiredEntriesError(obj.retired, activeIds);
     if (retiredError) return { use: "committed", reason: `usaldatud feedi retired[] on vigane: ${retiredError}` };
     retired = obj.retired as RetiredCatalogEntry[];
+    // IDENTITEEDI-PÕHI: iga retired id peab olema programm, mida see sait
+    // JUBA VAREM kommititult tundis (praegu aktiivsena või juba varem
+    // mahavõetuna) — mitte suvaline uus string. Ilma selleta saaks feed
+    // kaotada N PÄRIS aktiivset kirjet ja täita `retired[]` sama palju
+    // väljamõeldud ridadega: arvuline põrand allpool oleks täidetud, kuid
+    // väide ("see programm on mahavõetud") oleks kontrollimatu.
+    const unknownRow = retired.find((row) => !committedKnownIds.has(row.id));
+    if (unknownRow) {
+      return {
+        use: "committed",
+        reason: `usaldatud feedi retired[] väidab tundmatu programmi mahavõttu (id: ${unknownRow.id}) — pole varem kommititud kataloogis tuntud`
+      };
+    }
   }
   // MITTE-REGRESSIOON: usaldatud feed ei tohi kunagi kaotada kirjeid — aktiivsed +
   // mahavõetud kokku peavad katma kommititud põranda. Nii annab AMOS-i SELETATUD
@@ -367,7 +402,7 @@ export function chooseCatalogSource(opts: {
  */
 async function loadCatalogSource(): Promise<FeedResult> {
   if (!FEED_URL || !FEED_TRUSTED) {
-    const decision = chooseCatalogSource({ feedUrl: FEED_URL, trusted: FEED_TRUSTED, data: null, committedCount: committedActiveCount + committedRetiredCount });
+    const decision = chooseCatalogSource({ feedUrl: FEED_URL, trusted: FEED_TRUSTED, data: null, committedCount: committedActiveCount + committedRetiredCount, committedKnownIds });
     if (decision.use === "committed") console.warn(`[catalog] ${decision.reason}`);
     return committedResult();
   }
@@ -393,7 +428,7 @@ async function loadCatalogSource(): Promise<FeedResult> {
   } finally {
     clearTimeout(timeout);
   }
-  const decision = chooseCatalogSource({ feedUrl: FEED_URL, trusted: FEED_TRUSTED, data, committedCount: committedActiveCount + committedRetiredCount });
+  const decision = chooseCatalogSource({ feedUrl: FEED_URL, trusted: FEED_TRUSTED, data, committedCount: committedActiveCount + committedRetiredCount, committedKnownIds });
   if (decision.use === "feed") {
     console.log(`[catalog] usaldatud AMOS feed (mitte-regresseeruv): ${decision.entries.length} programmi, ${decision.retired.length} mahavõetut (${FEED_URL})`);
     const generatedAt = typeof (data as Record<string, unknown>).generatedAt === "string"
