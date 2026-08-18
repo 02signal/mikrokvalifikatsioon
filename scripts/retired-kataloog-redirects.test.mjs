@@ -177,7 +177,16 @@ test("id-churn: a brand-new active programme id the legacy JSON never had (candi
     const run = spawnSync(process.execPath, ["scripts/gen-slug-redirects.mjs"], { cwd: sandbox, encoding: "utf8" });
     assert.equal(run.status, 0, run.stderr || run.stdout);
     assert.doesNotMatch(run.stderr, /id-churn/, "a brand-new id absent from legacy JSON must not trip the guard");
-    assert.match(run.stdout, /id-churn: feed knows 1 id\(s\) legacy JSON does not/);
+    // Assert the new id is reported as healthy growth, not an exact "feed
+    // knows N id(s)" count: the sandbox is a copy of the live repo's OWN
+    // committed feed (see makeSandbox), which may already carry its own
+    // real retired[] entries (e.g. a genuine AMOS-measured withdrawal not
+    // yet reflected in the legacy JSON) independent of this test's fixture.
+    // Hardcoding "1" here would make this test hostage to that unrelated,
+    // time-varying fact — the exact same "today's data as the rule" defect
+    // this PR exists to eliminate elsewhere (see catalog-floor.test.mjs).
+    assert.match(run.stdout, /id-churn: feed knows \d+ id\(s\) legacy JSON does not/);
+    assert.match(run.stdout, /uus-kool-uus-mikrokraad-2026/, "the new candidate id must be reported as feed-only growth");
   } finally {
     rmSync(sandbox, { recursive: true, force: true });
   }

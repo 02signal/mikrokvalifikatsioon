@@ -593,18 +593,26 @@ test("source: a retired id already known from a PRIOR withdrawal (carried forwar
   assert.equal(d.use, "feed", "an id already known as retired from a prior cycle must be accepted");
 });
 
-test("committed LKG feed: today's real snapshot has no retired[] (an observation about today's data, not the rule)", () => {
+test("committed LKG feed: retired[] wiring matches the raw committed JSON (whatever it says today)", () => {
   // This documents TODAY's data only (this specific withdrawal was resolved via
   // the old hand-edit path before this mechanism existed). It must never be
   // read as "retired[] must be 0/empty" — that would forbid the mechanism from
   // ever being used: the day AMOS ships a real retired[] entry, an assertion
   // hardcoding 0 here would fail the build for the CORRECT, intended outcome.
-  // So this only checks internal consistency (whatever the committed feed
-  // actually says), never a specific count. The general parsing rule (absence
+  // So this only checks internal consistency, never a specific count — but it
+  // cross-checks against the RAW imported `lkgFeed` JSON, not against another
+  // export (`committedRetired`) that index.ts defines as a direct alias of
+  // `committedRetiredCount`. `committedRetiredCount === committedRetired.length`
+  // would be a tautology (both sides trace to the same one-line definition in
+  // index.ts) that passes even if the JSON -> `committedRetired` wiring silently
+  // dropped a real retired[] row — it would prove nothing. Comparing against the
+  // raw JSON actually exercises that wiring. The general parsing rule (absence
   // -> [], presence -> parsed and usable) is proven with fixtures against the
   // real committed-snapshot loader in scripts/committed-lkg-retired.test.mjs.
-  assert.equal(committedRetiredCount, committedRetired.length);
-  assert.deepEqual(catalogRetired.map((r) => r.id).sort(), committedRetired.map((r) => r.id).sort());
+  const rawRetiredIds = (lkgFeed.retired ?? []).map((r) => r.id).sort();
+  assert.equal(committedRetiredCount, rawRetiredIds.length);
+  assert.deepEqual(committedRetired.map((r) => r.id).sort(), rawRetiredIds);
+  assert.deepEqual(catalogRetired.map((r) => r.id).sort(), rawRetiredIds);
 });
 
 test("catalogRetired never leaks into the active catalog (count, list, or slug collision)", () => {
@@ -612,7 +620,22 @@ test("catalogRetired never leaks into the active catalog (count, list, or slug c
   for (const r of catalogRetired) {
     assert.ok(!activeIds.has(r.id), `retired id ${r.id} must not also be an active catalog id`);
   }
-  assert.equal(catalog.length, committedActiveCount, "retired entries must never inflate the active catalog count");
+  // No duplicate ids in the built active catalog — true regardless of which
+  // source (committed/feed) produced it, so it still holds once a trusted
+  // feed can legitimately grow the active set beyond the committed floor.
+  assert.equal(new Set(catalog.map((e) => e.id)).size, catalog.length, "active catalog must not contain duplicate ids");
+  // `catalog.length === committedActiveCount` ONLY holds because `node --test`
+  // has no `import.meta.env`, so this module always resolves `catalogSource`
+  // to "committed" here (verified: FEED_URL/FEED_TRUSTED are always undefined
+  // under plain node). It is NOT a general invariant — once a trusted, growing
+  // AMOS feed legitimately adds newly-approved programmes beyond the committed
+  // floor (the 41-pending-approval scenario this PR's id-churn fix exists to
+  // allow), `catalog.length` will correctly exceed `committedActiveCount`. Kept
+  // here only as a same-harness regression check for a same-file leak bug
+  // (e.g. accidentally concatenating `catalogRetired` into `catalog`).
+  if (catalogSource === "committed") {
+    assert.equal(catalog.length, committedActiveCount, "retired entries must never inflate the active catalog count");
+  }
 });
 
 test("committedKnownIds covers every real committed active + retired id (the identity-linkage base set)", () => {
