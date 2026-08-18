@@ -105,6 +105,18 @@ const slugMap = assignSlugs(sorted, (e) => `${e.provider} ${e.name}`);
 
 // Current valid catalog slug set (from data) + cross-check vs dist if present.
 const currentCatalogSlugs = new Set([...slugMap.values()]);
+
+// --- load the LKG feed early: retired[] ids are REAL pages now (item C), and
+// both the dist cross-check below and `destExists` need to know that before
+// they run. See the id-churn section further down for the rest of this data.
+const feed = loadJson("src/data/catalog/credential-commons-lkg/catalog-feed.json");
+const activePrograms = feed.programs.filter((p) => !p.status || p.status === "active");
+const liveIds = new Set(activePrograms.map((p) => p.id));
+const retiredIds = new Set((feed.retired ?? []).map((r) => r.id));
+// Every /kataloog/<slug>/ that is a REAL page today: the active legacy-JSON-
+// derived set PLUS retired ids (item C gives every one its own honest page).
+const knownKataloogSlugs = new Set([...currentCatalogSlugs, ...retiredIds]);
+
 const distKataloog = join(ROOT, "dist", "kataloog");
 if (existsSync(distKataloog)) {
   const distSlugs = new Set(
@@ -112,9 +124,12 @@ if (existsSync(distKataloog)) {
       .filter((d) => d.isDirectory())
       .map((d) => d.name)
   );
-  // data-derived slugs must match the built tree exactly
-  const onlyInData = [...currentCatalogSlugs].filter((s) => !distSlugs.has(s));
-  const onlyInDist = [...distSlugs].filter((s) => !currentCatalogSlugs.has(s));
+  // data-derived slugs must match the built tree exactly. `/kataloog/<retired-id>/`
+  // is now a real Astro-built page (the honest "seda enam ei pakuta" page, item
+  // C) even though it's absent from `currentCatalogSlugs` (legacy-JSON-derived,
+  // active-catalogue-only) — `knownKataloogSlugs` already folds `retiredIds` in.
+  const onlyInData = [...knownKataloogSlugs].filter((s) => !distSlugs.has(s));
+  const onlyInDist = [...distSlugs].filter((s) => !knownKataloogSlugs.has(s));
   if (onlyInData.length || onlyInDist.length) {
     console.error("[gen] data/dist slug mismatch (rebuild dist?):");
     if (onlyInData.length) console.error("  only in data:", onlyInData.slice(0, 8));
@@ -133,7 +148,11 @@ const fieldSlugs = new Set(fields.map((f) => slugify(f)));
 // function is only ever CALLED later, in the verify section at the bottom.
 function destExists(dest) {
   const m = dest.match(/^\/kataloog\/([^/]+)\/$/);
-  if (m) return currentCatalogSlugs.has(m[1]);
+  // A retired id is a real page too (the withdrawal page IS the destination
+  // now) — see item C. Never a redirect destination itself (the generator
+  // below never points a NEW redirect at one), but a PRESERVED pre-existing
+  // redirect could target it, so it must validate as real here.
+  if (m) return knownKataloogSlugs.has(m[1]);
   const f = dest.match(/^\/valdkond\/([^/]+)\/$/);
   if (f) return fieldSlugs.has(f[1]) && liveFieldSlugs.has(f[1]);
   return dest === "/kataloog/" || dest === "/mikrokraadid/" || dest === "/teema/" || dest === "/valdkond/"; // last-resort real routes
@@ -200,25 +219,30 @@ for (const entry of sorted) {
 //   /kataloog/  78 of 212 checkable URLs dead (587 impressions, 15 clicks)
 //   /vordlus/   83 of 121 URLs dead           (302 impressions,  4 clicks)
 // This section builds ONE shared resolver, reused by both ledgers below.
+// `feed`/`activePrograms`/`liveIds`/`retiredIds` were already loaded above
+// (needed earlier, by the dist cross-check and `destExists`).
 
-const feed = loadJson("src/data/catalog/credential-commons-lkg/catalog-feed.json");
-const activePrograms = feed.programs.filter((p) => !p.status || p.status === "active");
-const liveIds = new Set(activePrograms.map((p) => p.id));
 // A v2 row that carries explicit lineage is AMOS's decision, not a hint. The
 // helper validates it before any name-derived alias is considered; old feeds
 // that omit both fields continue through the existing ledger/inference path.
 const explicitAliasToId = explicitPreviousIdAliases(activePrograms);
 
-// Sanity: the LKG feed's active id set must be the SAME catalogue as the
-// legacy-JSON-derived `currentCatalogSlugs` above (both describe "what
-// /kataloog/ pages exist right now"). If they ever diverge, something is
-// stale (rebuild dist / resync a data source) — fail loudly rather than
-// silently redirecting into the wrong catalogue snapshot.
+// Sanity: the LKG feed's active+retired id set must be the SAME catalogue as
+// the legacy-JSON-derived `currentCatalogSlugs` above (both describe "what
+// /kataloog/ pages have EVER existed and still resolve to something real").
+// `retiredIds` is folded into the feed side deliberately: a programme moving
+// from `programs[]` to `retired[]` in the SAME AMOS release is a MODELED
+// transition (item C gives it a real page), not silent churn — so legacy
+// JSON never needs a matching hand-edit on a measured withdrawal. If the two
+// sides ever diverge for any OTHER reason, something is genuinely stale
+// (rebuild dist / resync a data source) — fail loudly rather than silently
+// redirecting into the wrong catalogue snapshot.
 {
-  const onlyInFeed = [...liveIds].filter((s) => !currentCatalogSlugs.has(s));
-  const onlyInLegacy = [...currentCatalogSlugs].filter((s) => !liveIds.has(s));
+  const feedKnownIds = new Set([...liveIds, ...retiredIds]);
+  const onlyInFeed = [...feedKnownIds].filter((s) => !currentCatalogSlugs.has(s));
+  const onlyInLegacy = [...currentCatalogSlugs].filter((s) => !feedKnownIds.has(s));
   if (onlyInFeed.length || onlyInLegacy.length) {
-    console.error("[gen] id-churn: LKG feed id set != legacy-derived catalog slug set:");
+    console.error("[gen] id-churn: LKG feed id set (active+retired) != legacy-derived catalog slug set:");
     if (onlyInFeed.length) console.error("  only in feed:", onlyInFeed.slice(0, 8));
     if (onlyInLegacy.length) console.error("  only in legacy set:", onlyInLegacy.slice(0, 8));
     process.exit(2);
@@ -386,7 +410,10 @@ const kataloogRedirects = [];
   const unresolvedSlugs = [];
   const ambiguousSlugs = [];
   for (const slug of kataloogLedger) {
-    if (currentCatalogSlugs.has(slug)) continue; // still a real page — never redirect a live URL
+    // Still a real page — never redirect a live URL. A retired id is a real
+    // page too now (item C: the withdrawal page IS the destination), so it
+    // must never 301 away, even though it dropped out of `currentCatalogSlugs`.
+    if (knownKataloogSlugs.has(slug)) continue;
     if (seenSources.has(`/kataloog/${slug}/`)) continue; // already handled by the entity-bug redirects above
     const r = resolveSlug(slug);
     let destination;
@@ -401,7 +428,7 @@ const kataloogRedirects = [];
     }
     kataloogRedirects.push({ source: `/kataloog/${slug}/`, destination, permanent: true });
   }
-  const stillLive = kataloogLedger.filter((s) => currentCatalogSlugs.has(s)).length;
+  const stillLive = kataloogLedger.filter((s) => knownKataloogSlugs.has(s)).length;
   const viaProgramme = kataloogRedirects.filter((r) => r.destination.startsWith("/kataloog/")).length;
   console.log(`[gen] kataloog (id-churn): ledger ${kataloogLedger.length}, still live ${stillLive}, redirected ${kataloogRedirects.length}`);
   console.log(`[gen] kataloog (id-churn): -> surviving programme: ${viaProgramme}, -> field (ambiguous): ${ambiguousSlugs.length}, -> ${MIKROKRAADID} fallback: ${unresolvedSlugs.length}`);
@@ -413,7 +440,9 @@ const kataloogRedirects = [];
     console.log(`[gen] kataloog: fallback slugs (no surviving id/alias/field):`);
     for (const s of unresolvedSlugs) console.log(`  ${s}`);
   }
-  growLedger("src/data/kataloog-known-slugs.json", kataloogLedger, currentCatalogSlugs);
+  // Grow the ledger from every REAL kataloog page, active or retired, so a
+  // future rotation of a retired id (an eventual full purge) is caught too.
+  growLedger("src/data/kataloog-known-slugs.json", kataloogLedger, knownKataloogSlugs);
 }
 
 // ============================================================================
