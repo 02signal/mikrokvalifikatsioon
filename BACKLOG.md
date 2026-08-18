@@ -1,5 +1,30 @@
 # Mikrokvalifikatsioon.ee Backlog
 
+## Resume point — 2026-08-18 (current)
+
+**LKG snapshot refresh is now automatic (proposal-only).** The last manual step in the
+catalog-withdrawal mechanism — a human copying the AMOS release's `catalog-feed.json` +
+`catalog.cc.jsonld` + `cc-projection-receipt.json` into
+`src/data/catalog/credential-commons-lkg/` after AMOS measures a withdrawal — is now done by
+`.github/workflows/lkg-refresh.yml` (daily + `workflow_dispatch`), which calls
+`node scripts/verify-lkg-refresh.mjs`. It fetches the published AMOS bundle, verifies it by
+REUSING the site's own real gates (contentHash, CC graph/receipt pairing, non-regression +
+`retired[]` identity — see that script's header), and only if verified AND different from
+today's committed snapshot writes the three files, regenerates `vercel.json`, runs the test
+suite + build, and opens/updates a PR on branch `automated/lkg-refresh`. **It never merges.**
+Local proof: ran against the real live release
+(`https://status.amos.02signal.com/mkval-catalog/catalog-feed.json` etc.) — verified clean,
+`changed=false` (today's committed snapshot is already current). 8 new sandboxed tests in
+`scripts/verify-lkg-refresh.test.mjs` cover both the accept and reject paths.
+
+- **FOLLOW-UP (owner/ops, no code):** the workflow's `gh pr create`/`gh pr edit` step needs the
+  repo setting **Settings → Actions → General → Workflow permissions → "Allow GitHub Actions to
+  create and approve pull requests"** enabled — off by default, and `permissions:
+  pull-requests: write` in the workflow YAML does not substitute for it. Until that box is
+  checked, the PR-open step will fail even though verification itself is correct; the failure
+  will say something like "GitHub Actions is not permitted to create or approve pull requests."
+  Not verifiable from a worktree (no `gh`/deploy access here) — needs a human with repo admin.
+
 ## Resume point — 2026-07-29 (current)
 
 **Lead capture is LIVE and works for real people.** The koolitaja `SubscribeForm` (PR #98, refined by
