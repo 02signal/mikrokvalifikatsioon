@@ -119,11 +119,21 @@ jobs:
             gh pr edit "$EXISTING_PR" --body-file "$RUNNER_TEMP/lkg-pr-body.md"
             echo "Updated existing PR #$EXISTING_PR"
           else
-            gh pr create \
+            # The verified data is already safely on the branch above. If only
+            # the PR step fails, say EXACTLY what to switch on instead of
+            # leaving a red run with a GitHub API message nobody can act on:
+            # creating a PR from Actions is off by default on GitHub, and the
+            # workflow-level `permissions:` block does NOT substitute for it.
+            if ! gh pr create \
               --base main \
               --head "$BRANCH" \
               --title "data(kataloog): automaatne AMOS hetktõmmise ettepanek" \
-              --body-file "$RUNNER_TEMP/lkg-pr-body.md"
+              --body-file "$RUNNER_TEMP/lkg-pr-body.md"; then
+              echo "::error::Verifitseeritud hetktõmmis on harus '$BRANCH', aga PR-i avada ei õnnestunud."
+              echo "::error::Lülita sisse: Settings -> Actions -> General -> Workflow permissions -> 'Allow GitHub Actions to create and approve pull requests'."
+              echo "::error::Kuni seda ei ole, saab PR-i avada käsitsi harust '$BRANCH' — andmed ise on juba kontrollitud ja kohal."
+              exit 1
+            fi
           fi
 
       - name: No change
