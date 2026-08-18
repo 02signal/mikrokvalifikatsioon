@@ -106,11 +106,6 @@
       "permanent": true
     },
     {
-      "source": "/kataloog/ebs-j-auml-tkusuutlik-ja-roheline-uuml-leminek-strateegiad-praktikad-ja-ressursside-juhtimine/",
-      "destination": "/kataloog/ebs-jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine/",
-      "permanent": true
-    },
-    {
       "source": "/kataloog/ebs-strateegiline-finantsjuhtimine-t-ouml-ouml-riistad-anal-uuml-uuml-s-ja-otsuste-tegemine/",
       "destination": "/kataloog/ebs-strateegiline-finantsjuhtimine-tooriistad-analuus-ja-otsuste-tegemine/",
       "permanent": true
@@ -571,12 +566,27 @@
       "permanent": true
     },
     {
+      "source": "/vordlus/ebs-digiturundus-tehisintellekti-ajastul-vs-tallinna-tehnikakorgkool-finantsarvestuse-ja-maksunduse-abc/",
+      "destination": "/kataloog/ebs-digiturundus-tehisintellekti-ajastul/",
+      "permanent": true
+    },
+    {
       "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-2-vs-taltech-rahatarkus-ja-investeerimine-2/",
       "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
       "permanent": true
     },
     {
       "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-2-vs-taltech-strateegiline-juhtimine-ja-poliitikaanaluus-avalikus-2/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-ariuhingu-omaniku-meistriklass/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-auditeerimise-baasteadmised/",
       "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
       "permanent": true
     },
@@ -591,12 +601,92 @@
       "permanent": true
     },
     {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-energiastrateegia/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-finants-ja-investeeringute-analuus/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-hooneautomaatika-ja-tehnosusteemid/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-hoonete-energiatohususe-modelleerimine/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
       "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-hoonete-energiatohususe-modelleerimine-s25/",
       "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
       "permanent": true
     },
     {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-inimeste-ja-vorgustike-juhtimine-avalikus-sektoris/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-juhtimine-juhendamine-coaching-ja-mentorlus/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-kestlik-maavarade-uurimine-kaevandamine-ja-ringmajandus/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-materjalide-taaskasutus-ja-okodisain/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-personali-varbamine/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
       "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-personali-varbamine-s25/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-raamatupidamise-ja-rahanduse-kaasaegsed-teemad-labi-esg-ja-finantsinnovatsiooni-prisma/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-rahatarkus-ja-investeerimine/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-ringmajandus-ja-materjalitehnoloogia/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-rohelised-energiatehnoloogiad/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-strateegiline-juhtimine-ja-poliitikaanaluus-avalikus-sektoris/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-teenusedisain/",
+      "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon-vs-taltech-tookeskkonna-kvaliteedi-juhtimine/",
       "destination": "/kataloog/ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon/",
       "permanent": true
     },
@@ -626,8 +716,18 @@
       "permanent": true
     },
     {
+      "source": "/vordlus/ebs-jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine-vs-tartu-ulikool-loovettevotluse-projektijuhtimine/",
+      "destination": "/kataloog/tartu-ulikool-loovettevotluse-projektijuhtimine/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/ebs-jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine-vs-tartu-ulikool-loovus-ja-eneseareng/",
+      "destination": "/kataloog/tartu-ulikool-loovus-ja-eneseareng/",
+      "permanent": true
+    },
+    {
       "source": "/vordlus/ebs-jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine-vs-tartu-ulikool-loovuse-ja-enesearengu-mikrokraadiprogramm/",
-      "destination": "/kataloog/ebs-jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine/",
+      "destination": "/kataloog/tartu-ulikool-loovus-ja-eneseareng/",
       "permanent": true
     },
     {
@@ -711,6 +811,46 @@
       "permanent": true
     },
     {
+      "source": "/vordlus/eesti-kunstiakadeemia-arhitektuuri-konserveerimine-ja-restaureerimine-vs-tallinna-tehnikakorgkool-aja-ja-rahajuhtimine-mudelprojekteerimises/",
+      "destination": "/kataloog/eesti-kunstiakadeemia-arhitektuuri-konserveerimine-ja-restaureerimine/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/eesti-kunstiakadeemia-baltisaksa-kultuuriparand-vs-tartu-ulikool-heaolu-mootmine-ja-mojutamine/",
+      "destination": "/kataloog/eesti-kunstiakadeemia-baltisaksa-kultuuriparand/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/eesti-kunstiakadeemia-baltisaksa-kultuuriparand-vs-tartu-ulikool-infovastupidavus/",
+      "destination": "/kataloog/eesti-kunstiakadeemia-baltisaksa-kultuuriparand/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/eesti-kunstiakadeemia-baltisaksa-kultuuriparand-vs-tartu-ulikool-islam-tana-kultuurist-konfliktideni/",
+      "destination": "/kataloog/eesti-kunstiakadeemia-baltisaksa-kultuuriparand/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/eesti-kunstiakadeemia-baltisaksa-kultuuriparand-vs-tartu-ulikool-kestliku-ja-sidusa-tulevikulinna-kujundamine/",
+      "destination": "/kataloog/eesti-kunstiakadeemia-baltisaksa-kultuuriparand/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/eesti-kunstiakadeemia-baltisaksa-kultuuriparand-vs-tartu-ulikool-kogukondade-arendamine/",
+      "destination": "/kataloog/eesti-kunstiakadeemia-baltisaksa-kultuuriparand/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/eesti-kunstiakadeemia-baltisaksa-kultuuriparand-vs-tartu-ulikool-teabehaldus-teoorias-ja-praktikas/",
+      "destination": "/kataloog/eesti-kunstiakadeemia-baltisaksa-kultuuriparand/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/eesti-kunstiakadeemia-baltisaksa-kultuuriparand-vs-tartu-ulikool-usundid-kultuuri-ja-motteloos/",
+      "destination": "/kataloog/eesti-kunstiakadeemia-baltisaksa-kultuuriparand/",
+      "permanent": true
+    },
+    {
       "source": "/vordlus/eesti-kunstiakadeemia-museoloogia-mikrokraad-vs-tallinna-ulikool-huvikaitse-ja-poliitkonkurents/",
       "destination": "/kataloog/eesti-kunstiakadeemia-museoloogia-mikrokraad/",
       "permanent": true
@@ -721,8 +861,18 @@
       "permanent": true
     },
     {
+      "source": "/vordlus/tallinna-tehnikakorgkool-finantsarvestuse-ja-maksunduse-abc-vs-tartu-ulikool-kinnisvaraturg-ja-ari/",
+      "destination": "/kataloog/tallinna-tehnikakorgkool-finantsarvestuse-ja-maksunduse-abc/",
+      "permanent": true
+    },
+    {
       "source": "/vordlus/tallinna-tehnikakorgkool-finantsarvestuse-ja-maksunduse-abc-vs-tartu-ulikool-teenuste-arendamine-ja-turundus/",
       "destination": "/kataloog/tallinna-tehnikakorgkool-finantsarvestuse-ja-maksunduse-abc/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-tehnikakorgkool-teabehalduse-alused-vs-tartu-ulikool-kinnisvaraturg-ja-ari/",
+      "destination": "/kataloog/tallinna-tehnikakorgkool-teabehalduse-alused/",
       "permanent": true
     },
     {
@@ -796,7 +946,97 @@
       "permanent": true
     },
     {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-ariuhingu-omaniku-meistriklass/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-auditeerimise-baasteadmised/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-energiastrateegia/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-finants-ja-investeeringute-analuus/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-hooneautomaatika-ja-tehnosusteemid/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
       "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-hooneautomaatika-ja-tehnosusteemid-2/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-hoonete-energiatohususe-modelleerimine/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-inimeste-ja-vorgustike-juhtimine-avalikus-sektoris/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-juhtimine-juhendamine-coaching-ja-mentorlus/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-kestlik-maavarade-uurimine-kaevandamine-ja-ringmajandus/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-materjalide-taaskasutus-ja-okodisain/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-personali-varbamine/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-raamatupidamise-ja-rahanduse-kaasaegsed-teemad-labi-esg-ja-finantsinnovatsiooni-prisma/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-rahatarkus-ja-investeerimine/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-ringmajandus-ja-materjalitehnoloogia/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-rohelised-energiatehnoloogiad/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-strateegiline-juhtimine-ja-poliitikaanaluus-avalikus-sektoris/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-teenusedisain/",
+      "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
+      "permanent": true
+    },
+    {
+      "source": "/vordlus/tallinna-ulikool-muuseumiharidus-vs-taltech-tookeskkonna-kvaliteedi-juhtimine/",
       "destination": "/kataloog/tallinna-ulikool-muuseumiharidus/",
       "permanent": true
     },
@@ -956,8 +1196,13 @@
       "permanent": true
     },
     {
+      "source": "/kataloog/ebs-jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine/",
+      "destination": "/mikrokraadid/",
+      "permanent": true
+    },
+    {
       "source": "/kataloog/ebs-jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine-2/",
-      "destination": "/kataloog/ebs-jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine/",
+      "destination": "/mikrokraadid/",
       "permanent": true
     },
     {
@@ -1082,7 +1327,7 @@
     },
     {
       "source": "/kataloog/taltech-hoonete-energiatohususe-modelleerimine-s25/",
-      "destination": "/kataloog/taltech-hoonete-energiatohususe-modelleerimine/",
+      "destination": "/mikrokraadid/",
       "permanent": true
     },
     {
