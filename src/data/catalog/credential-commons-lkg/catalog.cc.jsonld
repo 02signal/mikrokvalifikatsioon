@@ -124,24 +124,6 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/ebs-investeeringud-ja-ettevotte-rahandus/"
     },
     {
-      "@id": "https://mikrokvalifikatsioon.ee/kataloog/ebs-jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine/",
-      "@type": "MicroCredential",
-      "ectsCredits": 15,
-      "field": "IT ja andmed",
-      "language": "et",
-      "learningOutcome": [
-        "Õpid tuvastama ja analüüsima keskkonna- ning sotsiaalseid riske ning mõistma nende mõju ettevõtte tegevusele ja strateegiale",
-        "Omandad oskuse siduda keskkonna-, sotsiaal- ja juhtimispõhimõtted (ESG) ettevõtte juhtimise ja otsustusprotsessidega",
-        "Õpid kujundama ärimudeleid, mis aitavad vähendada kulusid, jäätmeid ja kes"
-      ],
-      "name": "Jätkusuutlik ja roheline üleminek: strateegiad, praktikad ja ressursside juhtimine",
-      "provider": {
-        "@type": "Organization",
-        "name": "EBS"
-      },
-      "url": "https://mikrokvalifikatsioon.ee/kataloog/ebs-jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine/"
-    },
-    {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/ebs-juhtimine-ja-turundus-rahvusvahelises-arikeskkonnas/",
       "@type": "MicroCredential",
       "ectsCredits": 15,
@@ -231,6 +213,19 @@
         "name": "Eesti Ettevõtluskõrgkool Mainor"
       },
       "url": "https://mikrokvalifikatsioon.ee/kataloog/eesti-ettevotluskorgkool-mainor-ettevotluse-mikrokraad-tartus/"
+    },
+    {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-ettevotluskorgkool-mainor-tarneahelajuhi-arenguprogramm/",
+      "@type": "MicroCredential",
+      "ectsCredits": 5,
+      "field": "majandus ja juhtimine",
+      "language": "et",
+      "name": "Tarneahelajuhi arenguprogramm",
+      "provider": {
+        "@type": "Organization",
+        "name": "Eesti Ettevõtluskõrgkool Mainor"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/eesti-ettevotluskorgkool-mainor-tarneahelajuhi-arenguprogramm/"
     },
     {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-ettevotluskorgkool-mainor-tervishoiuorganisatsiooni-juhtimine-ja-arendamine/",
@@ -387,6 +382,45 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-keskkonnakorralduse-meetmed/"
     },
     {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-keskkonnasaastlik-taimekasvatus-ja-mahetootmine/",
+      "@type": "MicroCredential",
+      "ectsCredits": 9,
+      "field": "muu",
+      "language": "et",
+      "name": "Keskkonnasäästlik taimekasvatus ja mahetootmine",
+      "provider": {
+        "@type": "Organization",
+        "name": "Eesti Maaülikool"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-keskkonnasaastlik-taimekasvatus-ja-mahetootmine/"
+    },
+    {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-maastiku-kujundus-ehitus-ja-esitlus/",
+      "@type": "MicroCredential",
+      "ectsCredits": 17,
+      "field": "disain ja loovus",
+      "language": "et",
+      "name": "Maastiku kujundus, ehitus ja esitlus",
+      "provider": {
+        "@type": "Organization",
+        "name": "Eesti Maaülikool"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-maastiku-kujundus-ehitus-ja-esitlus/"
+    },
+    {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-maastiku-planeerimine-hindamine-ja-kaitse/",
+      "@type": "MicroCredential",
+      "ectsCredits": 23,
+      "field": "muu",
+      "language": "et",
+      "name": "Maastiku planeerimine, hindamine ja kaitse",
+      "provider": {
+        "@type": "Organization",
+        "name": "Eesti Maaülikool"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-maastiku-planeerimine-hindamine-ja-kaitse/"
+    },
+    {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-taimekahjustajad-ja-nende-torje/",
       "@type": "MicroCredential",
       "ectsCredits": 13,
@@ -424,6 +458,19 @@
         "name": "Eesti Maaülikool"
       },
       "url": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-toiduainete-vaikekaitlemise-pohialused/"
+    },
+    {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-muusika-ja-teatriakadeemia-muusikaproduktsioon-ja-laulukirjutamine/",
+      "@type": "MicroCredential",
+      "ectsCredits": 21,
+      "field": "disain ja loovus",
+      "language": "et",
+      "name": "Muusikaproduktsioon ja laulukirjutamine",
+      "provider": {
+        "@type": "Organization",
+        "name": "Eesti Muusika- ja Teatriakadeemia"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/eesti-muusika-ja-teatriakadeemia-muusikaproduktsioon-ja-laulukirjutamine/"
     },
     {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-muusika-ja-teatriakadeemia-muusikapsuhholoogia/",
@@ -936,7 +983,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tallinna-ulikool-sooritus-ja-spordipsuhholoogia/",
       "@type": "MicroCredential",
       "ectsCredits": 30,
-      "field": "IT ja andmed",
+      "field": "terviseteadus",
       "language": "et",
       "name": "Sooritus- ja spordipsühholoogia",
       "provider": {
@@ -982,6 +1029,24 @@
         "name": "Tallinna Ülikool"
       },
       "url": "https://mikrokvalifikatsioon.ee/kataloog/tallinna-ulikool-taiskasvanute-koolitamine/"
+    },
+    {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/tallinna-ulikool-taiskasvanute-koolituste-korraldus/",
+      "@type": "MicroCredential",
+      "ectsCredits": 12,
+      "field": "IT ja andmed",
+      "language": "et",
+      "learningOutcome": [
+        "Mikrokraadiprogrammi eesmärk on: õppida kujundama täiskasvanu õppimist toetavat õpikeskkonda nii koolitaja kui ka koolitusprotsessi juhi vaatest",
+        "õppida rakendama kaasavaid ja õpimotivatsiooni toetavaid lähenemisviise ja õppemeetodeid",
+        "luua võimalused õppimis-, koolitus- ja arendusprotsesside juhtimiseks ja arendustege"
+      ],
+      "name": "Täiskasvanute koolituste korraldus",
+      "provider": {
+        "@type": "Organization",
+        "name": "Tallinna Ülikool"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/tallinna-ulikool-taiskasvanute-koolituste-korraldus/"
     },
     {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tallinna-ulikool-tehisintellekt-taienduskoolituse-arendamisel-ja-karjaarinoustamises/",
@@ -1119,10 +1184,52 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-ariprotsessid-digiuhiskonnas/"
     },
     {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-ariprotsesside-juhtimine-tehisintellekti-abil/",
+      "@type": "MicroCredential",
+      "ectsCredits": 12,
+      "field": "IT ja andmed",
+      "language": "et",
+      "learningOutcome": [
+        "Sõnastab ja analüüsib äriprobleeme andmeteaduse võtmes: Oskab püstitada andmeteaduse ülesandeid (klasterdamine, klassifitseerimine, regressioon) ning mõistab nende rolli ettevõtte otsustusprotsesside toetamisel",
+        "Rakendab andmeanalüüsi tehnilisi baasvahendeid: Kasutab Jupyteri keskkonda ja Pythoni olulisimaid teeke (NumPy, Pandas, Scikit-learn) lihtsamate töövoogude programmeerimiseks ja andmete visualiseerimiseks",
+        "Navigeerib andmepõhise ühiskonna õigusruumis: Tunneb andmekaitse ja privaatsuse põhimõtteid ning oskab hinnata tehnoloogiliste uuenduste ja tehisintellekti rakendamise mõju õiguslikule vastutusele ja regulatsioonidele",
+        "Lahendab kompleksseid juhtimiskaasusi: Suudab sünteesida tehnilised võimalused ja õiguslikud piirangud, et töötada välja strateegiaid äriprotsesside optimeerimiseks tehisintellekti abil",
+        "Hindab tehisintellekti ja andmehalduse riske: Oskab näha seoseid kiire tehnoloogilise arengu ja riikliku/rahvusvahelise õigusraamistiku vahel, tagades äriprotsesside vastavuse kehtivatele normidele"
+      ],
+      "name": "Äriprotsesside juhtimine tehisintellekti abil",
+      "provider": {
+        "@type": "Organization",
+        "name": "TalTech"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-ariprotsesside-juhtimine-tehisintellekti-abil/"
+    },
+    {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-aritegevuse-jarjepidevus-hubriidsojas/",
+      "@type": "MicroCredential",
+      "ectsCredits": 12,
+      "field": "IT ja andmed",
+      "language": "et",
+      "learningOutcome": [
+        "Assess hybrid threat risks: Identify and analyse the impact of information operations, disinformation, and manipulation on decision-making and business continuity",
+        "Design resilient digital systems: Apply the CIGET model (connectivity, infrastructure, governance, environmental sustainability, technology) to create interoperable and crisis-resilient solutions",
+        "Navigate legal frameworks: Understand legal foundations of digital states, data protection, and privacy",
+        "assess the impact of emerging technologies (including AI) on legal responsibility",
+        "Apply critical thinking and evidence-based reasoning: Use structured analytical methods to evaluate information and make ethical and justified decisions under uncertainty",
+        "Integrate security and governance principles: Combine cybersecurity, data governance, and societal requirements into sustainable, trust-building organisational solutions",
+        "Solve complex management challenges: Synthesize technical and legal aspects to develop practical strategies for resilient and efficient business processes"
+      ],
+      "name": "Business continuity in hybrid war",
+      "provider": {
+        "@type": "Organization",
+        "name": "TalTech"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-aritegevuse-jarjepidevus-hubriidsojas/"
+    },
+    {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-ariuhingu-omaniku-meistriklass/",
       "@type": "MicroCredential",
       "ectsCredits": 6,
-      "field": "haridus",
+      "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
         "Teab, tunneb ja saab aru üldjuhtimise olemusest, mõistab äriühingute juriidilist regulatsiooni ja praktilist toimimist",
@@ -1135,6 +1242,25 @@
         "name": "TalTech"
       },
       "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-ariuhingu-omaniku-meistriklass/"
+    },
+    {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-auditeerimise-baasteadmised/",
+      "@type": "MicroCredential",
+      "ectsCredits": 12,
+      "field": "majandus ja juhtimine",
+      "language": "et",
+      "learningOutcome": [
+        "Teab siseauditi ja audiitortegevuse regulatiivset taustsüsteemi ja rahvusvaheliste standardite olemust",
+        "Orienteerub auditi kui protsessi läbiviimises, oskab määrata majandusüksuses valitsevaid olulisi riske",
+        "Tunneb auditi meetodeid ja analüüsib eri protseduuride kasutamist auditis ning ülevaatuses",
+        "Võrdleb eri liiki audiitori järeldusotsuseid ja audiitori eriotstarbelisi raporteid"
+      ],
+      "name": "Auditeerimise baasteadmised",
+      "provider": {
+        "@type": "Organization",
+        "name": "TalTech"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-auditeerimise-baasteadmised/"
     },
     {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-avalik-haldus-ja-kaasaegne-andmepohine-valitsemine/",
@@ -1159,10 +1285,30 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-avalik-haldus-ja-kaasaegne-andmepohine-valitsemine/"
     },
     {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-energeetika-arikeskkond-ja-ettevotlus/",
+      "@type": "MicroCredential",
+      "ectsCredits": 18,
+      "field": "IT ja andmed",
+      "language": "et",
+      "learningOutcome": [
+        "Analüüsib kriitiliselt energiamajanduse ja -turgude toimimist süsteemses ja rahvusvahelises kontekstis, hinnates kütuse- ja energiakaubanduse rolli, turustruktuure, hinnakujunemise mehhanisme ning turumoonutuste ja riskide tekkepõhjuseid",
+        "Sünteesib energiasüsteemide ökonoomika teadmisi, hinnates kulustruktuure ja väärtusahelaid (tootmine, ülekanne, jaotus, tarbimine), rakendades investeeringute hindamise meetodeid ning tõlgendades kriitiliselt energiaettevõtete finantsandmeid",
+        "Koostab põhjendatud energiaturu ja -poliitika analüüse ja prognoose, hinnates regulatiivsete sekkumiste mõju, konkurentsivõimet ning hinnakomponentide kujunemist ja nende mõju lõpptarbijatele",
+        "Arendab, valideerib ja juhib kestlikke äri- ja ärimudeleid energia- ja tehnoloogiavaldkonnas, integreerides turu-, konkurentsi- ja finantsanalüüsi ning hinnates äriideede skaleeritavust ja tasuvust rahvusvahelises keskkonnas",
+        "Langetab strateegilisi otsuseid ja kommunikeerib neid professionaalselt, kavandades ettevõtte turundus- ja tegevusstrateegiaid, kaasates sidusrühmi ja investoreid ning töötades tulemuslikult meeskonnas"
+      ],
+      "name": "Energeetika ärikeskkond ja ettevõtlus",
+      "provider": {
+        "@type": "Organization",
+        "name": "TalTech"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-energeetika-arikeskkond-ja-ettevotlus/"
+    },
+    {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-energiastrateegia/",
       "@type": "MicroCredential",
       "ectsCredits": 6,
-      "field": "haridus",
+      "field": "energeetika",
       "language": "et",
       "learningOutcome": [
         "Mikrokraadikava läbinu mõistab energeetikas kasutatavaid põhiühikuid ning nende omavahelisi seoseid",
@@ -1202,7 +1348,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-finants-ja-investeeringute-analuus/",
       "@type": "MicroCredential",
       "ectsCredits": 6,
-      "field": "haridus",
+      "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
         "Mikrokraadikava läbinud õppur: Selgitab finantsturgude toimimist ning varaklasside erinevaid karakteristikuid ja peamisi turgudel kaubeldavate instrumentide tunnusjooni",
@@ -1222,7 +1368,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-hooneautomaatika-ja-tehnosusteemid/",
       "@type": "MicroCredential",
       "ectsCredits": 6,
-      "field": "haridus",
+      "field": "ehitus",
       "language": "et",
       "learningOutcome": [
         "Hoone automaatika ja tehnosüsteemide mikrokraadi läbinu: • orienteerub hoone tehnovõrkude projekteerimise, ehituse, järelvalve ja hooldamise nõuetes",
@@ -1258,16 +1404,16 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-hoonete-energiatohususe-modelleerimine/",
       "@type": "MicroCredential",
       "ectsCredits": 6,
-      "field": "haridus",
+      "field": "ehitus",
       "language": "et",
       "learningOutcome": [
-        "oskab teostada energiaarvutusi eri tüüpi hoonetele",
-        "oskab läbi viia investeeringute analüüse",
-        "on võimeline osalema energiatõhusate hoonete projekteerimises",
-        "oskab modelleerida eri tüüpi hooneid ja teha hoonete energiasimulatsioone",
-        "suudab analüüsida ja hinnata simulatsiooni tulemusi ning modelleerimise parameetrite ja lihtsustuste mõju simulatsiooni tulemustele"
+        "Mikrokraadikava läbinu oskab: teostada energiaarvutusi eri tüüpi hoonetele",
+        "läbi viia investeeringute analüüse",
+        "modelleerida eri tüüpi hooneid ja teha hoonete energiasimulatsioone",
+        "analüüsida ja hinnata simulatsiooni tulemusi ning modelleerimise parameetrite ja lihtsustuste mõju simulatsiooni tulemustele",
+        "On võimeline osalema energiatõhusate hoonete projekteerimises"
       ],
-      "name": "Hoonete energiatõhususe modelleerimine S25",
+      "name": "Hoonete energiatõhususe modelleerimine",
       "provider": {
         "@type": "Organization",
         "name": "TalTech"
@@ -1278,7 +1424,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-inimeste-ja-vorgustike-juhtimine-avalikus-sektoris/",
       "@type": "MicroCredential",
       "ectsCredits": 6,
-      "field": "haridus",
+      "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
         "Mikrokraadikava läbinud õppur mõistab koordineerimise ja koostöö rolli avalike poliitikate kujundamisel ja elluviimisel",
@@ -1316,10 +1462,30 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-intellektuaalomandioigus-euroopa-liidu-digitaalsel-uhtsel-turul/"
     },
     {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-it-juhtimine-ja-ariarhitektuur/",
+      "@type": "MicroCredential",
+      "ectsCredits": 24,
+      "field": "IT ja andmed",
+      "language": "et",
+      "learningOutcome": [
+        "Arendab ettevõtte IT strateegiat, sidudes selle organisatsiooni üldiste eesmärkidega",
+        "Kavandab ja optimeerib ettevõtte äriarhitektuuri ning juhib seda toetava infosüsteemi arendamist ja haldamist",
+        "Rakendab ja täiustab andmete ja infrastruktuuri kaitsemeetodeid, hinnates nende tõhusust",
+        "Analüüsib IKT kasutamisega seotud riske ja rakendab strateegiaid nende mõju vähendamiseks",
+        "Juhib ja motiveerib meeskondi, rakendades projektijuhtimise põhimõtteid ja praktikaid keerukates tööprotsessides"
+      ],
+      "name": "IT juhtimine ja äriarhitektuur",
+      "provider": {
+        "@type": "Organization",
+        "name": "TalTech"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-it-juhtimine-ja-ariarhitektuur/"
+    },
+    {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-juhtimine-juhendamine-coaching-ja-mentorlus/",
       "@type": "MicroCredential",
       "ectsCredits": 6,
-      "field": "haridus",
+      "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
         "Mikrokraadikava läbinu analüüsib ja eristab juhtimise, juhendamise, mentorluse ja coachingu rolle, funktsioone ja metoodikat tuginedes juhtimispsühholoogiale",
@@ -1337,7 +1503,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-kestlik-maavarade-uurimine-kaevandamine-ja-ringmajandus/",
       "@type": "MicroCredential",
       "ectsCredits": 6,
-      "field": "haridus",
+      "field": "muu",
       "language": "et",
       "learningOutcome": [
         "After completing this micro-degree program, the participant: has an understanding of the global mining industry, emphasising the environmental, economic, social, and political aspects of mining activities worldwide, with a focus on sustainable practices and technological advancements",
@@ -1354,10 +1520,71 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-kestlik-maavarade-uurimine-kaevandamine-ja-ringmajandus/"
     },
     {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-kiibidisain/",
+      "@type": "MicroCredential",
+      "ectsCredits": 24,
+      "field": "IT ja andmed",
+      "language": "et",
+      "learningOutcome": [
+        "Has knowledge of the fundamentals of chip development",
+        "Can model digital hardware in a hardware description language",
+        "Understands chip reliability and test problems and can offer solutions to them",
+        "Understands chip security problems and can offer solutions to them",
+        "Has practical experience in implementing a chip project"
+      ],
+      "name": "Chip Design",
+      "provider": {
+        "@type": "Organization",
+        "name": "TalTech"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-kiibidisain/"
+    },
+    {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-kosmoseoperatsioonid/",
+      "@type": "MicroCredential",
+      "ectsCredits": 30,
+      "field": "IT ja andmed",
+      "language": "et",
+      "learningOutcome": [
+        "Rakenda kommunikatsiooniteooria, raadiosageduselektroonika ja signaalitöötluse põhimõtteid sideühenduste hindamiseks ja kujundamiseks, sealhulgas modulatsioon, kodeerimine ja kanali jõudlus müra ja häirete tingimustes",
+        "Antennide disain ja levimismehhanismide hindamine erinevates keskkondades, võttes arvesse selliseid tegureid nagu peegeldused, difraktsioon ja Mitmekiirelise levi mõju mõju signaali kvaliteedile",
+        "Analüüsib elektromagnetilisi keskkondi, tuvastab müra ja häirete allikaid ning rakendab mõõtmis-, filtreerimis- ja varjestustehnikaid süsteemi töökindluse ja elektromagnetilise ühilduvuse tagamiseks",
+        "Hindab kosmosesüsteemide haavatavusi ning rakendab küberturvalisuse põhimõtteid ja leevendusstrateegiaid, et kaitsevõime ja tagada operatsioonide turvalisus",
+        "Kogub, analüüsib ja tõlgendab küber- ja kosmosevaldkonnaga seotud ohuteavet ning edastab tulemusi tõhusalt operatiivse otsustusprotsessi ja riskide vähendamise toetamiseks",
+        "Töötab tõhusalt multidistsiplinaarsetes meeskondades praktiliste insenerilahenduste (nt mehatroonika- või nutikad süsteemid) planeerimiseks, arendamiseks ja esitlemiseks, integreerides tehnilisi teadmisi projektijuhtimise ja reaalse maailma probleemide lahendamise oskustega"
+      ],
+      "name": "Kosmoseoperatsioonid",
+      "provider": {
+        "@type": "Organization",
+        "name": "TalTech"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-kosmoseoperatsioonid/"
+    },
+    {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-kuberohud-tehisintellekt-ja-pahavara/",
+      "@type": "MicroCredential",
+      "ectsCredits": 21,
+      "field": "IT ja andmed",
+      "language": "et",
+      "learningOutcome": [
+        "Explain the lifecycle of cybersecurity incidents and apply appropriate processes and documentation",
+        "Apply logging and system monitoring principles using centralized solutions and analysis techniques",
+        "Analyze and identify cyber threats using AI and machine learning methods",
+        "Apply security measures in web applications and select appropriate defense techniques",
+        "Evaluate risks, security, ethical, and privacy aspects of cybersecurity solutions, including AI"
+      ],
+      "name": "Cyber Threats, AI and Malware",
+      "provider": {
+        "@type": "Organization",
+        "name": "TalTech"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-kuberohud-tehisintellekt-ja-pahavara/"
+    },
+    {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-materjalide-taaskasutus-ja-okodisain/",
       "@type": "MicroCredential",
       "ectsCredits": 6,
-      "field": "haridus",
+      "field": "terviseteadus",
       "language": "et",
       "learningOutcome": [
         "Õppija tunneb erinevaid materjalide liike (nt plast, metall, klaas, paber, biolagunevad materjalid) ja mõistab jäätmete tekkimise protsesse ning allikaid erinevates tööstusharudes ja igapäevaelus ning oskab analüüsida jäätmete mõju keskkonnale ja inimtervisele",
@@ -1373,10 +1600,30 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-materjalide-taaskasutus-ja-okodisain/"
     },
     {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-mehitamata-susteemid/",
+      "@type": "MicroCredential",
+      "ectsCredits": 18,
+      "field": "IT ja andmed",
+      "language": "et",
+      "learningOutcome": [
+        "tunneb mehitamata ja autonoomsete süsteemide peamisi arhitektuure, alamsüsteeme, rakendusvaldkondi ning tööpõhimõtteid",
+        "oskab analüüsida ja valida sobivaid elektroonika-, tarkvara-, side-, sensori- ja juhtimislahendusi droonide ning autonoomsete sõidukite jaoks",
+        "suudab projekteerida autonoomse süsteemi kontseptsiooni alamsüsteemide tasemel, arvestades tehnilisi, keskkondlikke ja sotsiaal-õiguslikke nõudeid",
+        "oskab kasutada masinõppe mudeleid, töövahendeid ja treenimisandmeid sardsüsteemide põhistes lahendustes ning arvestada riistvarapiirangutega",
+        "omab praktilist kogemust meeskonna- ja projektipõhises arendustöös, lahenduste testimises, dokumenteerimises ja tulemuste esitlemises"
+      ],
+      "name": "Mehitamata süsteemid",
+      "provider": {
+        "@type": "Organization",
+        "name": "TalTech"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-mehitamata-susteemid/"
+    },
+    {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-personali-varbamine/",
       "@type": "MicroCredential",
       "ectsCredits": 6,
-      "field": "haridus",
+      "field": "muu",
       "language": "et",
       "learningOutcome": [
         "Mikrokraadi kava läbinu: •analüüsib ja hindab tööturu situatsiooni ja sellest tulenevaid võimalusi sobivate kandidaatide leidmiseks",
@@ -1390,6 +1637,19 @@
         "name": "TalTech"
       },
       "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-personali-varbamine/"
+    },
+    {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-piirdetarindite-projekteerimine/",
+      "@type": "MicroCredential",
+      "ectsCredits": 24,
+      "field": "haridus",
+      "language": "et",
+      "name": "Piirdetarindite projekteerimine",
+      "provider": {
+        "@type": "Organization",
+        "name": "TalTech"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-piirdetarindite-projekteerimine/"
     },
     {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-programmeerimine-i/",
@@ -1412,10 +1672,50 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-programmeerimine-i/"
     },
     {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-raamatupidamise-ja-rahanduse-kaasaegsed-teemad-labi-esg-ja-finantsinnovatsiooni-prisma/",
+      "@type": "MicroCredential",
+      "ectsCredits": 12,
+      "field": "muu",
+      "language": "et",
+      "learningOutcome": [
+        "The learner explains the key concepts of ESG reporting and regulations",
+        "can describe the latest developments and current situation in the field of ESG accounting and reporting",
+        "describes and analyses main ESG related standards and governing documents including New CSRD",
+        "prepares ESG reports and/or disclosures applying different techniques and standards, solves case studies outlining main ESG related problems",
+        "understands the importance of ESG in finance and investment and the benefits for stakeholders"
+      ],
+      "name": "Contemporary Topics in Accounting and Finance...",
+      "provider": {
+        "@type": "Organization",
+        "name": "TalTech"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-raamatupidamise-ja-rahanduse-kaasaegsed-teemad-labi-esg-ja-finantsinnovatsiooni-prisma/"
+    },
+    {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-rahatarkus-ja-investeerimine/",
+      "@type": "MicroCredential",
+      "ectsCredits": 12,
+      "field": "majandus ja juhtimine",
+      "language": "et",
+      "learningOutcome": [
+        "Hindab erinevate varaklasside (aktsiad, kinnisvara ja võlakirjad) õiglast väärtust ning tõlgendab saadud tulemusi",
+        "Hindab makromajanduse ning erinevate sündmuste mõju finantsturgudele ning investeeringute väärtusele",
+        "Selgitab investeeringute portfelli juhtimise aluspõhimõtteid, sh üksikute investeerimisalternatiivide mitmekesistamise mõjusid ning investeerimise eetilisi põhimõtteid",
+        "Selgitab finantsturgude toimimist ning varaklasside erinevaid karakteristikuid ja peamisi turgudel kaubeldavate instrumentide tunnusjooni",
+        "Oskab teha läbimõeldud finantsotsuseid eraisiku vaatenurgast ning analüüsida otsuste rahanduslikku mõju ning teha vastavaid rakenduslikke rahandusarvutusi"
+      ],
+      "name": "Rahatarkus ja investeerimine",
+      "provider": {
+        "@type": "Organization",
+        "name": "TalTech"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-rahatarkus-ja-investeerimine/"
+    },
+    {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-ringmajandus-ja-materjalitehnoloogia/",
       "@type": "MicroCredential",
       "ectsCredits": 3,
-      "field": "haridus",
+      "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
         "Mikrokraadi läbinu tunneb ringmajanduse põhimõtteid, seotud seadusandlust ja põhiteadmisi keskkonnakaitsetehnoloogiast",
@@ -1434,7 +1734,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-rohelised-energiatehnoloogiad/",
       "@type": "MicroCredential",
       "ectsCredits": 6,
-      "field": "haridus",
+      "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
         "Mikrokraadikava läbinud õppur omab põhiteadmisi tuule-, päikese- ja vesinikuenergiatehnoloogiatest ning nende tööpõhimõtetest",
@@ -1493,7 +1793,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-strateegiline-juhtimine-ja-poliitikaanaluus-avalikus-sektoris/",
       "@type": "MicroCredential",
       "ectsCredits": 6,
-      "field": "haridus",
+      "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
         "Mikrokraadikava lõpetanu: •mõistab seoseid strateegilise juhtimise, tulemus- ja finantsjuhtimise ning poliitikaanalüüsi vahel, nende erisusi avalikus sektoris",
@@ -1531,7 +1831,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-teenusedisain/",
       "@type": "MicroCredential",
       "ectsCredits": 6,
-      "field": "haridus",
+      "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
         "Mikrokraadikava läbinu tunneb kaasaegseid kliendikeskse teenusmajanduse ja elamusmajanduse paradigmasid",
@@ -1553,11 +1853,12 @@
       "field": "IT ja andmed",
       "language": "et",
       "learningOutcome": [
-        "Kava lõpetanud õppur: • oskab formuleerida otsinguülesandeid, • oskab kasutada põhimeetodeid seoste leidmiseks, klassifitseerimiseks, klasterdamiseks ja võrgustikuanalüüsiks",
-        "oskab defineerida ärianalüüsi ja andmekaevandamise probleeme",
-        "oskab kasutada andmekaevandamise tarkvara ja interpreteerida tulemusi äripoolele kommunikeeritaval viisil",
-        "kasutab erinevaid masinõppe algoritme eri probleemide korral",
-        "tõlgendab ja hindab masinõppesüsteemi töö tulemusi"
+        "Mikrokraadikava lõpetanud õppur oskab: formuleerida otsinguülesandeid",
+        "defineerida ärianalüüsi ja andmekaevandamise probleeme",
+        "kasutada põhimeetodeid seoste leidmiseks, klassifitseerimiseks, klasterdamiseks ja võrgustikuanalüüsiks",
+        "kasutada andmekaevandamise tarkvara ja interpreteerida tulemusi äripoolele kommunikeeritaval viisil",
+        "kasutada erinevaid masinõppe algoritme eri probleemide korral",
+        "tõlgendada ja hinnata masinõppesüsteemi töö tulemusi"
       ],
       "name": "Tehisintellekt, andmekaeve ja masinõpe",
       "provider": {
@@ -1565,6 +1866,24 @@
         "name": "TalTech"
       },
       "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-tehisintellekt-andmekaeve-ja-masinope/"
+    },
+    {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-tehnoloogiaoigus/",
+      "@type": "MicroCredential",
+      "ectsCredits": 12,
+      "field": "IT ja andmed",
+      "language": "et",
+      "learningOutcome": [
+        "Upon completion of the microcredential programme, the learner: explains the relationship between law and technology, digital technologies, and the protection of technology-related rights",
+        "applies legal principles to cases related to technology law",
+        "discusses and critically assesses the EU's digital regulatory initiatives"
+      ],
+      "name": "Technology Law",
+      "provider": {
+        "@type": "Organization",
+        "name": "TalTech"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-tehnoloogiaoigus/"
     },
     {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-toit-ja-toitumine/",
@@ -1585,10 +1904,31 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-toit-ja-toitumine/"
     },
     {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-toitlustuskorralduse-akadeemia/",
+      "@type": "MicroCredential",
+      "ectsCredits": 7,
+      "field": "IT ja andmed",
+      "language": "et",
+      "learningOutcome": [
+        "Kursuse lõpetanud osaleja: - mõistab ettevõtte toimimist ja oskab luua kasumlikku ärimudelit",
+        "tunneb tööõiguse ja finantsjuhtimise põhialuseid",
+        "oskab luua ja juhtida meeskonda",
+        "mõistab turunduse, hinnastamise ja kliendikogemuse olulisust",
+        "oskab korraldada üritusi ja juhtida protsesse algusest lõpuni",
+        "teab veiniõpetuse põhialuseid ja nende seost toitlustuse kvaliteediga"
+      ],
+      "name": "Toitlustuskorralduse akadeemia",
+      "provider": {
+        "@type": "Organization",
+        "name": "TalTech"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/taltech-toitlustuskorralduse-akadeemia/"
+    },
+    {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/taltech-tookeskkonna-kvaliteedi-juhtimine/",
       "@type": "MicroCredential",
       "ectsCredits": 6,
-      "field": "haridus",
+      "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
         "Koolituse läbinu oskab: - kujundada strateegiaid töökeskkonna kvaliteedi parandamiseks ja parema tasakaalu saavutamiseks",
@@ -2316,9 +2656,9 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-videomangude-narratiivid/"
     }
   ],
-  "checkedAt": "2026-07-24",
-  "generatedAt": "2026-07-24T12:14:32.000Z",
-  "runRef": "mkval_20260724T121432Z",
+  "checkedAt": "2026-08-18",
+  "generatedAt": "2026-08-18T08:03:04.000Z",
+  "runRef": "mkval_20260818T080304Z",
   "schemaVersion": "amos.mkval.catalog_cc_export/v1",
-  "sourceFeedHash": "sha256:f058f18219adc06b89a9fb2afcb39ecd40d968f618a742205cce99d1ffc0a75d"
+  "sourceFeedHash": "sha256:acf1fed3529850300152b9ff18fe3d3099ba671c2b96f57e05d4247efe4d6cc8"
 }
