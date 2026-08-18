@@ -1,0 +1,141 @@
+name: lkg-refresh
+# Item D: the last manual step in the catalog withdrawal mechanism (a human
+# refreshing the committed LKG snapshot after AMOS measures a withdrawal)
+# becomes an automatic, REVIEWABLE pull request.
+#
+# WHAT THIS WORKFLOW DOES:
+#   1. fetches the published AMOS release bundle (feed + CC graph + receipt),
+#   2. verifies it with scripts/verify-lkg-refresh.mjs — every gate REUSES the
+#      site's own real validation code (contentHash, graph/receipt pairing,
+#      non-regression + retired[] identity against the CURRENT committed
+#      snapshot). Nothing is reimplemented here or in that script.
+#   3. only if verification passes AND the candidate differs from what is
+#      committed: writes the three files, regenerates vercel.json, runs the
+#      test suite + build, and opens (or updates) a pull request.
+#
+# THIS WORKFLOW NEVER MERGES ANYTHING AND NEVER PUSHES TO `main`. It pushes
+# only to its own dedicated `automated/lkg-refresh` branch and opens a PR
+# against `main` for a HUMAN to review and merge. There is no merge step
+# anywhere below — that is deliberate, not an oversight.
+#
+# If verification fails, the `verify` step exits non-zero, the job goes RED,
+# and every later step is skipped by default (no `continue-on-error`
+# anywhere) — so an unverified candidate can never reach a pull request.
+on:
+  schedule:
+    - cron: "17 4 * * *" # daily, off-peak UTC
+  workflow_dispatch: {}
+
+# Never run two refreshes at once — both would race to force-push the same
+# branch.
+concurrency:
+  group: lkg-refresh
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Pinned to the exact version this mechanism was proven against
+      # locally (native TypeScript type-stripping, no ts-node/tsx needed —
+      # see scripts/verify-lkg-refresh.mjs and its sibling *.test.mjs files,
+      # which all import ../src/data/**/*.ts directly). Bump together with
+      # the version used for local development.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "26.0.0"
+
+      - run: npm ci
+
+      # --- 1+2: fetch + verify (fail-closed) --------------------------------
+      # This is the ONLY network-touching, trust-deciding step. Every rule it
+      # enforces is imported from src/data/catalog/index.ts and
+      # src/data/credentialCommons.ts — see that script's header comment for
+      # the exact list. A non-zero exit here stops the workflow: no file is
+      # written, no branch is touched, no PR is opened or updated.
+      - name: Verify published AMOS release against the committed snapshot
+        run: |
+          node scripts/verify-lkg-refresh.mjs \
+            --write \
+            --summary-file="$RUNNER_TEMP/lkg-summary.json" \
+            --pr-body-file="$RUNNER_TEMP/lkg-pr-body.md"
+
+      - name: Read verification summary
+        id: summary
+        run: |
+          echo "changed=$(jq -r '.changed' "$RUNNER_TEMP/lkg-summary.json")" >> "$GITHUB_OUTPUT"
+          cat "$RUNNER_TEMP/lkg-summary.json"
+
+      # --- 3: regenerate the redirect map from the newly-written snapshot ---
+      - name: Regenerate vercel.json redirects
+        if: steps.summary.outputs.changed == 'true'
+        run: node scripts/gen-slug-redirects.mjs
+
+      # --- test suite + build, same gate `npm run build` already runs -------
+      - name: Test suite + Astro build
+        if: steps.summary.outputs.changed == 'true'
+        run: npm run build
+
+      # --- open or update the PR — NEVER merge -------------------------------
+      - name: Open or update the review PR
+        if: steps.summary.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          BRANCH="automated/lkg-refresh"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add \
+            src/data/catalog/credential-commons-lkg/catalog-feed.json \
+            src/data/catalog/credential-commons-lkg/catalog.cc.jsonld \
+            src/data/catalog/credential-commons-lkg/cc-projection-receipt.json \
+            vercel.json
+          if git diff --cached --quiet; then
+            echo "verify script reported changed=true but nothing is staged — refusing to open an empty PR"
+            exit 1
+          fi
+          COMMIT_MSG="data(kataloog): automaatne AMOS hetktõmmise ettepanek
+
+          Verifitseeritud scripts/verify-lkg-refresh.mjs poolt (contentHash, retired[]
+          identiteet, mitte-regressioon, CC-graafi/kviitungi paardumine — kõik läbitud
+          enne seda commiti). See on ETTEPANEK: keegi inimene vaatab andmed üle ja
+          mergib käsitsi. See workflow ise EI MERGI kunagi midagi."
+          git commit -m "$COMMIT_MSG"
+          git push --force-with-lease origin "$BRANCH"
+
+          EXISTING_PR="$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$EXISTING_PR" ]; then
+            gh pr edit "$EXISTING_PR" --body-file "$RUNNER_TEMP/lkg-pr-body.md"
+            echo "Updated existing PR #$EXISTING_PR"
+          else
+            # The verified data is already safely on the branch above. If only
+            # the PR step fails, say EXACTLY what to switch on instead of
+            # leaving a red run with a GitHub API message nobody can act on:
+            # creating a PR from Actions is off by default on GitHub, and the
+            # workflow-level `permissions:` block does NOT substitute for it.
+            if ! gh pr create \
+              --base main \
+              --head "$BRANCH" \
+              --title "data(kataloog): automaatne AMOS hetktõmmise ettepanek" \
+              --body-file "$RUNNER_TEMP/lkg-pr-body.md"; then
+              echo "::error::Verifitseeritud hetktõmmis on harus '$BRANCH', aga PR-i avada ei õnnestunud."
+              echo "::error::Lülita sisse: Settings -> Actions -> General -> Workflow permissions -> 'Allow GitHub Actions to create and approve pull requests'."
+              echo "::error::Kuni seda ei ole, saab PR-i avada käsitsi harust '$BRANCH' — andmed ise on juba kontrollitud ja kohal."
+              exit 1
+            fi
+          fi
+
+      - name: No change
+        if: steps.summary.outputs.changed == 'false'
+        run: echo "AMOS-i väljalase on kommititud hetktõmmisega identne — ettepanekut ei ole vaja teha."
