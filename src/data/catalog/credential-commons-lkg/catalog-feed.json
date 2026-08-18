@@ -1,6 +1,6 @@
 {
   "schemaVersion": "amos.mkval.catalog/v2",
-  "generatedAt": "2026-08-18T08:03:04.000Z",
+  "generatedAt": "2026-08-18T11:53:19.000Z",
   "checkedAt": "2026-08-18",
   "dataUpdatedAt": "2026-08-18",
   "count": 168,
@@ -11279,7 +11279,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55564",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.9,
-          "sourceEvidenceHash": "sha256:cd567696d039f4488be610b526617eecee1400bbd96b0abca10ee047b641a3b8",
+          "sourceEvidenceHash": "sha256:9f8ca19916e43de1aab403307692af7d9c88830dab3876feda1782ac28b229b8",
           "reviewState": "approved"
         },
         {
@@ -11297,7 +11297,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55564",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.9,
-          "sourceEvidenceHash": "sha256:cd567696d039f4488be610b526617eecee1400bbd96b0abca10ee047b641a3b8",
+          "sourceEvidenceHash": "sha256:9f8ca19916e43de1aab403307692af7d9c88830dab3876feda1782ac28b229b8",
           "reviewState": "approved"
         },
         {
@@ -11315,7 +11315,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55564",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.9,
-          "sourceEvidenceHash": "sha256:cd567696d039f4488be610b526617eecee1400bbd96b0abca10ee047b641a3b8",
+          "sourceEvidenceHash": "sha256:9f8ca19916e43de1aab403307692af7d9c88830dab3876feda1782ac28b229b8",
           "reviewState": "approved"
         }
       ],
@@ -11336,7 +11336,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55564",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:cd567696d039f4488be610b526617eecee1400bbd96b0abca10ee047b641a3b8",
+          "sourceEvidenceHash": "sha256:9f8ca19916e43de1aab403307692af7d9c88830dab3876feda1782ac28b229b8",
           "reviewState": "approved"
         }
       ],
@@ -11344,7 +11344,7 @@
       "assessments": [],
       "credentials": [],
       "parserConfidence": 0.93,
-      "sourceEvidenceHash": "sha256:cd567696d039f4488be610b526617eecee1400bbd96b0abca10ee047b641a3b8",
+      "sourceEvidenceHash": "sha256:9f8ca19916e43de1aab403307692af7d9c88830dab3876feda1782ac28b229b8",
       "reviewState": "approved"
     },
     {
@@ -11399,7 +11399,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55624",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:8f64af445b07bdba86e268b4b7bc7c4519737993a1bd6881da83596a13b7029a",
+          "sourceEvidenceHash": "sha256:11788ba1e5222e6be3e4c34383c0bfc0c0e0d643dea02c84cf88d1732ad98a52",
           "reviewState": "approved"
         },
         {
@@ -11417,7 +11417,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55624",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:8f64af445b07bdba86e268b4b7bc7c4519737993a1bd6881da83596a13b7029a",
+          "sourceEvidenceHash": "sha256:11788ba1e5222e6be3e4c34383c0bfc0c0e0d643dea02c84cf88d1732ad98a52",
           "reviewState": "approved"
         },
         {
@@ -11435,7 +11435,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55624",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:8f64af445b07bdba86e268b4b7bc7c4519737993a1bd6881da83596a13b7029a",
+          "sourceEvidenceHash": "sha256:11788ba1e5222e6be3e4c34383c0bfc0c0e0d643dea02c84cf88d1732ad98a52",
           "reviewState": "approved"
         },
         {
@@ -11453,7 +11453,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55624",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:8f64af445b07bdba86e268b4b7bc7c4519737993a1bd6881da83596a13b7029a",
+          "sourceEvidenceHash": "sha256:11788ba1e5222e6be3e4c34383c0bfc0c0e0d643dea02c84cf88d1732ad98a52",
           "reviewState": "approved"
         }
       ],
@@ -11474,7 +11474,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55624",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.92,
-          "sourceEvidenceHash": "sha256:8f64af445b07bdba86e268b4b7bc7c4519737993a1bd6881da83596a13b7029a",
+          "sourceEvidenceHash": "sha256:11788ba1e5222e6be3e4c34383c0bfc0c0e0d643dea02c84cf88d1732ad98a52",
           "reviewState": "approved"
         }
       ],
@@ -11482,7 +11482,7 @@
       "assessments": [],
       "credentials": [],
       "parserConfidence": 0.94,
-      "sourceEvidenceHash": "sha256:8f64af445b07bdba86e268b4b7bc7c4519737993a1bd6881da83596a13b7029a",
+      "sourceEvidenceHash": "sha256:11788ba1e5222e6be3e4c34383c0bfc0c0e0d643dea02c84cf88d1732ad98a52",
       "reviewState": "approved"
     },
     {
@@ -11539,7 +11539,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55944",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:e12025d23c8a82be7294f101d1a4819cf55b7e1c44b1c8e5df860f8beda6e590",
+          "sourceEvidenceHash": "sha256:5fd6f8a1e7e69a2382f9b1f6b20a41920b5279c7968b46257871ca59ff8cfc9e",
           "reviewState": "approved"
         },
         {
@@ -11557,7 +11557,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55944",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:e12025d23c8a82be7294f101d1a4819cf55b7e1c44b1c8e5df860f8beda6e590",
+          "sourceEvidenceHash": "sha256:5fd6f8a1e7e69a2382f9b1f6b20a41920b5279c7968b46257871ca59ff8cfc9e",
           "reviewState": "approved"
         },
         {
@@ -11575,7 +11575,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55944",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:e12025d23c8a82be7294f101d1a4819cf55b7e1c44b1c8e5df860f8beda6e590",
+          "sourceEvidenceHash": "sha256:5fd6f8a1e7e69a2382f9b1f6b20a41920b5279c7968b46257871ca59ff8cfc9e",
           "reviewState": "approved"
         },
         {
@@ -11593,7 +11593,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55944",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:e12025d23c8a82be7294f101d1a4819cf55b7e1c44b1c8e5df860f8beda6e590",
+          "sourceEvidenceHash": "sha256:5fd6f8a1e7e69a2382f9b1f6b20a41920b5279c7968b46257871ca59ff8cfc9e",
           "reviewState": "approved"
         },
         {
@@ -11611,7 +11611,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55944",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:e12025d23c8a82be7294f101d1a4819cf55b7e1c44b1c8e5df860f8beda6e590",
+          "sourceEvidenceHash": "sha256:5fd6f8a1e7e69a2382f9b1f6b20a41920b5279c7968b46257871ca59ff8cfc9e",
           "reviewState": "approved"
         },
         {
@@ -11629,7 +11629,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55944",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:e12025d23c8a82be7294f101d1a4819cf55b7e1c44b1c8e5df860f8beda6e590",
+          "sourceEvidenceHash": "sha256:5fd6f8a1e7e69a2382f9b1f6b20a41920b5279c7968b46257871ca59ff8cfc9e",
           "reviewState": "approved"
         }
       ],
@@ -11650,7 +11650,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55944",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.92,
-          "sourceEvidenceHash": "sha256:e12025d23c8a82be7294f101d1a4819cf55b7e1c44b1c8e5df860f8beda6e590",
+          "sourceEvidenceHash": "sha256:5fd6f8a1e7e69a2382f9b1f6b20a41920b5279c7968b46257871ca59ff8cfc9e",
           "reviewState": "approved"
         }
       ],
@@ -11658,7 +11658,7 @@
       "assessments": [],
       "credentials": [],
       "parserConfidence": 0.94,
-      "sourceEvidenceHash": "sha256:e12025d23c8a82be7294f101d1a4819cf55b7e1c44b1c8e5df860f8beda6e590",
+      "sourceEvidenceHash": "sha256:5fd6f8a1e7e69a2382f9b1f6b20a41920b5279c7968b46257871ca59ff8cfc9e",
       "reviewState": "approved"
     },
     {
@@ -11712,7 +11712,7 @@
           "sourceUrl": "https://taltech.ee/kursus/56106",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:796ae96033a701b8ee6d25a2529b20e1a7ea5c85c60ecdf05b1adf8c32876109",
+          "sourceEvidenceHash": "sha256:80722ca46e88fb254b5375ea30a7d83b45bba3da34f329ccc53dcde1c28d0c61",
           "reviewState": "approved"
         },
         {
@@ -11730,7 +11730,7 @@
           "sourceUrl": "https://taltech.ee/kursus/56106",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:796ae96033a701b8ee6d25a2529b20e1a7ea5c85c60ecdf05b1adf8c32876109",
+          "sourceEvidenceHash": "sha256:80722ca46e88fb254b5375ea30a7d83b45bba3da34f329ccc53dcde1c28d0c61",
           "reviewState": "approved"
         },
         {
@@ -11748,7 +11748,7 @@
           "sourceUrl": "https://taltech.ee/kursus/56106",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:796ae96033a701b8ee6d25a2529b20e1a7ea5c85c60ecdf05b1adf8c32876109",
+          "sourceEvidenceHash": "sha256:80722ca46e88fb254b5375ea30a7d83b45bba3da34f329ccc53dcde1c28d0c61",
           "reviewState": "approved"
         }
       ],
@@ -11769,7 +11769,7 @@
           "sourceUrl": "https://taltech.ee/kursus/56106",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.92,
-          "sourceEvidenceHash": "sha256:796ae96033a701b8ee6d25a2529b20e1a7ea5c85c60ecdf05b1adf8c32876109",
+          "sourceEvidenceHash": "sha256:80722ca46e88fb254b5375ea30a7d83b45bba3da34f329ccc53dcde1c28d0c61",
           "reviewState": "approved"
         }
       ],
@@ -11777,7 +11777,7 @@
       "assessments": [],
       "credentials": [],
       "parserConfidence": 0.94,
-      "sourceEvidenceHash": "sha256:796ae96033a701b8ee6d25a2529b20e1a7ea5c85c60ecdf05b1adf8c32876109",
+      "sourceEvidenceHash": "sha256:80722ca46e88fb254b5375ea30a7d83b45bba3da34f329ccc53dcde1c28d0c61",
       "reviewState": "approved"
     },
     {
@@ -11834,7 +11834,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55284",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:df2e473b8fc5bc12da7cdb9d42ce377dc299a430eac799a5ffb3cedf8d03da26",
+          "sourceEvidenceHash": "sha256:57a439fcd0e5118a44884e5a272e7f84c2af3a5b196f76d0867ecad9ab5ccb8c",
           "reviewState": "approved"
         },
         {
@@ -11852,7 +11852,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55284",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:df2e473b8fc5bc12da7cdb9d42ce377dc299a430eac799a5ffb3cedf8d03da26",
+          "sourceEvidenceHash": "sha256:57a439fcd0e5118a44884e5a272e7f84c2af3a5b196f76d0867ecad9ab5ccb8c",
           "reviewState": "approved"
         },
         {
@@ -11870,7 +11870,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55284",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:df2e473b8fc5bc12da7cdb9d42ce377dc299a430eac799a5ffb3cedf8d03da26",
+          "sourceEvidenceHash": "sha256:57a439fcd0e5118a44884e5a272e7f84c2af3a5b196f76d0867ecad9ab5ccb8c",
           "reviewState": "approved"
         },
         {
@@ -11888,7 +11888,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55284",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:df2e473b8fc5bc12da7cdb9d42ce377dc299a430eac799a5ffb3cedf8d03da26",
+          "sourceEvidenceHash": "sha256:57a439fcd0e5118a44884e5a272e7f84c2af3a5b196f76d0867ecad9ab5ccb8c",
           "reviewState": "approved"
         },
         {
@@ -11906,7 +11906,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55284",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:df2e473b8fc5bc12da7cdb9d42ce377dc299a430eac799a5ffb3cedf8d03da26",
+          "sourceEvidenceHash": "sha256:57a439fcd0e5118a44884e5a272e7f84c2af3a5b196f76d0867ecad9ab5ccb8c",
           "reviewState": "approved"
         },
         {
@@ -11924,7 +11924,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55284",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:df2e473b8fc5bc12da7cdb9d42ce377dc299a430eac799a5ffb3cedf8d03da26",
+          "sourceEvidenceHash": "sha256:57a439fcd0e5118a44884e5a272e7f84c2af3a5b196f76d0867ecad9ab5ccb8c",
           "reviewState": "approved"
         }
       ],
@@ -11945,7 +11945,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55284",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.92,
-          "sourceEvidenceHash": "sha256:df2e473b8fc5bc12da7cdb9d42ce377dc299a430eac799a5ffb3cedf8d03da26",
+          "sourceEvidenceHash": "sha256:57a439fcd0e5118a44884e5a272e7f84c2af3a5b196f76d0867ecad9ab5ccb8c",
           "reviewState": "approved"
         }
       ],
@@ -11953,7 +11953,7 @@
       "assessments": [],
       "credentials": [],
       "parserConfidence": 0.94,
-      "sourceEvidenceHash": "sha256:df2e473b8fc5bc12da7cdb9d42ce377dc299a430eac799a5ffb3cedf8d03da26",
+      "sourceEvidenceHash": "sha256:57a439fcd0e5118a44884e5a272e7f84c2af3a5b196f76d0867ecad9ab5ccb8c",
       "reviewState": "approved"
     },
     {
@@ -12009,7 +12009,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55625",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:95539834c0e767178931e29d30b2d5c110100fa91a7532eeb1df2436a059e1c9",
+          "sourceEvidenceHash": "sha256:c72f3e21b87a885dfa921531b2d1e42888a236b8b1c6d460cfa2a626ef7d6153",
           "reviewState": "approved"
         },
         {
@@ -12027,7 +12027,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55625",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:95539834c0e767178931e29d30b2d5c110100fa91a7532eeb1df2436a059e1c9",
+          "sourceEvidenceHash": "sha256:c72f3e21b87a885dfa921531b2d1e42888a236b8b1c6d460cfa2a626ef7d6153",
           "reviewState": "approved"
         },
         {
@@ -12045,7 +12045,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55625",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:95539834c0e767178931e29d30b2d5c110100fa91a7532eeb1df2436a059e1c9",
+          "sourceEvidenceHash": "sha256:c72f3e21b87a885dfa921531b2d1e42888a236b8b1c6d460cfa2a626ef7d6153",
           "reviewState": "approved"
         },
         {
@@ -12063,7 +12063,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55625",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:95539834c0e767178931e29d30b2d5c110100fa91a7532eeb1df2436a059e1c9",
+          "sourceEvidenceHash": "sha256:c72f3e21b87a885dfa921531b2d1e42888a236b8b1c6d460cfa2a626ef7d6153",
           "reviewState": "approved"
         },
         {
@@ -12081,7 +12081,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55625",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:95539834c0e767178931e29d30b2d5c110100fa91a7532eeb1df2436a059e1c9",
+          "sourceEvidenceHash": "sha256:c72f3e21b87a885dfa921531b2d1e42888a236b8b1c6d460cfa2a626ef7d6153",
           "reviewState": "approved"
         }
       ],
@@ -12102,7 +12102,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55625",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.92,
-          "sourceEvidenceHash": "sha256:95539834c0e767178931e29d30b2d5c110100fa91a7532eeb1df2436a059e1c9",
+          "sourceEvidenceHash": "sha256:c72f3e21b87a885dfa921531b2d1e42888a236b8b1c6d460cfa2a626ef7d6153",
           "reviewState": "approved"
         }
       ],
@@ -12110,7 +12110,7 @@
       "assessments": [],
       "credentials": [],
       "parserConfidence": 0.94,
-      "sourceEvidenceHash": "sha256:95539834c0e767178931e29d30b2d5c110100fa91a7532eeb1df2436a059e1c9",
+      "sourceEvidenceHash": "sha256:c72f3e21b87a885dfa921531b2d1e42888a236b8b1c6d460cfa2a626ef7d6153",
       "reviewState": "approved"
     },
     {
@@ -12164,7 +12164,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55604",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:bcc568996bcaed6cdc6b584dbebc65afaada937940340203b70ce2ea35e52fb6",
+          "sourceEvidenceHash": "sha256:fdb881079aa9bce13af2c0ef75b58e8a6adebcb854a30e85393d40bfd68d5706",
           "reviewState": "approved"
         },
         {
@@ -12182,7 +12182,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55604",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:bcc568996bcaed6cdc6b584dbebc65afaada937940340203b70ce2ea35e52fb6",
+          "sourceEvidenceHash": "sha256:fdb881079aa9bce13af2c0ef75b58e8a6adebcb854a30e85393d40bfd68d5706",
           "reviewState": "approved"
         },
         {
@@ -12200,7 +12200,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55604",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.91,
-          "sourceEvidenceHash": "sha256:bcc568996bcaed6cdc6b584dbebc65afaada937940340203b70ce2ea35e52fb6",
+          "sourceEvidenceHash": "sha256:fdb881079aa9bce13af2c0ef75b58e8a6adebcb854a30e85393d40bfd68d5706",
           "reviewState": "approved"
         }
       ],
@@ -12221,7 +12221,7 @@
           "sourceUrl": "https://taltech.ee/kursus/55604",
           "sourceCheckedAt": "2026-08-18",
           "parserConfidence": 0.92,
-          "sourceEvidenceHash": "sha256:bcc568996bcaed6cdc6b584dbebc65afaada937940340203b70ce2ea35e52fb6",
+          "sourceEvidenceHash": "sha256:fdb881079aa9bce13af2c0ef75b58e8a6adebcb854a30e85393d40bfd68d5706",
           "reviewState": "approved"
         }
       ],
@@ -12229,7 +12229,7 @@
       "assessments": [],
       "credentials": [],
       "parserConfidence": 0.94,
-      "sourceEvidenceHash": "sha256:bcc568996bcaed6cdc6b584dbebc65afaada937940340203b70ce2ea35e52fb6",
+      "sourceEvidenceHash": "sha256:fdb881079aa9bce13af2c0ef75b58e8a6adebcb854a30e85393d40bfd68d5706",
       "reviewState": "approved"
     },
     {
@@ -18172,5 +18172,16 @@
       "reviewState": "approved"
     }
   ],
-  "contentHash": "sha256:acf1fed3529850300152b9ff18fe3d3099ba671c2b96f57e05d4247efe4d6cc8"
+  "retired": [
+    {
+      "id": "ebs-jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine",
+      "name": "Jätkusuutlik ja roheline üleminek: strateegiad, praktikad ja ressursside juhtimine",
+      "provider": "EBS",
+      "providerType": "ülikool",
+      "field": "IT ja andmed",
+      "url": "https://www.ebs.ee/taiendusope/mikrokraadid/jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine",
+      "withdrawnOn": "2026-08-18"
+    }
+  ],
+  "contentHash": "sha256:cf7fca11a1a373d642e6158c9711c8e735381a0a2910faaf1e11fdeb861d6524"
 }

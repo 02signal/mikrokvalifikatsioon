@@ -1196,11 +1196,6 @@
       "permanent": true
     },
     {
-      "source": "/kataloog/ebs-jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine/",
-      "destination": "/mikrokraadid/",
-      "permanent": true
-    },
-    {
       "source": "/kataloog/ebs-jatkusuutlik-ja-roheline-uleminek-strateegiad-praktikad-ja-ressursside-juhtimine-2/",
       "destination": "/mikrokraadid/",
       "permanent": true
