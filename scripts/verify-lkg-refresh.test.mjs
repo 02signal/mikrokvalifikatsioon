@@ -289,6 +289,7 @@ test("rejected: a feed that would drop entries (no explaining retired[]) fails t
 test("rejected: a receipt whose feed_hash no longer matches the candidate feed fails the pairing gate", () => {
   const sandbox = makeSandbox();
   try {
+    const before = readFileSync(join(sandbox, FEED_REL), "utf8");
     const { feedOut, ccOut, receiptOut } = buildWithdrawalCandidate(sandbox);
     const receipt = JSON.parse(readFileSync(receiptOut, "utf8"));
     receipt.feed_hash = `sha256:${"1".repeat(64)}`;
@@ -297,10 +298,7 @@ test("rejected: a receipt whose feed_hash no longer matches the candidate feed f
     const run = runScript(sandbox, [`--feed-url=${feedOut}`, `--cc-url=${ccOut}`, `--receipt-url=${receiptOut}`, "--write"]);
     assert.notEqual(run.status, 0);
     assert.match(run.stderr, /CC-väljalase ei sobi feediga/);
-    assert.equal(
-      readFileSync(join(sandbox, FEED_REL), "utf8"),
-      readFileSync(join(sandbox, FEED_REL), "utf8") // sanity: file still readable, i.e. untouched/valid
-    );
+    assert.equal(readFileSync(join(sandbox, FEED_REL), "utf8"), before);
   } finally {
     rmSync(sandbox, { recursive: true, force: true });
   }
