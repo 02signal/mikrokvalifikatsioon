@@ -32,16 +32,18 @@ concurrency:
   group: lkg-refresh
   cancel-in-progress: false
 
-permissions:
-  contents: write
-  pull-requests: write
-
 env:
   GH_TOKEN: ${{ github.token }}
 
 jobs:
+  # Scoped at job level, not workflow level: this is the only job today, but
+  # job-level keeps the grant tied to the one job that actually needs
+  # contents+PR write instead of silently covering any job added later.
   refresh:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
         with:
