@@ -92,6 +92,18 @@ jobs:
       # --- open or update the PR — NEVER merge -------------------------------
       - name: Open or update the review PR
         if: steps.summary.outputs.changed == 'true'
+        env:
+          # Creating a PR from Actions is blocked ORG-WIDE for 02signal (the
+          # repo-level checkbox is greyed out), and a workflow `permissions:`
+          # block does not substitute for it. So `gh` authenticates with a
+          # dedicated least-privilege token instead of GITHUB_TOKEN.
+          # LKG_PR_TOKEN: fine-grained PAT or GitHub App token scoped to THIS
+          # repo only, with Contents: read/write + Pull requests: read/write.
+          # Falls back to github.token so the failure stays honest (it will
+          # fail at PR creation with the actionable message below) rather than
+          # silently skipping the step when the secret is absent.
+          GH_TOKEN: ${{ secrets.LKG_PR_TOKEN || github.token }}
+          LKG_PR_TOKEN_PRESENT: ${{ secrets.LKG_PR_TOKEN != '' }}
         run: |
           set -euo pipefail
           BRANCH="automated/lkg-refresh"
@@ -132,8 +144,14 @@ jobs:
               --title "data(kataloog): automaatne AMOS hetktõmmise ettepanek" \
               --body-file "$RUNNER_TEMP/lkg-pr-body.md"; then
               echo "::error::Verifitseeritud hetktõmmis on harus '$BRANCH', aga PR-i avada ei õnnestunud."
-              echo "::error::Lülita sisse: Settings -> Actions -> General -> Workflow permissions -> 'Allow GitHub Actions to create and approve pull requests'."
-              echo "::error::Kuni seda ei ole, saab PR-i avada käsitsi harust '$BRANCH' — andmed ise on juba kontrollitud ja kohal."
+              if [ "${LKG_PR_TOKEN_PRESENT:-false}" != "true" ]; then
+                echo "::error::Saladus LKG_PR_TOKEN PUUDUB. Lisa see: Settings -> Secrets and variables -> Actions -> New repository secret."
+                echo "::error::Väärtus: fine-grained PAT AINULT selle hoidla peale, õigused Contents: read/write + Pull requests: read/write."
+              else
+                echo "::error::LKG_PR_TOKEN on olemas, aga PR-i loomine kukkus siiski. Kontrolli tokeni õigusi (Pull requests: read/write) ja aegumist."
+              fi
+              echo "::error::Alternatiiv (mõjutab kogu organisatsiooni): github.com/organizations/02signal/settings/actions -> Workflow permissions -> 'Allow GitHub Actions to create and approve pull requests'."
+              echo "::error::Kuni kumbagi ei ole, saab PR-i avada käsitsi harust '$BRANCH' — andmed ise on juba kontrollitud ja kohal."
               exit 1
             fi
           fi
