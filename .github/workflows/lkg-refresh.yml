@@ -76,8 +76,25 @@ jobs:
       - name: Read verification summary
         id: summary
         run: |
-          echo "changed=$(jq -r '.changed' "$RUNNER_TEMP/lkg-summary.json")" >> "$GITHUB_OUTPUT"
-          cat "$RUNNER_TEMP/lkg-summary.json"
+          S="$RUNNER_TEMP/lkg-summary.json"
+          echo "changed=$(jq -r '.changed' "$S")" >> "$GITHUB_OUTPUT"
+          # Owner policy 27.08.2026 (option B): a refresh where the PROGRAMME SET
+          # is identical is a freshness-only update (checkedAt / dataUpdatedAt /
+          # hashes) and merges itself. A programme appearing or disappearing is a
+          # business signal — that one stops and waits for a human. `verified`
+          # must be true for either path; a false verification already failed the
+          # step above, this is belt-and-braces.
+          ADDED="$(jq -r '.newlyAdded | length' "$S")"
+          WITHDRAWN="$(jq -r '.newlyWithdrawn | length' "$S")"
+          VERIFIED="$(jq -r '.verified' "$S")"
+          echo "newly_added=$ADDED" >> "$GITHUB_OUTPUT"
+          echo "newly_withdrawn=$WITHDRAWN" >> "$GITHUB_OUTPUT"
+          if [ "$VERIFIED" = "true" ] && [ "$ADDED" = "0" ] && [ "$WITHDRAWN" = "0" ]; then
+            echo "set_unchanged=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "set_unchanged=false" >> "$GITHUB_OUTPUT"
+          fi
+          cat "$S"
 
       # --- 3: regenerate the redirect map from the newly-written snapshot ---
       - name: Regenerate vercel.json redirects
@@ -89,8 +106,9 @@ jobs:
         if: steps.summary.outputs.changed == 'true'
         run: npm run build
 
-      # --- open or update the PR — NEVER merge -------------------------------
+      # --- open or update the PR (merge decision is the NEXT step) -----------
       - name: Open or update the review PR
+        id: pr
         if: steps.summary.outputs.changed == 'true'
         env:
           # Creating a PR from Actions is blocked ORG-WIDE for 02signal (the
@@ -124,13 +142,15 @@ jobs:
           Verifitseeritud scripts/verify-lkg-refresh.mjs poolt (contentHash, retired[]
           identiteet, mitte-regressioon, CC-graafi/kviitungi paardumine — kõik läbitud
           enne seda commiti). See on ETTEPANEK: keegi inimene vaatab andmed üle ja
-          mergib käsitsi. See workflow ise EI MERGI kunagi midagi."
+          mergib käsitsi, KUI programmide hulk muutus. Kui muutusid ainult
+          värskuse kuupäevad, merdžib töövoog selle ise (omaniku otsus 27.08.2026)."
           git commit -m "$COMMIT_MSG"
           git push --force-with-lease origin "$BRANCH"
 
           EXISTING_PR="$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')"
           if [ -n "$EXISTING_PR" ]; then
             gh pr edit "$EXISTING_PR" --body-file "$RUNNER_TEMP/lkg-pr-body.md"
+            echo "pr_number=$EXISTING_PR" >> "$GITHUB_OUTPUT"
             echo "Updated existing PR #$EXISTING_PR"
           else
             # The verified data is already safely on the branch above. If only
@@ -154,7 +174,47 @@ jobs:
               echo "::error::Kuni kumbagi ei ole, saab PR-i avada käsitsi harust '$BRANCH' — andmed ise on juba kontrollitud ja kohal."
               exit 1
             fi
+            echo "pr_number=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')" >> "$GITHUB_OUTPUT"
           fi
+
+      # --- 4: owner policy (option B, 27.08.2026) ---------------------------
+      # Freshness-only refresh merges itself; a programme-set change waits.
+      # NOTE ON THE COMMENT ABOVE THE PR STEP: this workflow used to say it
+      # "NEVER merges". That is no longer true and the claim was removed —
+      # it merges exactly one case, stated below, and nothing else.
+      - name: Auto-merge freshness-only refresh
+        if: steps.summary.outputs.changed == 'true' && steps.summary.outputs.set_unchanged == 'true' && steps.pr.outputs.pr_number != ''
+        env:
+          GH_TOKEN: ${{ secrets.LKG_PR_TOKEN || github.token }}
+        run: |
+          set -euo pipefail
+          PR="${{ steps.pr.outputs.pr_number }}"
+          echo "Programmide hulk muutumatu (lisandus=0, kadus=0) -> merdžin ise."
+          gh pr merge "$PR" --squash --delete-branch
+          echo "::notice::PR #$PR merdžitud automaatselt: ainult värskuse kuupäevad muutusid, programmide hulk on identne."
+
+      - name: Hold for the owner when the programme set changed
+        if: steps.summary.outputs.changed == 'true' && steps.summary.outputs.set_unchanged == 'false' && steps.pr.outputs.pr_number != ''
+        env:
+          GH_TOKEN: ${{ secrets.LKG_PR_TOKEN || github.token }}
+        run: |
+          set -euo pipefail
+          PR="${{ steps.pr.outputs.pr_number }}"
+          A="${{ steps.summary.outputs.newly_added }}"
+          W="${{ steps.summary.outputs.newly_withdrawn }}"
+          # Silt luuakse idempotentselt enne lisamist; kumbki samm ei tohi
+          # tood kukutada, sest PARIS tulemus on juba harus ja PR-is.
+          gh label create "vajab-omaniku-otsust" --color "B60205" \
+            --description "Programmide hulk muutus - inimene vaatab ule" --force >/dev/null 2>&1 || true
+          gh pr edit "$PR" --add-label "vajab-omaniku-otsust" >/dev/null 2>&1 || true
+          gh pr edit "$PR" --add-assignee "${{ github.repository_owner == '02signal' && 'arthunt' || github.actor }}" 2>/dev/null || true
+          {
+            printf 'Programmide hulk MUUTUS: lisandus %s, kadus %s.\n\n' "$A" "$W"
+            printf 'Seda ei merdzita automaatselt. Programmi ilmumine voi kadumine on arisignaal ja vaarib inimese pilku - kuupaeva nihkumine ei vaari (see merdzitakse ise).\n\n'
+            printf 'Verifitseerimine on labitud, andmed on harus. Vaata ule ja merdzi, kui oige.\n'
+          } > "$RUNNER_TEMP/hold-comment.md"
+          gh pr comment "$PR" --body-file "$RUNNER_TEMP/hold-comment.md"
+          echo "::warning::PR #$PR OOTAB SIND: programmide hulk muutus (lisandus=$A, kadus=$W). Automaatselt ei merdžita."
 
       - name: No change
         if: steps.summary.outputs.changed == 'false'
