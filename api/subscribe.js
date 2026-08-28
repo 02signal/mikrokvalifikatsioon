@@ -154,6 +154,14 @@ export default async function handler(req, res) {
   } else {
     topic = String(body.topic || '').trim();
     if (!ALLOWED_TOPICS.has(topic)) { res.status(400).json({ message: 'Tundmatu teema.' }); return; }
+    // 28.08.2026: koolitajale/index.astro now sends the programme name/URL
+    // here (topic_subscribe, b2b_koolitus) so a captured trainer contact can
+    // later be matched against the programme that appears in the catalog -
+    // the step-zero fix for the trainer-welcome-letter workstream (previously
+    // this branch dropped body.outcomes silently, same as every other
+    // client-supplied field this endpoint doesn't recognise). Optional here,
+    // unlike outcome_package above: most topic_subscribe forms send none.
+    outcomes = cleanOutcomes(Array.isArray(body.outcomes) ? body.outcomes : []);
   }
 
   const ingress = process.env.AMOS_TOPIC_CAPTURE_URL;

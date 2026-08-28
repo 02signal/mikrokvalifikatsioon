@@ -313,15 +313,24 @@ const schema = {
         const payload = Object.fromEntries(new FormData(form).entries());
         track("lead_form_submit_attempt", { form_name: "koolitaja_lisa_programm", source_site: "mikrokvalifikatsioon.ee" });
         // Koolitaja kontakt B2B-nimekirja (AMOS ratifitseeritud b2b_koolitus teema, b2b_outreach
-        // nõusolek). Programmi detailid (nimi, link) lähevad e-kirjaga — ingress neid ei kanna,
-        // ja inimene vaatab allika üle enne kataloogi lisamist.
+        // nõusolek). Programmi PÕHIdetailid (nimi, kool, link) lähevad NÜÜD ka AMOS-i, kitsalt
+        // lepingu enda piiresse (context.outcomes, sama väli mis "combo"/"slugs" jaoks juba
+        // olemas - vt capture-wire-contract.mjs CAPTURE_WIRE_FOLD_RULES). See on äriinfo
+        // (programmi nimi), mitte isikuandmed, aga ei saa siiski eraldi kanalit - käib sama
+        // nõusolekuga rada, mis kogu ülejäänud kirje. Rikkamad märkused (notes) jäävad
+        // ENDISELT ainult e-kirja - ingress ei kanna vabateksti, ainult neid kolme piiratud
+        // välja; inimene vaatab allika üle enne kataloogi lisamist.
+        const outcomes = [
+          `Programm: ${String(payload.programmName || "").trim()} (${String(payload.providerName || "").trim()})`.trim().slice(0, 240),
+          String(payload.programUrl || "").trim().slice(0, 240)
+        ].filter((o) => o.length > 0);
         let captured = false;
         if (payload.email) {
           try {
             const r = await fetch("/api/subscribe", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ kind: "topic_subscribe", topic: "b2b_koolitus", email: payload.email, field: payload.field || null, source_site: "mikrokvalifikatsioon_ee" })
+              body: JSON.stringify({ kind: "topic_subscribe", topic: "b2b_koolitus", email: payload.email, field: payload.field || null, outcomes, source_site: "mikrokvalifikatsioon_ee" })
             });
             captured = r.ok;
           } catch {
