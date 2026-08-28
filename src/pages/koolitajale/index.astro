@@ -332,7 +332,14 @@ const schema = {
           `Programm: ${payload.programmName || ""}\nKool/koolitaja: ${payload.providerName || ""}\nLink: ${payload.programUrl || ""}\nValdkond: ${payload.field || "-"}\nMärkused: ${payload.notes || "-"}\nKontakt: ${payload.email || ""}`
         );
         window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Lisa programm registrisse")}&body=${body}`;
-        track("lead_form_submit", { form_name: "koolitaja_lisa_programm", source_site: "mikrokvalifikatsioon.ee", delivery: captured ? "amos_list+mailto" : "mailto" });
+        // The program details always leave by mailto (the ingress doesn't
+        // carry them) and opening a mail draft is never a confirmed send -
+        // the person still has to press Send themselves. The only endpoint
+        // that actually confirms anything here is the b2b_koolitus capture,
+        // so lead_form_submit only fires when that capture succeeded.
+        if (captured) {
+          track("lead_form_submit", { form_name: "koolitaja_lisa_programm", source_site: "mikrokvalifikatsioon.ee", delivery: "amos_list+mailto" });
+        }
         if (note) note.textContent = captured
           ? "Avasime e-kirja programmi detailidega — vajuta Saada. Su kontakti panime juba kirja."
           : "Avasime e-kirja programmi detailidega — vajuta saatmiseks Saada.";

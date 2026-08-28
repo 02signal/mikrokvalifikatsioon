@@ -412,6 +412,7 @@ const schema = {
         event.preventDefault();
         if (!demandForm.reportValidity()) return;
         const payload = Object.fromEntries(new FormData(demandForm).entries());
+        demandTrack("lead_form_submit_attempt", { form_name: "kysi_oskust", source_site: "mikrokvalifikatsioon.ee" });
         demandTrack("demand_request", { skill: String(payload.skill || "").slice(0, 100), field: String(payload.field || "kõik"), has_email: payload.email ? "jah" : "ei" });
         // AMOS ratifitseeritud sissevool — ainult kui e-mail on antud (soovi saab saata ka ilma).
         let sent = false;
@@ -425,6 +426,12 @@ const schema = {
         if (!sent) {
           const body = encodeURIComponent("Soovitud oskus: " + (payload.skill || "") + "\nValdkond: " + (payload.field || "-") + "\nE-mail: " + (payload.email || "-"));
           window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Küsi uut mikrokvalifikatsiooni")}&body=${body}`;
+        }
+        // Only a confirmed webhook success counts as a submit. No email given
+        // (allowed - the request can be sent without one) or a failed webhook
+        // both fall back to mailto, and mailto is never a confirmed send.
+        if (sent) {
+          demandTrack("lead_form_submit", { form_name: "kysi_oskust", source_site: "mikrokvalifikatsioon.ee", delivery: "amos" });
         }
         if (demandNote) demandNote.textContent = sent
           ? "Aitäh! Lisasime su soovi nõudluse-nimekirja. Kui selline programm lisandub, anname teada."

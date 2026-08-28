@@ -656,7 +656,13 @@ const schema = {
           const body = encodeURIComponent(`Suunatesti vastus:\n${payload.suunatestSummary || ""}\n\nTaust: ${payload.message || "-"}\nE-mail: ${payload.email || "-"}`);
           window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Suunatest - mikrokvalifikatsioon.ee")}&body=${body}`;
         }
-        track("lead_form_submit", { form_name: "suunatest_vorm", source_site: "mikrokvalifikatsioon.ee", delivery: sent ? "amos" : "mailto" });
+        // Only a confirmed AMOS webhook success counts as a submit - the
+        // mailto fallback is a failure the visitor has to route around by
+        // hand, not a conversion. Counting both the same way would make
+        // every failed webhook look like a real lead.
+        if (sent) {
+          track("lead_form_submit", { form_name: "suunatest_vorm", source_site: "mikrokvalifikatsioon.ee", delivery: "amos" });
+        }
         if (noteEl) noteEl.textContent = sent
           ? "Aitäh! Saatsime valiku teele ja vastame ühe tööpäeva jooksul."
           : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";

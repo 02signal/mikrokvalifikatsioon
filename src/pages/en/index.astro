@@ -257,7 +257,11 @@ const langAlternates = [
           const body = encodeURIComponent(`Role: ${payload.role || "-"}\nEmail: ${payload.email || "-"}\nLooking for: ${payload.message || "-"}`);
           window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Microcredentials register - notify me")}&body=${body}`;
         }
-        track("lead_form_submit", { form_name: "en_notify", source_site: "mikrokvalifikatsioon.ee/en", role: String(payload.role || ""), delivery: sent ? "amos" : "mailto" });
+        // Only a confirmed AMOS webhook success counts as a submit - mailto
+        // is a fallback for a failed request, not a conversion.
+        if (sent) {
+          track("lead_form_submit", { form_name: "en_notify", source_site: "mikrokvalifikatsioon.ee/en", role: String(payload.role || ""), delivery: "amos" });
+        }
         if (note) note.textContent = sent
           ? "Thanks! We've got your details and will be in touch."
           : "We opened an email draft — press send to finish.";
