@@ -416,14 +416,18 @@ const schema = {
         demandTrack("demand_request", { skill: String(payload.skill || "").slice(0, 100), field: String(payload.field || "kõik"), has_email: payload.email ? "jah" : "ei" });
         // AMOS ratifitseeritud sissevool — ainult kui e-mail on antud (soovi saab saata ka ilma).
         let sent = false;
+        let rateLimited = false;
         const demandEmail = String(payload.email || "").trim();
         if (demandEmail) {
           try {
             const r = await fetch("/api/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kind: "topic_subscribe", topic: "mikrokvalifikatsioon", email: demandEmail, field: String(payload.skill || payload.field || "").slice(0, 64), source_site: "mikrokvalifikatsioon_ee" }) });
             sent = r.ok;
+            rateLimited = r.status === 429;
           } catch { sent = false; }
         }
-        if (!sent) {
+        // A 429 is the rate limiter working as designed, not a failure - do
+        // not fall through to the mailto fallback for it.
+        if (!sent && !rateLimited) {
           const body = encodeURIComponent("Soovitud oskus: " + (payload.skill || "") + "\nValdkond: " + (payload.field || "-") + "\nE-mail: " + (payload.email || "-"));
           window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Küsi uut mikrokvalifikatsiooni")}&body=${body}`;
         }
@@ -435,7 +439,9 @@ const schema = {
         }
         if (demandNote) demandNote.textContent = sent
           ? "Aitäh! Lisasime su soovi nõudluse-nimekirja. Kui selline programm lisandub, anname teada."
-          : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
+          : rateLimited
+            ? "Korraga tuli liiga palju päringuid. Palun proovi mõne minuti pärast uuesti."
+            : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
         demandForm.reset();
       });
     </script>

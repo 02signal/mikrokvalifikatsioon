@@ -731,6 +731,7 @@ const schema = {
         // Suuname AMOS-i sissevoolu (api/subscribe → double-opt-in). Kuni backend pole
         // main'is / env seadmata, vastab see 404/503 → mailto varuvariant (leadi ei kaota).
         let sent = false;
+        let rateLimited = false;
         try {
           const r = await fetch("/api/subscribe", {
             method: "POST",
@@ -738,8 +739,11 @@ const schema = {
             body: JSON.stringify({ kind: "outcome_package", email, source_site: "mikrokvalifikatsioon_ee", outcomes: arr.map((i) => i.text) })
           });
           sent = r.ok;
+          rateLimited = r.status === 429;
         } catch { sent = false; }
-        if (!sent) {
+        // A 429 is the rate limiter working as designed, not a failure - do
+        // not fall through to the mailto fallback for it.
+        if (!sent && !rateLimited) {
           const body = encodeURIComponent("Soovitud õpiväljundid:\n- " + arr.map((i) => i.text).join("\n- ") + "\n\nE-mail: " + email);
           window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Õpiväljundite pakett")}&body=${body}`;
         }
@@ -750,7 +754,9 @@ const schema = {
         }
         if (pkgNote) pkgNote.textContent = sent
           ? "Aitäh! Teavitame sind, kui sobiv programm või kombinatsioon lisandub."
-          : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
+          : rateLimited
+            ? "Korraga tuli liiga palju päringuid. Palun proovi mõne minuti pärast uuesti."
+            : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
       });
 
       renderPkg();

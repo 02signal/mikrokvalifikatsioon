@@ -642,6 +642,7 @@ const schema = {
         // AMOS-i ratifitseeritud sissevool (api/subscribe → topic_subscribe → double-opt-in).
         // Kui backend/env pole seatud → 503 → mailto varuvariant (leadi ei kaota).
         let sent = false;
+        let rateLimited = false;
         try {
           const response = await fetch("/api/subscribe", {
             method: "POST",
@@ -649,10 +650,15 @@ const schema = {
             body: JSON.stringify({ kind: "topic_subscribe", topic: "mikrokvalifikatsioon", email: payload.email, field: payload.field || null, source_site: "mikrokvalifikatsioon_ee" })
           });
           sent = response.ok;
+          rateLimited = response.status === 429;
         } catch {
           sent = false;
         }
-        if (!sent) {
+        // A 429 is the rate limiter working as designed, not a failure - do
+        // NOT fall through to the mailto fallback (that would tell the
+        // visitor "automatic sending failed" for something retrying shortly
+        // would fix on its own).
+        if (!sent && !rateLimited) {
           const body = encodeURIComponent(`Suunatesti vastus:\n${payload.suunatestSummary || ""}\n\nTaust: ${payload.message || "-"}\nE-mail: ${payload.email || "-"}`);
           window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Suunatest - mikrokvalifikatsioon.ee")}&body=${body}`;
         }
@@ -665,7 +671,9 @@ const schema = {
         }
         if (noteEl) noteEl.textContent = sent
           ? "Aitäh! Saatsime valiku teele ja vastame ühe tööpäeva jooksul."
-          : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
+          : rateLimited
+            ? "Korraga tuli liiga palju päringuid. Palun proovi mõne minuti pärast uuesti."
+            : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
       });
     </script>
   </body>
