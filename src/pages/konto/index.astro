@@ -884,8 +884,19 @@ const schema = {
           // analüütikasse. Risti-seadme sisselogimisel jääb see tühjaks ja vaade
           // kuvab neutraalse "Sinu konto" (vt syncAndRenderReal).
           rememberTypedEmail(email);
-          try { await requestLogin(email); } catch { /* näita kontrolli-e-posti niikuinii; saab uue tellida */ }
-          track("lead_form_submit", { form_name: "account", delivery: "magic_link" });
+          // requestLogin never throws (see konto-api.ts) - it resolves { ok }.
+          // ok:false means a real technical failure (network/5xx/rate-limit),
+          // NOT "email unknown" - the server is oracle-free and always returns
+          // ok:true regardless of whether the email is known, on purpose, so
+          // an attacker can't use this endpoint to enumerate accounts. We keep
+          // showing the same "check your email" screen either way (that
+          // oracle-free property has to hold in the UI too, not just the
+          // server response) - but lead_form_submit only fires on a real ok,
+          // so a failed magic-link request doesn't look like a conversion.
+          const loginResult = await requestLogin(email);
+          if (loginResult.ok) {
+            track("lead_form_submit", { form_name: "account", delivery: "magic_link" });
+          }
           if (btn) { btn.disabled = false; btn.textContent = origLabel; }
           if (emailInput) emailInput.disabled = false;
           const checkEmailEl = $("[data-check-email]");
