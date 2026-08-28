@@ -196,6 +196,15 @@ export default async function handler(req, res) {
         captured_at: new Date().toISOString(),
       }),
     });
+    if (r.status === 429) {
+      // The rate limiter working as designed, not a server failure — must
+      // not be reported to the visitor or logged as one (measured live,
+      // 28.08.2026: this was being mapped to 502 "Tellimine ebaõnnestus",
+      // indistinguishable from a real outage in both the response and our
+      // own error logs).
+      res.status(429).json({ ok: false, message: 'Korraga tuli liiga palju päringuid. Palun proovi mõne minuti pärast uuesti.' });
+      return;
+    }
     if (!r.ok) { console.error('subscribe: ingress status', r.status); res.status(502).json({ message: 'Tellimine ebaõnnestus. Proovi hiljem uuesti.' }); return; }
     res.status(200).json({ ok: true });
   } catch (e) {
