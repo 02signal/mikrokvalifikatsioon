@@ -1,9 +1,9 @@
 {
-  "checked_at": "2026-08-24",
+  "checked_at": "2026-08-31",
   "emitted_count": 155,
-  "feed_hash": "sha256:b4dc9f72530d0e011d1820541751d22a64635d981126e37baf8fe8d5fc35c779",
-  "generated_at": "2026-08-24T00:15:51.000Z",
-  "graph_sha256": "sha256:52b24ae35bbc98a73e3ed59f466a948a238782bad7fdbc1f9f1de4f403cbf64c",
+  "feed_hash": "sha256:6d5e854d9bc8911b0dbfdffef93f3415919fa546d137841d799f59a082065186",
+  "generated_at": "2026-08-31T00:17:10.000Z",
+  "graph_sha256": "sha256:459a302c6d7acc48204934d413b09fb9992a6228f2114a2f083da49f286e6114",
   "omitted_reason_counts": {
     "invalid_name_datatype": 0,
     "missing_ects": 13,
@@ -17,7 +17,7 @@
   "profile_context_sha256": "sha256:3f9d473145c7165df82f2c72eeb942fa92a3b635e33992d3859a1d726c022e9f",
   "profile_shape_sha256": "sha256:cf6f0cccaf2c4ac6f611fb00198d841c83103b89342d9214c763291d77d5627b",
   "profile_violation_gate": "amos.mkval.cc_profile_violation_gate/v1",
-  "run_ref": "mkval_20260824T001551Z",
+  "run_ref": "mkval_20260831T001710Z",
   "schema_version": "amos.mkval.catalog_cc_receipt/v1",
   "view_count": 168
 }
