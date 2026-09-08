@@ -65,8 +65,16 @@ export type CatalogEntry = {
   assessmentText?: string | null;
   /** ISO date (YYYY-MM-DD) — registration deadline; from feed or parsed from intakeText */
   registrationDeadline?: string | null;
-  /** ISO date (YYYY-MM-DD) — study start; from feed or parsed from intakeText */
+  /**
+   * ISO date (YYYY-MM-DD) — study start; from feed or parsed from intakeText.
+   * A legacy record may carry this alone. A current-feed record only carries
+   * it when `startDatePrecision` is "day" — never fabricated from `startMonth`.
+   */
   startDate?: string | null;
+  /** "YYYY-MM" — the announced start month when only the month is known ("algab septembris", no day ever stated). Also derived/present alongside `startDate` when precision is "day". */
+  startMonth?: string | null;
+  /** "day" when `startDate` is a real, provider-stated day; "month" when only `startMonth` is known — never fabricate a day for a month-only announcement. Absent/null for legacy records that predate this distinction. */
+  startDatePrecision?: "day" | "month" | null;
   sourceCheckedAt: string;
 };
 

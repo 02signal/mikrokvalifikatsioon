@@ -1,4 +1,5 @@
 import { catalog, providers, fields, fieldsWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../data/catalog";
+import { formatStartEt } from "../data/dates";
 import { plausiblePriceEur } from "../data/priceGuard";
 import { cleanOutcomeTexts } from "../data/outcomes";
 import { ehisFetchedAt, ehisFieldStats, ehisProgrammeCount, ehisProviderCount, ehisProviderStats } from "../data/ehisFacts";
@@ -31,7 +32,7 @@ export async function GET() {
       e.format || null,
       e.language ? `keel: ${e.language}` : null,
       e.registrationDeadline ? `registreerimine kuni ${e.registrationDeadline}` : null,
-      e.startDate ? `algab ${e.startDate}` : null
+      formatStartEt(e) ? `algab ${formatStartEt(e)}` : null
     ].filter(Boolean).join(" | ");
     const lines = [
       `### ${e.name} — ${e.provider}`,

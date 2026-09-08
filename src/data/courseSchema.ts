@@ -86,6 +86,14 @@ export function toCourse(entry: CatalogEntryWithSlug): Record<string, unknown> {
   }
 
   const courseMode = entry.format ? COURSE_MODE[entry.format] : undefined;
+  // schema.org's Date type accepts ISO 8601 reduced precision, so a month-only
+  // announced start ("algab septembris", the school never stated a day) emits
+  // startDate as "YYYY-MM" (entry.startMonth) — still a valid Date value, never
+  // a fabricated day-of-month. Day precision (or a legacy record with no
+  // precision field at all) emits the real day as before.
+  const startDateJsonLd = entry.startDatePrecision === "month"
+    ? (entry.startMonth ?? null)
+    : (entry.startDate ?? null);
   // Always a NON-EMPTY, valid CourseInstance: an instance with only @type+inLanguage is treated by
   // Google as incomplete and can disqualify the whole Course rich result. name+description use real
   // data; courseMode/startDate are added only when actually known (never fabricated).
@@ -94,7 +102,7 @@ export function toCourse(entry: CatalogEntryWithSlug): Record<string, unknown> {
     name: entry.name,
     description: entry.summary,
     ...(courseMode ? { courseMode } : {}),
-    ...(entry.startDate ? { startDate: entry.startDate } : {}),
+    ...(startDateJsonLd ? { startDate: startDateJsonLd } : {}),
     inLanguage: entry.language ?? "et"
   };
 

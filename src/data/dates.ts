@@ -42,3 +42,75 @@ export function monthLabel(iso: string): string {
   const name = ET_MONTHS[Number(m) - 1] ?? m;
   return `${name.charAt(0).toUpperCase()}${name.slice(1)} ${y}`;
 }
+
+/** "2026-09" → "september 2026" (väiketäht, jooksva teksti jaoks — vt monthLabel pealkirja jaoks) */
+function monthYearEt(monthKeyValue: string): string {
+  const [y, m] = monthKeyValue.split("-");
+  const name = ET_MONTHS[Number(m) - 1] ?? m;
+  return `${name} ${y}`;
+}
+
+/**
+ * Programmi teadaoleva õppe alguse eestikeelne kuvand ühest allikast kõigi
+ * kuvamiskohtade jaoks (kataloogileht, registreerimise grupeering, llms.txt,
+ * JSON-LD).
+ *
+ * precision "day" (või puudub täpsus, aga startDate on olemas — legacy
+ * kirjed): täpne kuupäev, `formatEt(startDate)`.
+ * precision "month": ainult kuu on teada ("algab septembris", kool ei ole
+ * kunagi päeva öelnud) → "<kuu nimi> <aasta> (täpne päev täpsustamisel)".
+ * MITTE KUNAGI väljamõeldud 1. kuupäev — omaniku otsus 2026-09-08, vt AMOS
+ * mkval-catalog-feed-contract.mjs.
+ * Teadmata algus (kumbki väli puudub) → null.
+ */
+export function formatStartEt(entry: {
+  startDate?: string | null;
+  startMonth?: string | null;
+  startDatePrecision?: "day" | "month" | null;
+}): string | null {
+  if (entry.startDatePrecision === "month") {
+    return entry.startMonth ? `${monthYearEt(entry.startMonth)} (täpne päev täpsustamisel)` : null;
+  }
+  return entry.startDate ? formatEt(entry.startDate) : null;
+}
+
+type EntryWithStart = {
+  startDate?: string | null;
+  startMonth?: string | null;
+  startDatePrecision?: "day" | "month" | null;
+};
+
+/**
+ * A month-only announced start ("algab septembris", startDatePrecision
+ * "month") has no real day to sort by — its sort key is the announced month
+ * with a day segment ("-99") no real day ever reaches, so it always sorts
+ * AFTER every day-precise start in the same calendar month, never before or
+ * interleaved with one. Cross-month ordering is unaffected: "2026-08-99" <
+ * "2026-09-01" still holds.
+ */
+function startSortKey(entry: EntryWithStart): string {
+  return entry.startDatePrecision === "month" ? `${entry.startMonth}-99` : (entry.startDate as string);
+}
+
+function startMonthGroupKey(entry: EntryWithStart): string {
+  return entry.startDatePrecision === "month" ? (entry.startMonth as string) : monthKey(entry.startDate as string);
+}
+
+/** Every entry with a known start (day OR month precision), earliest first — month-only entries within a month sort last, see startSortKey. */
+export function sortedByStart<T extends EntryWithStart>(entries: T[]): T[] {
+  return entries
+    .filter((e) => e.startDate || (e.startDatePrecision === "month" && e.startMonth))
+    .sort((a, b) => startSortKey(a).localeCompare(startSortKey(b)));
+}
+
+/** `sortedByStart`, grouped by calendar month — grouping key is `startMonth` when precision is "month", else the month derived from `startDate`. Group order follows `sortedByStart`'s own chronological order. */
+export function groupByStartMonth<T extends EntryWithStart>(entries: T[]): { key: string; label: string; entries: T[] }[] {
+  const groups: { key: string; label: string; entries: T[] }[] = [];
+  for (const e of sortedByStart(entries)) {
+    const k = startMonthGroupKey(e);
+    let g = groups.find((x) => x.key === k);
+    if (!g) { g = { key: k, label: monthLabel(k), entries: [] }; groups.push(g); }
+    g.entries.push(e);
+  }
+  return groups;
+}

@@ -11,7 +11,7 @@ import { credentialCommonsNodeFor, CC_CONTEXT } from "../../data/credentialCommo
 import { comparisonsFor } from "../../data/comparisons";
 import { ehisAttribution } from "../../data/ehisFacts";
 import { intakeDatesFor, intakeDatesFetchedAt } from "../../data/intakeDates";
-import { formatEt } from "../../data/dates";
+import { formatEt, formatStartEt } from "../../data/dates";
 import { fundingInfoFor, hasFundingInfo } from "../../data/funding";
 import { entryOutcomeObjects, languageLabel } from "../../data/outcomes";
 
@@ -87,6 +87,15 @@ function buildActiveView(entry: CatalogEntryWithSlug) {
   const fetchedDay = intakeDatesFetchedAt.slice(0, 10);
   const deadlinePast = !!(freshDeadline && freshDeadline < fetchedDay);
 
+  // Struktureeritud algusaeg (kataloogi enda startDate/startMonth) kuvatakse
+  // siin ainult siis, kui kooli enda lehelt värskelt kogutud kuupäeva
+  // (freshStart, eraldi süsteem, vt intakeDatesFor) EI OLE — see väldib kahte
+  // vastuolulist kuupäeva samal lehel. Kuu-täpsusega algus ("algab
+  // septembris", päeva ei ole kunagi öeldud) muidu kaoks siit lehelt täiesti
+  // struktureerimata kujul — entry.intakeText all on see olemas ainult
+  // toorteksti sees, kui kool seda üldse nii sõnastas.
+  const startEtText = !freshStart ? formatStartEt(entry) : null;
+
   const facts = [
     displayEcts != null ? { label: "Maht", value: `${displayEcts} EAP` } : null,
     entry.priceText ? { label: "Hind", value: entry.priceText } : null,
@@ -94,6 +103,7 @@ function buildActiveView(entry: CatalogEntryWithSlug) {
     entry.format ? { label: "Õppevorm", value: entry.format } : null,
     languageText ? { label: "Keel", value: languageText } : null,
     entry.intakeText ? { label: "Vastuvõtt", value: entry.intakeText } : null,
+    startEtText ? { label: "Algus", value: startEtText } : null,
     ehisNameEn ? { label: "Nimi (EN)", value: ehisNameEn } : null,
     ehisFieldName ? { label: "Ametlik õppekavarühm (EHIS)", value: ehisFieldName } : null
   ].filter((fact): fact is { label: string; value: string } => fact !== null);
