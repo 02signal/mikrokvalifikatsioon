@@ -493,7 +493,15 @@ export const catalog: CatalogEntryWithSlug[] = sorted.map((entry) => {
     // the required, unique programme-id gate above.
     slug: entry.id as string,
     registrationDeadline: entry.registrationDeadline ?? parsed.registrationDeadline,
-    startDate: entry.startDate ?? parsed.startDate,
+    // A month-only announced start (`startDatePrecision === "month"`) must
+    // NEVER fall back to the legacy intakeText-parsed startDate — that would
+    // fabricate a day AMOS explicitly declined to state ("algab septembris"
+    // must never become 2026-09-01). The legacy fallback (`parsed.startDate`)
+    // only ever applies to a record that predates the month/day precision
+    // split (both `startDate` and `startDatePrecision` absent from the feed).
+    startDate: entry.startDatePrecision === "month" ? null : (entry.startDate ?? parsed.startDate),
+    startMonth: entry.startMonth ?? null,
+    startDatePrecision: entry.startDatePrecision ?? null,
     ehis
   };
 });

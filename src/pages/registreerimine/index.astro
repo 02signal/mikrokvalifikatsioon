@@ -4,7 +4,7 @@ import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import { catalog, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
-import { formatEt, monthKey, monthLabel } from "../../data/dates";
+import { formatEt, formatStartEt, groupByStartMonth, sortedByStart } from "../../data/dates";
 import { toCourse } from "../../data/courseSchema";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
@@ -14,17 +14,11 @@ const byDeadline = catalog
   .filter((e) => e.registrationDeadline)
   .sort((a, b) => (a.registrationDeadline as string).localeCompare(b.registrationDeadline as string));
 
-const byStart = catalog
-  .filter((e) => e.startDate)
-  .sort((a, b) => (a.startDate as string).localeCompare(b.startDate as string));
-
-const startMonths: { key: string; label: string; entries: typeof byStart }[] = [];
-for (const e of byStart) {
-  const k = monthKey(e.startDate as string);
-  let g = startMonths.find((x) => x.key === k);
-  if (!g) { g = { key: k, label: monthLabel(e.startDate as string), entries: [] }; startMonths.push(g); }
-  g.entries.push(e);
-}
+// Includes month-only announced starts (startDatePrecision "month"), not
+// just day-precise ones — see groupByStartMonth/sortedByStart in
+// ../../data/dates.ts for the sort/group rules and their own test coverage.
+const byStart = sortedByStart(catalog);
+const startMonths = groupByStartMonth(catalog);
 
 const nearest = byDeadline[0]?.registrationDeadline ? formatEt(byDeadline[0].registrationDeadline as string) : null;
 const SITE = "https://mikrokvalifikatsioon.ee";
@@ -104,7 +98,14 @@ const schema = {
                     <td><a href={`/kataloog/${entry.slug}/`} data-track-event="cta_click" data-track-label="reg_to_detail">{entry.name}</a></td>
                     <td>{entry.provider}</td>
                     <td class="nowrap"><time datetime={entry.registrationDeadline}>{formatEt(entry.registrationDeadline as string)}</time> <span class="dl-badge" data-dl-badge></span></td>
-                    <td class="nowrap">{entry.startDate ? <time datetime={entry.startDate}>{formatEt(entry.startDate)}</time> : "—"}</td>
+                    <td class="nowrap">{
+                      (() => {
+                        const startText = formatStartEt(entry);
+                        if (!startText) return "—";
+                        const dt = entry.startDatePrecision === "month" ? (entry.startMonth as string) : (entry.startDate as string);
+                        return <time datetime={dt}>{startText}</time>;
+                      })()
+                    }</td>
                     <td class="nowrap">{entry.ects != null ? `${entry.ects} EAP` : "—"}</td>
                     <td class="nowrap">{entry.priceText || "kooli lehel"}</td>
                   </tr>
