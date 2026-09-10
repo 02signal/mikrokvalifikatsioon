@@ -102,6 +102,10 @@ const schema = {
                       (() => {
                         const startText = formatStartEt(entry);
                         if (!startText) return "—";
+                        // PR-3g: "järgmine algus täpsustamisel" has no real
+                        // ISO day/month to wrap in <time datetime> — entry.
+                        // startDate/startMonth are both null for this case.
+                        if (entry.nextStartKnown === false) return startText;
                         const dt = entry.startDatePrecision === "month" ? (entry.startMonth as string) : (entry.startDate as string);
                         return <time datetime={dt}>{startText}</time>;
                       })()

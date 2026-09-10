@@ -5,7 +5,7 @@ import legacyTaltech from "./taltech.json" with { type: "json" };
 import legacyTartuYlikool from "./tartu-ylikool.json" with { type: "json" };
 import legacyMuudKoolid from "./muud-koolid.json" with { type: "json" };
 import { assignSlugs, slugify } from "../slug.ts";
-import { parseIntakeDates } from "../dates.ts";
+import { parseIntakeDates, resolveCatalogStartDate } from "../dates.ts";
 import { ehisOverrideFor, type EhisAuthoritative } from "../ehisFacts/index.ts";
 import { sha256hex } from "../../lib/outcome-ref.ts";
 
@@ -493,15 +493,16 @@ export const catalog: CatalogEntryWithSlug[] = sorted.map((entry) => {
     // the required, unique programme-id gate above.
     slug: entry.id as string,
     registrationDeadline: entry.registrationDeadline ?? parsed.registrationDeadline,
-    // A month-only announced start (`startDatePrecision === "month"`) must
-    // NEVER fall back to the legacy intakeText-parsed startDate — that would
-    // fabricate a day AMOS explicitly declined to state ("algab septembris"
-    // must never become 2026-09-01). The legacy fallback (`parsed.startDate`)
-    // only ever applies to a record that predates the month/day precision
-    // split (both `startDate` and `startDatePrecision` absent from the feed).
-    startDate: entry.startDatePrecision === "month" ? null : (entry.startDate ?? parsed.startDate),
+    // See resolveCatalogStartDate's own comment (../dates.ts) for the full
+    // rule — nextStartKnown false / month precision / legacy intakeText
+    // fallback, in that priority order.
+    startDate: resolveCatalogStartDate(entry),
     startMonth: entry.startMonth ?? null,
     startDatePrecision: entry.startDatePrecision ?? null,
+    // Absent/undefined (a legacy record predating this field) is treated as
+    // `true` — never hides anything the pre-PR-3g site was already showing.
+    nextStartKnown: entry.nextStartKnown ?? true,
+    lastKnownStart: entry.lastKnownStart ?? null,
     ehis
   };
 });
