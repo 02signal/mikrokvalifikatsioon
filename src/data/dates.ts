@@ -25,6 +25,38 @@ export function parseIntakeDates(intakeText?: string | null): {
   };
 }
 
+/**
+ * Resolves the catalog's own `startDate` field for one entry — used ONLY by
+ * src/data/catalog/index.ts's entry mapping. Extracted as its own pure,
+ * exported function (unlike the render-only formatStartEt below) so this
+ * decision is independently testable without needing the live committed
+ * snapshot catalog/index.ts otherwise always loads at import time.
+ *
+ * PR-3g: `nextStartKnown === false` (AMOS already found nothing future on
+ * this programme) wins over everything else, INCLUDING the legacy
+ * intakeText-parsed fallback — without this an already-hidden programme
+ * would silently un-hide itself the moment AMOS's own startDate went to
+ * null, via a stale date shape still sitting in intakeText's free text.
+ *
+ * A month-only announced start (`startDatePrecision === "month"`) must
+ * also never fall back to the legacy intakeText-parsed startDate — that
+ * would fabricate a day AMOS explicitly declined to state ("algab
+ * septembris" must never become 2026-09-01). The legacy fallback
+ * (`parseIntakeDates(entry.intakeText).startDate`) only ever applies to a
+ * record that predates the month/day precision split (both `startDate`
+ * and `startDatePrecision` absent from the feed).
+ */
+export function resolveCatalogStartDate(entry: {
+  startDate?: string | null;
+  startDatePrecision?: "day" | "month" | null;
+  nextStartKnown?: boolean | null;
+  intakeText?: string | null;
+}): string | null {
+  if (entry.nextStartKnown === false) return null;
+  if (entry.startDatePrecision === "month") return null;
+  return entry.startDate ?? parseIntakeDates(entry.intakeText).startDate;
+}
+
 /** ISO YYYY-MM-DD → "21.08.2026" */
 export function formatEt(iso: string): string {
   const [y, m, d] = iso.split("-");
@@ -55,6 +87,13 @@ function monthYearEt(monthKeyValue: string): string {
  * kuvamiskohtade jaoks (kataloogileht, registreerimise grupeering, llms.txt,
  * JSON-LD).
  *
+ * PR-3g, omaniku otsus ("peida, kui ühtki tulevast pole"): `nextStartKnown
+ * === false` — AMOS on juba tuvastanud, et programmil ei ole ühtki
+ * tulevast algust ega tulevast registreerimistähtaega — annab TEKSTI
+ * "järgmine algus täpsustamisel", sõltumata sellest, mis startDate/
+ * startMonth samal kirjel veel oleks (need on AMOS-i poolt juba nulliti,
+ * see kontroll on siin lisakaitseks). See VÕIDAB kõik teised harud allpool.
+ *
  * precision "day" (või puudub täpsus, aga startDate on olemas — legacy
  * kirjed): täpne kuupäev, `formatEt(startDate)`.
  * precision "month": ainult kuu on teada ("algab septembris", kool ei ole
@@ -67,7 +106,9 @@ export function formatStartEt(entry: {
   startDate?: string | null;
   startMonth?: string | null;
   startDatePrecision?: "day" | "month" | null;
+  nextStartKnown?: boolean | null;
 }): string | null {
+  if (entry.nextStartKnown === false) return "järgmine algus täpsustamisel";
   if (entry.startDatePrecision === "month") {
     return entry.startMonth ? `${monthYearEt(entry.startMonth)} (täpne päev täpsustamisel)` : null;
   }
@@ -78,6 +119,7 @@ type EntryWithStart = {
   startDate?: string | null;
   startMonth?: string | null;
   startDatePrecision?: "day" | "month" | null;
+  nextStartKnown?: boolean | null;
 };
 
 /**
@@ -96,10 +138,19 @@ function startMonthGroupKey(entry: EntryWithStart): string {
   return entry.startDatePrecision === "month" ? (entry.startMonth as string) : monthKey(entry.startDate as string);
 }
 
-/** Every entry with a known start (day OR month precision), earliest first — month-only entries within a month sort last, see startSortKey. */
+/**
+ * Every entry with a known start (day OR month precision), earliest first —
+ * month-only entries within a month sort last, see startSortKey.
+ *
+ * PR-3g: `nextStartKnown === false` is excluded explicitly, on top of the
+ * existing startDate/startMonth check — AMOS already nulls both fields for
+ * such an entry, so this filter alone would already exclude it, but the
+ * explicit check keeps this correct even if a future/legacy record ever
+ * carries a stale startDate alongside nextStartKnown: false.
+ */
 export function sortedByStart<T extends EntryWithStart>(entries: T[]): T[] {
   return entries
-    .filter((e) => e.startDate || (e.startDatePrecision === "month" && e.startMonth))
+    .filter((e) => e.nextStartKnown !== false && (e.startDate || (e.startDatePrecision === "month" && e.startMonth)))
     .sort((a, b) => startSortKey(a).localeCompare(startSortKey(b)));
 }
 

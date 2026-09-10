@@ -20,7 +20,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { formatStartEt, groupByStartMonth, sortedByStart } from "../src/data/dates.ts";
+import { formatStartEt, groupByStartMonth, resolveCatalogStartDate, sortedByStart } from "../src/data/dates.ts";
 
 test("formatStartEt: day precision renders the real day (DD.MM.YYYY)", () => {
   assert.equal(
@@ -92,4 +92,105 @@ test("groupByStartMonth / sortedByStart: an entry with no known start at all is 
   ];
   assert.deepEqual(sortedByStart(fixture).map((e) => e.id), ["known"]);
   assert.equal(groupByStartMonth(fixture).flatMap((g) => g.entries).length, 1);
+});
+
+// --- PR-3g: hide past starts when no future intake ----------------------
+//
+// AMOS's catalog feed (PR-3g, mkval-catalog-feed-contract.mjs's
+// deriveMkvalNextStartVisibility) adds `nextStartKnown: false` when a
+// programme has no future intake start and no future registration
+// deadline anywhere — startDate/startMonth/startDatePrecision are already
+// null on that record from AMOS. The committed snapshot
+// (src/data/catalog/credential-commons-lkg/catalog-feed.json, generatedAt
+// 2026-08-31) predates this AMOS release and carries no nextStartKnown
+// field at all — MEASURED, same as PR-3d/#131's month-precision case — so
+// these tests use synthetic fixtures; the behaviour activates automatically
+// once a real AMOS deploy serves a nextStartKnown: false entry.
+
+test("formatStartEt: nextStartKnown false renders the honest placeholder, regardless of any stale startDate/startMonth still on the record", () => {
+  assert.equal(
+    formatStartEt({ nextStartKnown: false, startDate: null, startMonth: null, startDatePrecision: null }),
+    "järgmine algus täpsustamisel"
+  );
+  // Defense-in-depth: nextStartKnown false wins even over a startDate a
+  // future bug might leave on the record — AMOS's own blanking is not the
+  // only thing this decision relies on.
+  assert.equal(
+    formatStartEt({ nextStartKnown: false, startDate: "2023-08-30", startDatePrecision: "day" }),
+    "järgmine algus täpsustamisel"
+  );
+});
+
+test("formatStartEt: nextStartKnown true (or absent, legacy) is unaffected — normal day/month rendering", () => {
+  assert.equal(formatStartEt({ nextStartKnown: true, startDate: "2026-08-31" }), "31.08.2026");
+  assert.equal(formatStartEt({ startDate: "2026-08-31" }), "31.08.2026", "absent nextStartKnown behaves exactly like true");
+});
+
+test("groupByStartMonth / sortedByStart: nextStartKnown false is excluded, even if startDate/startMonth were somehow still present", () => {
+  const fixture = [
+    entry("visible", { startDate: "2026-09-01", startDatePrecision: "day", nextStartKnown: true }),
+    entry("hidden-clean", { startDate: null, startMonth: null, startDatePrecision: null, nextStartKnown: false }),
+    // Defense-in-depth case: nextStartKnown false must exclude the entry
+    // even if a stale startDate were somehow still attached to it.
+    entry("hidden-stale-date", { startDate: "2023-08-30", startDatePrecision: "day", nextStartKnown: false })
+  ];
+  assert.deepEqual(sortedByStart(fixture).map((e) => e.id), ["visible"]);
+  assert.equal(groupByStartMonth(fixture).flatMap((g) => g.entries).length, 1);
+});
+
+// resolveCatalogStartDate: src/data/catalog/index.ts's own startDate
+// resolution (not just formatStartEt's rendering) — this is where a REAL
+// regression would have shipped without PR-3g: nextStartKnown false must
+// win over the legacy intakeText-parsed fallback, or an already-hidden
+// programme would silently un-hide itself the moment AMOS's startDate
+// went to null.
+test("resolveCatalogStartDate: nextStartKnown false suppresses the legacy intakeText fallback entirely", () => {
+  assert.equal(
+    resolveCatalogStartDate({
+      nextStartKnown: false,
+      startDate: null,
+      startDatePrecision: null,
+      // A stale but still date-shaped free-text field — WITHOUT the
+      // nextStartKnown check, parseIntakeDates would resurrect this exact
+      // date as startDate, silently un-hiding the programme.
+      intakeText: "Registreerimine avatud; õpe algab 15.01.2024"
+    }),
+    null,
+    "the legacy fallback must never resurrect a stale intakeText date once AMOS has already hidden the start"
+  );
+});
+
+test("resolveCatalogStartDate: nextStartKnown true (or absent) still applies the legacy intakeText fallback exactly as before PR-3g", () => {
+  assert.equal(
+    resolveCatalogStartDate({
+      startDate: null,
+      startDatePrecision: null,
+      intakeText: "Registreerimine avatud; õpe algab 15.01.2027"
+    }),
+    "2027-01-15"
+  );
+});
+
+test("resolveCatalogStartDate: month precision never falls back to the legacy intakeText day, regardless of nextStartKnown", () => {
+  assert.equal(
+    resolveCatalogStartDate({
+      nextStartKnown: true,
+      startDate: null,
+      startDatePrecision: "month",
+      intakeText: "õpe algab 15.01.2027"
+    }),
+    null,
+    "a month-only announced start must never fabricate a day, even from intakeText"
+  );
+});
+
+test("resolveCatalogStartDate: a real feed startDate wins over the legacy intakeText fallback", () => {
+  assert.equal(
+    resolveCatalogStartDate({
+      startDate: "2027-02-01",
+      startDatePrecision: "day",
+      intakeText: "õpe algab 15.01.2027"
+    }),
+    "2027-02-01"
+  );
 });

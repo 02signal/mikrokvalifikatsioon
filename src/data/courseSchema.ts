@@ -1,10 +1,10 @@
 import type { CatalogEntryWithSlug } from "./catalog";
-import { cleanOutcomeTexts } from "./outcomes";
-import { plausiblePriceEur } from "./priceGuard";
+import { cleanOutcomeTexts } from "./outcomes.ts";
+import { plausiblePriceEur } from "./priceGuard.ts";
 // Re-exported for the many existing consumers that import parsePriceEur from
 // this module — the parser itself lives in ./priceText (a leaf module) so
 // ./priceGuard can use it too without a circular import back through here.
-export { parsePriceEur } from "./priceText";
+export { parsePriceEur } from "./priceText.ts";
 
 export const SITE = "https://mikrokvalifikatsioon.ee";
 
@@ -91,9 +91,16 @@ export function toCourse(entry: CatalogEntryWithSlug): Record<string, unknown> {
   // startDate as "YYYY-MM" (entry.startMonth) — still a valid Date value, never
   // a fabricated day-of-month. Day precision (or a legacy record with no
   // precision field at all) emits the real day as before.
-  const startDateJsonLd = entry.startDatePrecision === "month"
-    ? (entry.startMonth ?? null)
-    : (entry.startDate ?? null);
+  // PR-3g: `nextStartKnown === false` means AMOS already found nothing
+  // future on this programme (entry.startDate/startMonth are already null
+  // for this case) — checked explicitly, not only relied on implicitly,
+  // since a stale/future-known-later JSON-LD startDate is a machine claim
+  // to Google, not just page copy.
+  const startDateJsonLd = entry.nextStartKnown === false
+    ? null
+    : entry.startDatePrecision === "month"
+      ? (entry.startMonth ?? null)
+      : (entry.startDate ?? null);
   // Always a NON-EMPTY, valid CourseInstance: an instance with only @type+inLanguage is treated by
   // Google as incomplete and can disqualify the whole Course rich result. name+description use real
   // data; courseMode/startDate are added only when actually known (never fabricated).

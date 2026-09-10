@@ -75,6 +75,19 @@ export type CatalogEntry = {
   startMonth?: string | null;
   /** "day" when `startDate` is a real, provider-stated day; "month" when only `startMonth` is known — never fabricate a day for a month-only announcement. Absent/null for legacy records that predate this distinction. */
   startDatePrecision?: "day" | "month" | null;
+  /**
+   * PR-3g, owner decision ("peida, kui ühtki tulevast pole" — hide, when
+   * none is future): false when AMOS found no future intake start AND no
+   * future registration deadline anywhere on the programme — startDate/
+   * startMonth/startDatePrecision are then null too (AMOS's own blanking,
+   * see mkval-catalog-feed-contract.mjs's deriveMkvalNextStartVisibility).
+   * Absent/undefined for a legacy record that predates this field — that
+   * is treated exactly like `true` (never hides anything that was not
+   * already going to be hidden before this field existed).
+   */
+  nextStartKnown?: boolean | null;
+  /** ISO date (YYYY-MM-DD) or ISO month (YYYY-MM) — the historical start AMOS last observed, kept ONLY when `nextStartKnown` is false. Informational; the site never renders it as if it were the next start. */
+  lastKnownStart?: string | null;
   sourceCheckedAt: string;
 };
 
