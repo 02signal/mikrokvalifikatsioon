@@ -1,0 +1,20 @@
+{
+  "_comment": "Indekseeritavad /vordlus/<a>-vs-<b>/ lehed. Kõik teised võrdluslehed on noindex,follow ja väljas sitemapist. Nimekiri = Search Console'i lehed, millel oli >=1 klikk VÕI keskmine positsioon <15 (mkval-gsc-data, sektsioon B, algusest kuni dataDate). Värskendamine: tõmba GSC 'Pages' aruanne (dimension=page), filtreeri /vordlus/ prefiksiga, jäta alles read clicks>=1 või position<15 ja asenda pairs + dataDate. Ära lisa kunagi juurde käsitsi 'igaks juhuks'.",
+  "dataDate": "2026-09-29",
+  "rule": "clicks>=1 or avgPosition<15",
+  "pairs": [
+    "ebs-teenusedisain-turunduses-vs-tallinna-ulikool-taiskasvanute-koolituste-korraldus",
+    "eesti-kunstiakadeemia-museoloogia-mikrokraad-vs-tallinna-ulikool-sotsiaaltoo-ja-sotsiaalpoliitika",
+    "tallinna-tehnikakorgkool-aja-ja-rahajuhtimine-mudelprojekteerimises-vs-taltech-hooneautomaatika-ja-tehnosusteemid",
+    "tallinna-ulikool-andragoogika-alused-2026-2027-vs-tartu-ulikool-mikrokraadiprogramm-ruumiline-planeerimine-ja-keskkond",
+    "tallinna-ulikool-infotehnoloogia-haldamine-vs-taltech-it-juhtimine-ja-ariarhitektuur",
+    "taltech-raamatupidamise-ja-rahanduse-kaasaegsed-teemad-labi-esg-ja-finantsinnovatsiooni-prisma-vs-tartu-ulikool-teabehaldus-teoorias-ja-praktikas",
+    "taltech-teenusedisain-vs-tartu-ulikool-videomangude-narratiivid"
+  ],
+  "excluded": [
+    {
+      "prefix": "tallinna-ulikool-hariduspsuhholoogia-klassiruumis-vs-",
+      "reason": "võrdlusleht (pos 8–9) konkureerib programmilehega /kataloog/tallinna-ulikool-hariduspsuhholoogia-klassiruumis/ (pos 3,2, CTR 17,9%) — kannibaliseerimine, SEO/GEO plaan 29.09 punkt 6"
+    }
+  ]
+}
