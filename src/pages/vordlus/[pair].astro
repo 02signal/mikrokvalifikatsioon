@@ -7,6 +7,7 @@ import "../../styles/global.css";
 import { comparisons, type Comparison } from "../../data/comparisons";
 import { fieldsWithSlug, providersWithSlug, catalogCheckedAt } from "../../data/catalog";
 import { toCourse } from "../../data/courseSchema";
+import { isIndexableVordlus } from "../../data/vordlusIndex";
 
 export function getStaticPaths() {
   return comparisons.map((c) => ({ params: { pair: c.pair }, props: { cmp: c } }));
@@ -38,7 +39,11 @@ const bProvSlug = providersWithSlug.find((p) => p.provider === b.provider)?.slug
 
 const SITE = "https://mikrokvalifikatsioon.ee";
 const canonicalPath = `/vordlus/${cmp.pair}/`;
-const title = `${clip(a.name, 27)} vs ${clip(b.name, 27)} – võrdlus`;
+// Pealkiri täisnimedega (ilma "…"-ta); liiga pikal jätame lõpuliite ära.
+const fullTitle = `${a.name} vs ${b.name}`;
+const title = fullTitle.length + 10 <= 70 ? `${fullTitle} – võrdlus` : fullTitle;
+// Paarilehed on noindex,follow, välja arvatud Search Console'is töötavate valgeloend.
+const robots = isIndexableVordlus(cmp.pair) ? undefined : "noindex,follow";
 const description = `${a.name} (${a.provider}) vs ${b.name} (${b.provider}) — võrdle õpiväljundeid, mahtu, hinda ja õppevormi kõrvuti. Kumb mikrokraad sulle sobib?`;
 
 const facts: { label: string; a: string; b: string }[] = [
@@ -92,6 +97,7 @@ const schema = {
       title={title}
       description={description}
       canonicalPath={canonicalPath}
+      robots={robots}
       ogTitle={`${clip(a.name, 24)} vs ${clip(b.name, 24)}`}
       ogDescription={`Võrdle ${a.field} mikrokraade kõrvuti: õpiväljundid, maht, hind, õppevorm.`}
       jsonLd={schema}

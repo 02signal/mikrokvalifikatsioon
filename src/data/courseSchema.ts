@@ -34,11 +34,22 @@ const COURSE_MODE: Record<string, string> = {
 };
 
 /**
+ * Kas ISO kuupäev (YYYY-MM-DD) või kuu (YYYY-MM) on `now` suhtes minevikus.
+ * Kuu on minevikus alles siis, kui kuu ise on läbi (jooksev kuu on veel "tulevik").
+ * Tundmatu/vigane väärtus loetakse minevikuks — parem jätta välja kui väita.
+ */
+export function isPastDate(value: string, now: Date): boolean {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value < now.toISOString().slice(0, 10);
+  if (/^\d{4}-\d{2}$/.test(value)) return value < now.toISOString().slice(0, 7);
+  return true;
+}
+
+/**
  * schema.org/Course ühe kirje kohta. Lisab ainult teadaolevad faktid
  * (tundmatu väli jäetakse välja) — toidab Google Course rich resultsi ja
  * AI-assistentide hinna/mahu väljavõtet.
  */
-export function toCourse(entry: CatalogEntryWithSlug): Record<string, unknown> {
+export function toCourse(entry: CatalogEntryWithSlug, now: Date = new Date()): Record<string, unknown> {
   const course: Record<string, unknown> = {
     "@type": "Course",
     name: entry.name,
@@ -80,8 +91,11 @@ export function toCourse(entry: CatalogEntryWithSlug): Record<string, unknown> {
       price,
       category: "Tuition",
       url: entry.url,
-      // Registration deadline is a real date when known.
-      ...(entry.registrationDeadline ? { availabilityEnds: entry.registrationDeadline } : {})
+      // Registration deadline is a real date when known — but an already-passed
+      // one would present an expired offer as current, so it is left out.
+      ...(entry.registrationDeadline && !isPastDate(entry.registrationDeadline, now)
+        ? { availabilityEnds: entry.registrationDeadline }
+        : {})
     };
   }
 
@@ -96,11 +110,13 @@ export function toCourse(entry: CatalogEntryWithSlug): Record<string, unknown> {
   // for this case) — checked explicitly, not only relied on implicitly,
   // since a stale/future-known-later JSON-LD startDate is a machine claim
   // to Google, not just page copy.
-  const startDateJsonLd = entry.nextStartKnown === false
+  const rawStartDateJsonLd = entry.nextStartKnown === false
     ? null
     : entry.startDatePrecision === "month"
       ? (entry.startMonth ?? null)
       : (entry.startDate ?? null);
+  // A start that already passed is not an upcoming instance — never emit it.
+  const startDateJsonLd = rawStartDateJsonLd && !isPastDate(rawStartDateJsonLd, now) ? rawStartDateJsonLd : null;
   // Always a NON-EMPTY, valid CourseInstance: an instance with only @type+inLanguage is treated by
   // Google as incomplete and can disqualify the whole Course rich result. name+description use real
   // data; courseMode/startDate are added only when actually known (never fabricated).
