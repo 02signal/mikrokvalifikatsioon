@@ -20,6 +20,8 @@ export type QuestionEntry = {
    * küsimuseks. Kui puudub, kasutatakse `${question} | Mikrokvalifikatsioon.ee`.
    */
   seoTitle?: string;
+  /** Valikuline täislause meta description; kui puudub, lõigatakse see lühivastusest. */
+  metaDescription?: string;
   /** 1–3 väljavõetavat lauset; kuvatakse rasvaselt esimesena (AI-tsiteeritav). */
   shortAnswer: string;
   /**
@@ -238,7 +240,9 @@ export const questions: QuestionEntry[] = [
   {
     slug: "mis-on-eap",
     question: "Mis on EAP?",
-    seoTitle: "Mis on EAP? 1 EAP = 26 tundi õppetööd | Mikrokvalifikatsioon.ee",
+    seoTitle: "EAP tundides: tabel 6–30 EAP töömahuga | Mikrokvalifikatsioon.ee",
+    metaDescription:
+      "1 EAP on umbes 26 tundi õppija tööd; tabelis on 6, 12, 20 ja 30 EAP kogu töömaht tundides ning keskmine nädalakoormus, lisaks näited kataloogi programmidest.",
     figure: {
       src: "/diagrams/eap-26-tundi.svg",
       alt: "Joonis: 1 EAP võrdub umbes 26 tundi õppija tööd (loengud ja iseseisev töö); mikrokraad on tavaliselt 6–30 EAP ehk umbes 156–780 tundi.",

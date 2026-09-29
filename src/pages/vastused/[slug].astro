@@ -7,6 +7,14 @@ import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
 import { questions, questionBySlug } from "../../data/questions";
 import { catalogUpdatedAt } from "../../data/catalog";
+import {
+  eapRows,
+  eapProgrammeGroups,
+  eapDistributionNow,
+  eapDataDateText,
+  HOURS_PER_EAP,
+  WEEKS_PER_SEMESTER
+} from "../../data/eapTable";
 
 const SITE = "https://mikrokvalifikatsioon.ee";
 
@@ -110,7 +118,11 @@ const next = idx < questions.length - 1 ? questions[idx + 1] : null;
 
 // SEO meta: pealkiri = küsimus + bränd; kirjeldus = lühivastus (lõika ~155 märgini).
 const metaDescription =
-  acceptedAnswerText.length > 155 ? `${acceptedAnswerText.slice(0, 152).trimEnd()}…` : acceptedAnswerText;
+  q.metaDescription ??
+  (acceptedAnswerText.length > 155 ? `${acceptedAnswerText.slice(0, 152).trimEnd()}…` : acceptedAnswerText);
+const fmtHours = (n: number) => String(n).replace(".", ",");
+const showEapTable = q.slug === "mis-on-eap";
+const showEapDistribution = q.slug === "mitu-eap-d-on-mikrokraadil";
 ---
 
 <!doctype html>
@@ -149,6 +161,97 @@ const metaDescription =
           {q.body.map((para) => (
             <p class="vastused-body">{para}</p>
           ))}
+          {showEapTable && (
+            <>
+              <h2 class="eap-h2">EAP tundides: kogu töömaht keskmiselt</h2>
+              <div class="eap-table-wrap">
+                <table class="eap-table">
+                  <caption>
+                    Arvutus: 1 EAP = {HOURS_PER_EAP} tundi õppija tööd. Nädalakoormus eeldab umbes
+                    {WEEKS_PER_SEMESTER} õppenädalat semestris. See on keskmine, mitte lubadus:
+                    tegelik koormus sõltub programmist ja sinu tempost.
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Maht</th>
+                      <th scope="col">Kogu töömaht</th>
+                      <th scope="col">Tunde nädalas ühe semestriga</th>
+                      <th scope="col">Tunde nädalas kahe semestriga</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {eapRows.map((r) => (
+                      <tr>
+                        <th scope="row">{r.eap} EAP</th>
+                        <td>{r.hours} tundi</td>
+                        <td>umbes {fmtHours(r.hoursPerWeekOneSemester)}</td>
+                        <td>umbes {fmtHours(r.hoursPerWeekTwoSemesters)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {eapProgrammeGroups.length > 0 && (
+                <>
+                  <h3 class="eap-h3">Näited kataloogist mahu järgi</h3>
+                  <ul class="eap-programmes">
+                    {eapProgrammeGroups.map((g) => (
+                      <li>
+                        <strong>Umbes {g.eap} EAP ({g.lo}–{g.hi} EAP):</strong>
+                        <ul>
+                          {g.programmes.map((p) => (
+                            <li>
+                              <a
+                                href={`/kataloog/${p.slug}/`}
+                                data-track-event="cta_click"
+                                data-track-label={`eap_table_${p.slug}`}
+                              >{p.name}</a>
+                              — {p.provider}, {p.ects} EAP
+                            </li>
+                          ))}
+                        </ul>
+                      </li>
+                    ))}
+                  </ul>
+                  <p class="vastused-body">
+                    Näited on võetud praegusest kataloogist ({eapDataDateText}), mitte valitud kvaliteedi järgi.
+                    Kõik programmid: <a href="/kataloog/" data-track-event="cta_click" data-track-label="eap_table_kataloog">kataloog</a>.
+                  </p>
+                </>
+              )}
+            </>
+          )}
+          {showEapDistribution && (
+            <>
+              <h2 class="eap-h2">Mitu programmi on igas mahuvahemikus</h2>
+              <div class="eap-table-wrap">
+                <table class="eap-table">
+                  <caption>
+                    Kataloogi {eapDistributionNow.total} programmi, mille EAP-maht on teada; andmed seisuga {eapDataDateText}.
+                    1 EAP = {HOURS_PER_EAP} tundi õppija tööd.
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Maht</th>
+                      <th scope="col">Programme</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {eapDistributionNow.buckets.map((b) => (
+                      <tr>
+                        <th scope="row">{b.label}</th>
+                        <td>{b.count}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p class="vastused-body">
+                Vaata programme mahu järgi: <a href="/mikrokraadid/" data-track-event="cta_click" data-track-label="eap_distribution_mikrokraadid">kõik mikrokraadid</a>
+                või <a href="/kataloog/" data-track-event="cta_click" data-track-label="eap_distribution_kataloog">filtreeritav kataloog</a>.
+              </p>
+            </>
+          )}
           <p class="report-date">
             Andmed pärinevad koolide avalikelt lehtedelt ja Eesti Hariduse Infosüsteemist (EHIS);
             arvud on arvutatud registri andmetest, uuendatud {updatedAtText}. Lõplik ja siduv info on
@@ -220,6 +323,33 @@ const metaDescription =
         line-height: 1.65;
         margin-bottom: 14px;
       }
+      .eap-h2 { margin: 28px 0 12px; }
+      .eap-h3 { margin: 22px 0 8px; }
+      .eap-table-wrap { overflow-x: auto; }
+      .eap-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border: 1px solid var(--line);
+      }
+      .eap-table th, .eap-table td {
+        border: 1px solid var(--line);
+        padding: 10px 12px;
+        text-align: left;
+        font-size: 0.95rem;
+      }
+      .eap-table thead th { background: var(--navy); color: #fff; }
+      .eap-table tbody th { background: var(--ice); color: var(--ink); font-weight: 800; }
+      .eap-table caption {
+        caption-side: bottom;
+        text-align: left;
+        color: var(--muted);
+        font-size: 0.85rem;
+        padding-top: 10px;
+      }
+      .eap-programmes { padding-left: 18px; color: var(--muted); line-height: 1.6; }
+      .eap-programmes ul { margin: 4px 0 10px; padding-left: 18px; }
+      .eap-programmes a { color: var(--teal); font-weight: 700; }
       .vastused-nav {
         margin-top: 18px;
         font-size: 0.95rem;
