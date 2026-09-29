@@ -76,7 +76,7 @@ const introText =
 const faq: { q: string; a: string }[] = [
   {
     q: `Millised ${field} mikrokraadid ja mikrokvalifikatsioonid on?`,
-    a: `Registris on ${entries.length} ${field} programmi ${providersInField.length} koolist: ${providersInField.slice(0, 6).join(", ")}${providersInField.length > 6 ? " jt" : ""}. Kõik on allpool tabelis koos mahu, hinna ja õppevormiga.`
+    a: `Kataloogis on ${entries.length} ${field} programmi ${providersInField.length} koolist: ${providersInField.slice(0, 6).join(", ")}${providersInField.length > 6 ? " jt" : ""}. Kõik on allpool tabelis koos mahu, hinna ja õppevormiga.`
   }
 ];
 if (priceRangeText) {
@@ -143,7 +143,7 @@ wantedSchema.push({
   url: `${SITE}${figBase}.png`,
   contentUrl: `${SITE}${figBase}.png`,
   caption: figureCaption,
-  description: `${fieldCap} valdkonna profiil: programmide arv, EAP-maht ja hinnavahemik registri andmetel.`,
+  description: `${fieldCap} valdkonna profiil: programmide arv, EAP-maht ja hinnavahemik kataloogi andmetel.`,
   width: 1920,
   height: 1008,
   encodingFormat: "image/png",

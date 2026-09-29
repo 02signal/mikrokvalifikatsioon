@@ -47,7 +47,7 @@ const schema = {
       url: "https://mikrokvalifikatsioon.ee/",
       email: "info@mikrokvalifikatsioon.ee",
       telephone: "+37258180435",
-      description: "Sõltumatu register ja teejuht: ametlik EHIS mikrokvalifikatsioonide faktikiht ning õppijale võrreldav kataloog hinna, mahu ja rahastusvõimalustega.",
+      description: "Kataloog ja teejuht: ametlik EHIS mikrokvalifikatsioonide faktikiht ning õppijale võrreldav kataloog hinna, mahu ja rahastusvõimalustega.",
       areaServed: "EE",
       logo: "https://mikrokvalifikatsioon.ee/logo-square.png",
       contactPoint: { "@type": "ContactPoint", areaServed: "EE", availableLanguage: ["et"] }
@@ -109,10 +109,10 @@ const schema = {
 <html lang="et">
   <head>
     <Seo
-      title="Mikrokvalifikatsioonid ja mikrokraadid – Eesti register"
+      title="Mikrokvalifikatsioonid ja mikrokraadid – Eesti kataloog"
       description={`EHIS ametlik faktikiht: ${ehisProgrammeCount} mikrokvalifikatsiooni õppekava ${ehisProviderCount} pakkujalt. Võrreldav kataloog: ${catalog.length} programmi hinna, mahu ja rahastusinfoga.`}
       canonicalPath="/"
-      ogTitle="Eesti mikrokvalifikatsioonide ja mikrokraadide register"
+      ogTitle="Eesti mikrokvalifikatsioonide ja mikrokraadide kataloog"
       ogDescription="Ametlik EHIS faktikiht ja õppijale võrreldav kataloog koos hinna ja rahastusvõimalustega."
       jsonLd={schema}
       langAlternates={[{ lang: "et", path: "/" }, { lang: "en", path: "/en/" }]}
@@ -165,7 +165,7 @@ const schema = {
         <div class="hero-inner hero-copy">
           <div class="hero-text">
             <span class="eyebrow">Uus oskus ilma aastatepikkuse kraadiõppeta</span>
-            <h1>Leia oskus, mida tööandjad tunnustavad — ja keegi, kes selle kinni maksab.</h1>
+            <h1>Leia sobiv mikrokvalifikatsioon — ja uuri, kes selle kinni võiks maksta.</h1>
             <p>
               Eestis on EHIS-es juba sadu mikrokvalifikatsiooni õppekavu. Meie toome
               õppijale vajalikud detailid ühte vaatesse: mida õpid, kui kaua kestab,
@@ -235,7 +235,7 @@ const schema = {
             <span class="kicker">Sirvi</span>
             <h2>Leia oma suund — sirvi teemade, oskuste ja telgede kaupa.</h2>
             <p>
-              Iga vaade viib sind sama registri juurde eri nurga alt: valdkond, oskus, karjäär,
+              Iga vaade viib sind sama kataloogi juurde eri nurga alt: valdkond, oskus, karjäär,
               ametirühm või maakond. Vali see, mis sinu mõttega kõige paremini haakub.
             </p>
           </div>

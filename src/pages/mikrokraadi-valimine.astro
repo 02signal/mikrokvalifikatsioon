@@ -44,7 +44,7 @@ const decisionSteps = [
   },
   {
     name: "Vaata mahtu (EAP) ja kestust",
-    text: `Kontrolli mahtu ja kestust koos. Registris avaldatud ülikoolide mikrokraadide mahud jäävad vahemikku ${ectsTypicalText}. 24 EAP kahe semestriga on tuntav koormus töö kõrvalt; lühem 12–15 EAP programm mahub kiiremini graafikusse.`
+    text: `Kontrolli mahtu ja kestust koos. Kataloogis avaldatud ülikoolide mikrokraadide mahud jäävad vahemikku ${ectsTypicalText}. 24 EAP kahe semestriga on tuntav koormus töö kõrvalt; lühem 12–15 EAP programm mahub kiiremini graafikusse.`
   },
   {
     name: "Kontrolli rahastust ja sihtrühma",
@@ -78,8 +78,8 @@ const faqItems = [
   {
     question: "Millised on mikrokraadide valikud?",
     answer: biggestField
-      ? `Registris on praegu ${universityEntries.length} ülikooli mikrokraadi ${universityProviders.length} ülikoolist mitmes valdkonnas. Kõige laiem valik on valdkonnas „${biggestField.field}“ — ${biggestField.count} mikrokraadi. Kõik valdkonnad koos mikrokraadide arvuga on allpool „Sinu valikud“ ülevaates ja lehel /valdkond/.`
-      : `Registris on praegu ${universityEntries.length} ülikooli mikrokraadi ${universityProviders.length} ülikoolist mitmes valdkonnas. Kõik valdkonnad on allpool „Sinu valikud“ ülevaates ja lehel /valdkond/.`
+      ? `Kataloogis on praegu ${universityEntries.length} ülikooli mikrokraadi ${universityProviders.length} ülikoolist mitmes valdkonnas. Kõige laiem valik on valdkonnas „${biggestField.field}“ — ${biggestField.count} mikrokraadi. Kõik valdkonnad koos mikrokraadide arvuga on allpool „Sinu valikud“ ülevaates ja lehel /valdkond/.`
+      : `Kataloogis on praegu ${universityEntries.length} ülikooli mikrokraadi ${universityProviders.length} ülikoolist mitmes valdkonnas. Kõik valdkonnad on allpool „Sinu valikud“ ülevaates ja lehel /valdkond/.`
   },
   {
     question: "Mille järgi mikrokraadi valida?",
@@ -262,7 +262,7 @@ const schema = {
             <a class="btn btn-secondary" href="/mikrokraadid/" data-track-event="cta_click" data-track-label="mkr_valimine_hero_mikrokraadid">Kõik mikrokraadid</a>
           </div>
           <p class="report-date">
-            Registris on praegu {universityEntries.length} ülikooli mikrokraadi {universityProviders.length} ülikoolist.
+            Kataloogis on praegu {universityEntries.length} ülikooli mikrokraadi {universityProviders.length} ülikoolist.
             Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud koolide lehtedelt: {checkedAtText}.
           </p>
         </div>
@@ -283,7 +283,7 @@ const schema = {
             kõrvuti. Lõplik info on alati ülikooli enda lehel.
           </p>
           <ul class="check">
-            <li><strong>{universityEntries.length}</strong> ülikooli mikrokraadi {universityProviders.length} ülikoolist registris.</li>
+            <li><strong>{universityEntries.length}</strong> ülikooli mikrokraadi {universityProviders.length} ülikoolist kataloogis.</li>
             <li>Mikrokraad annab tavaliselt <strong>EAP-sid</strong> (ECTS), mida saab sageli tasemeõppes arvestada.</li>
             <li>Koolitusettevõtte või rakenduskõrgkooli lühiõppe valimisel aitab <a href="/mikrokvalifikatsiooni-valimine/">mikrokvalifikatsiooni valimine</a>.</li>
           </ul>

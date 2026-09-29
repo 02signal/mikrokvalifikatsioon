@@ -87,7 +87,7 @@ const faqItems = [
   },
   {
     question: "Kui suur on tüüpiline mikrokraadi maht (EAP)?",
-    answer: `Maht antakse Euroopa ainepunktides (EAP) ja 1 EAP vastab umbes 26 tunnile õppija tööd. Registris avaldatud ülikoolide mikrokraadide mahud jäävad vahemikku ${ectsTypicalText}; sagedasim koormus on ühe kuni kahe semestri jagu töö kõrvalt. Täpne EAP-maht on iga programmi juures kataloogis.`
+    answer: `Maht antakse Euroopa ainepunktides (EAP) ja 1 EAP vastab umbes 26 tunnile õppija tööd. Kataloogis avaldatud ülikoolide mikrokraadide mahud jäävad vahemikku ${ectsTypicalText}; sagedasim koormus on ühe kuni kahe semestri jagu töö kõrvalt. Täpne EAP-maht on iga programmi juures kataloogis.`
   },
   {
     question: "Kui kaua mikrokraadi õpe kestab?",
@@ -234,13 +234,13 @@ const schema = {
             on lihtne: <strong>mikrokvalifikatsioon</strong> on katusmõiste igale lühiõppele,
             <strong>mikrokraad</strong> on selle ülikoolitasemel alaliik. Siin näitame, kuidas
             ülikoolide mikrokraade kõrvutada — mahu (EAP), hinna, kestuse, õppevormi, ülikooli
-            ja eelduste järgi — ja toome päris näited registrist.
+            ja eelduste järgi — ja toome päris näited kataloogist.
           </p>
           <div class="actions">
             <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="mkr_vordlus_hero_kataloog">Ava filtreeritav kataloog</a>
           </div>
           <p class="report-date">
-            Registris on praegu {universityEntries.length} ülikooli mikrokraadi {universityProviders.length} ülikoolist.
+            Kataloogis on praegu {universityEntries.length} ülikooli mikrokraadi {universityProviders.length} ülikoolist.
             Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud koolide lehtedelt: {checkedAtText}.
           </p>
         </div>
@@ -255,7 +255,7 @@ const schema = {
           </div>
           <ul class="mkr-criteria">
             <li><strong>Ülikool ja sihtrühm</strong> — kes pakub ja kellele programm mõeldud on.</li>
-            <li><strong>Maht (EAP)</strong> — Euroopa ainepunktid; 1 EAP ≈ 26 tundi õppija tööd. Registris on {withEcts.length} mikrokraadi avaldanud oma EAP-mahu.</li>
+            <li><strong>Maht (EAP)</strong> — Euroopa ainepunktid; 1 EAP ≈ 26 tundi õppija tööd. Kataloogis on {withEcts.length} mikrokraadi avaldanud oma EAP-mahu.</li>
             <li><strong>Hind</strong> — õppemaks; {withPrice.length} kirjet näitab hinda avalikult. Osa kulust võib katta tööandja või õppekava enda rahastus.</li>
             <li><strong>Kestus</strong> — paarist nädalast kuni kahe semestrini töö kõrvalt.</li>
             <li><strong>Õppevorm</strong> — veebis, hübriid või kohapeal.</li>

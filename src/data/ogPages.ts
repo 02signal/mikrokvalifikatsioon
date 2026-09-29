@@ -27,12 +27,12 @@ export interface OgPageEntry {
 // Sisulehed: võti = canonical-tee viimane segment (Seo.astro tuletab sama võtme).
 const contentPages: Record<string, OgPageEntry> = {
   home: {
-    title: "Eesti mikrokvalifikatsioonide ja mikrokraadide register",
-    description: "Leia oskus, mida tööandjad tunnustavad — ja keegi, kes selle kinni maksab."
+    title: "Eesti mikrokvalifikatsioonide ja mikrokraadide kataloog",
+    description: "Leia sobiv mikrokvalifikatsioon — ja uuri, kes selle kinni võiks maksta."
   },
   en: {
     title: "Microcredentials & microdegrees in Estonia",
-    description: "The independent register: field, ECTS, price and who can fund it. Find a recognised skill."
+    description: "The catalogue: field, ECTS, price and who could fund it. Find the right skill."
   },
   kataloog: {
     title: "Kataloog — kõik mikrokvalifikatsioonid ühes kohas",
@@ -56,7 +56,7 @@ const contentPages: Record<string, OgPageEntry> = {
   },
   koolitajale: {
     title: "Koolitajale — kuidas pakkuda mikrokvalifikatsiooni",
-    description: "Ametlik raamistik, sammud pakkujaks saamiseks ja võimalus lisada oma programm registrisse."
+    description: "Ametlik raamistik, sammud pakkujaks saamiseks ja võimalus lisada oma programm kataloogi."
   },
   kvaliteedihindamine: {
     title: "Kvaliteedihindamine: 8 valdkonda ja kuidas valmistuda",
@@ -67,8 +67,8 @@ const contentPages: Record<string, OgPageEntry> = {
     description: "Turukaart ja avaandmed: programmid, pakkujad, valdkonnad, hinnad ja mahud."
   },
   "kuidas-koostame": {
-    title: "Kuidas me registrit koostame",
-    description: "Metoodika ja sõltumatus: allikad, kontrollkuupäevad, neutraalsus."
+    title: "Kuidas me kataloogi koostame",
+    description: "Metoodika: allikad, kontrollkuupäevad ja paranduste protsess."
   },
   kkk: {
     title: "Korduma kippuvad küsimused",
@@ -96,7 +96,7 @@ const contentPages: Record<string, OgPageEntry> = {
   },
   aastaraport: {
     title: "Eesti mikrokvalifikatsioonide ja mikrokraadide turg",
-    description: "Sõltumatu registri turuülevaade arvudes: programmid, koolid, hinnad, mahud."
+    description: "Kataloogi turuülevaade arvudes: programmid, koolid, hinnad, mahud."
   },
   privaatsus: {
     title: "Privaatsus ja küpsised",
@@ -210,7 +210,7 @@ const occupationPages = Object.fromEntries(
 // Per-lehetüüp aktsentvärv — kaart eristub tüübi kaupa (register/programm/teema/…),
 // jäädes brändi-perekonda. Aktsent värvib nii alaserva kui gradiendi põhja.
 export const ACCENT: Record<string, [number, number, number]> = {
-  content: [84, 194, 71],     // brändi-roheline — register / sisu
+  content: [84, 194, 71],     // brändi-roheline — kataloog / sisu
   programme: [56, 178, 172],  // teal — üks programm
   topic: [66, 153, 225],      // sinine — teema / oskus
   field: [128, 90, 213],      // violett — valdkond

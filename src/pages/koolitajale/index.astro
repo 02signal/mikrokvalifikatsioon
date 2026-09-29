@@ -72,11 +72,11 @@ const schema = {
   <head>
     <Seo
       title="Koolitajale | Kuidas pakkuda mikrokvalifikatsiooni ja jõuda õppijani"
-      description="Mikrokvalifikatsiooni ametlik raamistik koolitajale: maht 5–30 EAP, Täiskasvanute koolituse seadus, HAKA kvaliteedihindamine ja registreerimine EHIS-es. Lisaks: lisa oma programm Eesti suurimasse registrisse."
+      description="Mikrokvalifikatsiooni ametlik raamistik koolitajale: maht 5–30 EAP, Täiskasvanute koolituse seadus, HAKA kvaliteedihindamine ja registreerimine EHIS-es. Lisaks: lisa oma programm Eesti suurimasse kataloogi."
       canonicalPath="/koolitajale/"
       ogType="article"
       ogTitle="Koolitajale: kuidas pakkuda mikrokvalifikatsiooni"
-      ogDescription="Ametlik raamistik, sammud pakkujaks saamiseks ja võimalus lisada oma programm Eesti registrisse."
+      ogDescription="Ametlik raamistik, sammud pakkujaks saamiseks ja võimalus lisada oma programm Eesti kataloogi."
       jsonLd={schema}
     />
   </head>
@@ -91,10 +91,10 @@ const schema = {
           <p>
             Mikrokvalifikatsioon on lühike, tõendatud ja tunnustatud oskuskogum, millel on
             tööturul iseseisev väärtus. Sellel lehel on kokku võetud ametlik raamistik (kontrollitud
-            allikatest) ja võimalus lisada oma programm Eesti suurimasse avalikku registrisse.
+            allikatest) ja võimalus lisada oma programm Eesti suurimasse avalikku kataloogi.
           </p>
           <div class="actions">
-            <a class="btn btn-primary" href="#lisa-programm" data-track-event="cta_click" data-track-label="koolitaja_hero_lisa">Lisa oma programm registrisse</a>
+            <a class="btn btn-primary" href="#lisa-programm" data-track-event="cta_click" data-track-label="koolitaja_hero_lisa">Lisa oma programm kataloogi</a>
             <a class="btn btn-secondary" href="#raamistik" data-track-event="cta_click" data-track-label="koolitaja_hero_raamistik">Vaata ametlikku raamistikku</a>
           </div>
           <p class="report-date">Ametlik raamistik kontrollitud: {officialCheckedAt}</p>
@@ -125,7 +125,7 @@ const schema = {
             </article>
             <article class="card">
               <span class="stat">EHIS</span>
-              <h3>Register</h3>
+              <h3>Kataloog</h3>
               <p>Ametlikud õppekavad (sisu, väljundid, maht, sihtrühm) ja tunnistuste andmed on Eesti Hariduse Infosüsteemis.</p>
             </article>
           </div>
@@ -218,7 +218,7 @@ const schema = {
             </article>
             <article class="card">
               <h3>Turule toomine</h3>
-              <p>Kuidas jõuda valmis programmiga õppijani ja teha see nähtavaks otsingus ja registris.</p>
+              <p>Kuidas jõuda valmis programmiga õppijani ja teha see nähtavaks otsingus ja kataloogis.</p>
               <a href="/koolitajale/turule-toomine/" data-track-event="cta_click" data-track-label="koolitaja_hub_turuletoomine">Turule toomine</a>
             </article>
           </div>
@@ -229,10 +229,10 @@ const schema = {
         <div class="section-inner narrow">
           <div class="section-head compact-head">
             <span class="kicker">Jõua õppijani</span>
-            <h2>Lisa oma programm Eesti suurimasse avalikku registrisse.</h2>
+            <h2>Lisa oma programm Eesti suurimasse avalikku kataloogi.</h2>
             <p>
               Meie kataloogis on praegu {catalog.length} programmi {providers.length} koolist ja koolitajalt.
-              Register on koht, kust õppijad, ettevõtted ja nõustajad mikrokvalifikatsioone otsivad —
+              Kataloog on koht, kust õppijad, ettevõtted ja nõustajad mikrokvalifikatsioone otsivad —
               ja kust nad lähevad edasi kooli enda lehele. Lisamine ei maksa midagi.
             </p>
           </div>
@@ -266,16 +266,16 @@ const schema = {
             </div>
             <label class="checkbox">
               <input type="checkbox" name="consentList" required />
-              <span>Kinnitan, et tegu on avaliku programmiga ja andmeid tohib registris avaldada. Lisame info pärast allika kontrolli.</span>
+              <span>Kinnitan, et tegu on avaliku programmiga ja andmeid tohib kataloogis avaldada. Lisame info pärast allika kontrolli.</span>
             </label>
-            <button class="btn btn-primary" type="submit">Saada programm registrisse</button>
+            <button class="btn btn-primary" type="submit">Saada programm kataloogi</button>
             <p class="form-note" data-provider-note>Kontrollime info kooli avalikult lehelt ja lisame kirje koos kontrollkuupäevaga. Kui automaatne saatmine ei tööta, avaneb e-kirja varuvariant.</p>
           </form>
 
           <p class="field-help">
             Märkasid oma programmi juures viga või aegunud infot? Kirjuta
             <a href="mailto:info@mikrokvalifikatsioon.ee?subject=Kataloogi%20parandus" data-track-event="email_click" data-track-label="koolitaja_parandus">info@mikrokvalifikatsioon.ee</a> —
-            parandame allika põhjal. Vaata ka, <a href="/kuidas-koostame/">kuidas me registrit koostame</a>.
+            parandame allika põhjal. Vaata ka, <a href="/kuidas-koostame/">kuidas me kataloogi koostame</a>.
           </p>
         </div>
       </section>
@@ -284,7 +284,7 @@ const schema = {
         <div class="section-inner contact">
           <div>
             <span class="kicker">Järgmine samm</span>
-            <h2>Vaata, kuidas register on üles ehitatud — või küsi nõu.</h2>
+            <h2>Vaata, kuidas kataloog on üles ehitatud — või küsi nõu.</h2>
             <div class="inline-actions">
               <a class="btn btn-primary" href="/andmed/" data-track-event="cta_click" data-track-label="koolitaja_bottom_andmed">Turg andmetes</a>
               <a class="btn btn-secondary" href="/kuidas-koostame/" data-track-event="cta_click" data-track-label="koolitaja_bottom_metoodika">Kuidas koostame</a>
@@ -340,7 +340,7 @@ const schema = {
         const body = encodeURIComponent(
           `Programm: ${payload.programmName || ""}\nKool/koolitaja: ${payload.providerName || ""}\nLink: ${payload.programUrl || ""}\nValdkond: ${payload.field || "-"}\nMärkused: ${payload.notes || "-"}\nKontakt: ${payload.email || ""}`
         );
-        window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Lisa programm registrisse")}&body=${body}`;
+        window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Lisa programm kataloogi")}&body=${body}`;
         // The program details always leave by mailto (the ingress doesn't
         // carry them) and opening a mail draft is never a confirmed send -
         // the person still has to press Send themselves. The only endpoint

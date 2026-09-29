@@ -21,11 +21,11 @@ const faqItems = [
   },
   {
     question: "Is this an official state register?",
-    answer: "No. We are an independent register and guide that collects providers' public information in one place. The official information is always on each provider's own page and in Estonia's Education Information System (EHIS)."
+    answer: "No. We are a catalogue and guide that collects providers' public information in one place. The official information is always on each provider's own page and in Estonia's Education Information System (EHIS)."
   },
   {
     question: "How much does a microcredential cost in Estonia?",
-    answer: "Most are around 700–1,800 €, and some are free for specific target groups. Often the learner does not pay everything — the employer's training budget or target-group funding attached to the programme itself can cover a large part."
+    answer: "Most are around 700–1,800 €, and some are free for specific target groups. Some learners do not pay everything — an employer's training budget or target-group funding attached to the programme itself may cover part of it. Ask the provider."
   }
 ];
 
@@ -36,7 +36,7 @@ const schema = {
     {
       "@type": "WebSite",
       url: "https://mikrokvalifikatsioon.ee/en/",
-      name: "Microcredentials register — Estonia",
+      name: "Microcredentials catalogue — Estonia",
       inLanguage: "en",
       publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
       potentialAction: {
@@ -70,10 +70,10 @@ const langAlternates = [
   <head>
     <Seo
       title="Microcredentials & microdegrees in Estonia"
-      description="An independent register and guide to Estonia's microcredentials and university microdegrees: field, ECTS, price and who can fund it. Built from providers' public pages, dated and neutral."
+      description="A catalogue and guide to Estonia's microcredentials and university microdegrees: field, ECTS, price and who could fund it. Built from providers' public pages, dated and neutral."
       canonicalPath="/en/"
       ogTitle="Microcredentials & microdegrees in Estonia"
-      ogDescription="The independent register: every programme with field, ECTS, price and a link to the provider. Find a recognised skill — and someone to fund it."
+      ogDescription="The catalogue: every programme with field, ECTS, price and a link to the provider. Find the right skill — and see who could fund it."
       locale="en"
       jsonLd={schema}
       langAlternates={langAlternates}
@@ -97,8 +97,8 @@ const langAlternates = [
     <main>
       <section class="hero">
         <div class="hero-inner">
-          <span class="eyebrow">Estonia · independent register</span>
-          <h1>Find a recognised skill — and someone to fund it.</h1>
+          <span class="eyebrow">Estonia · catalogue</span>
+          <h1>Find the right skill — and see who could fund it.</h1>
           <p>
             Estonia already has hundreds of microcredentials and university microdegrees, scattered
             across dozens of provider pages. Here they are in one place: what you learn, how long it
@@ -135,14 +135,14 @@ const langAlternates = [
             </article>
             <article class="card">
               <h3>A certificate that counts</h3>
-              <p>An official certificate you can use in your CV, in Europass and in pay negotiations.</p>
+              <p>An official certificate you can use in your CV and in Europass.</p>
             </article>
             <article class="card">
-              <h3>Independent &amp; dated</h3>
+              <h3>Sourced &amp; dated</h3>
               <p>Built only from providers' public pages; every entry carries a checked date. We never invent missing facts.</p>
             </article>
           </div>
-          <p class="report-date">Dataset updated: {updatedAtText}. Public source facts checked: {checkedAtText}. This is an independent aggregator, not an official state register.</p>
+          <p class="report-date">Dataset updated: {updatedAtText}. Public source facts checked: {checkedAtText}. This is an aggregator, not an official state register.</p>
         </div>
       </section>
 
@@ -152,7 +152,7 @@ const langAlternates = [
             <span class="kicker">Tell us what you need</span>
             <h2>We're exploring a Europe-wide view. Be first to know.</h2>
             <p>
-              Today this is the independent register of Estonia's microcredentials and microdegrees.
+              Today this is the catalogue of Estonia's microcredentials and microdegrees.
               We're testing demand for a wider European catalog. Tell us who you are and we'll notify you.
             </p>
           </div>
@@ -178,7 +178,7 @@ const langAlternates = [
             </div>
             <label class="checkbox">
               <input type="checkbox" name="consent" required />
-              <span>I agree that Ettevõtluskeskus OÜ may use my data to reply and to notify me about the register.</span>
+              <span>I agree that Ettevõtluskeskus OÜ may use my data to reply and to notify me about the catalogue.</span>
             </label>
             <button class="btn btn-primary" type="submit">Notify me</button>
             <p class="form-note" data-en-note>We reply within one business day. If automatic sending fails, an email draft opens as a fallback.</p>
@@ -220,7 +220,7 @@ const langAlternates = [
       <div class="footer-inner">
         <strong>Mikrokvalifikatsioon.ee</strong>
         <nav class="footer-links" aria-label="Footer links">
-          <span>Ettevõtluskeskus OÜ · Estonia's microcredentials &amp; microdegrees register</span>
+          <span>Ettevõtluskeskus OÜ · Estonia's microcredentials &amp; microdegrees catalogue</span>
           <a href="/kataloog/">Catalog</a>
           <a href="#faq">FAQ</a>
           <a href="/" hreflang="et">Eesti keeles</a>
@@ -259,7 +259,7 @@ const langAlternates = [
         // not fall through to the mailto fallback for it.
         if (!sent && !rateLimited) {
           const body = encodeURIComponent(`Role: ${payload.role || "-"}\nEmail: ${payload.email || "-"}\nLooking for: ${payload.message || "-"}`);
-          window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Microcredentials register - notify me")}&body=${body}`;
+          window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Microcredentials catalogue - notify me")}&body=${body}`;
         }
         // Only a confirmed AMOS webhook success counts as a submit - mailto
         // is a fallback for a failed request, not a conversion.

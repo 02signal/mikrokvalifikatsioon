@@ -14,7 +14,7 @@ export const organization = {
   url: `${SITE}/`,
   inLanguage: "et",
   description:
-    "Sõltumatu Eesti mikrokvalifikatsioonide ja mikrokraadide register — valdkond, maht, hind ja rahastus ühes kohas.",
+    "Eesti mikrokvalifikatsioonide ja mikrokraadide kataloog — valdkond, maht, hind ja rahastus ühes kohas.",
   logo: {
     "@type": "ImageObject",
     url: `${SITE}/logo-square.png`,

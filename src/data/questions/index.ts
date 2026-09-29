@@ -172,11 +172,11 @@ export const questions: QuestionEntry[] = [
     },
     shortAnswer:
       `Mikrokraad kestab tavaliselt üks kuni kaks semestrit töö kõrvalt — kuud, mitte aastad. ` +
-      `Registris on tüüpiline maht ${ectsRangeText}, mis tähendab umbes ${hoursLo}–${hoursHi} tundi õppija tööd kokku (1 EAP ≈ 26 tundi). ` +
+      `Kataloogis on tüüpiline maht ${ectsRangeText}, mis tähendab umbes ${hoursLo}–${hoursHi} tundi õppija tööd kokku (1 EAP ≈ 26 tundi). ` +
       `Lühemad praktilised programmid kestavad paar kuud, mahukamad kuni aasta.`,
     body: [
       `Mikrokraadi kestust mõõdetakse õppija töö kogumahuna, mitte ainult kontakttundidena. Ametlik teisendus on 1 EAP (Euroopa ainepunkt) ≈ 26 tundi õppija tööd, mis hõlmab nii auditoorset kui iseseisvat tööd.`,
-      `Meie registri ${programmeCount} programmi mahud jäävad vahemikku ${ectsRangeText}, mediaan on ${ectsMedian} EAP. Kõige sagedasem mahuklass on ${ectsCommonBucket ? ectsCommonBucket.label : "12–18 EAP"} (${ectsCommonBucket ? ectsCommonBucket.count : ""} programmi). See vastab tüüpiliselt ühele kuni kahele semestrile töö kõrvalt.`,
+      `Meie kataloogi ${programmeCount} programmi mahud jäävad vahemikku ${ectsRangeText}, mediaan on ${ectsMedian} EAP. Kõige sagedasem mahuklass on ${ectsCommonBucket ? ectsCommonBucket.label : "12–18 EAP"} (${ectsCommonBucket ? ectsCommonBucket.count : ""} programmi). See vastab tüüpiliselt ühele kuni kahele semestrile töö kõrvalt.`,
       `Kalendris tähendab see enamasti õppeaastat hooti: üks semester (sügis või kevad) lühematel programmidel ja kaks semestrit mahukamatel. Täpne algus- ja lõpukuupäev on iga programmi juures kataloogis ja lõplik info alati kooli enda lehel.`
     ],
     relatedLinks: [
@@ -190,7 +190,7 @@ export const questions: QuestionEntry[] = [
     question: "Kui palju mikrokraad maksab?",
     figure: {
       src: "/diagrams/hind.svg",
-      alt: "Joonis: mikrokraadi hinnavahemik — tüüpiline vahemik (25.–75. protsentiil), mediaan ja avaldatud hindade äärmused registri andmetest.",
+      alt: "Joonis: mikrokraadi hinnavahemik — tüüpiline vahemik (25.–75. protsentiil), mediaan ja avaldatud hindade äärmused kataloogi andmetest.",
       caption: "Tüüpiline hind on keskmine pool kõigist hindadest (25.–75. protsentiil); punkt on mediaan. Sõltub mahust (EAP) ja koolist.",
       width: 960,
       height: 504,
@@ -198,12 +198,12 @@ export const questions: QuestionEntry[] = [
     },
     shortAnswer:
       `Mikrokraad maksab Eestis enamasti ${priceTypicalText} (tüüpiline vahemik, mediaan ${priceMedian != null ? fmtEur(priceMedian) : "~1 440 €"}). ` +
-      `Registris avaldatud hinnad ulatuvad ${priceMin != null ? fmtEur(priceMin) : "~300 €"}-st ${priceMax != null ? fmtEur(priceMax) : "~4 000 €"}-ni, sõltuvalt mahust (EAP) ja koolist. ` +
+      `Kataloogis avaldatud hinnad ulatuvad ${priceMin != null ? fmtEur(priceMin) : "~300 €"}-st ${priceMax != null ? fmtEur(priceMax) : "~4 000 €"}-ni, sõltuvalt mahust (EAP) ja koolist. ` +
       `Sageli ei maksa õppija kogu summat ise — tööandja koolituseelarve või õppekava enda sihtrühma rahastus võib osa katta.`,
     body: [
-      `Hind sõltub kõige rohkem mahust: 12–18 EAP programm maksab vähem kui 24–30 EAP oma. Meie registris on hind avaldatud ${prices.length} programmil ${programmeCount}-st. Avaldatud hinnad ulatuvad ${priceMin != null ? fmtEur(priceMin) : "~300 €"}-st ${priceMax != null ? fmtEur(priceMax) : "~4 000 €"}-ni; tüüpiline (keskmine pool kõikidest hindadest) vahemik on ${priceTypicalText} ja mediaan ${priceMedian != null ? fmtEur(priceMedian) : "~1 440 €"}.`,
+      `Hind sõltub kõige rohkem mahust: 12–18 EAP programm maksab vähem kui 24–30 EAP oma. Meie kataloogis on hind avaldatud ${prices.length} programmil ${programmeCount}-st. Avaldatud hinnad ulatuvad ${priceMin != null ? fmtEur(priceMin) : "~300 €"}-st ${priceMax != null ? fmtEur(priceMax) : "~4 000 €"}-ni; tüüpiline (keskmine pool kõikidest hindadest) vahemik on ${priceTypicalText} ja mediaan ${priceMedian != null ? fmtEur(priceMedian) : "~1 440 €"}.`,
       `Õppija ei pea sageli kogu summat ise maksma. Kolm rahastusrada on tööandja koolituseelarve, õppekava enda sihtrühma rahastus ja ise makstes. Osa programme on kindlale sihtrühmale rahastatud (näiteks töötavatele õpetajatele EL-i kaasrahastusel) — need on kataloogis märgitud.`,
-      `Lõplik ja siduv hind on alati kooli enda registreerimislehel; meie register koondab avaldatud hinnad koos kontrollkuupäevaga. Kui kool pole hinda avaldanud, jätame välja, mitte ei leiuta.`
+      `Lõplik ja siduv hind on alati kooli enda registreerimislehel; meie kataloog koondab avaldatud hinnad koos kontrollkuupäevaga. Kui kool pole hinda avaldanud, jätame välja, mitte ei leiuta.`
     ],
     relatedLinks: [
       { label: "Kes maksab mikrokvalifikatsiooni eest?", href: "/kes-maksab/" },
@@ -224,11 +224,11 @@ export const questions: QuestionEntry[] = [
     },
     shortAnswer:
       `Mikrokraadil on Eestis tavaliselt ${ectsRangeText}, mediaan ${ectsMedian} EAP. ` +
-      `Kõige sagedasem maht on ${ectsCommonBucket ? ectsCommonBucket.label : "12–18 EAP"} — see katab registris ${ectsCommonBucket ? ectsCommonBucket.count : ""} programmi. ` +
+      `Kõige sagedasem maht on ${ectsCommonBucket ? ectsCommonBucket.label : "12–18 EAP"} — see katab kataloogis ${ectsCommonBucket ? ectsCommonBucket.count : ""} programmi. ` +
       `1 EAP võrdub umbes 26 tunni õppija tööga, seega ${ectsMedian} EAP tähendab umbes ${ectsMedian != null ? ectsMedian * 26 : "390"} tundi.`,
     body: [
       `EAP ehk Euroopa ainepunkt (ECTS) mõõdab õppija töö kogumahtu: 1 EAP ≈ 26 tundi, mis sisaldab nii loenguid kui iseseisvat tööd. Mikrokvalifikatsiooni reguleerib täiskasvanute koolituse seadus ja mikrokraadid jäävad tüüpiliselt 5–30 EAP vahemikku.`,
-      `Meie registri ${ects.length} EAP-ga programmi jaotuvad nii: ${ectsBuckets.map((b) => `${b.label} — ${b.count} programmi`).join("; ")}. Mediaanmaht on ${ectsMedian} EAP ja kõige sagedasem klass on ${ectsCommonBucket ? ectsCommonBucket.label : "12–18 EAP"}.`,
+      `Meie kataloogi ${ects.length} EAP-ga programmi jaotuvad nii: ${ectsBuckets.map((b) => `${b.label} — ${b.count} programmi`).join("; ")}. Mediaanmaht on ${ectsMedian} EAP ja kõige sagedasem klass on ${ectsCommonBucket ? ectsCommonBucket.label : "12–18 EAP"}.`,
       `Ülikooli mikrokraadi EAP-d on ECTS-ainepunktid, mida saab sageli hiljem tasemeõppes (kraadiõppes) arvestada — see eristab mikrokraadi koolitusettevõtte mikrokvalifikatsioonist, mis ei pruugi EAP-sid anda. Iga programmi täpne EAP-maht on kataloogis.`
     ],
     relatedLinks: [
@@ -257,7 +257,7 @@ export const questions: QuestionEntry[] = [
       `Mikrokraadid annavad Eestis tavaliselt ${ectsRangeText}, seega umbes ${hoursLo}–${hoursHi} tundi õppimist.`,
     body: [
       `EAP (lühend sõnadest Euroopa ainepunkt) on sama mis rahvusvaheline ECTS. See mõõdab, kui palju aega õppimine keskmiselt nõuab — mitte ainult kontakttunde, vaid kogu õppija töö: loengud, praktikumid, lugemine, ülesanded ja eksamiks valmistumine.`,
-      `Üks EAP vastab umbes 26 tunnile õppija tööd. Nii saab mahtu kiiresti tundideks teisendada: ${ectsMedian} EAP (registri mediaan) ≈ ${ectsMedian != null ? ectsMedian * 26 : 390} tundi, 24 EAP ≈ 624 tundi. See aitab hinnata, kui palju koormust programm töö kõrvalt tekitab.`,
+      `Üks EAP vastab umbes 26 tunnile õppija tööd. Nii saab mahtu kiiresti tundideks teisendada: ${ectsMedian} EAP (kataloogi mediaan) ≈ ${ectsMedian != null ? ectsMedian * 26 : 390} tundi, 24 EAP ≈ 624 tundi. See aitab hinnata, kui palju koormust programm töö kõrvalt tekitab.`,
       `EAP-d on olulised kahel põhjusel: need on kogu Euroopas üheselt mõistetavad (ECTS), ja ülikooli mikrokraadi EAP-sid saab sageli hiljem kraadiõppes arvestada. Koolitusettevõtte mikrokvalifikatsioon ei pruugi EAP-sid anda — siis kuvatakse kestus tundides.`
     ],
     relatedLinks: [
@@ -284,7 +284,7 @@ export const questions: QuestionEntry[] = [
     body: [
       `Mõisted on hierarhilised. „Mikrokvalifikatsioon“ on lai katusmõiste — pakkuja võib olla ülikool, rakenduskõrgkool või koolitusettevõte. „Mikrokraad“ on kitsam: see on ülikooli (või rakenduskõrgkooli) pakutav mikrokvalifikatsioon, mis annab Euroopa ainepunkte (EAP) ja on kõrghariduse tasemel.`,
       `Peamine praktiline vahe on ainepunktid. Mikrokraadi EAP-sid saab sageli hiljem tasemeõppes arvestada — see on väärtuslik, kui plaanid edaspidi kraadiõpet. Koolitusettevõtte mikrokvalifikatsioon keskendub kiirele praktilisele oskusele ega pruugi EAP-sid anda.`,
-      `Meie registris on ${universityCount} ülikooli mikrokraadi (pakkujad: ${etList(universities)}) ja lisaks rakenduskõrgkoolide lühiõpe (${etList(otherProviders)}). Vali ülikooli mikrokraad, kui tahad ainepunkte ja kõrgharidustasemel õpet; vali koolitusettevõtte mikrokvalifikatsioon, kui tahad kiiret praktilist oskust.`
+      `Meie kataloogis on ${universityCount} ülikooli mikrokraadi (pakkujad: ${etList(universities)}) ja lisaks rakenduskõrgkoolide lühiõpe (${etList(otherProviders)}). Vali ülikooli mikrokraad, kui tahad ainepunkte ja kõrgharidustasemel õpet; vali koolitusettevõtte mikrokvalifikatsioon, kui tahad kiiret praktilist oskust.`
     ],
     relatedLinks: [
       { label: "Mis on mikrokvalifikatsioon?", href: "/mis-on-mikrokvalifikatsioon/" },
@@ -350,11 +350,11 @@ export const questions: QuestionEntry[] = [
     shortAnswer:
       `Mikrokraadile kandideerimiseks vali kataloogist sobiv programm, kontrolli eeldusi ja tähtaega ning registreeru kooli enda lehel. ` +
       `Osa mikrokraade nõuab varasemat kõrgharidust, osa on avatud kõigile — nõue on iga programmi juures. ` +
-      `Lõplik ja siduv registreerimine käib alati ülikooli või kooli enda lehel, mitte meie registris.`,
+      `Lõplik ja siduv registreerimine käib alati ülikooli või kooli enda lehel, mitte meie kataloogis.`,
     body: [
       `Samm 1 — vali programm. Kasuta filtreeritavat kataloogi (valdkond, kool, hind, maht) või tee avalehel 2-minutiline suunatest, mis pakub sulle sobivad programmid. Märgi kuni kolm ja võrdle neid kõrvuti.`,
       `Samm 2 — kontrolli eeldusi ja tähtaega. Vaata programmi lehelt, kas on vastuvõtu eeldusi (näiteks varasem kõrgharidus või töökogemus) ja millal on registreerimise tähtaeg ning õppe algus. Need on iga programmi juures kataloogis ja kooli lehel.`,
-      `Samm 3 — registreeru kooli lehel. Meie register suunab sind kooli enda registreerimislehele. Seal esitad andmed, valid rahastuse (ise või tööandja kaudu) ja kinnitad osaluse. Meie ei vahenda registreerumist ega salvesta sinu andmeid.`
+      `Samm 3 — registreeru kooli lehel. Meie kataloog suunab sind kooli enda registreerimislehele. Seal esitad andmed, valid rahastuse (ise või tööandja kaudu) ja kinnitad osaluse. Meie ei vahenda registreerumist ega salvesta sinu andmeid.`
     ],
     relatedLinks: [
       { label: "Registreerimine ja algusajad", href: "/registreerimine/" },
@@ -437,10 +437,10 @@ export const questions: QuestionEntry[] = [
     },
     shortAnswer:
       `Jah — paljud mikrokvalifikatsioonid on disainitud töötavale inimesele ja neid saab läbida veebis või hübriidõppes. ` +
-      `Registris on ${onlineOrBlendedCount} programmi ${programmeCount}-st veebi- või hübriidõppes (${onlineCount} täielikult veebis, ${blendedCount} hübriidis); enamik ülejäänutest toimub kohapeal. ` +
+      `Kataloogis on ${onlineOrBlendedCount} programmi ${programmeCount}-st veebi- või hübriidõppes (${onlineCount} täielikult veebis, ${blendedCount} hübriidis); enamik ülejäänutest toimub kohapeal. ` +
       `Õpe käib enamasti töö kõrvalt, sest maht on tüüpiliselt ${ectsRangeText} ühe kuni kahe semestri jooksul.`,
     body: [
-      `Õppevorm on iga programmi juures eraldi märgitud: veebis (kogu õpe internetis), hübriidõppes (osa veebis, osa kohapeal) või kohapeal. Meie registris on ${onlineCount} täielikult veebipõhist ja ${blendedCount} hübriidprogrammi — kokku ${onlineOrBlendedCount} programmi ${programmeCount}-st, mille saab läbida ilma iga kord kohale tulemata. Kohapeal toimub ${onsiteCount} programmi, sageli kompaktselt mõne sessioonina.`,
+      `Õppevorm on iga programmi juures eraldi märgitud: veebis (kogu õpe internetis), hübriidõppes (osa veebis, osa kohapeal) või kohapeal. Meie kataloogis on ${onlineCount} täielikult veebipõhist ja ${blendedCount} hübriidprogrammi — kokku ${onlineOrBlendedCount} programmi ${programmeCount}-st, mille saab läbida ilma iga kord kohale tulemata. Kohapeal toimub ${onsiteCount} programmi, sageli kompaktselt mõne sessioonina.`,
       `Töö kõrvalt õppimine on mikrokvalifikatsiooni üks peamisi eeliseid. Maht on tüüpiliselt ${ectsRangeText} (mediaan ${ectsMedian} EAP ≈ ${ectsMedian != null ? ectsMedian * 26 : 390} tundi õppija tööd kokku), mis jaguneb ühe kuni kahe semestri peale. See tähendab paari- kuni mõnetunnist nädalakoormust, mitte täiskohaga õpet.`,
       `Kui tahad just paindlikku õpet, filtreeri kataloogis õppevormi järgi ja vaata programmi lehelt täpne sessioonide rütm ning kas kohapealsed kohtumised on kohustuslikud. Lõplik info õppevormi ja ajakava kohta on alati kooli enda lehel.`
     ],
@@ -484,9 +484,9 @@ export const questions: QuestionEntry[] = [
       `EHIS-es on praegu ${ehisProgrammeCount} registreeritud mikrokvalifikatsiooni õppekava ${ehisProviderCount} pakkujalt; meie võrreldav kataloog koondab neist ${programmeCount} õppijale kasutatavat kirjet ja kuvab sobitatud ametlikud andmed otse EHIS-ist. ` +
       `EHIS-i peab Haridus- ja Teadusministeerium ning andmed on avaandmed.`,
     body: [
-      `EHIS (Eesti Hariduse Infosüsteem) on riiklik haridusandmete register, mida peab Haridus- ja Teadusministeerium. Kui mikrokvalifikatsiooni õppekava on EHIS-es registreeritud, tähendab see, et see on ametlikult kinnitatud õpe ja sellel on ametlik õppekavakood, kinnitatud maht (EAP) ning õpiväljundid.`,
-      `Meie register kasutab EHIS-i ametliku tõeallikana: iga sobitatud programmi nimi, EAP-maht, õppekeel ja ametlikud õpiväljundid pärinevad otse EHIS-ist (avaandmed, taaskasutatav viitega allikale). Nii ei tugine andmed üksnes kooli turunduslehele, vaid riiklikule registrile — see on usaldusväärsuse alus. EHIS-es on praegu ${ehisProgrammeCount} registreeritud mikrokvalifikatsiooni õppekava ${ehisProviderCount} pakkujalt; õppijale võrreldav kataloog koondab neist ${programmeCount} kasutatavat kirjet.`,
-      `Tunnustamine tööturul tuleneb just sellest ametlikust staatusest: tunnistus tõendab EHIS-es kinnitatud õppekava läbimist. Ülikooli mikrokraadi EAP-d on lisaks Euroopa ainepunktid (ECTS), mis on mõistetavad kogu Euroopas ja sageli hiljem kraadiõppes arvestatavad.`
+      `EHIS (Eesti Hariduse Infosüsteem) on riiklik haridusandmete kataloog, mida peab Haridus- ja Teadusministeerium. Kui mikrokvalifikatsiooni õppekava on EHIS-es registreeritud, tähendab see, et see on ametlikult kinnitatud õpe ja sellel on ametlik õppekavakood, kinnitatud maht (EAP) ning õpiväljundid.`,
+      `Meie kataloog kasutab EHIS-i ametliku tõeallikana: iga sobitatud programmi nimi, EAP-maht, õppekeel ja ametlikud õpiväljundid pärinevad otse EHIS-ist (avaandmed, taaskasutatav viitega allikale). Nii ei tugine andmed üksnes kooli turunduslehele, vaid riiklikule registrile — see on usaldusväärsuse alus. EHIS-es on praegu ${ehisProgrammeCount} registreeritud mikrokvalifikatsiooni õppekava ${ehisProviderCount} pakkujalt; õppijale võrreldav kataloog koondab neist ${programmeCount} kasutatavat kirjet.`,
+      `Ametlik staatus tähendab, et tunnistus tõendab EHIS-es kinnitatud õppekava läbimist; kuidas tööandja seda hindab, otsustab tööandja ise. Ülikooli mikrokraadi EAP-d on lisaks Euroopa ainepunktid (ECTS), mis on mõistetavad kogu Euroopas ja sageli hiljem kraadiõppes arvestatavad.`
     ],
     relatedLinks: [
       { label: "Kuidas me andmeid koostame", href: "/andmed/" },
@@ -512,7 +512,7 @@ export const questions: QuestionEntry[] = [
     body: [
       `Peamine vahe on formaalsuses ja tõendatuses. Mikrokvalifikatsioon on registreeritud õppekava: sellel on kinnitatud maht Euroopa ainepunktides (EAP/ECTS), määratletud õpiväljundid ja lõpus tunnistus, mis kinnitab nende saavutamist. Tavaline täiendkoolitus võib olla ühepäevane seminar või lühikursus, mille väljundid pole alati ametlikult kinnitatud.`,
       `See teeb mikrokvalifikatsioonist tugevama signaali tööturul: tööandja näeb täpselt, millise oskuse ja millisel tasemel oled tõendanud, ja see on Euroopas ECTS-ina mõistetav. Ülikooli mikrokraadi EAP-sid saab lisaks paljudes ülikoolides hiljem tasemeõppes arvestada — täiendkoolitus seda võimalust üldjuhul ei anna.`,
-      `Vali mikrokvalifikatsioon, kui tahad struktureeritud, tõendatud ja ülekantavat õpet, mis CV-s selgelt loeb. Vali lühike täiendkoolitus, kui vajad kiiret sissejuhatust ilma formaalse tunnistuseta. Meie register koondab just mikrokvalifikatsioone ja mikrokraade koos nende ametlike andmetega.`
+      `Vali mikrokvalifikatsioon, kui tahad struktureeritud, tõendatud ja ülekantavat õpet, mis CV-s selgelt loeb. Vali lühike täiendkoolitus, kui vajad kiiret sissejuhatust ilma formaalse tunnistuseta. Meie kataloog koondab just mikrokvalifikatsioone ja mikrokraade koos nende ametlike andmetega.`
     ],
     relatedLinks: [
       { label: "Mis on mikrokvalifikatsioon?", href: "/mis-on-mikrokvalifikatsioon/" },
@@ -529,7 +529,7 @@ export const questions: QuestionEntry[] = [
       `Lõpliku otsuse tee programmi õpiväljundite ja algusaja põhjal kooli enda lehel.`,
     body: [
       `Alusta eesmärgist: kas tahad edutamist, valdkonnavahetust, kindla oskuse tõendamist või sammu kraadiõppe poole. Eesmärk määrab, kas vajad ülikooli mikrokraadi (annab ülekantavad EAP-d) või praktilisemat koolitusettevõtte mikrokvalifikatsiooni. Vaata programmi õpiväljundeid — need ütlevad täpselt, mida pärast õpet oskad.`,
-      `Seejärel kontrolli mahtu ja vormi. Registri programmid on tüüpiliselt ${ectsRangeText} (mediaan ${ectsMedian} EAP) ja saadaval veebis, hübriidis või kohapeal — vali see, mis sinu töö kõrvale mahub. Kasuta filtreeritavat kataloogi, et kitsendada valik valdkonna, kooli, hinna ja õppevormi järgi, ja võrdle kuni kolme programmi kõrvuti.`,
+      `Seejärel kontrolli mahtu ja vormi. Kataloogi programmid on tüüpiliselt ${ectsRangeText} (mediaan ${ectsMedian} EAP) ja saadaval veebis, hübriidis või kohapeal — vali see, mis sinu töö kõrvale mahub. Kasuta filtreeritavat kataloogi, et kitsendada valik valdkonna, kooli, hinna ja õppevormi järgi, ja võrdle kuni kolme programmi kõrvuti.`,
       `Lõpuks vaata nõudlust ja tähtaegu. Meie valimisteejuht ja karjäärilehed seovad programmid ametite ja tööturu signaalidega, et saaksid valida tõendatud nõudluse järgi. Kontrolli registreerimise tähtaega ja õppe algust ning tee lõplik otsus kooli enda lehel, kus on siduv info.`
     ],
     relatedLinks: [
@@ -550,11 +550,11 @@ export const questions: QuestionEntry[] = [
       stacked: "/diagrams/stacked/valdkonnad.svg"
     },
     shortAnswer:
-      `Registri ${programmeCount} programmi jagunevad ${fieldCountExclMuu} valdkonna vahel ja enim pakutavad on ${etList(topFields.map((f) => `${f.field} (${f.count} programmi)`))}. ` +
+      `Kataloogi ${programmeCount} programmi jagunevad ${fieldCountExclMuu} valdkonna vahel ja enim pakutavad on ${etList(topFields.map((f) => `${f.field} (${f.count} programmi)`))}. ` +
       `Need kolm katavad suure osa kogu valikust. ` +
       `Iga valdkonna programme saab vaadata eraldi valdkonnalehel koos mahu, hinna ja koolidega.`,
     body: [
-      `Valdkond näitab, mis teemal oskust õpetatakse. Meie registris on ${fieldCountExclMuu} sisulist valdkonda ja programmide arv jaguneb nende vahel ebaühtlaselt: ${etList(topFields.map((f) => `${f.field} on ${f.count} programmi`))}. Need on praegu kõige laiema valikuga teemad.`,
+      `Valdkond näitab, mis teemal oskust õpetatakse. Meie kataloogis on ${fieldCountExclMuu} sisulist valdkonda ja programmide arv jaguneb nende vahel ebaühtlaselt: ${etList(topFields.map((f) => `${f.field} on ${f.count} programmi`))}. Need on praegu kõige laiema valikuga teemad.`,
       `Suur valik ühes valdkonnas tähendab tavaliselt suuremat tööturu nõudlust ja rohkem koole, kes seda pakuvad — see annab sulle rohkem võimalusi mahu, hinna ja õppevormi järgi valida. Väiksema valikuga valdkonnad (näiteks õigus või energeetika) on kitsamad, kuid sageli väga spetsiifilised ja sihitud.`,
       `Vali valdkond, mis seostub sinu praeguse või soovitud rolliga, ja vaata selle valdkonnalehelt kõik programmid kõrvuti. Kui sa pole kindel, milline valdkond sobib, aitab avalehe suunatest või valimisteejuht oskuse ja eesmärgi järgi õige teema leida.`
     ],

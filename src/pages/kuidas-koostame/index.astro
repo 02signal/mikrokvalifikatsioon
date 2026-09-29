@@ -27,8 +27,8 @@ const schema = {
     },
     {
       "@type": "Article",
-      headline: "Kuidas me mikrokvalifikatsioonide registrit koostame",
-      description: "Mikrokvalifikatsioon.ee metoodika ja sõltumatus: allikad, kontrollkuupäevad, neutraalsus (kõik programmid samade reeglite järgi, lisamine ei maksa midagi), paranduste protsess.",
+      headline: "Kuidas me mikrokvalifikatsioonide kataloogi koostame",
+      description: "Mikrokvalifikatsioon.ee metoodika ja allikad: allikad, kontrollkuupäevad, neutraalsus (kõik programmid samade reeglite järgi, lisamine ei maksa midagi), paranduste protsess.",
       inLanguage: "et",
       datePublished: "2026-06-13",
       dateModified: catalogUpdatedAt,
@@ -44,12 +44,12 @@ const schema = {
 <html lang="et">
   <head>
     <Seo
-      title="Kuidas me registrit koostame | Metoodika ja sõltumatus"
-      description="Mikrokvalifikatsioon.ee metoodika: andmed pärinevad pakkujate avalikelt lehtedelt, iga kirje kannab kontrollkuupäeva, tundmatut ei leiutata. Register on neutraalne ja sõltumatu — kõik programmid samade reeglite järgi."
+      title="Kuidas me kataloogi koostame | Metoodika ja allikad"
+      description="Mikrokvalifikatsioon.ee metoodika: andmed pärinevad pakkujate avalikelt lehtedelt, iga kirje kannab kontrollkuupäeva, tundmatut ei leiutata. Kõik programmid on kirjas samade reeglite järgi."
       canonicalPath="/kuidas-koostame/"
       ogType="article"
-      ogTitle="Kuidas me registrit koostame — metoodika ja sõltumatus"
-      ogDescription="Allikad, kontrollkuupäevad, neutraalsus ja paranduste protsess. Sõltumatu aggregaator, mitte ametlik riiklik register."
+      ogTitle="Kuidas me kataloogi koostame — metoodika ja allikad"
+      ogDescription="Allikad, kontrollkuupäevad, neutraalsus ja paranduste protsess. Koondaja, mitte ametlik riiklik register."
       jsonLd={schema}
     />
   </head>
@@ -59,10 +59,10 @@ const schema = {
     <main class="report-page simple-report">
       <section class="report-hero simple-report-hero">
         <div class="section-inner">
-          <span class="eyebrow">Metoodika ja sõltumatus</span>
-          <h1>Kuidas me registrit koostame — ja miks sellele võib tugineda.</h1>
+          <span class="eyebrow">Metoodika ja allikad</span>
+          <h1>Kuidas me kataloogi koostame — ja miks sellele võib tugineda.</h1>
           <p>
-            Mikrokvalifikatsioon.ee on sõltumatu register ja teejuht. Kogume Eesti mikrokvalifikatsioonid
+            Mikrokvalifikatsioon.ee on kataloog ja teejuht. Kogume Eesti mikrokvalifikatsioonid
             ja mikrokraadid ühte kohta, et õppija, ettevõte või nõustaja näeks korraga, mida õpid,
             kui kaua kestab, mis maksab ja kes selle kinni maksab. Siin on lahti seletatud, kuidas
             andmed sünnivad ja mille poolest oleme neutraalsed.
@@ -92,7 +92,7 @@ const schema = {
                 <p>
                   Hinnad, mahud ja vastuvõtud muutuvad. Seepärast kannab iga kirje kontrollkuupäeva
                   (<code>sourceCheckedAt</code>) ja me värskendame andmeid korrapäraselt. Praegu on
-                  registris {catalog.length} programmi {providers.length} koolist ja koolitajalt.
+                  kataloogis {catalog.length} programmi {providers.length} koolist ja koolitajalt.
                 </p>
               </div>
             </article>
@@ -117,10 +117,10 @@ const schema = {
             <h2>Kõik programmid samade reeglite järgi.</h2>
           </div>
           <ul class="check">
-            <li><strong>Avatud kõigile.</strong> Registrisse lisamine ei maksa midagi ja ei sõltu sellest, kas pakkuja on meiega kuidagi seotud.</li>
+            <li><strong>Avatud kõigile.</strong> Kataloogi lisamine ei maksa midagi ja ei sõltu sellest, kas pakkuja on meiega kuidagi seotud.</li>
             <li><strong>Ühtne kohtlemine.</strong> Ükski programm ei osta endale paremat kohta ega esiletõstmist — järjestus ja filtrid tulenevad andmetest, mitte tasust.</li>
-            <li><strong>Sõltumatu aggregaator.</strong> Me ei ole riiklik register ega ametlik tunnustaja. Oleme kõrvalseisja, kes koondab avaliku info ühte kohta.</li>
-            <li><strong>Läbipaistev operaator.</strong> Registrit peab Ettevõtluskeskus OÜ — leiad meie nime ja kontaktid igalt lehelt.</li>
+            <li><strong>Koondaja, mitte ametlik allikas.</strong> Me ei ole riiklik register ega ametlik tunnustaja. Koondame avaliku info ühte kohta ja viitame alati algallikale.</li>
+            <li><strong>Läbipaistev operaator.</strong> Kataloogi peab Ettevõtluskeskus OÜ — leiad meie nime ja kontaktid igalt lehelt.</li>
           </ul>
         </div>
       </section>
@@ -132,7 +132,7 @@ const schema = {
             <h2>Märkasid viga või puuduvat programmi?</h2>
           </div>
           <p>
-            Register paraneb tagasiside abil. Kui näed aegunud hinda, valet mahtu või puuduvat programmi,
+            Kataloog paraneb tagasiside abil. Kui näed aegunud hinda, valet mahtu või puuduvat programmi,
             anna teada — parandame allika põhjal ja uuendame kontrollkuupäeva. Vaikseid muudatusi ilma
             allikata me ei tee.
           </p>
@@ -153,7 +153,7 @@ const schema = {
         <div class="section-inner contact">
           <div>
             <span class="kicker">Edasi</span>
-            <h2>Vaata registrit, andmeid või lisa oma programm.</h2>
+            <h2>Vaata kataloogi, andmeid või lisa oma programm.</h2>
             <div class="inline-actions">
               <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="metoodika_kataloog">Ava kataloog</a>
               <a class="btn btn-secondary" href="/andmed/" data-track-event="cta_click" data-track-label="metoodika_andmed">Turg andmetes</a>

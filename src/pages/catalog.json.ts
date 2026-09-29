@@ -8,12 +8,12 @@ export async function GET() {
       {
         site: "Mikrokvalifikatsioon.ee",
         description:
-          "Eesti mikrokvalifikatsioonide ja mikrokraadide avalik register. Andmed pärinevad koolide avalikelt lehtedelt; tundmatu väärtus on null.",
+          "Eesti mikrokvalifikatsioonide ja mikrokraadide avalik kataloog. Andmed pärinevad koolide avalikelt lehtedelt; tundmatu väärtus on null.",
         updatedAt: catalogUpdatedAt,
         checkedAt: catalogCheckedAt,
         sourceFeedHash: catalogContentHash,
         importantCaveat:
-          "See register on info koondamiseks. Hinnad, mahud ja vastuvõtud muutuvad — ametlik info on iga kooli enda lehel (iga kirje url-väli).",
+          "See kataloog on info koondamiseks. Hinnad, mahud ja vastuvõtud muutuvad — ametlik info on iga kooli enda lehel (iga kirje url-väli).",
         count: catalog.length,
         // pageUrl = programmi siseleht; url = kooli ametlik leht.
         programs: catalog.map((entry) => {

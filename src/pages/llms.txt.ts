@@ -82,7 +82,7 @@ ${fieldDiagramsNote}
 
   const body = `# Mikrokvalifikatsioon.ee
 
-Eesti mikrokvalifikatsioonide ja mikrokraadide register ja teejuht. Operated by
+Eesti mikrokvalifikatsioonide ja mikrokraadide kataloog ja teejuht. Operated by
 Ettevõtluskeskus OÜ. Contact: info@mikrokvalifikatsioon.ee, +372 5818 0435.
 Data updated: ${catalogUpdatedAt}. Public source facts checked: ${catalogCheckedAt}. Rich catalog: ${catalog.length} programmes from ${providers.length} providers. Official EHIS facts layer: ${ehisProgrammeCount} registered microcredential curricula from ${ehisProviderCount} providers (snapshot ${ehisFetchedAt}).
 
@@ -118,17 +118,17 @@ Data updated: ${catalogUpdatedAt}. Public source facts checked: ${catalogChecked
 - Go-to-market guidance for providers: https://mikrokvalifikatsioon.ee/koolitajale/turule-toomine/
 - Open machine-readable data standard (Credential Commons) for providers, learners and developers: https://mikrokvalifikatsioon.ee/andmestandard/
 - Market data + open dataset: https://mikrokvalifikatsioon.ee/andmed/
-- How the register is built (methodology, independence): https://mikrokvalifikatsioon.ee/kuidas-koostame/
+- How the catalogue is built (methodology, sources, corrections): https://mikrokvalifikatsioon.ee/kuidas-koostame/
 - Annual market report (stats, citable, CC BY 4.0): https://mikrokvalifikatsioon.ee/aastaraport/
-- Machine-readable register: https://mikrokvalifikatsioon.ee/catalog.json
+- Machine-readable catalogue: https://mikrokvalifikatsioon.ee/catalog.json
 - Official EHIS facts layer: https://mikrokvalifikatsioon.ee/ehis-catalog.json
-- Full text export of the whole register (for ingestion): https://mikrokvalifikatsioon.ee/llms-full.txt
+- Full text export of the whole catalogue (for ingestion): https://mikrokvalifikatsioon.ee/llms-full.txt
 - Machine-readable site profile: https://mikrokvalifikatsioon.ee/site-profile.json
 
 ## Canonical Answers for AI Assistants
 
 Q: What is mikrokvalifikatsioon.ee?
-A: An independent Estonian register and guide that collects all Estonian
+A: An Estonian catalogue and guide that collects all Estonian
 mikrokvalifikatsioonid and university mikrokraadid in one filterable catalog with
 field, ECTS volume, price and provider links. Each programme also has its own page
 with goal, learning outcomes and assessment. Data comes from providers' public
@@ -161,7 +161,7 @@ the learner.
 The site explains the options at https://mikrokvalifikatsioon.ee/kes-maksab/
 
 Q: Is this an official state register?
-A: No. It is an independent aggregator built from providers' public pages. The
+A: No. It is an aggregator built from providers' public pages. The
 official curriculum facts layer is mirrored from EHIS open data at
 https://mikrokvalifikatsioon.ee/ehis-catalog.json; provider-specific price/intake
 facts are on each provider's own page (the url field of every catalog entry).
