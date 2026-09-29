@@ -7,12 +7,14 @@
     "eesti-kunstiakadeemia-museoloogia-mikrokraad-vs-tallinna-ulikool-sotsiaaltoo-ja-sotsiaalpoliitika",
     "tallinna-tehnikakorgkool-aja-ja-rahajuhtimine-mudelprojekteerimises-vs-taltech-hooneautomaatika-ja-tehnosusteemid",
     "tallinna-ulikool-andragoogika-alused-2026-2027-vs-tartu-ulikool-mikrokraadiprogramm-ruumiline-planeerimine-ja-keskkond",
-    "tallinna-ulikool-hariduspsuhholoogia-klassiruumis-vs-taltech-ariprotsessid-digitaaluhiskonnas",
-    "tallinna-ulikool-hariduspsuhholoogia-klassiruumis-vs-taltech-mehitamata-susteemid-2",
-    "tallinna-ulikool-hariduspsuhholoogia-klassiruumis-vs-taltech-tehisintellekt-andmekaeve-ja-masinope",
-    "tallinna-ulikool-hariduspsuhholoogia-klassiruumis-vs-taltech-tehisintellekt-andmekaeve-ja-masinope-2",
     "tallinna-ulikool-infotehnoloogia-haldamine-vs-taltech-it-juhtimine-ja-ariarhitektuur",
     "taltech-raamatupidamise-ja-rahanduse-kaasaegsed-teemad-labi-esg-ja-finantsinnovatsiooni-prisma-vs-tartu-ulikool-teabehaldus-teoorias-ja-praktikas",
     "taltech-teenusedisain-vs-tartu-ulikool-videomangude-narratiivid"
+  ],
+  "excluded": [
+    {
+      "prefix": "tallinna-ulikool-hariduspsuhholoogia-klassiruumis-vs-",
+      "reason": "võrdlusleht (pos 8–9) konkureerib programmilehega /kataloog/tallinna-ulikool-hariduspsuhholoogia-klassiruumis/ (pos 3,2, CTR 17,9%) — kannibaliseerimine, SEO/GEO plaan 29.09 punkt 6"
+    }
   ]
 }
