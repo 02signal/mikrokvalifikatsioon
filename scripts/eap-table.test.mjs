@@ -15,10 +15,15 @@ test("1 EAP = 26 tundi, nagu lehe enda tekst", () => {
 
 test("tabeli tunnid ja nädalakoormus on arvutatud, mitte sisse kirjutatud", () => {
   assert.deepEqual(eapRows.map((r) => r.eap), [6, 12, 20, 30]);
+  for (let i = 1; i < eapRows.length; i++) {
+    assert.ok(eapRows[i].hoursPerWeekOneSemester > eapRows[i - 1].hoursPerWeekOneSemester);
+    assert.ok(eapRows[i].hoursPerWeekTwoSemesters > eapRows[i - 1].hoursPerWeekTwoSemesters);
+  }
   for (const r of eapRows) {
     assert.equal(r.hours, r.eap * 26);
-    assert.equal(r.weeks, r.semesters * 20);
-    assert.ok(Math.abs(r.hoursPerWeek - r.hours / r.weeks) < 0.05);
+    assert.ok(Math.abs(r.hoursPerWeekOneSemester - r.hours / (1 * 20)) < 0.05);
+    assert.ok(Math.abs(r.hoursPerWeekTwoSemesters - r.hours / (2 * 20)) < 0.05);
+    assert.ok(r.hoursPerWeekTwoSemesters < r.hoursPerWeekOneSemester);
   }
 });
 

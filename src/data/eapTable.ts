@@ -12,23 +12,23 @@ export const WEEKS_PER_SEMESTER = 20;
 export type EapRow = {
   eap: number;
   hours: number;
-  semesters: number;
-  weeks: number;
-  hoursPerWeek: number;
+  /** Keskmine tundide arv nädalas, kui maht jaotub ühele semestrile. */
+  hoursPerWeekOneSemester: number;
+  /** Sama kahele semestrile. */
+  hoursPerWeekTwoSemesters: number;
 };
 
-/** Lühemad mahud (6, 12) ühe semestriga, mahukamad (20, 30) kahega — nagu lehe muu tekst. */
-const ROWS: Array<{ eap: number; semesters: number }> = [
-  { eap: 6, semesters: 1 },
-  { eap: 12, semesters: 1 },
-  { eap: 20, semesters: 2 },
-  { eap: 30, semesters: 2 }
-];
+const perWeek = (hours: number, semesters: number): number =>
+  Math.round((hours / (semesters * WEEKS_PER_SEMESTER)) * 10) / 10;
 
-export const eapRows: EapRow[] = ROWS.map(({ eap, semesters }) => {
+export const eapRows: EapRow[] = [6, 12, 20, 30].map((eap) => {
   const hours = eap * HOURS_PER_EAP;
-  const weeks = semesters * WEEKS_PER_SEMESTER;
-  return { eap, hours, semesters, weeks, hoursPerWeek: Math.round((hours / weeks) * 10) / 10 };
+  return {
+    eap,
+    hours,
+    hoursPerWeekOneSemester: perWeek(hours, 1),
+    hoursPerWeekTwoSemesters: perWeek(hours, 2)
+  };
 });
 
 /** Kataloogi EAP-vahemik, mille programme iga tabelirea all näidatakse. */
