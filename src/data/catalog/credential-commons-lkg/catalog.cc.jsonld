@@ -24,9 +24,10 @@
       "field": "IT ja andmed",
       "language": "et",
       "learningOutcome": [
-        "Mikrokraadi edukalt läbinu teab digitoote elukaare erinevaid etappe ja oskab põhjendada digitoote elukaarega seotud ressursivajadust ja ärilisi otsuseid",
+        "teab digitoote elukaare erinevaid etappe ja oskab põhjendada digitoote elukaarega seotud ressursivajadust ja ärilisi otsuseid",
         "koostab digitoote strateegial tugineva teekaardi, mis vastab ettevõtte eesmärkidele",
-        "mõistab agiilsete arendusmetoodikate põhimõtteid, oskab valida neist sobivaid ja"
+        "mõistab agiilsete arendusmetoodikate põhimõtteid, oskab valida neist sobivaid ja neid vajadusel rakendada",
+        "jälgib regulaarselt digitootega seotud andmeid, analüüsib kasutajate tagasisidet toote parendamiseks ja teeb nendel tuginevaid juhtimisotsuseid"
       ],
       "name": "Digitaalsete toodete protsesside ja operatsioonide juhtimine",
       "provider": {
@@ -39,12 +40,13 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/ebs-digitoodete-eestvedamine-ja-muudatuste-juhtimine/",
       "@type": "MicroCredential",
       "ectsCredits": 15,
-      "field": "IT ja andmed",
+      "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
-        "Portfelli strateegiline juhtimine: kuidas kujundada ja juhtida toodete ja tehnoloogia tervikpilti, mis toetab organisatsiooni eesmärke",
-        "Tehnoloogia ja äri sidumine: kuidas muuta tehnoloogilised valikud äriliseks väärtuseks ja teha teadlikke investeerimisotsuseid",
-        "Innovatsioonikultuuri kujundamine: kuidas luua keskkon"
+        "teab kuidas juhtida organisatsiooni terviklikku digitoodete portfelli, tagada toodete vahelist sünergiat ja saavutada kooskõla organisatsiooni pikaajaliste strateegiliste eesmärkidega",
+        "tunneb ära uute tehnoloogiate võimalikud kasutusvaldkonnad",
+        "mõistab organisatsioonikultuuri olemust ja oskab toetada organisatsioonis uuendustele avatud, usaldusliku ja kaasava organisatsioonikultuuri kujundamist, mis julgustab inimesi eksperimenteerima ja arenema",
+        "suudab arendada ja kujundada ettevõtte digitoodete portfelli, võttes arvesse digitoodete mõju kolmel tasemel: üksikisik, organisatsioon ja ühiskond"
       ],
       "name": "Digitoodete eestvedamine ja muudatuste juhtimine",
       "provider": {
@@ -75,14 +77,14 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/ebs-digiturundus-tehisintellekti-ajastul/",
       "@type": "MicroCredential",
       "ectsCredits": 15,
-      "field": "majandus ja juhtimine",
-      "language": "en",
+      "field": "IT ja andmed",
+      "language": "et",
       "learningOutcome": [
-        "Analüüsib tehisintellekti võimalusi ja kujundab andmepõhiseid turundusstrateegiaid",
-        "Rakendab ja optimeerib SEO-d, Google Adsi ja sotsiaalmeedia kampaaniaid",
-        "Tõlgendab ja visualiseerib andmeid GA4 ja Looker Studioga",
-        "Koostab kanalipõhiseid kampaaniaid sihtrühma ja eesmärkide järgi",
-        "Hindab ja kohandab strateegiaid turu ja tehnoloogia arenguga"
+        "Analüüsib tehisintellekti-põhiseid võimalusi digiturunduses ja kujundab andmepõhiseid turundusstrateegiaid",
+        "Rakendab ja optimeerib SEO-d, Google Ads'i ja sotsiaalmeedia reklaamikampaaniaid nähtavuse ja konversioonide suurendamiseks",
+        "Tõlgendab ja visualiseerib andmeid kasutades Google Analytics 4 (GA4) ja Looker Studiot strateegiliste otsuste tegemiseks",
+        "Koostab ja kavandab kanalipõhiseid turunduskampaaniaid, arvestades sihtrühma, eesmärke ning digitaalse keskkonna võimalusi",
+        "Hindab ja kohandab digiturunduse strateegiaid vastavalt turu ja tehnoloogia arengutele"
       ],
       "name": "Digiturundus tehisintellekti ajastul",
       "provider": {
@@ -156,23 +158,6 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/ebs-juhtimise-ja-eestvedamise-abc/"
     },
     {
-      "@id": "https://mikrokvalifikatsioon.ee/kataloog/ebs-strateegiline-finantsjuhtimine-tooriistad-analuus-ja-otsuste-tegemine/",
-      "@type": "MicroCredential",
-      "ectsCredits": 15,
-      "field": "IT ja andmed",
-      "language": "et",
-      "learningOutcome": [
-        "Hangib ja töötleb finants- ja majandusandmeid erinevatest allikatest, kasutades statistilisi ja programmeerimistööriistu. (Rakendamine, ülekantavad oskused)",
-        "Koostab ja rakendab finantsmudeleid, mis integreerivad eeldused ja prognoosid, ning toetavad strateegilist finantsotsuste tegemis"
-      ],
-      "name": "Strateegiline finantsjuhtimine: tööriistad, analüüs ja otsuste tegemine",
-      "provider": {
-        "@type": "Organization",
-        "name": "EBS"
-      },
-      "url": "https://mikrokvalifikatsioon.ee/kataloog/ebs-strateegiline-finantsjuhtimine-tooriistad-analuus-ja-otsuste-tegemine/"
-    },
-    {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/ebs-teenusedisain-turunduses/",
       "@type": "MicroCredential",
       "ectsCredits": 12,
@@ -187,6 +172,22 @@
         "name": "EBS"
       },
       "url": "https://mikrokvalifikatsioon.ee/kataloog/ebs-teenusedisain-turunduses/"
+    },
+    {
+      "@id": "https://mikrokvalifikatsioon.ee/kataloog/ebs-www-ebs-ee-taiendusope-mikrokraadid-juht-organisatsioon-ja-meeskond/",
+      "@type": "MicroCredential",
+      "ectsCredits": 3,
+      "field": "haridus",
+      "language": "et",
+      "learningOutcome": [
+        "Mikrokraadi programmi lõpetajad"
+      ],
+      "name": "Juht, organisatsioon ja meeskond",
+      "provider": {
+        "@type": "Organization",
+        "name": "EBS"
+      },
+      "url": "https://mikrokvalifikatsioon.ee/kataloog/ebs-www-ebs-ee-taiendusope-mikrokraadid-juht-organisatsioon-ja-meeskond/"
     },
     {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-ettevotluskorgkool-mainor-ettevotluse-mikrokraad-tallinnas/",
@@ -244,15 +245,8 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-kunstiakadeemia-arhitektuuri-konserveerimine-ja-restaureerimine/",
       "@type": "MicroCredential",
       "ectsCredits": 23,
-      "field": "ehitus",
+      "field": "disain ja loovus",
       "language": "et",
-      "learningOutcome": [
-        "Omab alusteadmisi konserveerimis- ja restaureerimisotsuste tegemiseks",
-        "Tunneb pärandi tehnilise seisundi uurimis- ja hindamismeetodeid",
-        "Oskab dokumenteerida ja kavandada hooldust",
-        "Tunneb ajaloolisi ehituspõhimõtteid, interjööre ja parke",
-        "Omab praktilisi restaureerimisoskusi"
-      ],
       "name": "Arhitektuuri konserveerimine ja restaureerimine",
       "provider": {
         "@type": "Organization",
@@ -264,14 +258,8 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-kunstiakadeemia-baltisaksa-kultuuriparand/",
       "@type": "MicroCredential",
       "ectsCredits": 21,
-      "field": "muu",
+      "field": "disain ja loovus",
       "language": "et",
-      "learningOutcome": [
-        "Saab interdistsiplinaarseid teadmisi baltisaksa kultuuri ajaloost",
-        "Seostab baltisaksa kultuuri ja pärandit tänapäeva teemadega",
-        "Omandab praktilisi oskusi praktilise suunitlusega ainete kaudu",
-        "Kasutab võimalusi baltisaksa kultuuri uurimistulemuste rakendamiseks"
-      ],
       "name": "Baltisaksa kultuuripärand",
       "provider": {
         "@type": "Organization",
@@ -283,13 +271,8 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-kunstiakadeemia-disain-hariduses-ja-haridusdisain/",
       "@type": "MicroCredential",
       "ectsCredits": 16,
-      "field": "disain ja loovus",
+      "field": "haridus",
       "language": "et",
-      "learningOutcome": [
-        "Teab kaasaegse disaini ja tarbekunsti õpetamise põhimõtteid",
-        "Analüüsib ja rakendab disainmõtlemisel põhinevat uuenduslikku õpikäsitust",
-        "Rakendab loovat, jätkusuutlikku ja kaasavat mõtteviisi"
-      ],
       "name": "Disain hariduses ja haridusdisain",
       "provider": {
         "@type": "Organization",
@@ -301,15 +284,9 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-kunstiakadeemia-museoloogia-mikrokraad/",
       "@type": "MicroCredential",
       "ectsCredits": 24,
-      "field": "muu",
+      "field": "disain ja loovus",
       "language": "et",
-      "learningOutcome": [
-        "Omab ülevaadet muuseumide kujunemisloost Eestis ja maailmas",
-        "Tunneb tänapäevaseid teoreetilisi käsitlusi muuseumidest",
-        "Analüüsib kriitiliselt muuseumide tegevust ja näitusi",
-        "Omab esmaseid oskusi kogude, haridusprogrammide ja näituste kureerimise alal"
-      ],
-      "name": "Museoloogia mikrokraad",
+      "name": "Museoloogia",
       "provider": {
         "@type": "Organization",
         "name": "Eesti Kunstiakadeemia"
@@ -320,9 +297,9 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-aiandus-iluaiandus/",
       "@type": "MicroCredential",
       "ectsCredits": 11,
-      "field": "muu",
+      "field": "haridus",
       "language": "et",
-      "name": "Aiandus (iluaiandus)",
+      "name": "Mikrokraad \"Aiandus\" (iluaiandus)",
       "provider": {
         "@type": "Organization",
         "name": "Eesti Maaülikool"
@@ -333,9 +310,9 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-baasteadmisi-raamatupidamisest-ja-rahandusest/",
       "@type": "MicroCredential",
       "ectsCredits": 12,
-      "field": "majandus ja juhtimine",
+      "field": "haridus",
       "language": "et",
-      "name": "Baasteadmisi raamatupidamisest ja rahandusest",
+      "name": "Mikrokraad \"Baasteadmisi raamatupidamisest ja rahandusest\"",
       "provider": {
         "@type": "Organization",
         "name": "Eesti Maaülikool"
@@ -345,10 +322,10 @@
     {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-ergonoomikaline-hindamine-ja-sekkumine-tookohtadel/",
       "@type": "MicroCredential",
-      "ectsCredits": 15,
-      "field": "terviseteadus",
+      "ectsCredits": 5,
+      "field": "haridus",
       "language": "et",
-      "name": "Ergonoomikaline hindamine ja sekkumine töökohtadel",
+      "name": "Mikrokraad \"Ergonoomikaline hindamine ja sekkumine töökohtadel\"",
       "provider": {
         "@type": "Organization",
         "name": "Eesti Maaülikool"
@@ -361,7 +338,7 @@
       "ectsCredits": 17,
       "field": "muu",
       "language": "et",
-      "name": "Keskkonnakorraldus ja kliimapoliitika",
+      "name": "Mikrokraad \"Keskkonnakorraldus ja kliimapoliitika\"",
       "provider": {
         "@type": "Organization",
         "name": "Eesti Maaülikool"
@@ -372,9 +349,9 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-keskkonnakorralduse-meetmed/",
       "@type": "MicroCredential",
       "ectsCredits": 18,
-      "field": "muu",
+      "field": "haridus",
       "language": "et",
-      "name": "Keskkonnakorralduse meetmed",
+      "name": "Mikrokraad \"Keskkonnakorralduse meetmed\"",
       "provider": {
         "@type": "Organization",
         "name": "Eesti Maaülikool"
@@ -382,51 +359,12 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-keskkonnakorralduse-meetmed/"
     },
     {
-      "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-keskkonnasaastlik-taimekasvatus-ja-mahetootmine/",
-      "@type": "MicroCredential",
-      "ectsCredits": 9,
-      "field": "muu",
-      "language": "et",
-      "name": "Keskkonnasäästlik taimekasvatus ja mahetootmine",
-      "provider": {
-        "@type": "Organization",
-        "name": "Eesti Maaülikool"
-      },
-      "url": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-keskkonnasaastlik-taimekasvatus-ja-mahetootmine/"
-    },
-    {
-      "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-maastiku-kujundus-ehitus-ja-esitlus/",
-      "@type": "MicroCredential",
-      "ectsCredits": 17,
-      "field": "disain ja loovus",
-      "language": "et",
-      "name": "Maastiku kujundus, ehitus ja esitlus",
-      "provider": {
-        "@type": "Organization",
-        "name": "Eesti Maaülikool"
-      },
-      "url": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-maastiku-kujundus-ehitus-ja-esitlus/"
-    },
-    {
-      "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-maastiku-planeerimine-hindamine-ja-kaitse/",
-      "@type": "MicroCredential",
-      "ectsCredits": 23,
-      "field": "muu",
-      "language": "et",
-      "name": "Maastiku planeerimine, hindamine ja kaitse",
-      "provider": {
-        "@type": "Organization",
-        "name": "Eesti Maaülikool"
-      },
-      "url": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-maastiku-planeerimine-hindamine-ja-kaitse/"
-    },
-    {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-taimekahjustajad-ja-nende-torje/",
       "@type": "MicroCredential",
       "ectsCredits": 13,
-      "field": "muu",
+      "field": "haridus",
       "language": "et",
-      "name": "Taimekahjustajad ja nende tõrje",
+      "name": "Mikrokraad \"Taimekahjustajad ja nende tõrje\"",
       "provider": {
         "@type": "Organization",
         "name": "Eesti Maaülikool"
@@ -436,10 +374,10 @@
     {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-taimsete-toiduainete-tehnoloogia-pohialused/",
       "@type": "MicroCredential",
-      "ectsCredits": 14,
-      "field": "tehnika ja tootmine",
+      "ectsCredits": 2,
+      "field": "majandus ja juhtimine",
       "language": "et",
-      "name": "Taimsete toiduainete tehnoloogia põhialused",
+      "name": "Mikrokraad \"Taimsete toiduainete tehnoloogia põhialused\"",
       "provider": {
         "@type": "Organization",
         "name": "Eesti Maaülikool"
@@ -449,10 +387,10 @@
     {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-maaulikool-toiduainete-vaikekaitlemise-pohialused/",
       "@type": "MicroCredential",
-      "ectsCredits": 22,
-      "field": "tehnika ja tootmine",
+      "ectsCredits": 4,
+      "field": "energeetika",
       "language": "et",
-      "name": "Toiduainete väikekäitlemise põhialused",
+      "name": "Mikrokraad \"Toiduainete väikekäitlemise põhialused\"",
       "provider": {
         "@type": "Organization",
         "name": "Eesti Maaülikool"
@@ -475,16 +413,10 @@
     {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/eesti-muusika-ja-teatriakadeemia-muusikapsuhholoogia/",
       "@type": "MicroCredential",
-      "ectsCredits": 15,
-      "field": "disain ja loovus",
+      "ectsCredits": 3,
+      "field": "terviseteadus",
       "language": "et",
-      "learningOutcome": [
-        "Omab süsteemset ülevaadet muusikapsühholoogiast ja uurimismeetoditest",
-        "Mõistab kuulmissüsteemi ülesehitust ja toimemehhanisme",
-        "Mõistab muusika õppimise psühholoogilisi aspekte",
-        "Tunneb muusikateraapia olemust ja oskab hinnata selle võimalusi"
-      ],
-      "name": "Muusikapsühholoogia",
+      "name": "Mikrokraadiprogramm: Muusikapsühholoogia 2026/2027",
       "provider": {
         "@type": "Organization",
         "name": "Eesti Muusika- ja Teatriakadeemia"
@@ -1171,7 +1103,7 @@
       "field": "IT ja andmed",
       "language": "et",
       "learningOutcome": [
-        "Mikrokraadikava läbinu: 1. teab ja tunneb ressursside kasutamise üldiseid põhimõtteid tootmises ja teeninduses, oskab rakendada ressursside kasutamise tõhustamise meetodeid",
+        "teab ja tunneb ressursside kasutamise üldiseid põhimõtteid tootmises ja teeninduses, oskab rakendada ressursside kasutamise tõhustamise meetodeid",
         "teab ja tunneb tootmis- ja teenindusprotsesside juhtimise praktilisi tööriistu ja meetodeid, oskab neid kasutada erinevate protsesside korraldamises",
         "oskab valida organisatsiooni vajadustele sobiva kvaliteedijuhtimise lähenemise juurutades kvaliteedijuhtimissüsteemi organisatsioonis",
         "tunneb digitaalse muutuse põhimõtteid ja mõistab digimuutuste ning muudatuste juhtimise seost"
@@ -1210,13 +1142,18 @@
       "field": "IT ja andmed",
       "language": "et",
       "learningOutcome": [
-        "Assess hybrid threat risks: Identify and analyse the impact of information operations, disinformation, and manipulation on decision-making and business continuity",
-        "Design resilient digital systems: Apply the CIGET model (connectivity, infrastructure, governance, environmental sustainability, technology) to create interoperable and crisis-resilient solutions",
-        "Navigate legal frameworks: Understand legal foundations of digital states, data protection, and privacy",
+        "Assess hybrid threat risks:",
+        "Identify and analyse the impact of information operations, disinformation, and manipulation on decision-making and business continuity",
+        "Design resilient digital systems:",
+        "Apply the CIGET model (connectivity, infrastructure, governance, environmental sustainability, technology) to create interoperable and crisis-resilient solutions",
+        "Navigate legal frameworks:",
+        "Understand legal foundations of digital states, data protection, and privacy",
         "assess the impact of emerging technologies (including AI) on legal responsibility",
-        "Apply critical thinking and evidence-based reasoning: Use structured analytical methods to evaluate information and make ethical and justified decisions under uncertainty",
-        "Integrate security and governance principles: Combine cybersecurity, data governance, and societal requirements into sustainable, trust-building organisational solutions",
-        "Solve complex management challenges: Synthesize technical and legal aspects to develop practical strategies for resilient and efficient business processes"
+        "Apply critical thinking and evidence-based reasoning:",
+        "Use structured analytical methods to evaluate information and make ethical and justified decisions under uncertainty",
+        "Integrate security and governance principles:",
+        "Combine cybersecurity, data governance, and societal requirements into sustainable, trust-building organisational solutions",
+        "Solve complex management challenges:"
       ],
       "name": "Business continuity in hybrid war",
       "provider": {
@@ -1269,7 +1206,7 @@
       "field": "IT ja andmed",
       "language": "et",
       "learningOutcome": [
-        "Kava läbinu: - tunneb riigivalitsemise ja avaliku halduse põhialuseid, avaliku halduse eesmärke ja toimimise piire",
+        "tunneb riigivalitsemise ja avaliku halduse põhialuseid, avaliku halduse eesmärke ja toimimise piire",
         "mõistab avaliku ja erasektori tegutsemiskeskkonna erinevusi",
         "teab poliitikakujundamise protsessi peamiseid etappe, neis osalevaid pooli ning nende rolle",
         "kirjeldab ja mõistab peamiseid andmevaldkonna termineid",
@@ -1331,7 +1268,8 @@
       "field": "haridus",
       "language": "et",
       "learningOutcome": [
-        "Mikrokraadikava läbinu omab ettevõtlusprotsessis erinevate valdkondlike pädevuste sünteesi: - enesejuhtimine, loovus ja kommunikatsioon",
+        "Mikrokraadikava läbinu omab ettevõtlusprotsessis erinevate valdkondlike pädevuste sünteesi:",
+        "enesejuhtimine, loovus ja kommunikatsioon",
         "teadmised ettevõtlusprotsessist, -keskkonnast ja finantsarvestusest",
         "teadmised müügist ja turundusest, turu-uuringute läbiviimine",
         "turundus- ja müügitoe rakendamine",
@@ -1351,7 +1289,8 @@
       "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
-        "Mikrokraadikava läbinud õppur: Selgitab finantsturgude toimimist ning varaklasside erinevaid karakteristikuid ja peamisi turgudel kaubeldavate instrumentide tunnusjooni",
+        "Mikrokraadikava läbinud õppur:",
+        "Selgitab finantsturgude toimimist ning varaklasside erinevaid karakteristikuid ja peamisi turgudel kaubeldavate instrumentide tunnusjooni",
         "hindab erinevate varaklasside (aktsiad, kinnisvara, võlakirjad) õiglast väärtust ning tõlgendab saadud tulemusi",
         "selgitab investeeringute portfelli juhtimise aluspõhimõtteid ning investeerimise eetilisi põhimõtteid",
         "hindab makromajanduse ning erinevate sündmuste mõju finantsturgudele ning investeeringute väärtusele",
@@ -1371,8 +1310,11 @@
       "field": "ehitus",
       "language": "et",
       "learningOutcome": [
-        "Hoone automaatika ja tehnosüsteemide mikrokraadi läbinu: • orienteerub hoone tehnovõrkude projekteerimise, ehituse, järelvalve ja hooldamise nõuetes",
-        "tunneb tehnosüsteemide toimimis- ja juhtimispõhimõtteid, nende mõju hoone sisekliimale ja energiatõhususele ning süsteemide omavahelist mõju • oskab koostada automaatika lähteülesannet ja lähteülesandeid ruumi, tehnosüsteemi ja hoone tasemel • oskab analüüsida hooneautomaatika süsteemi toimivust"
+        "Hoone automaatika ja tehnosüsteemide mikrokraadi läbinu:",
+        "orienteerub hoone tehnovõrkude projekteerimise, ehituse, järelvalve ja hooldamise nõuetes",
+        "tunneb tehnosüsteemide toimimis- ja juhtimispõhimõtteid, nende mõju hoone sisekliimale ja energiatõhususele ning süsteemide omavahelist mõju",
+        "oskab koostada automaatika lähteülesannet ja lähteülesandeid ruumi, tehnosüsteemi ja hoone tasemel",
+        "oskab analüüsida hooneautomaatika süsteemi toimivust"
       ],
       "name": "Hooneautomaatika ja tehnosüsteemid",
       "provider": {
@@ -1551,7 +1493,9 @@
         "Analüüsib elektromagnetilisi keskkondi, tuvastab müra ja häirete allikaid ning rakendab mõõtmis-, filtreerimis- ja varjestustehnikaid süsteemi töökindluse ja elektromagnetilise ühilduvuse tagamiseks",
         "Hindab kosmosesüsteemide haavatavusi ning rakendab küberturvalisuse põhimõtteid ja leevendusstrateegiaid, et kaitsevõime ja tagada operatsioonide turvalisus",
         "Kogub, analüüsib ja tõlgendab küber- ja kosmosevaldkonnaga seotud ohuteavet ning edastab tulemusi tõhusalt operatiivse otsustusprotsessi ja riskide vähendamise toetamiseks",
-        "Töötab tõhusalt multidistsiplinaarsetes meeskondades praktiliste insenerilahenduste (nt mehatroonika- või nutikad süsteemid) planeerimiseks, arendamiseks ja esitlemiseks, integreerides tehnilisi teadmisi projektijuhtimise ja reaalse maailma probleemide lahendamise oskustega"
+        "Töötab tõhusalt multidistsiplinaarsetes meeskondades praktiliste insenerilahenduste (nt mehatroonika- või nutikad süsteemid)",
+        "planeerimiseks, arendamiseks ja",
+        "esitlemiseks, integreerides tehnilisi teadmisi projektijuhtimise ja reaalse maailma probleemide lahendamise oskustega"
       ],
       "name": "Kosmoseoperatsioonid",
       "provider": {
@@ -1626,7 +1570,8 @@
       "field": "muu",
       "language": "et",
       "learningOutcome": [
-        "Mikrokraadi kava läbinu: •analüüsib ja hindab tööturu situatsiooni ja sellest tulenevaid võimalusi sobivate kandidaatide leidmiseks",
+        "Mikrokraadi kava läbinu:",
+        "analüüsib ja hindab tööturu situatsiooni ja sellest tulenevaid võimalusi sobivate kandidaatide leidmiseks",
         "teeb tööanalüüsi ja selle pinnalt koostab vakantse töökoha täitmiseks sobiva ameti- ja isikukirjelduse",
         "kujundab ametikoha täitmiseks sobiva värbamis- ja valikuprotsessi ja valib sobivad värbamis- ja valikumeetodeid",
         "kujundab kohased sisseelamisprogrammid, mis toetavad positiivse töötajakogemuse kujunemist"
@@ -1644,6 +1589,14 @@
       "ectsCredits": 24,
       "field": "haridus",
       "language": "et",
+      "learningOutcome": [
+        "mõistab pideva enesetäiendamise ja elukestva õppe vajadust valdkonnas asetleidvate arengute kontekstis",
+        "seostab ehitusvaldkonna teoreetilisi teadmisi hoonete projekteerimise praktilise tegevusega",
+        "analüüsib, üldistab ja hindab projekteerimisprotsessi, selle osapooli ja seoseid ning lahenduste mõju",
+        "töötab välja erinevaid piirdetarindeid, arvutab nende iseloomustamiseks vajalikke füüsikalisi suurusi ning analüüsib nende soojus- ja niiskustehnilist toimivust",
+        "5.valdab ehituse niiskusturvalisuse tagamise meetodeid ning rakendab neid toimiva lahenduse väljapakkumisel",
+        "tunneb iseseisvalt ära ning lahendab soojus- ja niiskustehnilisi probleeme nii projekteerimisel, ehitamisel kui ka kasutusetapis"
+      ],
       "name": "Piirdetarindite projekteerimine",
       "provider": {
         "@type": "Organization",
@@ -1796,7 +1749,7 @@
       "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
-        "Mikrokraadikava lõpetanu: •mõistab seoseid strateegilise juhtimise, tulemus- ja finantsjuhtimise ning poliitikaanalüüsi vahel, nende erisusi avalikus sektoris",
+        "mõistab seoseid strateegilise juhtimise, tulemus- ja finantsjuhtimise ning poliitikaanalüüsi vahel, nende erisusi avalikus sektoris",
         "püstitab asjakohased strateegilised eesmärgid ja valib sobivad tulemusindikaatorid",
         "tunneb peamiseid poliitikaanalüüsi meetodeid ja põhimõisteid",
         "oskab hinnata olemasolevate strateegiliste plaanide ja teostatud poliitikaanalüüside kvaliteeti"
@@ -1910,7 +1863,8 @@
       "field": "IT ja andmed",
       "language": "et",
       "learningOutcome": [
-        "Kursuse lõpetanud osaleja: - mõistab ettevõtte toimimist ja oskab luua kasumlikku ärimudelit",
+        "Kursuse lõpetanud osaleja:",
+        "mõistab ettevõtte toimimist ja oskab luua kasumlikku ärimudelit",
         "tunneb tööõiguse ja finantsjuhtimise põhialuseid",
         "oskab luua ja juhtida meeskonda",
         "mõistab turunduse, hinnastamise ja kliendikogemuse olulisust",
@@ -1931,7 +1885,8 @@
       "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
-        "Koolituse läbinu oskab: - kujundada strateegiaid töökeskkonna kvaliteedi parandamiseks ja parema tasakaalu saavutamiseks",
+        "Koolituse läbinu oskab:",
+        "kujundada strateegiaid töökeskkonna kvaliteedi parandamiseks ja parema tasakaalu saavutamiseks",
         "hinnata ja kujundada töökohti ning koostada töökeskkonna riskianalüüsi",
         "hinnata psühhosotsiaalsete ohutegurite mõju ning oskab rakendada ennetavaid meetmeid"
       ],
@@ -1968,9 +1923,6 @@
       "ectsCredits": 24,
       "field": "IT ja andmed",
       "language": "et",
-      "learningOutcome": [
-        "Mikrokraadiprogrammi läbinu: omab terviklikku ettekujutust andmete statistilise analüüsi läbiviimisest, oskab analüüsi põhjal järeldusi teha, oskab valida probleemi ja andmete põhjal sobiva lahendusmeetodi ja teab, kuidas valikut põhjendada, oskab valida tulemuste visualiseerimiseks sobiva lahenduse ja seda põhjendada"
-      ],
       "name": "Mikrokraadiprogramm „Andmeanalüüs“",
       "provider": {
         "@type": "Organization",
@@ -2032,13 +1984,8 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-disainiuuringud-teenuste-disainis/",
       "@type": "MicroCredential",
       "ectsCredits": 25,
-      "field": "IT ja andmed",
+      "field": "disain ja loovus",
       "language": "et",
-      "learningOutcome": [
-        "d Lisett Heil jagab oma kogemusi",
-        "Miks tulla õppima? Teadmised disainmõtlemise ja teenusedisaini metoodikast: Omandad põhjalikud teadmised disainmõtlemise ja teenusedisaini metoodika rakendusvaldkondadest, mis on olulised nii avalikus- kui erasektoris",
-        "Käed-külge kogemus: Programm sisaldab praktilisi projekte reaalsete"
-      ],
       "name": "Mikrokraadiprogramm „Disainiuuringud teenuste disainis“",
       "provider": {
         "@type": "Organization",
@@ -2047,39 +1994,12 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-disainiuuringud-teenuste-disainis/"
     },
     {
-      "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-haldusoigus-praktikutele/",
-      "@type": "MicroCredential",
-      "ectsCredits": 18,
-      "field": "IT ja andmed",
-      "language": "et",
-      "learningOutcome": [
-        "Tunneb Eesti põhiseaduslikku korda ja riigiõiguse üldpõhimõtteid",
-        "Tunneb ära põhiseadusliku probleemi ja suudab seda põhiseaduslikku argumentatsiooni kasutades lahendada",
-        "Tunneb haldusõiguse põhiseaduslikke printsiipe ja põhimõisteid",
-        "Tunneb haldusmenetluse põhimõtteid ja menetlust"
-      ],
-      "name": "Haldusõigus praktikutele",
-      "provider": {
-        "@type": "Organization",
-        "name": "Tartu Ülikool"
-      },
-      "url": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-haldusoigus-praktikutele/"
-    },
-    {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-heaolu-mootmine-ja-mojutamine/",
       "@type": "MicroCredential",
-      "ectsCredits": 12,
+      "ectsCredits": 3,
       "field": "muu",
       "language": "et",
-      "learningOutcome": [
-        "Tunneb heaolukäsitlusi ja nende mõju heaolu kujundamisel",
-        "Oskab heaolu mõõta eri näitajate kaudu",
-        "Mõistab heaolu komponente ja nende seoseid",
-        "Teab heaolu kujunemise mehhanisme ja mõjutamise võimalusi",
-        "Orienteerub veebiuuringute metodoloogias ja rakendab teadmisi praktiliselt",
-        "Kasutab kvantitatiivseid andmeanalüüsi meetodeid programmis R"
-      ],
-      "name": "Heaolu mõõtmine ja mõjutamine",
+      "name": "Mikrokraadiprogramm „Heaolu mõõtmine ja mõjutamine“",
       "provider": {
         "@type": "Organization",
         "name": "Tartu Ülikool"
@@ -2090,13 +2010,8 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-histoloogia-histoloogilise-tehnika-alustega/",
       "@type": "MicroCredential",
       "ectsCredits": 12,
-      "field": "IT ja andmed",
+      "field": "terviseteadus",
       "language": "et",
-      "learningOutcome": [
-        "Mikrokraadiprogrammi läbinu 1. tunneb histoloogliste preparaatide valmistamise põhimõtteid ja oskab preparaate mikroskopeerida",
-        "teab inimese embrüonaalse arengu varaseid arenguetappe, kudede ja organite embrüogeneesi ja mõistab väärarengute tekkimise põhjuseid",
-        "suudab iseloomustada kudede põhitüüpe ja näha seosei"
-      ],
       "name": "Mikrokraadiprogramm „Histoloogia histoloogilise tehnika alustega“",
       "provider": {
         "@type": "Organization",
@@ -2108,7 +2023,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-informaatika-didaktika/",
       "@type": "MicroCredential",
       "ectsCredits": 3,
-      "field": "IT ja andmed",
+      "field": "haridus",
       "language": "et",
       "learningOutcome": [
         "Mikrokraadiprogrammi läbinud õppija: omab põhikooli ja gümnaasiumi informaatikaõpetaja töö jaoks vajalikke ainedidaktilisi teadmisi",
@@ -2120,25 +2035,6 @@
         "name": "Tartu Ülikool"
       },
       "url": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-informaatika-didaktika/"
-    },
-    {
-      "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-informaatikaopetaja-erialaained/",
-      "@type": "MicroCredential",
-      "ectsCredits": 12,
-      "field": "IT ja andmed",
-      "language": "et",
-      "learningOutcome": [
-        "Selgitab informaatika alustõdesid, informaatika oskussõnavara",
-        "Omab algteadmisi programmeerimisest, relatsioonilistest andmebaasidest, multimeediast ja infoturbest",
-        "Oskab kirjutada lihtsamaid programmikoode Pythonis ning lihtsamaid päringuid SQLis",
-        "Oskab luua multimeediat sisaldavaid õppematerjale ning anal"
-      ],
-      "name": "Informaatikaõpetaja erialaained",
-      "provider": {
-        "@type": "Organization",
-        "name": "Tartu Ülikool"
-      },
-      "url": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-informaatikaopetaja-erialaained/"
     },
     {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-infotehnoloogia-alused/",
@@ -2163,18 +2059,10 @@
     {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-infovastupidavus/",
       "@type": "MicroCredential",
-      "ectsCredits": 16,
+      "ectsCredits": 6,
       "field": "muu",
       "language": "et",
-      "learningOutcome": [
-        "Omab süsteemseid teadmisi infohäirete ja mõjutustegevuse teooriast",
-        "Mõistab meediainstitutsioonide rolli infokorratuse tingimustes",
-        "Tuvastab infomanipulatsiooni ja mõjutustegevust",
-        "Hindab valeinfo ja küberohtude mõju organisatsioonile",
-        "Disainib meetmeid infohäirete ennetamiseks ja lahendamiseks",
-        "Töötab välja ja kommunikeerib valeinfovastaseid strateegiaid"
-      ],
-      "name": "Infovastupidavus",
+      "name": "Mikrokraadiprogramm „Infovastupidavus“",
       "provider": {
         "@type": "Organization",
         "name": "Tartu Ülikool"
@@ -2185,7 +2073,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-innovatsiooni-meistriklass/",
       "@type": "MicroCredential",
       "ectsCredits": 18,
-      "field": "IT ja andmed",
+      "field": "muu",
       "language": "et",
       "name": "Innovatsiooni meistriklass",
       "provider": {
@@ -2198,16 +2086,9 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-islam-tana-kultuurist-konfliktideni/",
       "@type": "MicroCredential",
       "ectsCredits": 12,
-      "field": "muu",
+      "field": "majandus ja juhtimine",
       "language": "et",
-      "learningOutcome": [
-        "Mõistab eri piirkondade islami eripära ja religioonist tulenevaid käitumisreegleid",
-        "Omab baasteadmisi islami ajaloost ja õpetusest",
-        "Teab, kuidas vältida religiooni- ja kultuurierinevustest tulenevaid konflikte",
-        "Mõistab religiooni tähtsust moslemite igapäevaelus",
-        "Saab aluse islamiühiskondades hakkamasaamiseks"
-      ],
-      "name": "Islam täna: kultuurist konfliktideni",
+      "name": "Mikrokraadiprogramm „Islam täna: kultuurist konfliktideni“",
       "provider": {
         "@type": "Organization",
         "name": "Tartu Ülikool"
@@ -2235,18 +2116,10 @@
     {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-kestliku-ja-sidusa-tulevikulinna-kujundamine/",
       "@type": "MicroCredential",
-      "ectsCredits": 12,
-      "field": "muu",
+      "ectsCredits": 6,
+      "field": "tehnika ja tootmine",
       "language": "et",
-      "learningOutcome": [
-        "Kirjeldab kestlike linnapiirkondade kontseptsiooni ja arengusuundi",
-        "Rakendab kestliku ruumiloome põhimõtteid eri lahendusi põimides",
-        "Arvestab ruumiloomes kriitiliselt kaasuvate mõjude ja muutuste kontekstiga",
-        "Tunneb sekkumiste mitmetasandilist perspektiivi ja strateegilisi sekkumispunkte",
-        "Hindab innovatsiooniniššide küpsust ja valdkonna valmidust",
-        "Määratleb sidusrühmi ja kasutab kaasavaid meetodeid"
-      ],
-      "name": "Kestliku ja sidusa tulevikulinna kujundamine",
+      "name": "Mikrokraadiprogramm „Kestliku ja sidusa tulevikulinna kujundamine“",
       "provider": {
         "@type": "Organization",
         "name": "Tartu Ülikool"
@@ -2260,12 +2133,7 @@
       "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
-        "Arvutab ja tõlgendab kinnisvararahanduse põhinäitajaid",
-        "Rakendab kinnisvaratehingute sisu- ja vorminõudeid",
-        "Teab kinnisvaraarenduse protsesse ja juhtimisvõimalusi",
-        "Kasutab kliendiandmeid turunduse kavandamisel",
-        "Analüüsib ettevõtluskeskkonda ja äriplaani komponente",
-        "Teab kinnisvara maksustamise põhimõtteid"
+        "Pärast aine läbimist:"
       ],
       "name": "Kinnisvaraturg ja -äri",
       "provider": {
@@ -2277,18 +2145,10 @@
     {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-kogukondade-arendamine/",
       "@type": "MicroCredential",
-      "ectsCredits": 12,
+      "ectsCredits": 6,
       "field": "muu",
       "language": "et",
-      "learningOutcome": [
-        "Tunneb kogukondade arendamise põhimõtteid ja eetilisi aluseid",
-        "Teab dialoogilise kogukondade arendamise lähtealuseid",
-        "Rakendab dialoogilise ruumiloome põhimõtteid",
-        "Rakendab dialoogilisele lähenemisele tuginevaid meetodeid",
-        "Teab kogukondade toimevõimekuse mehhanisme ja dünaamikat",
-        "Analüüsib kogukondade profiile ja muutuste protsesse"
-      ],
-      "name": "Kogukondade arendamine",
+      "name": "Mikrokraadiprogramm „Kogukondade arendamine“",
       "provider": {
         "@type": "Organization",
         "name": "Tartu Ülikool"
@@ -2299,11 +2159,10 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-loovettevotja/",
       "@type": "MicroCredential",
       "ectsCredits": 12,
-      "field": "IT ja andmed",
+      "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
-        "d inimesed, kes soovivad lisaks loovusele ettevõtluskompetentse omandada",
-        "kultuurikorralduse valdkonnas tegutsejad"
+        "Mikrokraadiprogrammi läbinu oskab:"
       ],
       "name": "Loovettevõtja mikrokraadiprogramm",
       "provider": {
@@ -2316,15 +2175,10 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-loovettevotluse-projektijuhtimine/",
       "@type": "MicroCredential",
       "ectsCredits": 15,
-      "field": "IT ja andmed",
+      "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
-        "Mikrokraadi läbinud õppija: mõistab loovettevõtluse eripärasid ja tulevikutrende",
-        "arendab ideest ärimudeli ja äriplaani",
-        "koostab turundus- ja kommunikatsioonistrateegiaid",
-        "planeerib ja juhib projekte kogu projektitsükli vältel",
-        "kasutab projektijuhtimise tööriistu ja digilahendusi",
-        "rakendab riskijuhtimise ja jätkusuutli"
+        "Mikrokraadi läbinud õppija:"
       ],
       "name": "Loovettevõtluse projektijuhtimise mikrokraadiprogramm",
       "provider": {
@@ -2337,14 +2191,10 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-loovus-ja-eneseareng/",
       "@type": "MicroCredential",
       "ectsCredits": 15,
-      "field": "IT ja andmed",
+      "field": "disain ja loovus",
       "language": "et",
       "learningOutcome": [
-        "Mikrokraadi läbinud õppija: mõistab isiklikke väärtusi, eesmärke ja professionaalset arengut",
-        "oskab kasutada loova mõtlemise ja disainmõtlemise tööriistu",
-        "analüüsib kultuuri- ja loomesektori globaalseid trende",
-        "arendab ja esitleb oma ideid süsteemselt ja veenvalt",
-        "rakendab jätkusuutlikkuse põhimõtteid oma projektis"
+        "Mikrokraadi läbinud õppija:"
       ],
       "name": "Loovuse ja enesearengu mikrokraadiprogramm",
       "provider": {
@@ -2357,7 +2207,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-majanduspoliitika-kujundamine-digiajastul/",
       "@type": "MicroCredential",
       "ectsCredits": 15,
-      "field": "IT ja andmed",
+      "field": "haridus",
       "language": "et",
       "name": "Majanduspoliitika kujundamine digiajastul",
       "provider": {
@@ -2370,7 +2220,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-okoloogia-ja-looduskaitse-globaalmuutuste-tingimustes/",
       "@type": "MicroCredential",
       "ectsCredits": 14,
-      "field": "IT ja andmed",
+      "field": "muu",
       "language": "et",
       "name": "Mikrokraadiprogramm ,,Ökoloogia ja looduskaitse globaalmuutuste tingimustes\"",
       "provider": {
@@ -2400,13 +2250,16 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-riigihangete-korraldamine/",
       "@type": "MicroCredential",
       "ectsCredits": 12,
-      "field": "IT ja andmed",
+      "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
-        "Mikrokraadiprogrammi läbinu tunneb ja oskab rakendada Eesti ja EL-i riigihankeõigust, sh riigihanke üldpõhimõtteid",
+        "tunneb ja oskab rakendada Eesti ja EL-i riigihankeõigust, sh riigihanke üldpõhimõtteid",
         "suudab tuvastada konkreetse riigihanke korraldamise peamised õiguslikud riskid, neid vältida või heastada",
         "orienteerub hankeasjade õiguskaitsesüsteemis",
-        "oskab orienteeruda riigihangete registris ja vajali"
+        "oskab orienteeruda riigihangete registris ja vajalikes dokumentides",
+        "oskab koostada riigihanke dokumente",
+        "tunneb põhjalikult riigihangete korraldamise eesmärke, protsessi ja tingimusi",
+        "oskab riigihankeid efektiivselt ja täpselt korraldada"
       ],
       "name": "Mikrokraadiprogramm „Riigihangete korraldamine“",
       "provider": {
@@ -2424,7 +2277,8 @@
       "learningOutcome": [
         "Oskab seostada koha arengut üleilmsete ühiskondlike, majanduslike ja keskkonna muutustega",
         "Oskab identifitseerida planeerimislahenduse leidmiseks tarvilikku andme- ja analüüsivajadust",
-        "Valdab ruumianalüüsi ja visualiseerimise võtteid ning on valmis eest vedama planeerimisalast innovatsiooni kaasaegses digitali"
+        "Valdab ruumianalüüsi ja visualiseerimise võtteid ning on valmis eest vedama planeerimisalast innovatsiooni kaasaegses digitaliseerivas ühiskonnas",
+        "Tunneb ruumiplaneerimise korralduslikku raamistikku Eestis ja mujal maailmas ning on valmis korraldama multidistsiplinaarse planeerimismeeskonna tööd"
       ],
       "name": "Mikrokraadiprogramm \"Ruumiline planeerimine ja keskkond\"",
       "provider": {
@@ -2434,31 +2288,24 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-ruumiline-planeerimine-ja-keskkond/"
     },
     {
-      "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-soome-keele-opetamine/",
-      "@type": "MicroCredential",
-      "ectsCredits": 18,
-      "field": "IT ja andmed",
-      "language": "et",
-      "learningOutcome": [
-        "l on soome keele alane teoreetiline ettevalmistus ning didaktilised oskused soome keele ja kultuuri alaste ainete õpetamiseks üldhariduskoolis ja kutsekoolis, aga ka erinevatel keelekursustel täiskasvanutele",
-        "Programm ei anna kutset ega kraadi",
-        "Magistrikraadiga tegevõpetajad (eesti keele õpetajad, võõrkeel"
-      ],
-      "name": "Soome keele õpetamine",
-      "provider": {
-        "@type": "Organization",
-        "name": "Tartu Ülikool"
-      },
-      "url": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-soome-keele-opetamine/"
-    },
-    {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-soorituspsuhholoogia-praktikule/",
       "@type": "MicroCredential",
       "ectsCredits": 12,
-      "field": "IT ja andmed",
+      "field": "haridus",
       "language": "et",
       "learningOutcome": [
-        "d kandidaadile Magistritöö teemasid Sulge menüü Õppimine Õppimine Õppekavade läbimine Õppevormid Võrdne kohtlemine Instituudi kalender Avalduste vormid Praktika Välismaale vahetusüliõpilaseks Osale uuringus! Vilistlaselu Image Hea erialakaaslane! Oleme uhked, et oled teinud valiku tulla õppima psühholoogia instituuti"
+        "Mikrokraadi läbinud õppija.",
+        "tunneb erialaste oskuste õppimise ja sooritamisega seotud psühholoogilisi protsesse ning mõistab nende eesmärgipärase suunamise või arendamise põhimõtteid",
+        "mõistab ja oskab analüüsida psühholoogiliste oskuste arendamise eesmärke, võimalusi ja tulemusi erialaste oskuste algtasemest kuni tippsoorituseni nii individuaalse kui rühmasoorituse puhul",
+        "oskab psühholoogiliste oskuste treenimise programme planeerida, läbi viia ja hinnata",
+        "selgitab erialaste oskuste arengut ja motivatsiooni toetava juhendamise põhimõtteid ning oskab neid rakendada",
+        "tunneb ja kasutab vaimse tervise toetamise põhimõtteid erialaste oskuste arendamise foonil",
+        "analüüsib soorituspsühholoogia rakendamise eetilisi põhimõtteid ja tunneb oma pädevuse piire",
+        "SVPH.00.073 Spordi- ja soorituspsühholoogia (6 EAP, sügis)",
+        "SVPH.00.074 Oskuste treening soorituspsühholoogias (3 EAP, kevad)",
+        "SVPH.00.076 Tippsoorituse psühholoogilised alused (3 EAP, kevad)",
+        "Aave Hannus, PhD",
+        "Tartu Ülikooli spordi- ja soorituspsühholoogia lektor"
       ],
       "name": "Mikrokraad „Soorituspsühholoogia praktikule“",
       "provider": {
@@ -2471,7 +2318,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-susteemianaluus/",
       "@type": "MicroCredential",
       "ectsCredits": 6,
-      "field": "IT ja andmed",
+      "field": "majandus ja juhtimine",
       "language": "et",
       "learningOutcome": [
         "Mikrokraadiprogrammi läbinud õppija: analüüsib äri probleeme ja olukordi ning vajadusi uute infotehnoloogiliste süsteemide rakendamiseks või olemasolevate muutmiseks, kasutades laia valikut ärianalüüsitehnikaid",
@@ -2486,36 +2333,12 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-susteemianaluus/"
     },
     {
-      "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-tanapaevane-haridusjuhtimine-eestvedamine-strateegia-ja-organisatsioonikultuur/",
-      "@type": "MicroCredential",
-      "ectsCredits": 12,
-      "field": "IT ja andmed",
-      "language": "et",
-      "learningOutcome": [
-        "itest lähtuvaid teadmisi või oskusi, mida soovite programmi raames saavutada",
-        "sõnastab ja kujunda"
-      ],
-      "name": "Tänapäevane haridusjuhtimine: eestvedamine, strateegia ja organisatsioonikultuur",
-      "provider": {
-        "@type": "Organization",
-        "name": "Tartu Ülikool"
-      },
-      "url": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-tanapaevane-haridusjuhtimine-eestvedamine-strateegia-ja-organisatsioonikultuur/"
-    },
-    {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-teabehaldus-teoorias-ja-praktikas/",
       "@type": "MicroCredential",
-      "ectsCredits": 15,
-      "field": "muu",
+      "ectsCredits": 12,
+      "field": "haridus",
       "language": "et",
-      "learningOutcome": [
-        "Kasutab ja tõlgendab teabehalduse mõisteid, õigusakte ja standardeid",
-        "Kujundab ja arendab dokumendisüsteemi infosüsteemidega lõimitult",
-        "Koostab dokumendihalduse alusdokumente ja määrab metaandmed",
-        "Rakendab dokumenteerimise, digiteerimise ja arhiveerimise põhimõtteid",
-        "On kursis toimepidevuse tagamise põhimõtetega"
-      ],
-      "name": "Teabehaldus teoorias ja praktikas",
+      "name": "Mikrokraadiprogramm „Teabehaldus teoorias ja praktikas“",
       "provider": {
         "@type": "Organization",
         "name": "Tartu Ülikool"
@@ -2526,7 +2349,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-teenuste-arendamine-ja-turundus/",
       "@type": "MicroCredential",
       "ectsCredits": 23,
-      "field": "IT ja andmed",
+      "field": "majandus ja juhtimine",
       "language": "et",
       "name": "Mikrokraadiprogramm \"Teenuste arendamine ja turundus\"",
       "provider": {
@@ -2557,7 +2380,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-tehnoloogia-transformatiivne-kasutamine-haridustuleviku-kujundamiseks/",
       "@type": "MicroCredential",
       "ectsCredits": 18,
-      "field": "IT ja andmed",
+      "field": "haridus",
       "language": "et",
       "name": "Mikrokraadiprogramm \"Tehnoloogia transformatiivne kasutamine haridustuleviku kujundamiseks”",
       "provider": {
@@ -2570,17 +2393,9 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-terviseteaduste-alused/",
       "@type": "MicroCredential",
       "ectsCredits": 12,
-      "field": "terviseteadus",
+      "field": "majandus ja juhtimine",
       "language": "et",
-      "learningOutcome": [
-        "Tunneb rahvatervishoiu olemust, näitajaid ja suundumusi ning analüüsib neid",
-        "Tunneb tervise kontseptsioone ja peamisi tervisemõjureid",
-        "Loeb ja tõlgendab terviseteaduste teaduskirjandust kriitiliselt",
-        "Tunneb tervisedenduse põhimõtteid ja sekkumisvõimalusi",
-        "Rakendab teadmisi ettekannete ja programmide koostamisel",
-        "Pakub lahendusi rahvatervishoiu probleemidele"
-      ],
-      "name": "Terviseteaduste alused",
+      "name": "Mikrokraadiprogramm „Terviseteaduste alused“",
       "provider": {
         "@type": "Organization",
         "name": "Tartu Ülikool"
@@ -2588,27 +2403,10 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-terviseteaduste-alused/"
     },
     {
-      "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-tolketehnoloogia/",
-      "@type": "MicroCredential",
-      "ectsCredits": 12,
-      "field": "IT ja andmed",
-      "language": "et",
-      "learningOutcome": [
-        "Programmi läbinud õppija 1. rakendab tõlkeabitarkvara tööpõhimõtteid, valib tõlketööks vajaduse korral sobivad tehnilised abivahendid ning kasutab tõlkeabiprogrammide põhilisi funktsioone konkreetsete tõlkeülesannete lahendamiseks",
-        "analüüsib tõlketöö käigus tekkivaid tehnilisi probleeme ning lahendab neid oma teadmi"
-      ],
-      "name": "Tõlketehnoloogia",
-      "provider": {
-        "@type": "Organization",
-        "name": "Tartu Ülikool"
-      },
-      "url": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-tolketehnoloogia/"
-    },
-    {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-turundus-sotsiaalmeedias-ja-brandijuhtimine-mikroettevotetele/",
       "@type": "MicroCredential",
       "ectsCredits": 16,
-      "field": "IT ja andmed",
+      "field": "majandus ja juhtimine",
       "language": "et",
       "name": "Mikrokraadiprogramm \"Turundus sotsiaalmeedias ja brändijuhtimine mikroettevõtetele\"",
       "provider": {
@@ -2621,16 +2419,9 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-usundid-kultuuri-ja-motteloos/",
       "@type": "MicroCredential",
       "ectsCredits": 12,
-      "field": "muu",
+      "field": "haridus",
       "language": "et",
-      "learningOutcome": [
-        "Omab süsteemset ülevaadet eri religioonidest ja nende avaldumisest",
-        "Orienteerub religioonide paljususes, teab ajalugu, õpetusi ja tavasid",
-        "Mõistab religiooni rolli Euroopa ja Eesti kultuuriloos",
-        "Teab Piibli keskset mõju lääne kultuurile ja ühiskonnale",
-        "Tunneb keskseid piiblilugusid kunstis, kirjanduses ja muusikas"
-      ],
-      "name": "Usundid kultuuri- ja mõtteloos",
+      "name": "Mikrokraadiprogramm „Usundid kultuuri- ja mõtteloos“",
       "provider": {
         "@type": "Organization",
         "name": "Tartu Ülikool"
@@ -2641,7 +2432,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-videomangude-narratiivid/",
       "@type": "MicroCredential",
       "ectsCredits": 18,
-      "field": "IT ja andmed",
+      "field": "haridus",
       "language": "et",
       "learningOutcome": [
         "oskad end erialaselt mänguloome alal teostada",
@@ -2656,9 +2447,9 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-videomangude-narratiivid/"
     }
   ],
-  "checkedAt": "2026-08-31",
-  "generatedAt": "2026-08-31T00:17:10.000Z",
-  "runRef": "mkval_20260831T001710Z",
+  "checkedAt": "2026-09-28",
+  "generatedAt": "2026-09-28T00:16:29.000Z",
+  "runRef": "mkval_20260928T001629Z",
   "schemaVersion": "amos.mkval.catalog_cc_export/v1",
-  "sourceFeedHash": "sha256:6d5e854d9bc8911b0dbfdffef93f3415919fa546d137841d799f59a082065186"
+  "sourceFeedHash": "sha256:ac44f314205643665e3dd2fa31a0e6f30d827e9bb45c1129c27bc709a25ebfca"
 }

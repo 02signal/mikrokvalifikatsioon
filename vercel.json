@@ -547,7 +547,7 @@
     },
     {
       "source": "/kataloog/ebs-strateegiline-finantsjuhtimine-tooriistad-analuus-ja-otsuste-tegemine-2/",
-      "destination": "/kataloog/ebs-strateegiline-finantsjuhtimine-tooriistad-analuus-ja-otsuste-tegemine/",
+      "destination": "/mikrokraadid/",
       "permanent": true
     },
     {
@@ -782,7 +782,7 @@
     },
     {
       "source": "/kataloog/tartu-ulikool-haldusoigus-praktikutele-2/",
-      "destination": "/kataloog/tartu-ulikool-haldusoigus-praktikutele/",
+      "destination": "/mikrokraadid/",
       "permanent": true
     },
     {
@@ -792,7 +792,7 @@
     },
     {
       "source": "/kataloog/tartu-ulikool-informaatikaopetaja-erialaained-2/",
-      "destination": "/kataloog/tartu-ulikool-informaatikaopetaja-erialaained/",
+      "destination": "/mikrokraadid/",
       "permanent": true
     },
     {
@@ -892,7 +892,7 @@
     },
     {
       "source": "/kataloog/tartu-ulikool-soome-keele-opetamine-2/",
-      "destination": "/kataloog/tartu-ulikool-soome-keele-opetamine/",
+      "destination": "/mikrokraadid/",
       "permanent": true
     },
     {
@@ -902,12 +902,12 @@
     },
     {
       "source": "/kataloog/tartu-ulikool-tanapaevane-haridusjuhtimine-eestvedamine-strateegia-ja-organisatsioonikultuur-2/",
-      "destination": "/kataloog/tartu-ulikool-tanapaevane-haridusjuhtimine-eestvedamine-strateegia-ja-organisatsioonikultuur/",
+      "destination": "/mikrokraadid/",
       "permanent": true
     },
     {
       "source": "/kataloog/tartu-ulikool-tolketehnoloogia-2/",
-      "destination": "/kataloog/tartu-ulikool-tolketehnoloogia/",
+      "destination": "/mikrokraadid/",
       "permanent": true
     },
     {
