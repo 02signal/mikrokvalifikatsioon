@@ -44,22 +44,22 @@ const fullTitle = `${a.name} vs ${b.name}`;
 const title = fullTitle.length + 10 <= 70 ? `${fullTitle} – võrdlus` : fullTitle;
 // Paarilehed on noindex,follow, välja arvatud Search Console'is töötavate valgeloend.
 const robots = isIndexableVordlus(cmp.pair) ? undefined : "noindex,follow";
-const description = `${a.name} (${a.provider}) vs ${b.name} (${b.provider}) — võrdle õpiväljundeid, mahtu, hinda ja õppevormi kõrvuti. Kumb mikrokraad sulle sobib?`;
+const description = `${a.name} (${a.provider}) vs ${b.name} (${b.provider}) – võrdle õpiväljundeid, mahtu, hinda ja õppevormi kõrvuti. Kumb mikrokraad sulle sobib?`;
 
 const facts: { label: string; a: string; b: string }[] = [
   { label: "Kool", a: a.provider, b: b.provider },
   { label: "Valdkond", a: a.field, b: b.field },
-  { label: "Maht", a: a.ects != null ? `${a.ects} EAP` : "—", b: b.ects != null ? `${b.ects} EAP` : "—" },
+  { label: "Maht", a: a.ects != null ? `${a.ects} EAP` : "–", b: b.ects != null ? `${b.ects} EAP` : "–" },
   { label: "Hind", a: a.priceText || "kooli lehel", b: b.priceText || "kooli lehel" },
-  { label: "Kestus", a: a.durationText || "—", b: b.durationText || "—" },
-  { label: "Õppevorm", a: a.format || "—", b: b.format || "—" },
-  { label: "Keel", a: a.language || "—", b: b.language || "—" },
-  { label: "Vastuvõtt", a: a.intakeText || "—", b: b.intakeText || "—" }
+  { label: "Kestus", a: a.durationText || "–", b: b.durationText || "–" },
+  { label: "Õppevorm", a: a.format || "–", b: b.format || "–" },
+  { label: "Keel", a: a.language || "–", b: b.language || "–" },
+  { label: "Vastuvõtt", a: a.intakeText || "–", b: b.intakeText || "–" }
 ];
 
 const faq = [
   { q: `Mille poolest ${a.name} ja ${b.name} erinevad?`,
-    a: `Mõlemad on ${a.field} valdkonna programmid. ${a.name} pakub ${a.provider}, ${b.name} ${b.provider}. ${cmp.shared.length ? `${cmp.shared.length} õpiväljundit kattuvad; ülejäänud erinevad (vt allpool).` : "Õpiväljundid on erineva rõhuasetusega (vt allpool)."} Maht ja hind: ${a.ects ?? "?"} EAP / ${a.priceText || "—"} vs ${b.ects ?? "?"} EAP / ${b.priceText || "—"}.` },
+    a: `Mõlemad on ${a.field} valdkonna programmid. ${a.name} pakub ${a.provider}, ${b.name} ${b.provider}. ${cmp.shared.length ? `${cmp.shared.length} õpiväljundit kattuvad; ülejäänud erinevad (vt allpool).` : "Õpiväljundid on erineva rõhuasetusega (vt allpool)."} Maht ja hind: ${a.ects ?? "?"} EAP / ${a.priceText || "–"} vs ${b.ects ?? "?"} EAP / ${b.priceText || "–"}.` },
   { q: `Kumb valida?`,
     a: `See sõltub sinu eesmärgist, ajast ja sellest, kes maksab. Vaata, kumma õpiväljundid on sinu soovitud oskusele lähemal, ja arvesta mahtu, hinda ja õppevormi. Rahastuse kohta vaata „Kes maksab?".` }
 ];
@@ -118,7 +118,7 @@ const schema = {
           <span class="eyebrow">Võrdlus</span>
           <h1>{a.name} vs {b.name}: kumb valida?</h1>
           <p>
-            Kaks {a.field} valdkonna mikrokraadi kõrvuti — {a.provider} ja {b.provider}.
+            Kaks {a.field} valdkonna mikrokraadi kõrvuti – {a.provider} ja {b.provider}.
             Võrdle õpiväljundeid, mahtu, hinda ja õppevormi ning vali, kumb sinu eesmärgile sobib.
           </p>
           <p class="report-date">Andmed kontrollitud: {checkedAtText}</p>
@@ -163,11 +163,11 @@ const schema = {
           <div class="vs-grid">
             <div>
               <h2 class="vs-h">Ainult {a.name}</h2>
-              <ul class="check">{cmp.aOnly.slice(0, 6).map((o) => <li>{o}</li>)}{cmp.aOnly.length === 0 && <li class="muted">—</li>}</ul>
+              <ul class="check">{cmp.aOnly.slice(0, 6).map((o) => <li>{o}</li>)}{cmp.aOnly.length === 0 && <li class="muted">–</li>}</ul>
             </div>
             <div>
               <h2 class="vs-h">Ainult {b.name}</h2>
-              <ul class="check">{cmp.bOnly.slice(0, 6).map((o) => <li>{o}</li>)}{cmp.bOnly.length === 0 && <li class="muted">—</li>}</ul>
+              <ul class="check">{cmp.bOnly.slice(0, 6).map((o) => <li>{o}</li>)}{cmp.bOnly.length === 0 && <li class="muted">–</li>}</ul>
             </div>
           </div>
         </div>

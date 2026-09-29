@@ -20,25 +20,25 @@ const coverage = [
 ];
 
 const mistakes = [
-  "Üldsõnalisus konkreetsuse asemel — „me peame seda oluliseks“ ilma tõendita, mis näitaks, kuidas see päriselt välja näeb.",
-  "Väited ilma tõendita — iga väide peab viitama konkreetsele dokumendile, näitele või protsessile, mitte jääma lubaduseks.",
-  "Vastuolu veebilehe või õppekavaga — kui eneseanalüüs kirjeldab midagi teisiti kui asutuse veebileht või õppekava, loeb hindaja seda riskiks.",
+  "Üldsõnalisus konkreetsuse asemel – „me peame seda oluliseks“ ilma tõendita, mis näitaks, kuidas see päriselt välja näeb.",
+  "Väited ilma tõendita – iga väide peab viitama konkreetsele dokumendile, näitele või protsessile, mitte jääma lubaduseks.",
+  "Vastuolu veebilehe või õppekavaga – kui eneseanalüüs kirjeldab midagi teisiti kui asutuse veebileht või õppekava, loeb hindaja seda riskiks.",
   "Sama jutt korratud mitmes valdkonnas, selle asemel et iga valdkonna kohta eraldi ja täpselt kirjutada.",
-  "Tähemärgipiirangu ületamine või vastupidi — vastus nii lühike, et sisu ei jõua kohale."
+  "Tähemärgipiirangu ületamine või vastupidi – vastus nii lühike, et sisu ei jõua kohale."
 ];
 
 const faqItems = [
   {
     question: "Kas eneseanalüüs on lisadokument või hindamise alus?",
-    answer: "Eneseanalüüs on hindamise alusdokument, mitte lisamaterjal. Hindaja loeb selle põhjal, kas asutus vastab kõigile kaheksale valdkonnale — kõik muu (õppekava, veebileht, tõendid) peab eneseanalüüsi väiteid toetama, mitte sellele vastu rääkima."
+    answer: "Eneseanalüüs on hindamise alusdokument, mitte lisamaterjal. Hindaja loeb selle põhjal, kas asutus vastab kõigile kaheksale valdkonnale – kõik muu (õppekava, veebileht, tõendid) peab eneseanalüüsi väiteid toetama, mitte sellele vastu rääkima."
   },
   {
     question: "Mitu valdkonda peab eneseanalüüs katma?",
-    answer: "Kõik kaheksa HAKA hindamisvaldkonda ja kokku 27 kriteeriumi. Iga kriteeriumi kohta tuleb kirjutada eraldi, tõenduspõhiselt — mitte ühte üldist teksti valdkonna kohta."
+    answer: "Kõik kaheksa HAKA hindamisvaldkonda ja kokku 27 kriteeriumi. Iga kriteeriumi kohta tuleb kirjutada eraldi, tõenduspõhiselt – mitte ühte üldist teksti valdkonna kohta."
   },
   {
     question: "Kust leian ametliku eneseanalüüsi vormi?",
-    answer: "Ametlik eneseanalüüsi aruande vorm on avaldatud HAKA veebilehel (PDF). See leht on praktiline abimaterjal vormi täitmiseks, mitte vormi asendus — kontrolli alati kehtivat vormi ametlikust allikast."
+    answer: "Ametlik eneseanalüüsi aruande vorm on avaldatud HAKA veebilehel (PDF). See leht on praktiline abimaterjal vormi täitmiseks, mitte vormi asendus – kontrolli alati kehtivat vormi ametlikust allikast."
   },
   {
     question: "Mis vahe on eneseanalüüsil ja kontrollnimekirjal?",
@@ -108,7 +108,7 @@ const schema = {
           <h1>Eneseanalüüs: HAKA hindamise alusdokument</h1>
           <p>
             Paljud koolitajad käsitlevad eneseanalüüsi kui üht paberit paljudest. Tegelikult on
-            see hindamise <strong>alusdokument</strong> — sellest loeb hindaja, kas asutus vastab
+            see hindamise <strong>alusdokument</strong> – sellest loeb hindaja, kas asutus vastab
             kaheksale HAKA hindamisvaldkonnale, ja kõik muu (õppekava, veebileht, tõendid) peab
             selle väiteid toetama.
           </p>
@@ -124,13 +124,13 @@ const schema = {
         <div class="section-inner narrow">
           <div class="section-head compact-head">
             <span class="kicker">Miks eneseanalüüs, mitte lisadokument</span>
-            <h2>Eneseanalüüs on hindamise alus — mitte lisamaterjal juurde.</h2>
+            <h2>Eneseanalüüs on hindamise alus – mitte lisamaterjal juurde.</h2>
             <p>
               Eneseanalüüsi aruanne on dokument, mille põhjal HAKA hindaja teeb oma hinnangu
-              iga kriteeriumi kohta. See ei ole kaaskiri õppekavale — see on peamine tekst, mida
+              iga kriteeriumi kohta. See ei ole kaaskiri õppekavale – see on peamine tekst, mida
               hindaja loeb ja mille vastu ta kõiki teisi dokumente (õppekava, veebileht, tõendid)
               kontrollib. Kui eneseanalüüsis öeldut ei ole tõenditega kaetud või kui see läheb
-              vastuollu asutuse veebilehe või õppekavaga, loeb hindaja seda riskiks — ükskõik kui
+              vastuollu asutuse veebilehe või õppekavaga, loeb hindaja seda riskiks – ükskõik kui
               hea sisu tegelikkuses on.
             </p>
           </div>
@@ -143,7 +143,7 @@ const schema = {
           <div class="section-head compact-head">
             <span class="kicker">8 valdkonda</span>
             <h2>Eneseanalüüs katab samad kaheksa valdkonda, mida hindaja hindab.</h2>
-            <p>Täpsem kirjeldus igast valdkonnast ja tüüpvigadest on eraldi lehel — 8 valdkonna kontrollnimekirjas.</p>
+            <p>Täpsem kirjeldus igast valdkonnast ja tüüpvigadest on eraldi lehel – 8 valdkonna kontrollnimekirjas.</p>
           </div>
           <div class="measure-list">
             {coverage.map((c) => (
@@ -171,7 +171,7 @@ const schema = {
           <p>
             Iga väide eneseanalüüsis peab olema tõenduspõhine: „X on tagatud, mille tõendiks on
             Y.“ Praktikas tähendab see viidet konkreetsele dokumendile, protsessikirjeldusele,
-            statistikale või näitele — mitte üldist lubadust. Kasulikud tõendid valdkondade
+            statistikale või näitele – mitte üldist lubadust. Kasulikud tõendid valdkondade
             kaupa:
           </p>
           <ul class="check">
@@ -179,7 +179,7 @@ const schema = {
             <li>Tabel: iga õpiväljund × hindamismeetod × hindamiskriteerium.</li>
             <li>Koolitajate kvalifikatsiooni koondtabel (haridus, kogemus, digipädevus) samas struktuuris kõigi kohta.</li>
             <li>Kvaliteedidokument ühes kohas veebis, kuupäevaga, koos ühe konkreetse näitega tagasisidest tingitud muudatusest.</li>
-            <li>Ligipääsetavuse ja ressursside aus kirjeldus — mis on tagatud ja mis mitte.</li>
+            <li>Ligipääsetavuse ja ressursside täpne kirjeldus – mis on tagatud ja mis mitte.</li>
           </ul>
         </div>
       </section>
@@ -204,7 +204,7 @@ const schema = {
             <p>
               Kõigepealt kirjuta eneseanalüüs sisuliselt valmis, valdkond valdkonna haaval,
               tõenditega. Seejärel kasuta 8 valdkonna kontrollnimekirja kiireks eelkontrolliks
-              enne esitamist — kas mahud klapivad, kas tõendid on olemas ja kas keel on läbivalt
+              enne esitamist – kas mahud klapivad, kas tõendid on olemas ja kas keel on läbivalt
               sama.
             </p>
           </div>
@@ -219,7 +219,7 @@ const schema = {
         <div class="section-inner contact">
           <div>
             <span class="kicker">Ametlikud allikad</span>
-            <h2>Eneseanalüüsi ametlik vorm ja täpsed nõuded — otse HAKA-lt.</h2>
+            <h2>Eneseanalüüsi ametlik vorm ja täpsed nõuded – otse HAKA-lt.</h2>
             <p>See leht on praktiline abimaterjal, mitte ametlik juhis. Siduvad nõuded, vorm ja tähtajad kinnitab alati ametlik allikas.</p>
             <div class="inline-actions">
               <a class="btn btn-primary" href="https://haka.ee/wp-content/uploads/Taienduskoolitusasutuste-oppekavaruhma-kvaliteedihindamise-eneseanaluusiaruande-vorm-06.10.25.pdf" target="_blank" rel="noreferrer" data-track-event="official_source_click" data-track-label="ea_vorm_pdf">Eneseanalüüsi aruande vorm (PDF)</a>

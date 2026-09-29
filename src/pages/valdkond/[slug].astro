@@ -62,14 +62,14 @@ const canonicalPath = `/valdkond/${fieldSlug}/`;
 // valdkonna kohta build-ajal), nii et alt/caption antakse otse ette.
 const figBase = `/diagrams/valdkond/${fieldSlug}`;
 const figureId = `valdkond/${fieldSlug}`;
-const figureAlt = `Joonis: ${fieldCap} valdkonna profiil — ${entries.length} programmi ${providersInField.length} koolist${ectsRangeText ? `, maht ${ectsRangeText}` : ""}${priceRangeText ? `, hind ${priceRangeText}` : ""}.`;
+const figureAlt = `Joonis: ${fieldCap} valdkonna profiil – ${entries.length} programmi ${providersInField.length} koolist${ectsRangeText ? `, maht ${ectsRangeText}` : ""}${priceRangeText ? `, hind ${priceRangeText}` : ""}.`;
 const figureCaption = `${fieldCap}: ${entries.length} mikrokraadi ja mikrokvalifikatsiooni ${providersInField.length} koolist${ectsRangeText ? `, maht ${ectsRangeText}` : ""}${priceRangeText ? `, hind ${priceRangeText}` : ""}.`;
 
-// Extractable intent intro (1–2 lauset) — kuvatud lehel JA WebPage.description'is,
+// Extractable intent intro (1—2 lauset) — kuvatud lehel JA WebPage.description'is,
 // et AI-assistendid ja otsing saaksid valdkonna kokkuvõtte kohe kätte.
 const introText =
   `${fieldCap} valdkonnas on ${entries.length} mikrokraadi ja mikrokvalifikatsiooni ${providersInField.length} koolist` +
-  `${degreeCount > 0 && qualCount > 0 ? ` — ${degreeCount} ülikooli mikrokraadi (EAP, tasemeõppes arvestatav) ja ${qualCount} koolitusettevõtte mikrokvalifikatsiooni` : ""}` +
+  `${degreeCount > 0 && qualCount > 0 ? ` – ${degreeCount} ülikooli mikrokraadi (EAP, tasemeõppes arvestatav) ja ${qualCount} koolitusettevõtte mikrokvalifikatsiooni` : ""}` +
   `${ectsRangeText ? `. Maht ${ectsRangeText}` : ""}${priceRangeText ? `, hind ${priceRangeText}` : ""}.`;
 
 // KKK — ainult päris vastustega. Tühje/sisutühje küsimusi me ei emiteeri.
@@ -87,7 +87,7 @@ if (priceRangeText) {
 }
 if (degreeCount > 0 && qualCount > 0) {
   faq.push({
-    q: `Mikrokraad või mikrokvalifikatsioon — mille ${field} valdkonnas valida?`,
+    q: `Mikrokraad või mikrokvalifikatsioon – mille ${field} valdkonnas valida?`,
     a: `Selles valdkonnas on ${degreeCount} ülikooli mikrokraadi (annavad EAP-sid, mida saab sageli hiljem tasemeõppes arvestada) ja ${qualCount} koolitusettevõtte või rakenduskõrgkooli mikrokvalifikatsiooni (kiirem praktiline oskus). Vali eesmärgi järgi: ainepunktid ja kõrgharidustase vs kohe rakendatav oskus.`
   });
 }
@@ -201,10 +201,10 @@ const schema = { "@context": "https://schema.org", "@graph": wantedSchema };
                   <tr>
                     <td><a href={`/kataloog/${entry.slug}/`} data-track-event="cta_click" data-track-label="field_to_detail">{entry.name}</a></td>
                     <td>{entry.provider}</td>
-                    <td>{entry.ects != null ? `${entry.ects} EAP` : "—"}</td>
+                    <td>{entry.ects != null ? `${entry.ects} EAP` : "–"}</td>
                     <td>{entry.priceText || "kooli lehel"}</td>
-                    <td>{entry.format || "—"}</td>
-                    <td>{entry.intakeText || "—"}</td>
+                    <td>{entry.format || "–"}</td>
+                    <td>{entry.intakeText || "–"}</td>
                     <td class="row-actions">
                       <button type="button" class="row-interest" data-interest-btn data-slug={entry.slug} data-field={entry.field} data-provider={entry.provider} title="Mind huvitab" aria-label={`Mind huvitab: ${entry.name}`}>♥</button>
                       <label class="compare-pick">
@@ -251,7 +251,7 @@ const schema = { "@context": "https://schema.org", "@graph": wantedSchema };
                 <div class="level-card">
                   <p class="level-num">{qualCount}</p>
                   <p class="level-lbl">mikrokvalifikatsiooni</p>
-                  <p class="level-desc">Koolitusettevõtete ja rakenduskõrgkoolide lühiõpe — kiire praktiline oskus.</p>
+                  <p class="level-desc">Koolitusettevõtete ja rakenduskõrgkoolide lühiõpe – kiire praktiline oskus.</p>
                   <p class="level-links">
                     <a href="/mikrokvalifikatsiooni-valimine/" data-track-event="cta_click" data-track-label="field_to_qual_valimine">Kuidas mikrokvalifikatsiooni valida →</a>
                     <a href="/mikrokvalifikatsioonide-vordlus/" data-track-event="cta_click" data-track-label="field_to_qual_vordlus">Mikrokvalifikatsioonide võrdlus →</a>
@@ -270,10 +270,10 @@ const schema = { "@context": "https://schema.org", "@graph": wantedSchema };
             <h2>Mille järgi {field} programme võrrelda?</h2>
           </div>
           <ul class="check">
-            <li><strong>Maht ja kestus</strong> — kui palju aega sul on (EAP ja semestrid).</li>
-            <li><strong>Hind ja rahastus</strong> — vaata <a href="/kes-maksab/">kes maksab</a>: tööandja, õppekava rahastus või ise.</li>
-            <li><strong>Õppevorm</strong> — kas saad õppida veebis töö kõrvalt või käia kohapeal.</li>
-            <li><strong>Eeldused ja õpiväljundid</strong> — mida pead oskama enne ja mida oskad pärast (programmi lehel).</li>
+            <li><strong>Maht ja kestus</strong> – kui palju aega sul on (EAP ja semestrid).</li>
+            <li><strong>Hind ja rahastus</strong> – vaata <a href="/kes-maksab/">kes maksab</a>: tööandja, õppekava rahastus või ise.</li>
+            <li><strong>Õppevorm</strong> – kas saad õppida veebis töö kõrvalt või käia kohapeal.</li>
+            <li><strong>Eeldused ja õpiväljundid</strong> – mida pead oskama enne ja mida oskad pärast (programmi lehel).</li>
           </ul>
           <div class="inline-actions">
             <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="field_suunatest">Tee 2 minuti suunatest</a>
@@ -291,7 +291,7 @@ const schema = { "@context": "https://schema.org", "@graph": wantedSchema };
           <div class="section-inner narrow">
             <div class="section-head compact-head">
               <span class="kicker">KKK</span>
-              <h2>{fieldCap} mikrokraadid — korduvad küsimused</h2>
+              <h2>{fieldCap} mikrokraadid – korduvad küsimused</h2>
             </div>
             <div class="faq">
               {faq.map((f) => (
@@ -425,7 +425,7 @@ const schema = { "@context": "https://schema.org", "@graph": wantedSchema };
             window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Teavitus valdkonnast: " + field)}&body=${body}`;
           }
           track("lead_form_submit", { form_name: "field_subscribe", field, delivery: sent ? "amos" : "mailto" });
-          if (note) note.textContent = sent ? "Aitäh! Teavitame sind selle valdkonna uudistest." : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
+          if (note) note.textContent = sent ? "Aitäh! Teavitame sind selle valdkonna uudistest." : "Avasime e-kirja varuvariandi – vajuta saatmiseks Saada.";
           form.reset();
         });
       }

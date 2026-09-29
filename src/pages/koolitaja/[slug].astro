@@ -95,7 +95,7 @@ const schema = {
       description={description}
       canonicalPath={canonicalPath}
       ogTitle={`${provider}: ${count} mikrokraadi ja mikrokvalifikatsiooni`}
-      ogDescription={`${count} programmi ühes võrreldavas tabelis${factBits ? ` — ${factBits}` : ""}. Maht, hind, õppevorm ja õpiväljundid kõrvuti.`}
+      ogDescription={`${count} programmi ühes võrreldavas tabelis${factBits ? ` – ${factBits}` : ""}. Maht, hind, õppevorm ja õpiväljundid kõrvuti.`}
       jsonLd={schema}
     />
   </head>
@@ -133,10 +133,10 @@ const schema = {
                   <tr>
                     <td><a href={`/kataloog/${entry.slug}/`} data-track-event="cta_click" data-track-label="provider_to_detail">{entry.name}</a></td>
                     <td>{entry.field}</td>
-                    <td>{entry.ects != null ? `${entry.ects} EAP` : "—"}</td>
+                    <td>{entry.ects != null ? `${entry.ects} EAP` : "–"}</td>
                     <td>{entry.priceText || "kooli lehel"}</td>
-                    <td>{entry.format || "—"}</td>
-                    <td>{entry.intakeText || "—"}</td>
+                    <td>{entry.format || "–"}</td>
+                    <td>{entry.intakeText || "–"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -167,7 +167,7 @@ const schema = {
             <div class="section-head compact-head">
               <span class="kicker">Sarnased teistes koolides</span>
               <h2>Sama valdkonna mikrokraadid teistes koolides</h2>
-              <p>Võrdle {provider} programme sama valdkonna omadega mujalt — kataloog näitab kõik kõrvuti.</p>
+              <p>Võrdle {provider} programme sama valdkonna omadega mujalt – kataloog näitab kõik kõrvuti.</p>
             </div>
             {relatedByField.map((group) => (
               <div class="provider-block">
@@ -176,7 +176,7 @@ const schema = {
                   {group.items.map((entry) => (
                     <li>
                       <a href={`/kataloog/${entry.slug}/`} data-track-event="cta_click" data-track-label="provider_related_detail">{entry.name}</a>
-                      {` — ${entry.provider}`}{entry.ects ? `, ${entry.ects} EAP` : ""}
+                      {` – ${entry.provider}`}{entry.ects ? `, ${entry.ects} EAP` : ""}
                     </li>
                   ))}
                 </ul>

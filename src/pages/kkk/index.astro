@@ -9,7 +9,7 @@ import { catalog, providers } from "../../data/catalog";
 const basics = [
   {
     question: "Mis on mikrokvalifikatsioon?",
-    answer: "Mikrokvalifikatsioon on lühike, tõendatud ja tunnustatud õpe, mille lõpus saad tunnistuse ühe konkreetse oskuse kohta — mitte terve eriala diplomi. Tüüpiline maht on mõni kuu kuni kaks semestrit töö kõrvalt."
+    answer: "Mikrokvalifikatsioon on lühike, tõendatud ja tunnustatud õpe, mille lõpus saad tunnistuse ühe konkreetse oskuse kohta – mitte terve eriala diplomi. Tüüpiline maht on mõni kuu kuni kaks semestrit töö kõrvalt."
   },
   {
     question: "Mis vahe on mikrokvalifikatsioonil ja mikrokraadil?",
@@ -17,7 +17,7 @@ const basics = [
   },
   {
     question: "Mis vahe on mikrokvalifikatsioonil ja kutsetunnistusel?",
-    answer: "Kutsetunnistus kinnitab olemasolevat oskust eksamiga ega pruugi sisaldada õpet. Mikrokvalifikatsioon sisaldab alati õpet — õpid uue oskuse ja saad selle kohta tunnistuse."
+    answer: "Kutsetunnistus kinnitab olemasolevat oskust eksamiga ega pruugi sisaldada õpet. Mikrokvalifikatsioon sisaldab alati õpet – õpid uue oskuse ja saad selle kohta tunnistuse."
   },
   {
     question: "Mis on EAP ja kui suur programm tavaliselt on?",
@@ -51,7 +51,7 @@ const recognition = [
   },
   {
     question: "Kas mikrokraadiks on vaja varasemat kõrgharidust?",
-    answer: "Sõltub programmist. Paljud nõuavad kõrgharidust, aga mitte kõik — näiteks programmeerimise või ettevõtluse baasprogrammid on sageli avatud kõigile. Nõue on kirjas iga programmi lehel."
+    answer: "Sõltub programmist. Paljud nõuavad kõrgharidust, aga mitte kõik – näiteks programmeerimise või ettevõtluse baasprogrammid on sageli avatud kõigile. Nõue on kirjas iga programmi lehel."
   },
   {
     question: "Kuidas valida endale sobiv programm?",
@@ -70,7 +70,7 @@ const providersFaq = [
   },
   {
     question: "Kuidas lisada oma programm kataloogi?",
-    answer: "Täida lehel koolitajale vorm „lisa oma programm“ — programmi nimi, kool, link ja kontakt. Kontrollime info kooli avalikult lehelt ja lisame kirje koos kontrollkuupäevaga. Lisamine ei maksa midagi."
+    answer: "Täida lehel koolitajale vorm „lisa oma programm“ – programmi nimi, kool, link ja kontakt. Kontrollime info kooli avalikult lehelt ja lisame kirje koos kontrollkuupäevaga. Lisamine ei maksa midagi."
   }
 ];
 
@@ -81,11 +81,11 @@ const kataloog = [
   },
   {
     question: "Kust andmed pärinevad?",
-    answer: `Iga kirje pärineb kooli või koolitaja avalikult lehelt ja kannab kontrollkuupäeva. Praegu on kataloogis ${catalog.length} programmi ${providers.length} koolist ja koolitajalt. Tundmatut väärtust me ei leiuta — jätame välja.`
+    answer: `Iga kirje pärineb kooli või koolitaja avalikult lehelt ja kannab kontrollkuupäeva. Praegu on kataloogis ${catalog.length} programmi ${providers.length} koolist ja koolitajalt. Tundmatut väärtust me ei leiuta – jätame välja.`
   },
   {
     question: "Kas kataloogi lisamine maksab?",
-    answer: "Ei. Lisamine ei maksa midagi ega sõltu sellest, kas pakkuja on meiega seotud. Ükski programm ei osta endale paremat kohta — järjestus ja filtrid tulenevad andmetest, mitte tasust."
+    answer: "Ei. Lisamine ei maksa midagi ega sõltu sellest, kas pakkuja on meiega seotud. Ükski programm ei osta endale paremat kohta – järjestus ja filtrid tulenevad andmetest, mitte tasust."
   }
 ];
 
@@ -128,7 +128,7 @@ const schema = {
       description="Vastused kõige sagedasematele küsimustele mikrokvalifikatsioonide ja mikrokraadide kohta: mis see on, kui kaua kestab, mis maksab, kes maksab, tunnustus, ning kuidas saada pakkujaks."
       canonicalPath="/kkk/"
       ogTitle="Korduma kippuvad küsimused mikrokvalifikatsioonist"
-      ogDescription="Aeg, raha, rahastus, tunnustus ja koolitajale — lühikesed selged vastused ühes kohas."
+      ogDescription="Aeg, raha, rahastus, tunnustus ja koolitajale – lühikesed selged vastused ühes kohas."
       jsonLd={schema}
     />
   </head>
@@ -142,7 +142,7 @@ const schema = {
           <h1>Lühikesed selged vastused mikrokvalifikatsioonist.</h1>
           <p>
             Mis on mikrokvalifikatsioon, kui kaua kestab, mis maksab, kes selle kinni maksab ja
-            kuidas saada pakkujaks — kõik ühes kohas. Ei leia vastust? Kirjuta info@mikrokvalifikatsioon.ee.
+            kuidas saada pakkujaks – kõik ühes kohas. Ei leia vastust? Kirjuta info@mikrokvalifikatsioon.ee.
           </p>
         </div>
       </section>
@@ -195,7 +195,7 @@ const schema = {
           </div>
           <Faq items={kataloog} openFirst={1} />
           <p class="notice">
-            Otsid vastust ühele konkreetsele küsimusele — kui kaua kestab, kui palju maksab, mitu EAP-d,
+            Otsid vastust ühele konkreetsele küsimusele – kui kaua kestab, kui palju maksab, mitu EAP-d,
             kus õppida või kuidas kandideerida? Vaata
             <a href="/vastused/" data-track-event="cta_click" data-track-label="kkk_vastused">lühikesi faktivastuseid lehel Vastused →</a>
           </p>

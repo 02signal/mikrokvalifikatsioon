@@ -49,11 +49,11 @@ const schema = {
 <html lang="et">
   <head>
     <Seo
-      title={`Mikrokraadid Eestis — võrdle ${universityEntries.length} programmi, EAP ja hind`}
-      description={`Kõik Eesti mikrokraadid ühes võrreldavas vaates: ${universityEntries.length} programmi koolide kaupa, maht (EAP), hind ja õppevorm kõrvuti. Aluseks EHIS ametlikud andmed — ${ehisProgrammeCount} õppekava ${ehisProviderCount} pakkujalt.`}
+      title={`Mikrokraadid Eestis – võrdle ${universityEntries.length} programmi, EAP ja hind`}
+      description={`Kõik Eesti mikrokraadid ühes võrreldavas vaates: ${universityEntries.length} programmi koolide kaupa, maht (EAP), hind ja õppevorm kõrvuti. Aluseks EHIS ametlikud andmed – ${ehisProgrammeCount} õppekava ${ehisProviderCount} pakkujalt.`}
       canonicalPath="/mikrokraadid/"
       ogType="article"
-      ogTitle="Mikrokraadid Eestis — võrdle programme, EAP ja hind"
+      ogTitle="Mikrokraadid Eestis – võrdle programme, EAP ja hind"
       ogDescription="Kõik Eesti mikrokraadid ühes vaates: võrdle kooli, mahtu (EAP), hinda ja õppevormi. Aluseks EHIS ametlikud andmed."
       jsonLd={schema}
     />
@@ -67,7 +67,7 @@ const schema = {
           <span class="eyebrow">Mikrokraadid</span>
           <h1>Mikrokraad on kõrgkooli mikrokvalifikatsioon.</h1>
           <p>
-            Lühike ülikooliõpe — tavaliselt mõni kuu kuni kaks semestrit töö kõrvalt — mille
+            Lühike ülikooliõpe – tavaliselt mõni kuu kuni kaks semestrit töö kõrvalt – mille
             lõpus saad ametliku tunnistuse ühe konkreetse oskuse kohta. Siin saad
             mikrokraade võrrelda kooli, mahu, hinna ja algusaja järgi; EHIS ametlik
             turupilt katab {ehisProgrammeCount} registreeritud mikrokvalifikatsiooni
@@ -88,23 +88,23 @@ const schema = {
             <h2>Mikrokraadid Eesti kõrgkoolides.</h2>
             <p>Vaata kõiki koole korraga <a href="/koolitaja/">mikrokraadid koolide kaupa</a> lehel, või vali kool allpool.</p>
           </div>
-          <p>Igal real allpool on kirjas ka maht ehk EAP — nii saad kohe aru, kui palju aega üks mikrokraad päriselt võtab.</p>
+          <p>Igal real allpool on kirjas ka maht ehk EAP – nii saad kohe aru, kui palju aega üks mikrokraad päriselt võtab.</p>
           <Figure id="eap-26-tundi" />
           {byProvider.map(({ provider, slug, entries }) => (
             <div class="provider-block">
-              <h3>{slug ? <a href={`/koolitaja/${slug}/`}>{provider}</a> : provider} — {entries.length} mikrokraadi</h3>
+              <h3>{slug ? <a href={`/koolitaja/${slug}/`}>{provider}</a> : provider} – {entries.length} mikrokraadi</h3>
               <ul class="check">
                 {entries.slice(0, 8).map((entry) => (
                   <li>
                     <a href={`/kataloog/${entry.slug}/`}>{entry.name}</a>
-                    {entry.ects ? ` — ${entry.ects} EAP` : ""}{entry.priceText ? `, ${entry.priceText}` : ""}
+                    {entry.ects ? ` – ${entry.ects} EAP` : ""}{entry.priceText ? `, ${entry.priceText}` : ""}
                   </li>
                 ))}
               </ul>
               {slug && <p><a href={`/koolitaja/${slug}/`}>Vaata kõiki {provider} mikrokraade →</a></p>}
             </div>
           ))}
-          <p>Hinnad on kooliti erinevad — nii näeb välja tüüpilise mikrokraadi hind kogu turu peale kokku.</p>
+          <p>Hinnad on kooliti erinevad – nii näeb välja tüüpilise mikrokraadi hind kogu turu peale kokku.</p>
           <Figure id="hind" />
         </div>
       </section>
@@ -113,7 +113,7 @@ const schema = {
         <div class="section-inner">
           <div class="section-head compact-head">
             <span class="kicker">Mis vahe on?</span>
-            <h2>Mikrokraad, mikrokvalifikatsioon, kutsetunnistus — lihtne vahe.</h2>
+            <h2>Mikrokraad, mikrokvalifikatsioon, kutsetunnistus – lihtne vahe.</h2>
           </div>
           <Figure id="mikrokraad-vs-mikrokvalifikatsioon" />
           <div class="simple-cards">
@@ -140,7 +140,7 @@ const schema = {
         <div class="section-inner contact">
           <div>
             <span class="kicker">Järgmine samm</span>
-            <h2>Filtreeri kataloogist valdkond, hind ja kool — leia oma programm.</h2>
+            <h2>Filtreeri kataloogist valdkond, hind ja kool – leia oma programm.</h2>
             <div class="inline-actions">
               <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="mikrokraadid_bottom_kataloog">Ava kataloog</a>
               <a class="btn btn-secondary" href="mailto:info@mikrokvalifikatsioon.ee?subject=Mikrokraadi%20valik" data-track-event="email_click" data-track-label="mikrokraadid_bottom_email">Küsi nõu e-mailiga</a>

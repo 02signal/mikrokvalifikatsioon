@@ -54,14 +54,14 @@ const programmeCount = catalog.length;
 const universityCount = rows.filter((r) => r.type === "ülikool").length;
 
 const ectsText = (r: ProviderRow) =>
-  r.minEcts != null && r.maxEcts != null ? (r.minEcts === r.maxEcts ? `${r.minEcts} EAP` : `${r.minEcts}–${r.maxEcts} EAP`) : "—";
+  r.minEcts != null && r.maxEcts != null ? (r.minEcts === r.maxEcts ? `${r.minEcts} EAP` : `${r.minEcts}–${r.maxEcts} EAP`) : "–";
 const priceText = (r: ProviderRow) =>
   r.minPrice != null && r.maxPrice != null
     ? (r.minPrice === r.maxPrice ? `${r.minPrice} €` : `${r.minPrice}–${r.maxPrice} €`) + (r.freeCount > 0 ? `, ${r.freeCount} rahastatud` : "")
     : "kooli lehel";
 
-const title = `Mikrokraadid koolide kaupa — ${providerCount} koolitajat ühes kohas`;
-const description = `Kõik Eesti mikrokraade ja mikrokvalifikatsioone pakkuvad koolid ühes kohas: ${providerCount} koolitajat, ${programmeCount} programmi. Vali kool ja vaata kõiki selle programme — maht (EAP), hind ja valdkonnad kõrvuti.`;
+const title = `Mikrokraadid koolide kaupa – ${providerCount} koolitajat ühes kohas`;
+const description = `Kõik Eesti mikrokraade ja mikrokvalifikatsioone pakkuvad koolid ühes kohas: ${providerCount} koolitajat, ${programmeCount} programmi. Vali kool ja vaata kõiki selle programme – maht (EAP), hind ja valdkonnad kõrvuti.`;
 
 const schema = {
   "@context": "https://schema.org",
@@ -96,8 +96,8 @@ const schema = {
       title={title}
       description={description}
       canonicalPath={canonicalPath}
-      ogTitle="Mikrokraadid koolide kaupa — kõik koolitajad ühes kohas"
-      ogDescription={`${providerCount} kooli, ${programmeCount} programmi. Vali kool ja vaata kõiki selle mikrokraade — maht, hind ja valdkonnad kõrvuti.`}
+      ogTitle="Mikrokraadid koolide kaupa – kõik koolitajad ühes kohas"
+      ogDescription={`${providerCount} kooli, ${programmeCount} programmi. Vali kool ja vaata kõiki selle mikrokraade – maht, hind ja valdkonnad kõrvuti.`}
       jsonLd={schema}
     />
   </head>
@@ -114,7 +114,7 @@ const schema = {
           <span class="eyebrow">Koolitajad</span>
           <h1>Mikrokraadid ja mikrokvalifikatsioonid koolide kaupa</h1>
           <p>
-            Kõik {providerCount} Eesti kooli, kes pakuvad mikrokraade ja mikrokvalifikatsioone —
+            Kõik {providerCount} Eesti kooli, kes pakuvad mikrokraade ja mikrokvalifikatsioone –
             sh {universityCount} kõrgkooli. Vali kool ja näed kõiki selle programme ühel lehel:
             maht (EAP), hind, õppevorm ja valdkonnad kõrvuti. Kokku {programmeCount} programmi.
           </p>
@@ -156,7 +156,7 @@ const schema = {
             <h2>Muud teed valikuni</h2>
           </div>
           <p class="chips">
-            <a class="chip" href="/mikrokraadid/">Mikrokraadid Eestis — ülevaade</a>
+            <a class="chip" href="/mikrokraadid/">Mikrokraadid Eestis – ülevaade</a>
             <a class="chip" href="/kataloog/">Filtreeritav kataloog</a>
             <a class="chip" href="/mikrokvalifikatsioonide-vordlus/">Võrdle programme kõrvuti</a>
             <a class="chip" href="/mikrokvalifikatsiooni-valimine/">Valimise teejuht</a>

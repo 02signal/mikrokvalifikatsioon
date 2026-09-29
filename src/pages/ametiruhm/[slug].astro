@@ -67,7 +67,7 @@ const salaryText = salary
     ? `brutopalga mediaan ${eur(salary.min)} €`
     : `brutopalga mediaan ${eur(salary.min)}–${eur(salary.max)} €`
   : "palgakontekst";
-const description = `${group.label} Eestis: ${demandText} (avaandmed ${asOf}), ${salaryText} (Statistikaamet ${salaryMonthlyYear}) ning käsitsi kontrollitud õpitee — ${valdkondCards.length} valdkonda ja ${karjaarCards.length} karjäärirada sobivate mikrokvalifikatsioonide ja mikrokraadideni.`;
+const description = `${group.label} Eestis: ${demandText} (avaandmed ${asOf}), ${salaryText} (Statistikaamet ${salaryMonthlyYear}) ning käsitsi kontrollitud õpitee – ${valdkondCards.length} valdkonda ja ${karjaarCards.length} karjäärirada sobivate mikrokvalifikatsioonide ja mikrokraadideni.`;
 
 // ── FAQ (≥2 Q&A; toidab ka FAQPage JSON-LD-d) ───────────────────────────────────
 const faq: { question: string; answer: string }[] = [];
@@ -78,7 +78,7 @@ if (demand) {
       `Avaandmete järgi (seis ${asOf}) on selle ametirühma nõudlus vähemalt ühes ` +
       `maakonnas kuni ${openingsBandText(demand.topBand)} ja vabu kohti on ${demand.activeRegions} ` +
       `maakonnas ${demand.regionCount}-st (trend ${trendLabel(demand.trend)}). Arvud on toodud ` +
-      `vahemikena ametirühma tasemel — see on ametliku avaandmestiku täpsus.`,
+      `vahemikena ametirühma tasemel – see on ametliku avaandmestiku täpsus.`,
   });
 }
 if (salary) {
@@ -98,7 +98,7 @@ faq.push({
     `${valdkondCards.length && karjaarCards.length ? " ja " : ""}` +
     `${karjaarCards.length ? `karjäärirajad (${karjaarCards.map((c) => c.label).join(", ")})` : ""}. ` +
     `Need lehed näitavad sobivaid mikrokvalifikatsioone ja mikrokraade. Me ei väida, et üks ` +
-    `kindel programm annab kvalifikatsiooni kindlaks ametiks — vali õpe, mille väljund on käegakatsutav.`,
+    `kindel programm annab kvalifikatsiooni kindlaks ametiks – vali õpe, mille väljund on käegakatsutav.`,
 });
 
 // ── JSON-LD: WebPage + BreadcrumbList + ItemList + FAQPage + Dataset ─────────────
@@ -134,7 +134,7 @@ const graph: any[] = [
   },
   {
     "@type": "ItemList",
-    name: `${group.label} — õpitee (valdkonnad ja karjäärirajad)`,
+    name: `${group.label} – õpitee (valdkonnad ja karjäärirajad)`,
     numberOfItems: studyItems.length,
     itemListElement: studyItems.map((it, i) => ({
       "@type": "ListItem",
@@ -169,7 +169,7 @@ if (demand) {
 if (salary) {
   graph.push({
     "@type": "Dataset",
-    name: "Statistikaamet — brutopalga mediaan ametiala järgi (PA626)",
+    name: "Statistikaamet – brutopalga mediaan ametiala järgi (PA626)",
     description: `${group.label} palgakontekst: brutopalga mediaan ISCO alarühmade kaupa, riiklik, viimane avaldatud aasta ${salaryMonthlyYear}.`,
     creator: { "@type": "Organization", name: "Statistikaamet" },
     license: "https://creativecommons.org/licenses/by-sa/4.0/",
@@ -248,7 +248,7 @@ const schema = { "@context": "https://schema.org", "@graph": graph };
               Allikas: <a href="https://andmed.eesti.ee/datasets/eesti-tootukassa-poolt-vahendatud-vabade-tookohtade-statistika" rel="noopener" target="_blank">Eesti Töötukassa avaandmed</a>,
               litsents <a href="https://creativecommons.org/licenses/by-nc/3.0/" rel="noopener" target="_blank">CC BY-NC 3.0</a>.
               Andmeseis {asOf}. Arvud on toodud vahemikena, ametirühma tasemel, agregeeritud
-              maakondade üle (kõrgeim bänd — bände ei summeerita, sest need on avatud vahemikud).
+              maakondade üle (kõrgeim bänd – bände ei summeerita, sest need on avatud vahemikud).
             </p>
           </div>
         </section>
@@ -300,7 +300,7 @@ const schema = { "@context": "https://schema.org", "@graph": graph };
             <p class="muted">
               Need lingid viivad valdkonna- ja karjääriraja-lehtedele, kus sobivad
               mikrokvalifikatsioonid ja mikrokraadid juba kirjas on. Me <strong>ei väida</strong>,
-              et üks kindel programm annab kvalifikatsiooni kindlaks ametiks — sobivuse otsus jääb
+              et üks kindel programm annab kvalifikatsiooni kindlaks ametiks – sobivuse otsus jääb
               õppe enda lehele.
             </p>
           </div>
@@ -348,7 +348,7 @@ const schema = { "@context": "https://schema.org", "@graph": graph };
         <div class="section-inner narrow">
           <div class="section-head compact-head">
             <span class="kicker">Korduvad küsimused</span>
-            <h2>{group.label} — KKK</h2>
+            <h2>{group.label} – KKK</h2>
           </div>
           <Faq items={faq} />
         </div>
@@ -398,7 +398,7 @@ const schema = { "@context": "https://schema.org", "@graph": graph };
       </section>
     </main>
 
-    <Footer label={`${group.label} — tööturg ja õpe`} />
+    <Footer label={`${group.label} – tööturg ja õpe`} />
 
     <style>
       .crumbs { font-size: 0.85rem; color: #5a6b80; margin-bottom: 12px; }

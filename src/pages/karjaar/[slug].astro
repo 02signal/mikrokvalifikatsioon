@@ -40,14 +40,14 @@ const fieldsCovered = fieldsWithSlug.filter((f) => entries.some((e) => e.field =
 
 const SITE = "https://mikrokvalifikatsioon.ee";
 const canonicalPath = `/karjaar/${career.slug}/`;
-const title = `${career.role} — karjäärirada ja õpe`;
+const title = `${career.role} – karjäärirada ja õpe`;
 const laborPeriod = asOfText(laborCheckedAt);
 const laborGroup = iscoLabel(careerIsco);
 const description = `${career.role} karjäärirada: mida amet teeb, kuidas alustada ja läbi lüüa, milline õpe aitab ning mida näitab ${laborPeriod} ametirühma nõudlus. ${entries.length} sobivat mikrokvalifikatsiooni ja mikrokraadi.`;
 
 const faq = [
   { q: `Kas alustajana saab ${roleLower} tööd?`,
-    a: `Saab, aga konkurents on tihe: avaldusi laekub sadu ja trend kasvab. Tööandjad ütlevad, et tugevaid kandidaate on üksikuid — otsustavad isikuomadused ja see, mida oled päriselt teinud (portfoolio), mitte ainult CV-rida. Ehita päris tööde portfoolio juba õppe ajal.` },
+    a: `Saab, aga konkurents on tihe: avaldusi laekub sadu ja trend kasvab. Tööandjad ütlevad, et tugevaid kandidaate on üksikuid – otsustavad isikuomadused ja see, mida oled päriselt teinud (portfoolio), mitte ainult CV-rida. Ehita päris tööde portfoolio juba õppe ajal.` },
   { q: `Milline õpe aitab ${roleLower}na alustada?`,
     a: `Allpool on ${entries.length} sobivat mikrokvalifikatsiooni ja mikrokraadi${portfolio.length ? `, sealhulgas ${portfolio.length} portfoolio-sõbralikku, kus saab teha päris töid` : ""}. Vali õpe, mille väljund on midagi käegakatsutavat.` },
   { q: `Kes maksab ${roleLower} õppe eest?`,
@@ -68,7 +68,7 @@ const schema = {
     },
     {
       "@type": "ItemList",
-      name: `${career.role} — sobivad mikrokvalifikatsioonid ja mikrokraadid`,
+      name: `${career.role} – sobivad mikrokvalifikatsioonid ja mikrokraadid`,
       numberOfItems: entries.length,
       itemListElement: entries.map((entry, index) => ({
         "@type": "ListItem", position: index + 1, item: toCourse(entry)
@@ -96,8 +96,8 @@ const schema = {
       title={title}
       description={description}
       canonicalPath={canonicalPath}
-      ogTitle={`${career.role} — karjäärirada ja õpe`}
-      ogDescription="Kuidas alustada ja läbi lüüa — portfoolio, isikuomadused ja sobiv õpe."
+      ogTitle={`${career.role} – karjäärirada ja õpe`}
+      ogDescription="Kuidas alustada ja läbi lüüa – portfoolio, isikuomadused ja sobiv õpe."
       jsonLd={schema}
     />
   </head>
@@ -123,20 +123,20 @@ const schema = {
           <div class="detail-block">
             <h2>Kas alustajana on võimalik läbi lüüa?</h2>
             <p>
-              Paljud kardavad, et alustajana on raske läbi lüüa — ja avaldusi laekubki sadu, trend
+              Paljud kardavad, et alustajana on raske läbi lüüa – ja avaldusi laekubki sadu, trend
               kasvab. Aga tööandjad ütlevad sama selgelt: <strong>tugevaid kandidaate on üksikuid</strong>.
               Otsustab harva CV-rida. Otsustavad <strong>isikuomadused</strong> ja see, mida oled
-              päriselt teinud — sinu <strong>portfoolio</strong>. Seega vali õpe, mis laseb sul ehitada
+              päriselt teinud – sinu <strong>portfoolio</strong>. Seega vali õpe, mis laseb sul ehitada
               päris tööde portfoolio, mitte ainult tunnistuse.
             </p>
           </div>
           <div class="detail-block">
             <h2>Kuidas {roleLower}na läbi lüüa</h2>
             <ul class="check">
-              <li><strong>Ehita portfoolio</strong> — päris tööd ja projektid, mida saad näidata.</li>
-              <li><strong>Näita isikuomadusi</strong> — algatust, õppimisvõimet, koostööd.</li>
+              <li><strong>Ehita portfoolio</strong> – päris tööd ja projektid, mida saad näidata.</li>
+              <li><strong>Näita isikuomadusi</strong> – algatust, õppimisvõimet, koostööd.</li>
               <li><strong>Tee praktilisi projekte juba õppe ajal</strong>, mitte alles pärast.</li>
-              <li><strong>Vali õpe käegakatsutava väljundiga</strong> — kus lõpuks on midagi reaalset.</li>
+              <li><strong>Vali õpe käegakatsutava väljundiga</strong> – kus lõpuks on midagi reaalset.</li>
             </ul>
           </div>
         </div>
@@ -152,7 +152,7 @@ const schema = {
             <div class="section-head compact-head">
               <span class="kicker">Soovitus</span>
               <h2>Portfoolio-sõbralikud programmid ({portfolio.length})</h2>
-              <p>Need programmid lasevad sul teha päris töid ja praktilisi projekte — täpselt seda, mida tööandja vaatab.</p>
+              <p>Need programmid lasevad sul teha päris töid ja praktilisi projekte – täpselt seda, mida tööandja vaatab.</p>
             </div>
             <ul class="prog-grid">
               {portfolio.map((entry) => (

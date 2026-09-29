@@ -76,7 +76,7 @@ const schema = {
     {
       "@type": "CollectionPage",
       name: "Mikrokvalifikatsioonide õpiväljundid",
-      description: "Otsitav kataloog mikrokvalifikatsioonide ja mikrokraadide õpiväljunditest — leia programm selle järgi, mida pärast oskad.",
+      description: "Otsitav kataloog mikrokvalifikatsioonide ja mikrokraadide õpiväljunditest – leia programm selle järgi, mida pärast oskad.",
       inLanguage: "et",
       url: `${SITE}/oskused/`,
       isPartOf: { "@id": `${SITE}/#organization` }
@@ -92,7 +92,7 @@ const schema = {
       title="Otsi mikrokraadi oskuse (õpiväljundi) järgi"
       description={`Mida sa pärast oskad? Otsi ${outcomes.length} õpiväljundi (õpitulemuse) seast märksõna järgi ja leia kohe, milline mikrokvalifikatsioon või mikrokraad selle oskuse annab. Pane kokku oma oskuste pakett.`}
       canonicalPath="/oskused/"
-      ogTitle="Otsi mikrokraadi oskuse järgi — mida sa pärast oskad"
+      ogTitle="Otsi mikrokraadi oskuse järgi – mida sa pärast oskad"
       ogDescription="Sisesta oskus ja näe, millised programmid selle annavad. Korja sobivad õpiväljundid oma paketti."
       jsonLd={schema}
     />
@@ -115,9 +115,9 @@ const schema = {
             {programmesWithOutcomes} programmist. Või <a href="/teema/" data-track-event="cta_click" data-track-label="oskused_to_teema">sirvi teemade kaupa</a>.
           </p>
           <p class="syn">
-            „Õpiväljund" on lihtsalt see, <strong>mida sa pärast oskad</strong> — ehk mida õpetatakse,
+            „Õpiväljund" on lihtsalt see, <strong>mida sa pärast oskad</strong> – ehk mida õpetatakse,
             mis oskuse saad, õpitulemused, kursuse sisu. Korja sobivad õpiväljundid <strong>oma paketti</strong>
-            ja jäta e-mail — siis teavitame, kui sellele lähedane programm või kombinatsioon lisandub.
+            ja jäta e-mail – siis teavitame, kui sellele lähedane programm või kombinatsioon lisandub.
           </p>
           <p class="report-date">Andmestik uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}</p>
         </div>
@@ -195,7 +195,7 @@ const schema = {
               <button type="button" class="pkg-switch-btn" data-pkg-rename title="Muuda paketi nime">Nimeta ümber</button>
               <button type="button" class="pkg-switch-btn pkg-switch-del" data-pkg-delete title="Kustuta see pakett">Kustuta pakett</button>
             </div>
-            <p class="pkg-switch-help" data-pkg-switch-help hidden>Saad hoida mitut erinevat paketti — nt eri töökohtade või inimeste jaoks. Vali ülalt, millist praegu täidad.</p>
+            <p class="pkg-switch-help" data-pkg-switch-help hidden>Saad hoida mitut erinevat paketti – nt eri töökohtade või inimeste jaoks. Vali ülalt, millist praegu täidad.</p>
             <p>
               Korjasid kokku oskused, mida tahad õppida. Hoiame paketid sinu brauseris ja näitame
               allpool, milline <strong>programm või kombinatsioon</strong> su valitud oskustele kõige
@@ -235,7 +235,7 @@ const schema = {
           <div>
             <span class="kicker">Ei leidnud?</span>
             <h2>Küsi oskust, mida veel ei õpetata.</h2>
-            <p>Kui sulle vajalikku oskust kataloogis pole, anna teada — kogume nõudlust ja teavitame, kui selline programm lisandub.</p>
+            <p>Kui sulle vajalikku oskust kataloogis pole, anna teada – kogume nõudlust ja teavitame, kui selline programm lisandub.</p>
             <div class="inline-actions">
               <a class="btn btn-primary" href="/kataloog/#kusi-oskust" data-track-event="cta_click" data-track-label="oskused_demand">Küsi uut oskust</a>
               <a class="btn btn-secondary" href="/#suunatest" data-track-event="cta_click" data-track-label="oskused_suunatest">Tee suunatest</a>
@@ -482,9 +482,9 @@ const schema = {
       const PKG_TARGET = 5;
       const packageSizeHint = (n: number): { label: string; tone: "low" | "good" | "large" } | null => {
         if (n <= 0) return null;
-        if (n <= 4) return { label: "Lisa veel — hea pakett on umbes 5 õpiväljundit.", tone: "low" };
-        if (n <= 6) return { label: "✓ Hea suurus — umbes 5 õpiväljundit on mikrokvalifikatsioonis hea toon.", tone: "good" };
-        return { label: "Päris suur pakett. Kõige selgemad paketid on umbes 5 oskust — võid soovi korral teha ka mitu väiksemat.", tone: "large" };
+        if (n <= 4) return { label: "Lisa veel – hea pakett on umbes 5 õpiväljundit.", tone: "low" };
+        if (n <= 6) return { label: "✓ Hea suurus – umbes 5 õpiväljundit on mikrokvalifikatsioonis hea toon.", tone: "good" };
+        return { label: "Päris suur pakett. Kõige selgemad paketid on umbes 5 oskust – võid soovi korral teha ka mitu väiksemat.", tone: "large" };
       };
 
       // Parim üksik programm + parim kombinatsioon (greedy set-cover) valitud õpiväljunditele.
@@ -533,8 +533,8 @@ const schema = {
             html += `<p class="pm-h2">Täielikuks katteks (${combo.covered_refs.length}/${total}) sobib kombinatsioon:</p>`;
             html += `<ol class="pm-combo">${combo.variants.map((v) => `<li>${line(v.variant_ref)}</li>`).join("")}</ol>`;
             const tail = combo.fully_covered
-              ? "Ükski üksik programm ei kata kogu su paketti — sa soovid oskuste kombinatsiooni, mida praegu pakub vaid mitu eri programmi. Jäta e-mail, siis teavitame, kui sellele lähedasem terviklik lahendus lisandub."
-              : `Praegused programmid katavad sinu paketist ${combo.covered_refs.length}/${total} oskust — kõigile su valitud oskustele veel ühtegi katet pole. Jäta e-mail, siis teavitame, kui lisandub programm, mis su paketti paremini katab.`;
+              ? "Ükski üksik programm ei kata kogu su paketti – sa soovid oskuste kombinatsiooni, mida praegu pakub vaid mitu eri programmi. Jäta e-mail, siis teavitame, kui sellele lähedasem terviklik lahendus lisandub."
+              : `Praegused programmid katavad sinu paketist ${combo.covered_refs.length}/${total} oskust – kõigile su valitud oskustele veel ühtegi katet pole. Jäta e-mail, siis teavitame, kui lisandub programm, mis su paketti paremini katab.`;
             html += `<p class="pm-note">${tail}</p>`;
           }
         }
@@ -756,7 +756,7 @@ const schema = {
           ? "Aitäh! Teavitame sind, kui sobiv programm või kombinatsioon lisandub."
           : rateLimited
             ? "Korraga tuli liiga palju päringuid. Palun proovi mõne minuti pärast uuesti."
-            : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
+            : "Avasime e-kirja varuvariandi – vajuta saatmiseks Saada.";
       });
 
       renderPkg();

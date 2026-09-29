@@ -54,10 +54,10 @@ const schema = {
   <head>
     <Seo
       title="Registreerimine ja algusajad – mikrokvalifikatsioonid"
-      description={`Millal mikrokvalifikatsioonide ja mikrokraadide registreerimine lõpeb ja millal õpe algab. ${byDeadline.length} tähtaega ja ${byStart.length} algusaega, sorditud — leia, millele jõuad veel registreeruda ja planeeri kalendrisse.`}
+      description={`Millal mikrokvalifikatsioonide ja mikrokraadide registreerimine lõpeb ja millal õpe algab. ${byDeadline.length} tähtaega ja ${byStart.length} algusaega, sorditud – leia, millele jõuad veel registreeruda ja planeeri kalendrisse.`}
       canonicalPath="/registreerimine/"
       ogTitle="Registreerimine ja algusajad"
-      ogDescription="Mis lõpeb varsti ja mis algab millal — planeeri õpingud kalendri järgi."
+      ogDescription="Mis lõpeb varsti ja mis algab millal – planeeri õpingud kalendri järgi."
       jsonLd={schema}
     />
   </head>
@@ -85,7 +85,7 @@ const schema = {
         <div class="section-inner">
           <div class="section-head compact-head">
             <span class="kicker">Registreerimine</span>
-            <h2>Registreerimine lõpeb — kõige varem lõppevad ees.</h2>
+            <h2>Registreerimine lõpeb – kõige varem lõppevad ees.</h2>
           </div>
           <div class="compare-wrap">
             <table class="time-table">
@@ -101,7 +101,7 @@ const schema = {
                     <td class="nowrap">{
                       (() => {
                         const startText = formatStartEt(entry);
-                        if (!startText) return "—";
+                        if (!startText) return "–";
                         // PR-3g: "järgmine algus täpsustamisel" has no real
                         // ISO day/month to wrap in <time datetime> — entry.
                         // startDate/startMonth are both null for this case.
@@ -110,7 +110,7 @@ const schema = {
                         return <time datetime={dt}>{startText}</time>;
                       })()
                     }</td>
-                    <td class="nowrap">{entry.ects != null ? `${entry.ects} EAP` : "—"}</td>
+                    <td class="nowrap">{entry.ects != null ? `${entry.ects} EAP` : "–"}</td>
                     <td class="nowrap">{entry.priceText || "kooli lehel"}</td>
                   </tr>
                 ))}
@@ -124,7 +124,7 @@ const schema = {
         <div class="section-inner">
           <div class="section-head compact-head">
             <span class="kicker">Algusajad</span>
-            <h2>Algavad õpingud kuude kaupa — planeeri kalendrisse.</h2>
+            <h2>Algavad õpingud kuude kaupa – planeeri kalendrisse.</h2>
           </div>
           {startMonths.map((m) => (
             <div class="month-block">
@@ -132,7 +132,7 @@ const schema = {
               <ul class="check">
                 {m.entries.map((entry) => (
                   <li>
-                    <a href={`/kataloog/${entry.slug}/`}>{entry.name}</a> — {entry.provider}
+                    <a href={`/kataloog/${entry.slug}/`}>{entry.name}</a> – {entry.provider}
                     {entry.registrationDeadline && <>, registreerimine kuni {formatEt(entry.registrationDeadline)}</>}
                   </li>
                 ))}
@@ -145,7 +145,7 @@ const schema = {
       <section class="white">
         <div class="section-inner narrow">
           <p class="notice">
-            Kuupäevad pärinevad koolide avalikelt lehtedelt ja võivad muutuda — kinnita alati programmi lehel.
+            Kuupäevad pärinevad koolide avalikelt lehtedelt ja võivad muutuda – kinnita alati programmi lehel.
             Programmid ilma kindla kuupäevata leiad <a href="/kataloog/">kataloogist</a>.
           </p>
           <div class="inline-actions">
@@ -160,7 +160,7 @@ const schema = {
           <div>
             <span class="kicker">Püsi kursis</span>
             <h2>Tahad teada, kui avaneb uus vastuvõtt?</h2>
-            <p>Vali valdkond ja telli teavitus — anname teada, kui sinu valdkonnas avaneb uus registreerimine.</p>
+            <p>Vali valdkond ja telli teavitus – anname teada, kui sinu valdkonnas avaneb uus registreerimine.</p>
             <div class="inline-actions">
               <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="reg_fields">Vali valdkond</a>
             </div>

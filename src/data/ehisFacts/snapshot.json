@@ -4,7 +4,7 @@
   "source_endpoint": "http://enda.ehis.ee/avaandmed/rest/oppekavad/-/-/OK_LIIK_MKVOK/1/JSON",
   "publisher": "Haridus- ja Teadusministeerium",
   "attribution_text": "Allikas: EHIS (Eesti Hariduse Infosüsteem), Haridus- ja Teadusministeerium",
-  "licence": "avaandmed.eesti.ee — taaskasutatav, viitega allikale (HTM/EHIS)",
+  "licence": "avaandmed.eesti.ee – taaskasutatav, viitega allikale (HTM/EHIS)",
   "fetched_at": "2026-07-02",
   "record_count": 450,
   "curricula": [

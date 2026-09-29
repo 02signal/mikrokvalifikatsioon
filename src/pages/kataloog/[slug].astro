@@ -130,7 +130,7 @@ function buildActiveView(entry: CatalogEntryWithSlug) {
   // ("Õpetajate akadeemia … programmid") ja metaTail on õdedel-vendadel samuti sama,
   // nii et ilma nimeta said kümme eri lehte identse kirjelduse. Nimi on ainus osa,
   // mis neid eristab — ja kirjeldus peakski ütlema, MIS sellel lehel on.
-  const descLead = entry.summary.startsWith(entry.name) ? entry.summary : `${entry.name} — ${entry.summary}`;
+  const descLead = entry.summary.startsWith(entry.name) ? entry.summary : `${entry.name} – ${entry.summary}`;
   const description = `${descLead} ${metaTail}.`.replace(/\s+/g, " ").trim().slice(0, 300);
   // Hoia pealkiri alla 70 tähemärgi: nimi + pakkuja kui mahub, muidu ainult nimi;
   // väga pikk nimi lõigatakse sõnapiiril + „…".
@@ -194,7 +194,7 @@ const pageCanonicalPath = activeView?.canonicalPath ?? retiredView!.canonicalPat
 // see EI ole enam ostetav pakkumine; ometi jääb see läbitav (follow), et
 // sisemine linkimine (kataloogi ja sarnaste programmide vahel) toimiks.
 const pageRobots = retired ? "noindex,follow" : undefined;
-const pageOgTitle = entry ? `${entry.name} — ${entry.provider}` : `${retired!.name} — ei ole enam saadaval`;
+const pageOgTitle = entry ? `${entry.name} – ${entry.provider}` : `${retired!.name} – ei ole enam saadaval`;
 const pageOgDescription = entry ? entry.summary : pageDescription;
 ---
 
@@ -262,7 +262,7 @@ const pageOgDescription = entry ? entry.summary : pageDescription;
               <p class="school-check-line">
                 <a href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_school_check_${entry.provider}`}>Ajakohast hinda, vastuvõttu ja kirjeldust vaata kooli lehel ↗</a>
               </p>
-              <p class="school-check-sub">Selle kooli ajakohast infot me automaatselt ei kogu — kindel info on kooli enda lehel. Allpool toodud ametlikud faktid (nimi, EAP, õppekavarühm, õpiväljundid) pärinevad EHIS-est.</p>
+              <p class="school-check-sub">Selle kooli ajakohast infot me automaatselt ei kogu – kindel info on kooli enda lehel. Allpool toodud ametlikud faktid (nimi, EAP, õppekavarühm, õpiväljundid) pärinevad EHIS-est.</p>
             </div>
           )}
 
@@ -285,7 +285,7 @@ const pageOgDescription = entry ? entry.summary : pageDescription;
                   <dt>Sihtrühmale rahastatud</dt>
                   <dd>
                     {funding.targetGroupFunded ? (
-                      <>jah{funding.fundingSource && <> — {funding.fundingSource}</>}</>
+                      <>jah{funding.fundingSource && <> – {funding.fundingSource}</>}</>
                     ) : (
                       "ei"
                     )}
@@ -302,7 +302,7 @@ const pageOgDescription = entry ? entry.summary : pageDescription;
                 )}
               </dl>
               <p class="funding-note">
-                Rahastus ja sihtrühm võivad muutuda — sõnastus on kooli enda info.
+                Rahastus ja sihtrühm võivad muutuda – sõnastus on kooli enda info.
                 <a href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_funding_check_${entry.provider}`}>kinnita kooli lehel ↗</a>
               </p>
             </div>
@@ -312,7 +312,7 @@ const pageOgDescription = entry ? entry.summary : pageDescription;
             <div class={`intake-fresh${deadlinePast ? " intake-fresh-past" : ""}`}>
               {deadlinePast ? (
                 <p class="intake-fresh-line">
-                  Viimane teadaolev vastuvõtt: <strong>{formatEt(freshDeadline as string)}</strong> —
+                  Viimane teadaolev vastuvõtt: <strong>{formatEt(freshDeadline as string)}</strong> –
                   <a href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_intake_school_${entry.provider}`}>vaata uut vastuvõttu kooli lehelt ↗</a>
                 </p>
               ) : (
@@ -339,7 +339,7 @@ const pageOgDescription = entry ? entry.summary : pageDescription;
                 </div>
               )}
 
-              {/* Kooli ENDA kirjeldus — säilitatud, ei kao ülekirjutuse tõttu */}
+              {/* Kooli ENDA kirjeldus – säilitatud, ei kao ülekirjutuse tõttu */}
               {hasSchoolDescription && (
                 <div class="detail-block detail-block-school">
                   <h2>Kooli enda kirjeldus</h2>
@@ -399,7 +399,7 @@ const pageOgDescription = entry ? entry.summary : pageDescription;
           {isOfficial ? (
             <>
               <p class="notice notice-official">
-                <strong>Ametlik allikas (faktid): EHIS — Haridus- ja Teadusministeerium.</strong>
+                <strong>Ametlik allikas (faktid): EHIS – Haridus- ja Teadusministeerium.</strong>
                 Programmi nimi, maht (EAP) ja õppekeel pärinevad otse Eesti Hariduse
                 Infosüsteemi (EHIS) ametlikust õppekavast
                 {ehis.ehisKood && <> koodiga <strong>{ehis.ehisKood}</strong></>}
@@ -419,9 +419,9 @@ const pageOgDescription = entry ? entry.summary : pageDescription;
             </>
           ) : (
             <p class="notice">
-              <strong>Allikas:</strong> selle programmi õppekava info — eesmärk ja õpiväljundid — pärineb
+              <strong>Allikas:</strong> selle programmi õppekava info – eesmärk ja õpiväljundid – pärineb
               <a href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_source_${entry.provider}`}>{entry.provider} koolituslehelt</a>
-              (kontrollitud {checkedAtText}). Ametlik ja lõplik info — hind, vastuvõtt ja tingimused — on samuti seal.
+              (kontrollitud {checkedAtText}). Ametlik ja lõplik info – hind, vastuvõtt ja tingimused – on samuti seal.
               Märkasid viga? Kirjuta <a href={`mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Kataloogi parandus: " + entry.name)}`} data-track-event="email_click" data-track-label="detail_correction">info@mikrokvalifikatsioon.ee</a>.
             </p>
           )}
@@ -451,7 +451,7 @@ const pageOgDescription = entry ? entry.summary : pageDescription;
           <div>
             <span class="kicker">Raha küsimus</span>
             <h2>Kes võiks selle õppe kinni maksta?</h2>
-            <p>Sageli ei pea sa ise kogu hinda maksma — tööandja koolituseelarve, õppekava enda rahastus või ise koos lihtsa tasuvusarvutusega.</p>
+            <p>Sageli ei pea sa ise kogu hinda maksma – tööandja koolituseelarve, õppekava enda rahastus või ise koos lihtsa tasuvusarvutusega.</p>
             <div class="inline-actions">
               <a class="btn btn-primary" href="/kes-maksab/" data-track-event="cta_click" data-track-label="detail_kesmaksab">Vaata, kes maksab</a>
               <a class="btn btn-secondary" href="/#suunatest" data-track-event="cta_click" data-track-label="detail_suunatest">Tee suunatest</a>
@@ -616,7 +616,7 @@ const pageOgDescription = entry ? entry.summary : pageDescription;
             }
             track("lead_form_submit", { form_name: "interest_waitlist", programme_slug: slug, delivery: sent ? "amos" : "mailto" });
             const msg = box.querySelector("[data-interest-msg]");
-            if (msg) msg.innerHTML = sent ? "<strong>Aitäh!</strong> Teavitame sind, kui midagi muutub." : "Avasime e-kirja varuvariandi — vajuta saatmiseks Saada.";
+            if (msg) msg.innerHTML = sent ? "<strong>Aitäh!</strong> Teavitame sind, kui midagi muutub." : "Avasime e-kirja varuvariandi – vajuta saatmiseks Saada.";
           });
         }
       </script>
