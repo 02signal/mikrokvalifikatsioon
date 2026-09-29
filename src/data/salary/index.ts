@@ -67,6 +67,6 @@ export function professionalsHourlyFor(region: string): number | null {
 
 /** "1 700" — Estonian thousands grouping with a thin space. */
 export function eur(n: number | null): string {
-  if (n == null) return "—";
+  if (n == null) return "–";
   return Math.round(n).toLocaleString("et-EE").replace(/ /g, " ");
 }

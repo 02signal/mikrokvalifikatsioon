@@ -28,19 +28,19 @@ export interface OgPageEntry {
 const contentPages: Record<string, OgPageEntry> = {
   home: {
     title: "Eesti mikrokvalifikatsioonide ja mikrokraadide kataloog",
-    description: "Leia sobiv mikrokvalifikatsioon — ja uuri, kes selle kinni võiks maksta."
+    description: "Leia sobiv mikrokvalifikatsioon – ja uuri, kes selle kinni võiks maksta."
   },
   en: {
     title: "Microcredentials & microdegrees in Estonia",
     description: "The catalogue: field, ECTS, price and who could fund it. Find the right skill."
   },
   kataloog: {
-    title: "Kataloog — kõik mikrokvalifikatsioonid ühes kohas",
+    title: "Kataloog – kõik mikrokvalifikatsioonid ühes kohas",
     description: "Filtreeri valdkonna, kooli ja hinna järgi. Iga programmi juures maht, hind ja link kooli lehele."
   },
   mikrokraadid: {
     title: "Mikrokraadid Eestis",
-    description: "Kõikide ülikoolide mikrokraadid ühes kohas — mis need on ja kust neid leida."
+    description: "Kõikide ülikoolide mikrokraadid ühes kohas – mis need on ja kust neid leida."
   },
   "mis-on-mikrokvalifikatsioon": {
     title: "Mis on mikrokvalifikatsioon?",
@@ -48,14 +48,14 @@ const contentPages: Record<string, OgPageEntry> = {
   },
   "kes-maksab": {
     title: "Kes maksab mikrokvalifikatsiooni eest?",
-    description: "Kolm rada: tööandja, õppekava rahastus või ise — ja kuidas igaüht küsida."
+    description: "Kolm rada: tööandja, õppekava rahastus või ise – ja kuidas igaüht küsida."
   },
   koolitaja: {
-    title: "Mikrokraadid koolide kaupa — kõik koolitajad",
+    title: "Mikrokraadid koolide kaupa – kõik koolitajad",
     description: "Kõik Eesti mikrokraade ja mikrokvalifikatsioone pakkuvad koolid ühes kohas. Vali kool ja vaata kõiki selle programme."
   },
   koolitajale: {
-    title: "Koolitajale — kuidas pakkuda mikrokvalifikatsiooni",
+    title: "Koolitajale – kuidas pakkuda mikrokvalifikatsiooni",
     description: "Ametlik raamistik, sammud pakkujaks saamiseks ja võimalus lisada oma programm kataloogi."
   },
   kvaliteedihindamine: {
@@ -72,7 +72,7 @@ const contentPages: Record<string, OgPageEntry> = {
   },
   kkk: {
     title: "Korduma kippuvad küsimused",
-    description: "Aeg, raha, rahastus, tunnustus ja koolitajale — lühikesed selged vastused."
+    description: "Aeg, raha, rahastus, tunnustus ja koolitajale – lühikesed selged vastused."
   },
   vordlus: {
     title: "Programmide võrdlus",
@@ -84,15 +84,15 @@ const contentPages: Record<string, OgPageEntry> = {
   },
   registreerimine: {
     title: "Registreerimine ja algusajad",
-    description: "Mis on kohe lõppemas ja millal õpingud algavad — planeeri kalendri järgi."
+    description: "Mis on kohe lõppemas ja millal õpingud algavad – planeeri kalendri järgi."
   },
   teema: {
     title: "Mikrokraadid teemade ja oskuste kaupa",
-    description: "Leia mikrokvalifikatsioon oskuse järgi — andmeanalüüs, juhtimine, AI, turundus ja muu."
+    description: "Leia mikrokvalifikatsioon oskuse järgi – andmeanalüüs, juhtimine, AI, turundus ja muu."
   },
   karjaar: {
     title: "Karjäärirajad: kuidas alustada ja läbi lüüa",
-    description: "Portfoolio ja isikuomadused otsustavad — vali roll ja sobiv õpe."
+    description: "Portfoolio ja isikuomadused otsustavad – vali roll ja sobiv õpe."
   },
   aastaraport: {
     title: "Eesti mikrokvalifikatsioonide ja mikrokraadide turg",
@@ -110,10 +110,10 @@ const contentPages: Record<string, OgPageEntry> = {
   // agent töölogi). Iga leht on kordumatu, standalone — reaalne kaart tasub ära.
   valdkond: {
     title: "Mikrokraadid valdkondade kaupa",
-    description: "Sirvi Eesti mikrokvalifikatsioone ja mikrokraade valdkondade järgi — IT ja andmed, majandus ja juhtimine, tehnika, haridus ja palju muud."
+    description: "Sirvi Eesti mikrokvalifikatsioone ja mikrokraade valdkondade järgi – IT ja andmed, majandus ja juhtimine, tehnika, haridus ja palju muud."
   },
   maakond: {
-    title: "Mikrokraadid maakonniti — õpe, tööturg, palk",
+    title: "Mikrokraadid maakonniti – õpe, tööturg, palk",
     description: "Vali maakond ja vaata kohapealset õpet, veebiõpet, avalikku tööturunõudlust ja palgakonteksti."
   },
   ametiruhm: {
@@ -121,24 +121,24 @@ const contentPages: Record<string, OgPageEntry> = {
     description: "Millised ametid on Eestis nõutud? Vali ametirühm ja näe nõudlust, palgakonteksti ja sobivat õpiteed."
   },
   andmestandard: {
-    title: "Avatud andmestandard — Credential Commons",
+    title: "Avatud andmestandard – Credential Commons",
     description: "Vastavuskontrolli läbinud kataloogikirjed on avaldatud avatud, masinloetava standardi järgi (Credential Commons)."
   },
   konto: {
-    title: "Minu konto — hoia oma oskuste pakett alles",
+    title: "Minu konto – hoia oma oskuste pakett alles",
     description: "Loo konto: hoiame su valitud oskuste paketi alles ja anname märku, kui sobiv programm või tähtaeg lisandub."
   },
   kinnita: {
-    title: "Logime sind sisse — Minu konto",
+    title: "Logime sind sisse – Minu konto",
     description: "Kinnitame su e-posti ja viime su kontole."
   },
   "mikrokraadi-valimine": {
     title: "Mikrokraadi valimine: kuidas valida õige?",
-    description: "Otsustusraamistik ja kõik valikud valdkonniti — kuidas valida õige ülikooli mikrokraad, päris Eesti andmetega."
+    description: "Otsustusraamistik ja kõik valikud valdkonniti – kuidas valida õige ülikooli mikrokraad, päris Eesti andmetega."
   },
   "mikrokvalifikatsiooni-valimine": {
     title: "Mikrokvalifikatsiooni valimine: kuidas valida õige?",
-    description: "Otsustusraamistik ja kõik valikud valdkonniti — kuidas valida õige mikrokvalifikatsioon, päris Eesti andmetega."
+    description: "Otsustusraamistik ja kõik valikud valdkonniti – kuidas valida õige mikrokvalifikatsioon, päris Eesti andmetega."
   }
 };
 
@@ -160,20 +160,20 @@ const programmePages = Object.fromEntries(
 
 // Teemalehed: võti = teema slug (ei kattu programmislugidega — teemad on üksiksõnad).
 const topicPages = Object.fromEntries(
-  topics.map((t) => [t.slug, { title: `${t.label} — mikrokraadid`, description: `${t.entries.length} programmi · õpiväljundid, maht ja hind` }])
+  topics.map((t) => [t.slug, { title: `${t.label} – mikrokraadid`, description: `${t.entries.length} programmi · õpiväljundid, maht ja hind` }])
 );
 
 // Koolilehed: võti = pakkuja slug.
 const providerPages = Object.fromEntries(
   providersWithSlug.map((p) => {
     const n = catalog.filter((e) => e.provider === p.provider).length;
-    return [p.slug, { title: `${p.provider} — mikrokraadid`, description: `${n} programmi · maht, hind, õpiväljundid` }];
+    return [p.slug, { title: `${p.provider} – mikrokraadid`, description: `${n} programmi · maht, hind, õpiväljundid` }];
   })
 );
 
 // Karjäärilehed: võti = karjääri slug.
 const careerPages = Object.fromEntries(
-  careers.map((c) => [c.slug, { title: `${c.role} — karjäärirada`, description: `${c.entries.length} programmi · portfoolio + sobiv õpe` }])
+  careers.map((c) => [c.slug, { title: `${c.role} – karjäärirada`, description: `${c.entries.length} programmi · portfoolio + sobiv õpe` }])
 );
 
 // Valdkonnalehed: võti = valdkonna slug (individuaalne valdkond, nt "it-ja-andmed").
@@ -181,7 +181,7 @@ const fieldPages = Object.fromEntries(
   fieldsWithSlug.map((f) => {
     const n = catalog.filter((e) => e.field === f.field).length;
     const fieldCap = f.field.charAt(0).toUpperCase() + f.field.slice(1);
-    return [f.slug, { title: `${fieldCap} — mikrokraadid`, description: `${n} programmi · maht, hind, õppevorm` }];
+    return [f.slug, { title: `${fieldCap} – mikrokraadid`, description: `${n} programmi · maht, hind, õppevorm` }];
   })
 );
 
@@ -198,13 +198,13 @@ const questionPages = Object.fromEntries(
 // Maakonnalehed: võti = maakonna slug (/maakond/<slug>/). "maakond" (indeks) on
 // contentPages sees, siin ainult 15 üksikmaakonda.
 const regionPages = Object.fromEntries(
-  REGIONS.map((r) => [r.slug, { title: `${r.formalName} — õpe, tööturg, palk`, description: `Õppimisvõimalused, avalik tööturunõudlus ja palgakontekst ${r.name} kohta.` }])
+  REGIONS.map((r) => [r.slug, { title: `${r.formalName} – õpe, tööturg, palk`, description: `Õppimisvõimalused, avalik tööturunõudlus ja palgakontekst ${r.name} kohta.` }])
 );
 
 // Ametirühmalehed: võti = rühma slug (/ametiruhm/<slug>/). "ametiruhm" (indeks)
 // on contentPages sees, siin ainult 4 üksikrühma.
 const occupationPages = Object.fromEntries(
-  OCCUPATION_GROUPS.map((g) => [g.slug, { title: `${g.label} — tööturu nõudlus ja õpe`, description: g.blurb }])
+  OCCUPATION_GROUPS.map((g) => [g.slug, { title: `${g.label} – tööturu nõudlus ja õpe`, description: g.blurb }])
 );
 
 // Per-lehetüüp aktsentvärv — kaart eristub tüübi kaupa (register/programm/teema/…),

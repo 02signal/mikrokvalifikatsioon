@@ -79,8 +79,8 @@ const schema = {
 <html lang="et">
   <head>
     <Seo
-      title="Minu konto — hoia oma oskuste pakett alles"
-      description="Loo konto: hoiame su valitud oskuste paketi alles ja anname märku, kui sobiv programm, kombinatsioon või registreerimise tähtaeg lisandub. Parooli pole vaja — saadame sisselogimislingi e-postiga."
+      title="Minu konto – hoia oma oskuste pakett alles"
+      description="Loo konto: hoiame su valitud oskuste paketi alles ja anname märku, kui sobiv programm, kombinatsioon või registreerimise tähtaeg lisandub. Parooli pole vaja – saadame sisselogimislingi e-postiga."
       canonicalPath="/konto/"
       robots="noindex,follow"
       jsonLd={schema}
@@ -109,7 +109,7 @@ const schema = {
         <PmStepper current={2} />
       </div>
 
-      <!-- ============ EKRAAN B — välja logitud: Loo konto / Logi sisse ============ -->
+      <!-- ============ EKRAAN B – välja logitud: Loo konto / Logi sisse ============ -->
       <!-- STATE s1: usaldus-/rämpsposti-hirm. VASTUS: täpselt mida, miks, ei spämmi, sina kontrollid. -->
       <section class="pm-wrap pm-screen on" data-screen="auth" data-tool-section="konto-login" aria-labelledby="authH">
         <!-- .pm-rise puhkeseis on NÄHTAV (opacity:1); sisenemis-efekti mängib
@@ -175,7 +175,7 @@ const schema = {
         </div>
       </section>
 
-      <!-- ============ EKRAAN C — pärast saatmist: Kontrolli e-posti ============ -->
+      <!-- ============ EKRAAN C – pärast saatmist: Kontrolli e-posti ============ -->
       <!-- STATE s2: ebakindlus + ootus ("kas tuli?"). VASTUS: kristallselge mis/kellelt/millal + kontroll. -->
       <section class="pm-wrap pm-screen" data-screen="check" hidden aria-labelledby="checkH">
         <div class="pm-card pm-center pm-rise" style="max-width:580px;margin:10px auto">
@@ -211,7 +211,7 @@ const schema = {
         </div>
       </section>
 
-      <!-- ============ EKRAAN E — sisse logitud: Minu konto ============ -->
+      <!-- ============ EKRAAN E – sisse logitud: Minu konto ============ -->
       <!-- STATE s3: saavutus + "mis nüüd?". VASTUS: kinnita (hoitud), orienteeri (3 kogumit), paku järgmine samm. -->
       <section class="pm-wrap pm-screen" data-screen="account" hidden aria-labelledby="acctH">
         <div class="pm-rise">
@@ -248,7 +248,7 @@ const schema = {
             </button>
           </div>
 
-          <!-- KOGUM 1 — Minu oskused (kaalukontroll + vaste + jälgime-seisund) -->
+          <!-- KOGUM 1 – Minu oskused (kaalukontroll + vaste + jälgime-seisund) -->
           <div class="pm-pane on" id="pane-osk" role="tabpanel" aria-labelledby="tab-osk" data-feature="packages">
             <p class="pm-paneintro">
               Need on oskused, mille <b>sina</b> valisid. Sea igaühe tähtsus (klõpsa täppe) - me sätime
@@ -270,7 +270,7 @@ const schema = {
             </div>
           </div>
 
-          <!-- KOGUM 2 — Minu programmid (prioriteet + sobivuse riba) -->
+          <!-- KOGUM 2 – Minu programmid (prioriteet + sobivuse riba) -->
           <div class="pm-pane" id="pane-prog" role="tabpanel" aria-labelledby="tab-prog" data-feature="programmes">
             <p class="pm-paneintro">
               Programmid, mis su oskustele kõige lähemal on. Sea järjekord noolte abil - tähtsaim üleval.
@@ -283,7 +283,7 @@ const schema = {
             </p>
           </div>
 
-          <!-- KOGUM 3 — Minu võrdlused -->
+          <!-- KOGUM 3 – Minu võrdlused -->
           <div class="pm-pane" id="pane-cmp" role="tabpanel" aria-labelledby="tab-cmp" data-feature="compares">
             <p class="pm-paneintro">
               Võrdlused, mille sa salvestasid. Ava ja vaata programme kõrvuti - hind, maht, õpiväljundid.
@@ -295,7 +295,7 @@ const schema = {
           </div>
 
           <!-- Konto-haldus: meeldetuletused, teavitused, profiil, nõusolek -->
-          <!-- MINU TELLIMUSED — ülevaade, millele oled tellinud teavitusi. -->
+          <!-- MINU TELLIMUSED – ülevaade, millele oled tellinud teavitusi. -->
           <section class="pm-acc-block" data-feature="subs" aria-labelledby="subsH">
             <h3 id="subsH">Minu tellimused</h3>
             <p class="pm-paneintro">
@@ -308,7 +308,7 @@ const schema = {
             </p>
           </section>
 
-          <!-- FEATURE 2 — Tähtaja-meeldetuletused -->
+          <!-- FEATURE 2 – Tähtaja-meeldetuletused -->
           <section class="pm-acc-block" data-feature="reminders" aria-labelledby="remH">
             <h3 id="remH">Tähtaja-meeldetuletused</h3>
             <p class="pm-paneintro">
@@ -327,7 +327,7 @@ const schema = {
             </p>
           </section>
 
-          <!-- FEATURE 3 — Teavituslehed (valdkond / oskus / KOMBINATSIOON) -->
+          <!-- FEATURE 3 – Teavituslehed (valdkond / oskus / KOMBINATSIOON) -->
           <section class="pm-acc-block" data-feature="notify" aria-labelledby="notifyH">
             <h3 id="notifyH">Teavita mind, kui sobiv lisandub</h3>
             <p class="pm-paneintro">
@@ -368,7 +368,7 @@ const schema = {
             </p>
           </section>
 
-          <!-- FEATURE 4 — Toetuse profiil -->
+          <!-- FEATURE 4 – Toetuse profiil -->
           <section class="pm-acc-block" data-feature="funding" aria-labelledby="fundH">
             <h3 id="fundH">Kuidas õpinguid rahastada</h3>
             <p class="pm-paneintro">
@@ -397,7 +397,7 @@ const schema = {
             </p>
           </section>
 
-          <!-- "Mida saad veel teha" — persoona järgmised sammud -->
+          <!-- "Mida saad veel teha" – persoona järgmised sammud -->
           <h3 style="font-family:var(--pm-disp);font-weight:700;font-size:19px;margin:30px 0 14px">Mida saad veel teha</h3>
           <div class="pm-nextgrid">
             <a class="pm-next" href="/oskused/" data-track-event="cta_click" data-track-label="account_next_oskused">
@@ -418,7 +418,7 @@ const schema = {
             </a>
           </div>
 
-          <!-- FEATURE 5 — Nõusolek & andmed -->
+          <!-- FEATURE 5 – Nõusolek & andmed -->
           <section class="pm-acc-block" data-feature="consent" aria-labelledby="consentH">
             <h3 id="consentH">Sinu nõusolek ja andmed</h3>
             <p class="pm-paneintro">Sa otsustad, mida me sulle saadame ja kui kaua su andmeid hoiame.</p>

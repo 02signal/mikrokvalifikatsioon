@@ -37,7 +37,7 @@ function dmy(iso: string): string {
 const laborUpdated = dmy(laborGeneratedAt || laborCheckedAt);
 
 const title = "Mikrokvalifikatsioonid maakonniti: õpe, töökohad ja palk";
-const description = `Mida saab igas Eesti maakonnas õppida, millised tööd on nõutud ja kui palju makstakse — õpe, avalik tööturunõudlus (${laborAsOf}) ja Statistikaameti palk koos. Kõik 15 maakonda.`;
+const description = `Mida saab igas Eesti maakonnas õppida, millised tööd on nõutud ja kui palju makstakse – õpe, avalik tööturunõudlus (${laborAsOf}) ja Statistikaameti palk koos. Kõik 15 maakonda.`;
 const introText = "Vali maakond ja näe ühes kohas: milliseid mikrokvalifikatsioone ja mikrokraade saab seal õppida (kohapeal või veebis), millised ametirühmad on avaandmete järgi nõutud ja milline on piirkondlik palgakontekst.";
 
 const schema = {
@@ -62,7 +62,7 @@ const schema = {
     },
     {
       "@type": "ItemList",
-      name: "Eesti maakonnad — õpe, töökohad ja palk",
+      name: "Eesti maakonnad – õpe, töökohad ja palk",
       numberOfItems: REGIONS.length,
       itemListElement: REGIONS.map((r, i) => ({
         "@type": "ListItem",
@@ -83,7 +83,7 @@ const schema = {
       description={description}
       canonicalPath={canonicalPath}
       ogTitle="Mikrokvalifikatsioonid maakonniti"
-      ogDescription="Õpe, avalik tööturunõudlus ja palk — kõik 15 Eesti maakonda ühes vaates."
+      ogDescription="Õpe, avalik tööturunõudlus ja palk – kõik 15 Eesti maakonda ühes vaates."
       jsonLd={schema}
     />
   </head>
@@ -97,7 +97,7 @@ const schema = {
             <a href="/">Avaleht</a> › <span>Maakonnad</span>
           </nav>
           <span class="eyebrow">Maakonniti</span>
-          <h1>Õpe, töökohad ja palk — maakonniti</h1>
+          <h1>Õpe, töökohad ja palk – maakonniti</h1>
           <p>{introText}</p>
           <p class="report-date">Kataloog kontrollitud: {checkedAtText}. Tööturu andmeseis: {laborAsOf} (andmefeed uuendatud {laborUpdated}).</p>
         </div>

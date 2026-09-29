@@ -59,7 +59,7 @@ const faqItems = [
   {
     question: "Mis on mikrokvalifikatsioon?",
     answer:
-      "Mikrokvalifikatsioon on lühike tunnustatud õpe, mille lõpus saad tunnistuse ühe konkreetse oskuse kohta — mitte terve eriala diplomi. Pakkuja võib olla rakenduskõrgkool, ülikool või koolitusettevõte. Tüüpiline maht on mõni kuu kuni paar semestrit töö kõrvalt."
+      "Mikrokvalifikatsioon on lühike tunnustatud õpe, mille lõpus saad tunnistuse ühe konkreetse oskuse kohta – mitte terve eriala diplomi. Pakkuja võib olla rakenduskõrgkool, ülikool või koolitusettevõte. Tüüpiline maht on mõni kuu kuni paar semestrit töö kõrvalt."
   },
   {
     question: "Mille poolest erineb mikrokvalifikatsioon mikrokraadist?",
@@ -79,12 +79,12 @@ const faqItems = [
   {
     question: "Millises valdkonnas on kõige rohkem valikut?",
     answer: biggestField
-      ? `Selle lehe valimis (rakenduskõrgkoolide ja koolitusettevõtete mikrokvalifikatsioonid) on kõige rohkem programme valdkonnas „${biggestField.field}“ — ${biggestField.count} programmi. Kõik valdkonnad koos programmide arvuga on välja toodud allpool valdkonnapõhises võrdluses; täisnimekirja näeb lehel /valdkond/.`
+      ? `Selle lehe valimis (rakenduskõrgkoolide ja koolitusettevõtete mikrokvalifikatsioonid) on kõige rohkem programme valdkonnas „${biggestField.field}“ – ${biggestField.count} programmi. Kõik valdkonnad koos programmide arvuga on välja toodud allpool valdkonnapõhises võrdluses; täisnimekirja näeb lehel /valdkond/.`
       : "Valdkonnapõhine jaotus koos programmide arvuga on välja toodud allpool olevas võrdluses ja lehel /valdkond/."
   },
   {
     question: "Kui suur on tüüpiline maht (EAP)?",
-    answer: `Maht antakse Euroopa ainepunktides (EAP); 1 EAP vastab umbes 26 tunnile õppija tööd. Selle lehe valimis jäävad avaldatud mahud vahemikku ${ectsTypicalText} — väiksem maht tähendab kiiremat lühiõpet, suurem maht põhjalikumat programmi. Osa koolitusettevõtteid annab mahu hoopis akadeemilistes tundides; täpne maht on iga programmi juures kataloogis.`
+    answer: `Maht antakse Euroopa ainepunktides (EAP); 1 EAP vastab umbes 26 tunnile õppija tööd. Selle lehe valimis jäävad avaldatud mahud vahemikku ${ectsTypicalText} – väiksem maht tähendab kiiremat lühiõpet, suurem maht põhjalikumat programmi. Osa koolitusettevõtteid annab mahu hoopis akadeemilistes tundides; täpne maht on iga programmi juures kataloogis.`
   },
   {
     question: "Kui kaua õpe tüüpiliselt kestab?",
@@ -134,12 +134,12 @@ const schema = {
     },
     {
       "@type": "ItemList",
-      name: "Mikrokvalifikatsioonide võrdlus — näiteprogrammid",
+      name: "Mikrokvalifikatsioonide võrdlus – näiteprogrammid",
       numberOfItems: tableRows.length,
       itemListElement: tableRows.map((entry, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        name: `${entry.name} — ${entry.provider}`,
+        name: `${entry.name} – ${entry.provider}`,
         url: `${SITE}/kataloog/${entry.slug}/`
       }))
     },
@@ -150,7 +150,7 @@ const schema = {
       itemListElement: topFields.map((stat, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        name: `${stat.field} — ${stat.count} programmi`,
+        name: `${stat.field} – ${stat.count} programmi`,
         url: `${SITE}/valdkond/${stat.slug}/`
       }))
     },
@@ -165,21 +165,21 @@ const schema = {
   ]
 };
 
-const fmtEap = (e: (typeof catalog)[number]): string => (e.ects ? `${e.ects} EAP` : "—");
+const fmtEap = (e: (typeof catalog)[number]): string => (e.ects ? `${e.ects} EAP` : "–");
 const fmtFormat = (e: (typeof catalog)[number]): string =>
-  e.format === "veebis" ? "veebis" : e.format === "hübriid" ? "hübriid" : e.format === "kohapeal" ? "kohapeal" : "—";
+  e.format === "veebis" ? "veebis" : e.format === "hübriid" ? "hübriid" : e.format === "kohapeal" ? "kohapeal" : "–";
 ---
 
 <!doctype html>
 <html lang="et">
   <head>
     <Seo
-      title="Mikrokvalifikatsioonide võrdlus — hind, maht, EAP, õppevorm | Mikrokvalifikatsioon.ee"
+      title="Mikrokvalifikatsioonide võrdlus – hind, maht, EAP, õppevorm | Mikrokvalifikatsioon.ee"
       description="Mikrokvalifikatsioonide võrdlus: hind, maht/EAP, kestus, õppevorm ja kes maksab. Reaalsed näited Eesti programmidest ja võrdlustööriist kõrvutamiseks."
       canonicalPath={PATH}
       ogType="article"
       ogTitle="Mikrokvalifikatsioonide võrdlus"
-      ogDescription="Kuidas võrrelda mikrokvalifikatsioone: hind, maht, kestus, õppevorm ja kes maksab — reaalsete Eesti näidetega."
+      ogDescription="Kuidas võrrelda mikrokvalifikatsioone: hind, maht, kestus, õppevorm ja kes maksab – reaalsete Eesti näidetega."
       ogImage="/diagrams/mikrokraad-vs-mikrokvalifikatsioon.og.png"
       jsonLd={schema}
     />
@@ -193,7 +193,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
           <span class="eyebrow">Võrdlus</span>
           <h1>Mikrokvalifikatsioonide võrdlus</h1>
           <p>
-            Mikrokvalifikatsioon on lühike, tunnustatud õpe ühe konkreetse oskuse kohta — mitte
+            Mikrokvalifikatsioon on lühike, tunnustatud õpe ühe konkreetse oskuse kohta – mitte
             terve eriala diplom. Et leida endale õige, tasub programme võrrelda viie tunnuse järgi:
             <strong>hind, maht (EAP), kestus, õppevorm ja kes maksab</strong>. Siin on lihtne juhend
             ja reaalsed näited Eesti pakkujatelt.
@@ -205,7 +205,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
         </div>
       </section>
 
-      <!-- Mis on mikrokvalifikatsioon — GEO: lühike, faktiline definitsioon -->
+      <!-- Mis on mikrokvalifikatsioon – GEO: lühike, faktiline definitsioon -->
       <section class="white">
         <div class="section-inner narrow">
           <div class="section-head compact-head">
@@ -215,7 +215,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
           <p>
             <strong>Mikrokvalifikatsioon</strong> on katusmõiste lühikesele tunnustatud õppele, mille
             lõpus saad tunnistuse ühe oskuse kohta. Pakkuja võib olla rakenduskõrgkool, ülikool või
-            koolitusettevõte. <strong>Mikrokraad</strong> on selle ülikooli versioon — annab EAP-sid
+            koolitusettevõte. <strong>Mikrokraad</strong> on selle ülikooli versioon – annab EAP-sid
             (Euroopa ainepunkte), mida saab hiljem kraadiõppes arvestada. Iga mikrokraad on
             mikrokvalifikatsioon, aga mitte vastupidi. Pikem selgitus on lehel
             <a href="/mis-on-mikrokvalifikatsioon/">Mis on mikrokvalifikatsioon?</a>
@@ -234,7 +234,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
         </div>
       </section>
 
-      <!-- Kuidas võrrelda — GEO: selge how-to, extractable -->
+      <!-- Kuidas võrrelda – GEO: selge how-to, extractable -->
       <section class="ice">
         <div class="section-inner">
           <div class="section-head compact-head">
@@ -245,7 +245,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
             <article class="card">
               <span class="stat">1 · Hind</span>
               <h3>Mida õpe maksab?</h3>
-              <p>Vaata kooli avaldatud hinda. Pea meeles, et osa hinnast võib katta tööandja või õppekava enda rahastus — vaata <a href="/kes-maksab/">kes maksab</a>.</p>
+              <p>Vaata kooli avaldatud hinda. Pea meeles, et osa hinnast võib katta tööandja või õppekava enda rahastus – vaata <a href="/kes-maksab/">kes maksab</a>.</p>
             </article>
             <article class="card">
               <span class="stat">2 · Maht (EAP)</span>
@@ -276,7 +276,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
         </div>
       </section>
 
-      <!-- Reaalne võrdlustabel — GEO: extractable structured data -->
+      <!-- Reaalne võrdlustabel – GEO: extractable structured data -->
       <section class="white">
         <div class="section-inner">
           <div class="section-head compact-head">
@@ -313,7 +313,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
           </div>
           <p class="notice">
             Andmed pärinevad koolide avalikelt lehtedelt (kontrollitud {checkedAtText}). Veerg „Kes maksab" näitab
-            tüüpilisi rahastusradu, mitte konkreetset soodustust. Lõplik ja ametlik hind on alati kooli enda lehel —
+            tüüpilisi rahastusradu, mitte konkreetset soodustust. Lõplik ja ametlik hind on alati kooli enda lehel –
             metoodika on kirjas lehel <a href="/andmed/">Andmed</a>.
           </p>
           <div class="actions">
@@ -323,7 +323,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
         </div>
       </section>
 
-      <!-- Valdkonnapõhine võrdlus — GEO: per-field, extractable table -->
+      <!-- Valdkonnapõhine võrdlus – GEO: per-field, extractable table -->
       <section class="ice">
         <div class="section-inner">
           <div class="section-head compact-head">
@@ -331,7 +331,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
             <h2>Mikrokvalifikatsioonide võrdlus valdkonniti.</h2>
             <p>
               Iga valdkonna kohta on toodud programmide arv, mahuvahemik (EAP), hinnavahemik ja
-              paar näiteprogrammi — kõik päris kataloogiandmetest. Klõpsa valdkonnal, et näha
+              paar näiteprogrammi – kõik päris kataloogiandmetest. Klõpsa valdkonnal, et näha
               kõiki selle programme.
             </p>
           </div>
@@ -380,13 +380,13 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
                 <a href={`/valdkond/${f.slug}/`}>{f.field}</a>
               </>
             ))}.
-            Kaalud karjäärivahetust? Vaata, millised oskused ja ametid kokku käivad —
+            Kaalud karjäärivahetust? Vaata, millised oskused ja ametid kokku käivad –
             <a href="/karjaar/">karjäärirajad</a> ja <a href="/oskused/">oskuste ülevaade</a> aitavad valida.
           </p>
         </div>
       </section>
 
-      <!-- Kuidas valida — GEO: decision guide, extractable steps -->
+      <!-- Kuidas valida – GEO: decision guide, extractable steps -->
       <section class="white">
         <div class="section-inner narrow">
           <div class="section-head compact-head">
@@ -394,7 +394,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
             <h2>Neli sammu sobiva mikrokvalifikatsioonini.</h2>
           </div>
           <ol class="check">
-            <li><strong>Alusta oskusest, mitte koolist.</strong> Mõtle, millist konkreetset oskust soovid tõendada, ja filtreeri valdkonna järgi — näiteks <a href="/valdkond/majandus-ja-juhtimine/">majandus ja juhtimine</a> või <a href="/valdkond/it-ja-andmed/">IT ja andmed</a>.</li>
+            <li><strong>Alusta oskusest, mitte koolist.</strong> Mõtle, millist konkreetset oskust soovid tõendada, ja filtreeri valdkonna järgi – näiteks <a href="/valdkond/majandus-ja-juhtimine/">majandus ja juhtimine</a> või <a href="/valdkond/it-ja-andmed/">IT ja andmed</a>.</li>
             <li><strong>Vaata mahtu ja kestust koos.</strong> Väiksem EAP-maht sobib kiiresse graafikusse töö kõrvalt; suurem maht annab põhjalikuma tulemuse, aga nõuab rohkem aega.</li>
             <li><strong>Kontrolli õppevormi.</strong> Veebis või hübriid sobib töötavale inimesele; kohapealne annab rohkem praktikat ja kontakti.</li>
             <li><strong>Võrdle hinda ja rahastust.</strong> Märgi kataloogis kuni kolm programmi, vaata need <a href="/vordlus/">võrdlustööriistas</a> kõrvuti ja kaalu, kas kulu katab tööandja, õppekava enda rahastus või sina ise (<a href="/kes-maksab/">kes maksab?</a>).</li>
@@ -404,13 +404,13 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
             valikud valdkonniti on lehel <a href="/mikrokvalifikatsiooni-valimine/">Mikrokvalifikatsiooni valimine</a>.
             Kui kahtled, kas sulle sobib pigem koolitusettevõtte praktiline mikrokvalifikatsioon või
             ülikooli mikrokraad, vaata kõrvale <a href="/mikrokraadide-vordlus/">mikrokraadide võrdlust</a> ja
-            <a href="/mikrokraadi-valimine/">mikrokraadi valimist</a> — ülikoolide mikrokraadid annavad
+            <a href="/mikrokraadi-valimine/">mikrokraadi valimist</a> – ülikoolide mikrokraadid annavad
             ECTS-ainepunkte, mida saab hiljem tasemeõppes arvestada.
           </p>
         </div>
       </section>
 
-      <!-- FAQ — GEO: FAQPage, sourced -->
+      <!-- FAQ – GEO: FAQPage, sourced -->
       <section class="white">
         <div class="section-inner narrow">
           <div class="section-head compact-head">

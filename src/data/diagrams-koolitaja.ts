@@ -45,7 +45,7 @@ export const koolitajaDiagrams: Diagram[] = [
       inner: { label: "1 ÕPPEKAVA", sub: "vajalik, aga üksi ei piisa" },
     },
     takeaway: "Valmista ette kõik kaheksa valdkonda.",
-    alt: "HAKA ei hinda üht õppekava, vaid asutuse võimekust kogu õppekavarühmas kaheksas valdkonnas ja kokku 27 kriteeriumi järgi, kolmeastmelisel skaalal (vastab / vastab osaliselt / ei vasta). Üks hea õppekava on osa tervikust, aga üksinda ei taga see positiivset otsust — kõik kaheksa valdkonda peavad vastama nõuetele. Positiivne otsus kehtib viis aastat.",
+    alt: "HAKA ei hinda üht õppekava, vaid asutuse võimekust kogu õppekavarühmas kaheksas valdkonnas ja kokku 27 kriteeriumi järgi, kolmeastmelisel skaalal (vastab / vastab osaliselt / ei vasta). Üks hea õppekava on osa tervikust, aga üksinda ei taga see positiivset otsust – kõik kaheksa valdkonda peavad vastama nõuetele. Positiivne otsus kehtib viis aastat.",
     caption: "HAKA hindab asutuse kogu õppekavarühma võimekust, mitte üht õppekava eraldi.",
   },
   // ── /vastused/mis-on-haka-eneseanalyys/ ───────────────────────────────────
@@ -60,8 +60,8 @@ export const koolitajaDiagrams: Diagram[] = [
       via: "+ konkreetne tõend",
       to: { label: "USUTAV", sub: "hindaja saab kontrollida" },
     },
-    takeaway: "Kirjuta iga väide nii: „X on tagatud, tõendiks on Y“ — mitte üldsõnaliselt.",
-    alt: "Eneseanalüüs on HAKA kvaliteedihindamise alusdokument, mille asutus koostab ise enne hindamist ja mis on kohustuslik osa taotlusest. Hindaja loeb seda kui peamist teksti, mitte kaaskirja: iga väide vajab konkreetset tõendit — dokumenti, näidet või protsessi —, et olla usutav. Ilma tõenditeta jääb eneseanalüüs üldsõnaliseks ega veena hindajat.",
+    takeaway: "Kirjuta iga väide nii: „X on tagatud, tõendiks on Y“ – mitte üldsõnaliselt.",
+    alt: "Eneseanalüüs on HAKA kvaliteedihindamise alusdokument, mille asutus koostab ise enne hindamist ja mis on kohustuslik osa taotlusest. Hindaja loeb seda kui peamist teksti, mitte kaaskirja: iga väide vajab konkreetset tõendit – dokumenti, näidet või protsessi –, et olla usutav. Ilma tõenditeta jääb eneseanalüüs üldsõnaliseks ega veena hindajat.",
     caption: "Väide + konkreetne tõend teeb eneseanalüüsi usutavaks; üldsõnaline väide ei loe.",
   },
   // ── /vastused/kui-palju-maksab-haka-mikrokvalifikatsiooni-hindamine/ ─────
@@ -77,8 +77,8 @@ export const koolitajaDiagrams: Diagram[] = [
         { label: "~100 €", sub: "iga õppekava registreerimine EHIS-es" },
       ],
     },
-    takeaway: "Mitme õppekava lisamine samasse rühma ei too uut hindamistasu — ainult registreerimistasu.",
-    alt: "HAKA kvaliteedihindamisega ja mikrokvalifikatsiooni registreerimisega kaasnevad kaks eri riigilõivu: õppekavarühma kvaliteedihindamine maksab suurusjärgus 1450 € ja tasutakse korra rühma sisenemisel (otsus kehtib viis aastat); iga õppekava registreerimine Eesti Hariduse Infosüsteemis (EHIS) maksab lisaks suurusjärgus 100 € õppekava kohta. Need on suurusjärgu numbrid — täpsed ja ajakohased summad tuleb kontrollida ametlikust allikast.",
+    takeaway: "Mitme õppekava lisamine samasse rühma ei too uut hindamistasu – ainult registreerimistasu.",
+    alt: "HAKA kvaliteedihindamisega ja mikrokvalifikatsiooni registreerimisega kaasnevad kaks eri riigilõivu: õppekavarühma kvaliteedihindamine maksab suurusjärgus 1450 € ja tasutakse korra rühma sisenemisel (otsus kehtib viis aastat); iga õppekava registreerimine Eesti Hariduse Infosüsteemis (EHIS) maksab lisaks suurusjärgus 100 € õppekava kohta. Need on suurusjärgu numbrid – täpsed ja ajakohased summad tuleb kontrollida ametlikust allikast.",
     caption: "Suurusjärgu numbrid: hindamine ~1450 € (kord rühma kohta), registreerimine ~100 € (iga õppekava kohta).",
   },
   // ── /vastused/haka-mikrokvalifikatsiooni-hindamise-tuupvead/ ─────────────
@@ -96,7 +96,7 @@ export const koolitajaDiagrams: Diagram[] = [
       ],
     },
     takeaway: "Lukusta mahunumbrid ühte kohta, kontrolli dokumentide kooskõla ja lisa igale väitele tõend enne esitamist.",
-    alt: "Kõige sagedasemad vead HAKA hindamiseks valmistumisel on kolm: mahuarvestuse mittevastavus (akadeemilised ja astronoomilised tunnid segamini), dokumendid, mis ei klapi omavahel (õppekava, veebileht ja eneseanalüüs räägivad erinevat juttu), ja üldsõnaline eneseanalüüs ilma konkreetse tõendita. Enamik neist vigadest on ennetatavad — need on pigem korrastamise, mitte sisu puudujäägid.",
+    alt: "Kõige sagedasemad vead HAKA hindamiseks valmistumisel on kolm: mahuarvestuse mittevastavus (akadeemilised ja astronoomilised tunnid segamini), dokumendid, mis ei klapi omavahel (õppekava, veebileht ja eneseanalüüs räägivad erinevat juttu), ja üldsõnaline eneseanalüüs ilma konkreetse tõendita. Enamik neist vigadest on ennetatavad – need on pigem korrastamise, mitte sisu puudujäägid.",
     caption: "Kolm sagedasemat lõksu: maht ei klapi, dokumendid ei klapi, väide ilma tõendita.",
   },
   // ── /vastused/kuidas-arvutada-oppekava-eap-mahtu/ ────────────────────────
@@ -111,7 +111,7 @@ export const koolitajaDiagrams: Diagram[] = [
       via: "156 astr. tundi",
       to: { label: "6 EAP", sub: "÷ 26" },
     },
-    takeaway: "Sinu programmi numbrid on erinevad — kasuta sama kahesammulist valemit ja lukusta tulemus ühte kohta.",
+    takeaway: "Sinu programmi numbrid on erinevad – kasuta sama kahesammulist valemit ja lukusta tulemus ühte kohta.",
     alt: "Õppekava EAP-mahu arvutamiseks tuleb esmalt akadeemilised tunnid (45 min) teisendada astronoomilisteks, korrutades 0,75-ga; seejärel jagada astronoomiliste tundide summa 26-ga, et saada EAP-de arv. Näide: 208 akadeemilist tundi × 0,75 = 156 astronoomilist tundi; 156 ÷ 26 = 6 EAP. Sama lõplik number peab kajastuma täht-täheliselt õppekavas, veebilehel ja eneseanalüüsis.",
     caption: "Näide: 208 akadeemilist tundi × 0,75 = 156 astronoomilist tundi; 156 ÷ 26 = 6 EAP.",
   },
@@ -134,7 +134,7 @@ export const koolitajaDiagrams: Diagram[] = [
         note: "täiskasvanute koolituse seadus",
       },
     },
-    takeaway: "Tõenda iga koolitaja pädevus avalikult ja ühtses stiilis — kutse on üks võimalik, mitte ainus viis.",
+    takeaway: "Tõenda iga koolitaja pädevus avalikult ja ühtses stiilis – kutse on üks võimalik, mitte ainus viis.",
     alt: "Täiskasvanute koolituse seadus ei nõua, et koolitajal oleks täiskasvanud koolitaja kutsetunnistus. HAKA kvaliteedihindamisel on koolitajate kompetentsus aga eraldi hindamisvaldkond: iga koolitaja eriala- ja täiskasvanute koolitaja pädevus peab olema tõendatud ja avalik. Täiskasvanud koolitaja kutse (Andras, EKR tase 5 või 6) on üks tunnustatud tõend selle kõrval, kuid sama pädevust saab tõendada ka erialase hariduse, dokumenteeritud koolituskogemuse ja tulemuslikkuse hindamise kaudu.",
     caption: "Kutse pole seadusest kohustuslik; HAKA hindab koolitaja pädevust ja kutse on üks võimalik tõend.",
   },
@@ -158,24 +158,24 @@ export const koolitajaDiagrams: Diagram[] = [
       },
     },
     takeaway: "EHIS-registreerimine on kohustuslik; Credential Commons teeb sama sisu masinatele ja teistele loetavaks.",
-    alt: "EHIS (Eesti Hariduse Infosüsteem) on Eesti riiklik register, kuhu mikrokvalifikatsiooni õppekavad ja tunnistused ametlikult kantakse — see on kohustuslik samm. Credential Commons on avatud, masinloetav andmestandard, mis kirjeldab sama sisu nii, et seda saavad lugeda ka teised koolid, tööandjad ja AI-teenused. Credential Commons ei asenda EHIS-t, vaid täiendab seda: EHIS annab ametliku staatuse, Credential Commons teeb sama info laiemalt kättesaadavaks.",
+    alt: "EHIS (Eesti Hariduse Infosüsteem) on Eesti riiklik register, kuhu mikrokvalifikatsiooni õppekavad ja tunnistused ametlikult kantakse – see on kohustuslik samm. Credential Commons on avatud, masinloetav andmestandard, mis kirjeldab sama sisu nii, et seda saavad lugeda ka teised koolid, tööandjad ja AI-teenused. Credential Commons ei asenda EHIS-t, vaid täiendab seda: EHIS annab ametliku staatuse, Credential Commons teeb sama info laiemalt kättesaadavaks.",
     caption: "EHIS on kohustuslik riiklik register; Credential Commons on täiendav masinloetav kiht, mitte asendus.",
   },
   // ── /koolitajale/hinnastamine/ ────────────────────────────────────────────
   {
     id: "hinnastamine-tasuvuse-naide",
     kicker: "Tasuvuse näide",
-    headline: "Kolmas õppija katab vooru — edasi tuleb kasum",
-    deck: "illustratiivne näide — täida oma numbritega",
+    headline: "Kolmas õppija katab vooru – edasi tuleb kasum",
+    deck: "illustratiivne näide – täida oma numbritega",
     body: {
       kind: "flow",
       from: { label: "3000 €", sub: "vooru püsikulu (näide)" },
       via: "÷ (1200 − 200)",
       to: { label: "3 õppijat", sub: "katab vooru; edasi kasum" },
     },
-    takeaway: "See on illustratiivne näide — pane oma tegelikud numbrid valemisse enne otsust.",
+    takeaway: "See on illustratiivne näide – pane oma tegelikud numbrid valemisse enne otsust.",
     alt: "Tasuvuse loogika: õppijate arv tasuvuseni = ühekordne + püsikulu jagatud (hind ühele õppijale miinus muutuvkulu ühele). Illustratiivses näites on vooru püsikulu 3000 €, hind õppijale 1200 € ja muutuvkulu õppija kohta 200 €: 3000 ÷ (1200 − 200) = 3 õppijat katab vooru; iga järgmine õppija on kasum. See ei ole lubadus, vaid arvutusloogika, mille iga koolitaja täidab oma numbritega.",
-    caption: "Näide: vooru püsikulu 3000 €, hind 1200 €, muutuvkulu 200 € — kolmas õppija katab vooru.",
+    caption: "Näide: vooru püsikulu 3000 €, hind 1200 €, muutuvkulu 200 € – kolmas õppija katab vooru.",
   },
   // ── /koolitajale/turule-toomine/ ─────────────────────────────────────────
   {
@@ -200,7 +200,7 @@ export const koolitajaDiagrams: Diagram[] = [
   {
     id: "eneseanalyys-alusdokument",
     kicker: "Eneseanalüüs",
-    headline: "See ei ole kaaskiri — see on hindamise alus",
+    headline: "See ei ole kaaskiri – see on hindamise alus",
     deck: "levinud eksiarvamus vs tegelik roll",
     body: {
       kind: "compare",
@@ -216,8 +216,8 @@ export const koolitajaDiagrams: Diagram[] = [
       },
     },
     takeaway: "Kirjuta nii, et õppekava, veebileht ja eneseanalüüs räägiksid täht-täheliselt sama juttu.",
-    alt: "Paljud koolitajad käsitlevad eneseanalüüsi kui üht paberit paljude seas — levinud, aga vale eeldus. Tegelikult on eneseanalüüs hindamise alusdokument: see on peamine tekst, mida HAKA hindaja loeb ja mille vastu ta kõiki teisi dokumente (õppekava, veebileht, tõendid) kontrollib. Kui eneseanalüüs läheb vastuollu veebilehe või õppekavaga, loeb hindaja seda riskiks, ükskõik kui hea sisu tegelikkuses on.",
-    caption: "Eneseanalüüs on hindamise alusdokument, mitte kaaskiri — kõik muu peab seda toetama.",
+    alt: "Paljud koolitajad käsitlevad eneseanalüüsi kui üht paberit paljude seas – levinud, aga vale eeldus. Tegelikult on eneseanalüüs hindamise alusdokument: see on peamine tekst, mida HAKA hindaja loeb ja mille vastu ta kõiki teisi dokumente (õppekava, veebileht, tõendid) kontrollib. Kui eneseanalüüs läheb vastuollu veebilehe või õppekavaga, loeb hindaja seda riskiks, ükskõik kui hea sisu tegelikkuses on.",
+    caption: "Eneseanalüüs on hindamise alusdokument, mitte kaaskiri – kõik muu peab seda toetama.",
   },
   // ── /koolitajale/kvaliteedihindamine/ ────────────────────────────────────
   {
@@ -231,9 +231,9 @@ export const koolitajaDiagrams: Diagram[] = [
       via: "praktikas loetakse",
       to: { label: "EI VASTA", sub: "langetab kogu valdkonna" },
     },
-    takeaway: "Sihi iga kriteeriumi puhul selget „vastab“ — mitte „peaaegu“.",
+    takeaway: "Sihi iga kriteeriumi puhul selget „vastab“ – mitte „peaaegu“.",
     alt: "HAKA hindab iga kriteeriumi kolmeastmelisel skaalal: vastab, vastab osaliselt või ei vasta. Kuldne reegel on, et kui midagi on vaid osaliselt täidetud, loeb hindaja seda praktikas täitmata. Mitu „vastab osaliselt“ hinnangut võivad langetada terve valdkonna ja koos sellega positiivse otsuse, kuna kõik kaheksa valdkonda peavad nõuetele vastama.",
-    caption: "„Vastab osaliselt“ loetakse hindamisel praktikas täitmata — sihi selget „vastab“.",
+    caption: "„Vastab osaliselt“ loetakse hindamisel praktikas täitmata – sihi selget „vastab“.",
   },
   // ── /koolitajale/kuidas-ehitada/ ─────────────────────────────────────────
   {
@@ -246,7 +246,7 @@ export const koolitajaDiagrams: Diagram[] = [
       inner: { label: "2 VALDKONDA", sub: "6.2 Õppekava + 6.5 Hindamine" },
     },
     takeaway: "Ülejäänud kuut valdkonda tõendab ikka asutus ise.",
-    alt: "Kaheksast HAKA hindamisvaldkonnast käivad kaks otseselt õppekava andmete kohta: 6.2 Õppekava (kas õpiväljundid, maht ja sisu räägivad sama lugu) ja 6.5 Hindamine ja lõpudokumendid (kas igal õpiväljundil on selge hindamiskriteerium). Avatud andmestandard (Credential Commons) aitab just neid kahte valdkonda korrastatult ja kontrollitavalt kirja panna. Ülejäänud kuut valdkonda — õppekavaarendust, õppeprotsessi, koolitajate pädevust, kvaliteedijuhtimist ja ressursse — andmestandard ei asenda; neid tõendab ikka asutus ise.",
+    alt: "Kaheksast HAKA hindamisvaldkonnast käivad kaks otseselt õppekava andmete kohta: 6.2 Õppekava (kas õpiväljundid, maht ja sisu räägivad sama lugu) ja 6.5 Hindamine ja lõpudokumendid (kas igal õpiväljundil on selge hindamiskriteerium). Avatud andmestandard (Credential Commons) aitab just neid kahte valdkonda korrastatult ja kontrollitavalt kirja panna. Ülejäänud kuut valdkonda – õppekavaarendust, õppeprotsessi, koolitajate pädevust, kvaliteedijuhtimist ja ressursse – andmestandard ei asenda; neid tõendab ikka asutus ise.",
     caption: "6.2 ja 6.5 on andmevaldkonnad, kus andmestandard aitab; ülejäänud kuus on asutuse enda tõendada.",
   },
 ];

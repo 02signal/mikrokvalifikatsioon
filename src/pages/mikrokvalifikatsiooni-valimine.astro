@@ -41,7 +41,7 @@ const ectsTypicalText =
 const decisionSteps = [
   {
     name: "Alusta eesmärgist",
-    text: "Sõnasta üks konkreetne oskus, mida tahad tõendada — mitte „õpin midagi kasulikku“, vaid näiteks „oskan teha andmeanalüüsi“ või „juhin projekti“. Eesmärk määrab kõik järgmised sammud."
+    text: "Sõnasta üks konkreetne oskus, mida tahad tõendada – mitte „õpin midagi kasulikku“, vaid näiteks „oskan teha andmeanalüüsi“ või „juhin projekti“. Eesmärk määrab kõik järgmised sammud."
   },
   {
     name: "Vaata mahtu ja kestust",
@@ -49,11 +49,11 @@ const decisionSteps = [
   },
   {
     name: "Kontrolli rahastust ja sihtrühma",
-    text: "Vaata, kes kulu katab: tööandja koolituseelarve, õppekava enda rahastus või sina ise. Osa programme on kindlale sihtrühmale rahastatud — kontrolli, kas sina kvalifitseerud. Rahastusradadest räägib leht „Kes maksab?“."
+    text: "Vaata, kes kulu katab: tööandja koolituseelarve, õppekava enda rahastus või sina ise. Osa programme on kindlale sihtrühmale rahastatud – kontrolli, kas sina kvalifitseerud. Rahastusradadest räägib leht „Kes maksab?“."
   },
   {
     name: "Vali valdkond",
-    text: "Kitsenda otsing valdkonna järgi — näiteks IT ja andmed, majandus ja juhtimine või tehnika ja tootmine. Iga valdkonna lehel näed kõiki selle programme korraga."
+    text: "Kitsenda otsing valdkonna järgi – näiteks IT ja andmed, majandus ja juhtimine või tehnika ja tootmine. Iga valdkonna lehel näed kõiki selle programme korraga."
   },
   {
     name: "Võrdle kõrvuti",
@@ -79,27 +79,27 @@ const faqItems = [
   {
     question: "Millised on mikrokvalifikatsioonide valikud?",
     answer: biggestField
-      ? `Selle lehe valimis (rakenduskõrgkoolide ja koolitusettevõtete mikrokvalifikatsioonid) on ${microQuals.length} programmi ${providers.length} koolist mitmes valdkonnas. Kõige laiem valik on valdkonnas „${biggestField.field}“ — ${biggestField.count} programmi. Kõik valdkonnad koos programmide arvuga on allpool „Sinu valikud“ ülevaates ja lehel /valdkond/.`
+      ? `Selle lehe valimis (rakenduskõrgkoolide ja koolitusettevõtete mikrokvalifikatsioonid) on ${microQuals.length} programmi ${providers.length} koolist mitmes valdkonnas. Kõige laiem valik on valdkonnas „${biggestField.field}“ – ${biggestField.count} programmi. Kõik valdkonnad koos programmide arvuga on allpool „Sinu valikud“ ülevaates ja lehel /valdkond/.`
       : `Selle lehe valimis on ${microQuals.length} programmi ${providers.length} koolist mitmes valdkonnas. Kõik valdkonnad koos programmide arvuga on allpool „Sinu valikud“ ülevaates ja lehel /valdkond/.`
   },
   {
     question: "Mille järgi mikrokvalifikatsiooni valida?",
     answer:
-      "Viie tunnuse järgi: hind, maht (EAP või akadeemilised tunnid), kestus, õppevorm (veebis, hübriid või kohapeal) ja kes kulu katab. Esimese sõela teeb aga eesmärk — milline oskus su tööd või karjääri kõige rohkem aitab. Alles siis tasub hindu ja mahte kõrvutada."
+      "Viie tunnuse järgi: hind, maht (EAP või akadeemilised tunnid), kestus, õppevorm (veebis, hübriid või kohapeal) ja kes kulu katab. Esimese sõela teeb aga eesmärk – milline oskus su tööd või karjääri kõige rohkem aitab. Alles siis tasub hindu ja mahte kõrvutada."
   },
   {
-    question: "Mikrokvalifikatsioon vs mikrokraad — kumba valida?",
+    question: "Mikrokvalifikatsioon vs mikrokraad – kumba valida?",
     answer:
       "Mikrokvalifikatsioon on katusmõiste igale lühikesele tunnustatud õppele; mikrokraad on selle ülikooli versioon, mis annab EAP-sid, mida saab hiljem kraadiõppes arvestada. Vali koolitusettevõtte või rakenduskõrgkooli mikrokvalifikatsioon, kui tahad kiiret praktilist oskust; vali ülikooli mikrokraad, kui tahad ainepunkte tasemeõppe jaoks. Ülikoolide oma võrdle lehel /mikrokraadi-valimine/."
   },
   {
     question: "Kui suur on tüüpiline maht (EAP)?",
-    answer: `Maht antakse Euroopa ainepunktides (EAP); 1 EAP vastab umbes 26 tunnile õppija tööd. Selle lehe valimis jäävad avaldatud mahud vahemikku ${ectsTypicalText} — väiksem maht tähendab kiiremat lühiõpet, suurem maht põhjalikumat programmi. Osa koolitusettevõtteid annab mahu hoopis akadeemilistes tundides; täpne maht on iga programmi juures kataloogis.`
+    answer: `Maht antakse Euroopa ainepunktides (EAP); 1 EAP vastab umbes 26 tunnile õppija tööd. Selle lehe valimis jäävad avaldatud mahud vahemikku ${ectsTypicalText} – väiksem maht tähendab kiiremat lühiõpet, suurem maht põhjalikumat programmi. Osa koolitusettevõtteid annab mahu hoopis akadeemilistes tundides; täpne maht on iga programmi juures kataloogis.`
   },
   {
     question: "Kes mikrokvalifikatsiooni kinni maksab?",
     answer:
-      "Kolm rada: tööandja koolituseelarve (kui oskus aitab praegust tööd), õppekava enda sihtrühma rahastus (kui kvalifitseerud) või ise makstes. Osa programme on kindlale sihtrühmale rahastatud — kontrolli kooli lehelt, kas sina kvalifitseerud. Sobiva raja leiad lehelt /kes-maksab/."
+      "Kolm rada: tööandja koolituseelarve (kui oskus aitab praegust tööd), õppekava enda sihtrühma rahastus (kui kvalifitseerud) või ise makstes. Osa programme on kindlale sihtrühmale rahastatud – kontrolli kooli lehelt, kas sina kvalifitseerud. Sobiva raja leiad lehelt /kes-maksab/."
   },
   {
     question: "Kust pärinevad valikulehe andmed?",
@@ -166,7 +166,7 @@ const schema = {
       itemListElement: optionFields.map((stat, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        name: `${stat.field} — ${stat.count} programmi`,
+        name: `${stat.field} – ${stat.count} programmi`,
         url: `${SITE}/valdkond/${stat.slug}/`
       }))
     },
@@ -186,12 +186,12 @@ const schema = {
 <html lang="et">
   <head>
     <Seo
-      title="Mikrokvalifikatsiooni valimine — kuidas valida õige? Sinu valikud | Mikrokvalifikatsioon.ee"
+      title="Mikrokvalifikatsiooni valimine – kuidas valida õige? Sinu valikud | Mikrokvalifikatsioon.ee"
       description="Mikrokvalifikatsiooni valimine sammhaaval: kuidas valida õige mikrokvalifikatsioon eesmärgi, mahu, rahastuse ja valdkonna järgi. Vaata kõiki valikuid Eesti pakkujatelt."
       canonicalPath={PATH}
       ogType="article"
       ogTitle="Mikrokvalifikatsiooni valimine: kuidas valida õige?"
-      ogDescription="Otsustusraamistik ja kõik valikud valdkonniti — kuidas valida õige mikrokvalifikatsioon, päris Eesti andmetega."
+      ogDescription="Otsustusraamistik ja kõik valikud valdkonniti – kuidas valida õige mikrokvalifikatsioon, päris Eesti andmetega."
       jsonLd={schema}
     />
     <style is:global>
@@ -254,7 +254,7 @@ const schema = {
             Õige mikrokvalifikatsiooni valid eesmärgi, mitte kooli nime järgi.
             <strong>Alusta ühest konkreetsest oskusest, mida tahad tõendada</strong>, ja sõelu
             siis välja eesmärgile sobiv programm mahu (EAP), kestuse, rahastuse, valdkonna ja
-            õppevormi järgi. Siin on selge otsustusraamistik ja kõik su valikud — reaalsed
+            õppevormi järgi. Siin on selge otsustusraamistik ja kõik su valikud – reaalsed
             andmed {providers.length} koolist.
           </p>
           <div class="actions">
@@ -264,7 +264,7 @@ const schema = {
         </div>
       </section>
 
-      <!-- Lühivastus — GEO: extractable, otse intentile -->
+      <!-- Lühivastus – GEO: extractable, otse intentile -->
       <section class="white">
         <div class="section-inner narrow">
           <div class="section-head compact-head">
@@ -281,18 +281,18 @@ const schema = {
           <ul class="check">
             <li><strong>{catalog.length}</strong> programmi {providers.length} koolist meie kataloogis.</li>
             <li><strong>{microQuals.length}</strong> neist on rakenduskõrgkoolide ja koolitusettevõtete mikrokvalifikatsioonid.</li>
-            <li><strong>{microDegrees.length}</strong> on ülikoolide mikrokraadid — nende valimisel aitab <a href="/mikrokraadi-valimine/">mikrokraadi valimine</a>.</li>
+            <li><strong>{microDegrees.length}</strong> on ülikoolide mikrokraadid – nende valimisel aitab <a href="/mikrokraadi-valimine/">mikrokraadi valimine</a>.</li>
           </ul>
         </div>
       </section>
 
-      <!-- Otsustusraamistik — GEO: HowTo, nummerdatud sammud -->
+      <!-- Otsustusraamistik – GEO: HowTo, nummerdatud sammud -->
       <section class="ice">
         <div class="section-inner narrow">
           <div class="section-head compact-head">
             <span class="kicker">Otsustusraamistik</span>
             <h2>Kuus sammu sobiva mikrokvalifikatsioonini.</h2>
-            <p>Järgi neid samme järjekorras — eesmärk teeb esimese sõela, hind ja õppevorm viimase.</p>
+            <p>Järgi neid samme järjekorras – eesmärk teeb esimese sõela, hind ja õppevorm viimase.</p>
           </div>
           <ol class="mkv-steps">
             {decisionSteps.map((step, i) => (
@@ -305,7 +305,7 @@ const schema = {
         </div>
       </section>
 
-      <!-- Sinu valikud — GEO: per-field options overview, extractable table -->
+      <!-- Sinu valikud – GEO: per-field options overview, extractable table -->
       <section class="white">
         <div class="section-inner">
           <div class="section-head compact-head">
@@ -313,7 +313,7 @@ const schema = {
             <h2>Mikrokvalifikatsioonide valikud valdkonniti.</h2>
             <p>
               Iga valdkonna kohta on toodud programmide arv, mahuvahemik (EAP), hinnavahemik ja
-              paar näiteprogrammi — kõik päris kataloogiandmetest. Klõpsa valdkonnal, et näha
+              paar näiteprogrammi – kõik päris kataloogiandmetest. Klõpsa valdkonnal, et näha
               selle kõiki programme ja teha valik.
             </p>
           </div>
@@ -370,7 +370,7 @@ const schema = {
         </div>
       </section>
 
-      <!-- Seotud — cross-links -->
+      <!-- Seotud – cross-links -->
       <section class="ice">
         <div class="section-inner narrow">
           <div class="section-head compact-head">
@@ -378,21 +378,21 @@ const schema = {
             <h2>Vaata edasi.</h2>
           </div>
           <ul class="check">
-            <li><a href="/mikrokraadi-valimine/">Mikrokraadi valimine</a> — kuidas valida õige ülikooli mikrokraad (EAP, eeldused, tasemeõpe).</li>
-            <li><a href="/mikrokvalifikatsioonide-vordlus/">Mikrokvalifikatsioonide võrdlus</a> — hind, maht, kestus ja õppevorm kõrvuti.</li>
-            <li><a href="/mikrokraadide-vordlus/">Mikrokraadide võrdlus</a> — ülikoolide mikrokraadid ühes tabelis.</li>
-            <li><a href="/kataloog/">Filtreeritav kataloog</a> ja <a href="/vordlus/">võrdlustööriist</a> — kõrvuta kuni kolm programmi.</li>
-            <li><a href="/kes-maksab/">Kes maksab?</a> — tööandja, õppekava rahastus või ise; leia oma rahastusrada.</li>
+            <li><a href="/mikrokraadi-valimine/">Mikrokraadi valimine</a> – kuidas valida õige ülikooli mikrokraad (EAP, eeldused, tasemeõpe).</li>
+            <li><a href="/mikrokvalifikatsioonide-vordlus/">Mikrokvalifikatsioonide võrdlus</a> – hind, maht, kestus ja õppevorm kõrvuti.</li>
+            <li><a href="/mikrokraadide-vordlus/">Mikrokraadide võrdlus</a> – ülikoolide mikrokraadid ühes tabelis.</li>
+            <li><a href="/kataloog/">Filtreeritav kataloog</a> ja <a href="/vordlus/">võrdlustööriist</a> – kõrvuta kuni kolm programmi.</li>
+            <li><a href="/kes-maksab/">Kes maksab?</a> – tööandja, õppekava rahastus või ise; leia oma rahastusrada.</li>
           </ul>
         </div>
       </section>
 
-      <!-- KKK — GEO: FAQPage, katab valimine/valik/valikud cluster -->
+      <!-- KKK – GEO: FAQPage, katab valimine/valik/valikud cluster -->
       <section class="white">
         <div class="section-inner narrow">
           <div class="section-head compact-head">
             <span class="kicker">Korduvad küsimused</span>
-            <h2>Valimine, valikud ja võrdlemine — lühivastused.</h2>
+            <h2>Valimine, valikud ja võrdlemine – lühivastused.</h2>
           </div>
           <Faq items={faqItems} openFirst={3} />
         </div>
@@ -402,7 +402,7 @@ const schema = {
         <div class="section-inner contact">
           <div>
             <span class="kicker">Järgmine samm</span>
-            <h2>Tee valik kindlamaks — võrdle kõrvuti või tee suunatest.</h2>
+            <h2>Tee valik kindlamaks – võrdle kõrvuti või tee suunatest.</h2>
             <div class="inline-actions">
               <a class="btn btn-primary" href="/vordlus/" data-track-event="cta_click" data-track-label="mkv_valimine_bottom_tool">Võrdle kuni 3 programmi</a>
               <a class="btn btn-secondary" href="/#suunatest" data-track-event="cta_click" data-track-label="mkv_valimine_bottom_suunatest">Tee suunatest</a>

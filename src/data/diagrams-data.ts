@@ -50,7 +50,7 @@ function hindDiagram(): Diagram {
       maxLabel: fmtEur(max),
       bandLabel: "tüüpiline vahemik",
     },
-    takeaway: "Küsi kõigepealt tööandjalt ja koolilt — sageli ei maksa õppija kogu summat ise.",
+    takeaway: "Küsi kõigepealt tööandjalt ja koolilt – sageli ei maksa õppija kogu summat ise.",
     alt:
       `Kataloogis avaldatud õppetasud ulatuvad ${fmtEur(min)}-st ${fmtEur(max)}-ni. Tüüpiline vahemik ` +
       `(25.–75. protsentiil) on ${fmtEur(p25)}–${fmtEur(p75)}, mediaan ${fmtEur(median)}. Hind sõltub mahust ` +
@@ -80,9 +80,9 @@ function eapJaotusDiagram(): Diagram {
         emphasis: common ? b.label === common.label : true,
       })),
     },
-    takeaway: `1 EAP ≈ 26 tundi — tüüpiline maht tähendab umbes ${hoursLo}–${hoursHi} tundi õppija tööd kokku.`,
+    takeaway: `1 EAP ≈ 26 tundi – tüüpiline maht tähendab umbes ${hoursLo}–${hoursHi} tundi õppija tööd kokku.`,
     alt:
-      `Kataloogi mikrokraadid EAP-vahemike kaupa: ${buckets.map((b) => `${b.label} — ${b.count}`).join("; ")}. ` +
+      `Kataloogi mikrokraadid EAP-vahemike kaupa: ${buckets.map((b) => `${b.label} – ${b.count}`).join("; ")}. ` +
       `Kõige sagedasem maht on ${commonLabel}. 1 EAP ≈ 26 tundi õppija tööd.`,
     caption: "Mikrokraadi maht EAP-vahemike kaupa; esile tõstetud on kõige sagedasem vahemik.",
   };
@@ -102,7 +102,7 @@ function valdkonnadDiagram(): Diagram {
       kind: "bars",
       bars: rows.map((r, i) => ({ label: cap(r.field), value: r.count, display: String(r.count), emphasis: i === 0 })),
     },
-    takeaway: `${total} valdkonda kokku — vaata igaüht valdkonnalehel.`,
+    takeaway: `${total} valdkonda kokku – vaata igaüht valdkonnalehel.`,
     alt:
       `Kataloogi programmid jagunevad ${total} valdkonna vahel. Enim pakutavad on ` +
       `${rows.map((r) => `${cap(r.field)} (${r.count})`).join(", ")}. Iga valdkonna programme saab vaadata eraldi valdkonnalehel.`,
@@ -129,7 +129,7 @@ function oppevormDiagram(): Diagram {
     },
     takeaway: "Veebis või hübriidis saab õppida töö kõrvalt.",
     alt:
-      `Kataloogis on ${f.online} täielikult veebipõhist ja ${f.blended} hübriidprogrammi — kokku ` +
+      `Kataloogis on ${f.online} täielikult veebipõhist ja ${f.blended} hübriidprogrammi – kokku ` +
       `${f.onlineOrBlended} programmi saab läbida ilma iga kord kohale tulemata. Kohapeal toimub ${f.onsite}. ` +
       `Õpe käib enamasti töö kõrvalt.`,
     caption: "Mitu programmi igas õppevormis. Veebis või hübriidis saab õppida töö kõrvalt.",
@@ -144,7 +144,7 @@ function ehisTunnustatudDiagram(): Diagram {
     id: "ehis-tunnustatud",
     kicker: "Ametlik",
     headline: "EHIS-es registreeritud",
-    deck: "riiklik register — Haridus- ja Teadusministeerium",
+    deck: "riiklik register – Haridus- ja Teadusministeerium",
     body: {
       kind: "cards",
       cards: [
@@ -154,7 +154,7 @@ function ehisTunnustatudDiagram(): Diagram {
     },
     takeaway: "Tunnistus tõendab EHIS-es kinnitatud õppekava läbimist.",
     alt:
-      `Mikrokvalifikatsioonid on Eesti Hariduse Infosüsteemis (EHIS) registreeritud õppekavad — riiklik register, ` +
+      `Mikrokvalifikatsioonid on Eesti Hariduse Infosüsteemis (EHIS) registreeritud õppekavad – riiklik register, ` +
       `mida peab Haridus- ja Teadusministeerium. EHIS-es on ${programmes} registreeritud mikrokvalifikatsiooni ` +
       `õppekava ${providers} pakkujalt. Tunnistus tõendab EHIS-es kinnitatud õppekava läbimist.`,
     caption: "Mikrokvalifikatsioonid on EHIS-es registreeritud õppekavad (riiklik register). Tunnistus tõendab kinnitatud õppekava läbimist.",

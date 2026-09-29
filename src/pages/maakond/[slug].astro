@@ -57,11 +57,11 @@ const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
 // ── INTRO + META (väljavõetav, päris arvudega) ─────────────────────────────────
 const introText =
   `${region.formalName} (keskus ${region.seat}): ${allEntries.length} mikrokvalifikatsiooni ja mikrokraadi` +
-  `${local.length > 0 ? ` — ${local.length} kohapeal ${localProviders.length} koolist` : ""}` +
+  `${local.length > 0 ? ` – ${local.length} kohapeal ${localProviders.length} koolist` : ""}` +
   `${online.length > 0 ? `, ${online.length} veebis kättesaadav` : ""}.` +
   (hasLabor ? ` avaandmete järgi on ${laborAsOf} kõrgeim nõudlus ametirühmas „${iscoLabel(topDemand!.isco_major_group)}".` : "");
 
-const title = `Õpe, töö ja palk ${region.name}l — mikrokvalifikatsioonid`;
+const title = `Õpe, töö ja palk ${region.name}l – mikrokvalifikatsioonid`;
 const description =
   `Mida saab ${region.name}l õppida, millised tööd on nõutud ja kui palju makstakse. ` +
   `${allEntries.length} mikrokvalifikatsiooni ja mikrokraadi${hasLabor ? `, avalik tööturunõudlus (${laborAsOf})` : ""}` +
@@ -85,7 +85,7 @@ if (hasLabor) {
     q: `Millised tööd on ${region.name}l nõutud?`,
     a: `Avaandmetel on ${laborAsOf} ${region.name}l kõige rohkem avatud kohti ametirühmas `
       + `„${iscoLabel(topDemand!.isco_major_group)}" (${openingsBandText(topDemand!.openings_now_band)}). `
-      + `Arvud on toodud vahemikena ametirühma tasemel — täpne nimekiri allpool. Üksikuid töökuulutusi me ei kuva.`
+      + `Arvud on toodud vahemikena ametirühma tasemel – täpne nimekiri allpool. Üksikuid töökuulutusi me ei kuva.`
   });
 }
 if (regionalHourly != null) {
@@ -121,7 +121,7 @@ const graph: Record<string, unknown>[] = [
 if (allEntries.length > 0) {
   graph.push({
     "@type": "ItemList",
-    name: `${region.formalName} — mikrokvalifikatsioonid ja mikrokraadid`,
+    name: `${region.formalName} – mikrokvalifikatsioonid ja mikrokraadid`,
     numberOfItems: allEntries.length,
     itemListElement: allEntries.map((entry, index) => ({
       "@type": "ListItem", position: index + 1, item: toCourse(entry)
@@ -170,7 +170,7 @@ const schema = { "@context": "https://schema.org", "@graph": graph };
       description={description}
       canonicalPath={canonicalPath}
       ogTitle={`Õpe, töö ja palk ${region.name}l`}
-      ogDescription={`${allEntries.length} mikrokvalifikatsiooni ja mikrokraadi, avalik tööturunõudlus ja palk — ${region.formalName}.`}
+      ogDescription={`${allEntries.length} mikrokvalifikatsiooni ja mikrokraadi, avalik tööturunõudlus ja palk – ${region.formalName}.`}
       jsonLd={schema}
     />
   </head>
@@ -218,7 +218,7 @@ const schema = { "@context": "https://schema.org", "@graph": graph };
               {online.length > 0 && (
                 <div class="prog-block">
                   <h3 class="prog-sub">Veebis kättesaadav (kõikjalt Eestist, {online.length})</h3>
-                  <p class="prog-note">Need programmid toimuvad veebis või hübriidvormis — sa ei pea {region.name}l kohapeal käima.</p>
+                  <p class="prog-note">Need programmid toimuvad veebis või hübriidvormis – sa ei pea {region.name}l kohapeal käima.</p>
                   <ul class="prog-grid">
                     {online.map((entry) => (
                       <li class="prog-card prog-online">
@@ -239,7 +239,7 @@ const schema = { "@context": "https://schema.org", "@graph": graph };
               <h2>Mida {region.name}l õppida</h2>
               <p class="muted">
                 Kataloogis ei ole praegu ühtegi {region.name}l kohapeal toimuvat mikrokvalifikatsiooni ega mikrokraadi.
-                Vaata <a href="/kataloog/">kogu kataloogi</a> — paljud programmid on veebis kättesaadavad kõikjalt Eestist.
+                Vaata <a href="/kataloog/">kogu kataloogi</a> – paljud programmid on veebis kättesaadavad kõikjalt Eestist.
               </p>
             </div>
           )}
@@ -328,7 +328,7 @@ const schema = { "@context": "https://schema.org", "@graph": graph };
           <div class="section-inner narrow">
             <div class="section-head compact-head">
               <span class="kicker">KKK</span>
-              <h2>{region.name} — korduvad küsimused</h2>
+              <h2>{region.name} – korduvad küsimused</h2>
             </div>
             <div class="faq">
               {faq.map((f) => (

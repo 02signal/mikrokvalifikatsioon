@@ -56,7 +56,7 @@ import Nav from "../../components/Nav.astro";
         <div class="section-inner">
           <span class="eyebrow">Võrdlus</span>
           <h1>Vali kataloogist kuni 3 programmi ja vaata neid kõrvuti.</h1>
-          <p data-compare-intro>Hind, maht, kestus, õppevorm — ja kui kool on avaldanud, ka eesmärk, õpiväljundid ja hindamine.</p>
+          <p data-compare-intro>Hind, maht, kestus, õppevorm – ja kui kool on avaldanud, ka eesmärk, õpiväljundid ja hindamine.</p>
         </div>
       </section>
 
@@ -131,16 +131,16 @@ import Nav from "../../components/Nav.astro";
           ["Kool", (p) => escapeHtml(p.provider)],
           ["Valdkond", (p) => escapeHtml(p.field)],
           ["Hind", (p) => escapeHtml(p.priceText || "kooli lehel")],
-          ["Maht", (p) => p.ects ? `${p.ects} EAP` : "—"],
-          ["Kestus", (p) => escapeHtml(p.durationText || "—")],
-          ["Õppevorm", (p) => escapeHtml(p.format || "—")],
-          ["Keel", (p) => p.language === "en" ? "inglise" : p.language === "et" ? "eesti" : "—"],
-          ["Vastuvõtt", (p) => escapeHtml(p.intakeText || "—")],
+          ["Maht", (p) => p.ects ? `${p.ects} EAP` : "–"],
+          ["Kestus", (p) => escapeHtml(p.durationText || "–")],
+          ["Õppevorm", (p) => escapeHtml(p.format || "–")],
+          ["Keel", (p) => p.language === "en" ? "inglise" : p.language === "et" ? "eesti" : "–"],
+          ["Vastuvõtt", (p) => escapeHtml(p.intakeText || "–")],
           ["Kellele", (p) => escapeHtml(p.summary)]
         ];
-        if (chosen.some((p) => p.goalText)) rows.push(["Eesmärk", (p) => escapeHtml(p.goalText || "—")]);
-        if (chosen.some((p) => p.outcomes?.length)) rows.push(["Õpiväljundid", (p) => p.outcomes?.length ? `<ul>${p.outcomes.map((o) => `<li>${escapeHtml(o)}</li>`).join("")}</ul>` : "—"]);
-        if (chosen.some((p) => p.assessmentText)) rows.push(["Hindamine", (p) => escapeHtml(p.assessmentText || "—")]);
+        if (chosen.some((p) => p.goalText)) rows.push(["Eesmärk", (p) => escapeHtml(p.goalText || "–")]);
+        if (chosen.some((p) => p.outcomes?.length)) rows.push(["Õpiväljundid", (p) => p.outcomes?.length ? `<ul>${p.outcomes.map((o) => `<li>${escapeHtml(o)}</li>`).join("")}</ul>` : "–"]);
+        if (chosen.some((p) => p.assessmentText)) rows.push(["Hindamine", (p) => escapeHtml(p.assessmentText || "–")]);
         rows.push(["", (p) => `<a href="${escapeHtml(p.url)}" target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label="vordlus_${escapeHtml(p.provider)}">Vaata kooli lehel</a>`]);
 
         table.innerHTML =
