@@ -20,7 +20,7 @@ import assert from "node:assert/strict";
 import { catalog } from "../src/data/catalog/index.ts";
 import { cleanOutcomeTexts } from "../src/data/outcomes.ts";
 import { outcomeRefMap, outcomeRefForText, outcomeRecordForText } from "../src/data/outcomeRefs.ts";
-import { outcomeMeta, SKILL_TAG_RE } from "../src/lib/outcome-ref.ts";
+import { normalizeOutcomeText, outcomeMeta, SKILL_TAG_RE } from "../src/lib/outcome-ref.ts";
 
 const OUT_REF_RE = /^out_[0-9a-f]{24}$/;
 const FALLBACK_TAG = "muu_oskus";
@@ -73,15 +73,22 @@ test("every entry has a well-formed out_ref and a valid skillTag", () => {
   }
 });
 
+// The ref is AMOS's outcome identity: deriveOutcomeRef hashes
+// language + skillTag + normalizeOutcomeText(text) (NFKC, collapsed whitespace,
+// edge punctuation stripped). The map's key is the coarser /oskused/ dedup key
+// (trim + lowercase), so two keys that differ only in what normalization drops
+// (e.g. "… õppija:" vs "… õppija") are ONE outcome and MUST share a ref. A
+// collision is only a bug when two DIFFERENT normalized outcomes share a ref.
 test("outcome_refs are UNIQUE across the map (no two outcomes collide on a ref)", () => {
-  const seen = new Map(); // ref -> first key that used it
+  const seen = new Map(); // ref -> { key, identity } of the first key that used it
   const collisions = [];
   for (const [key, rec] of Object.entries(outcomeRefMap)) {
+    const identity = `${rec.skillTag}\n${normalizeOutcomeText(key)}`;
     const prev = seen.get(rec.outcome_ref);
-    if (prev !== undefined) {
-      collisions.push({ ref: rec.outcome_ref, a: prev, b: key });
-    } else {
-      seen.set(rec.outcome_ref, key);
+    if (prev === undefined) {
+      seen.set(rec.outcome_ref, { key, identity });
+    } else if (prev.identity !== identity) {
+      collisions.push({ ref: rec.outcome_ref, a: prev.key, b: key });
     }
   }
   assert.equal(
@@ -89,6 +96,22 @@ test("outcome_refs are UNIQUE across the map (no two outcomes collide on a ref)"
     0,
     `out_ref collisions: ${JSON.stringify(collisions.slice(0, 5), null, 2)}`
   );
+});
+
+test("outcome_refs follow the AMOS identity: normalization-equal texts share a ref, others do not", () => {
+  const byIdentity = new Map(); // identity -> ref
+  for (const [key, rec] of Object.entries(outcomeRefMap)) {
+    const identity = `${rec.skillTag}\n${normalizeOutcomeText(key)}`;
+    const prev = byIdentity.get(identity);
+    if (prev === undefined) byIdentity.set(identity, rec.outcome_ref);
+    else assert.equal(rec.outcome_ref, prev, `same AMOS outcome, different refs: ${JSON.stringify(key)}`);
+  }
+
+  // Fixture: an edge-punctuation variant is the same outcome, a real change is not.
+  const base = "Mikrokraadi läbinud õppija oskab koostada eelarvet";
+  assert.equal(outcomeMeta(`${base}:`).outcome_ref, outcomeMeta(base).outcome_ref);
+  assert.equal(outcomeMeta(`  ${base}!  `).outcome_ref, outcomeMeta(base).outcome_ref);
+  assert.notEqual(outcomeMeta(`${base} ja aruannet`).outcome_ref, outcomeMeta(base).outcome_ref);
 });
 
 test("outcomeRefForText resolves a known outcome and rejects an unknown string", () => {

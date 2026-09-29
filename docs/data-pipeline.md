@@ -45,7 +45,9 @@ recomputes the committed `count` + EHIS-`matches` from the JSON and asserts the 
 `catalog` never regresses below them (plus an absolute backstop: count ≥ 150, matches
 ≥ 140). It is self-adjusting (no hardcoded 148/169). Any future change — a bad feed, or a
 data edit that breaks EHIS matching — **fails the build before deploy**, so the live site
-never silently degrades.
+never silently degrades. The EHIS floor is identity-based: a historical row whose canonical
+id the committed LKG lists in `retired[]` (a measured withdrawal) leaves the floor with its
+match (`legacyEhisIdentityRows`); a match lost for any other reason still fails the gate.
 
 ## 0. Delivery goal
 

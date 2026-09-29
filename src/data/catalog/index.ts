@@ -46,6 +46,22 @@ const LEGACY_EHIS_IDENTITY_BY_PROGRAMME_ID = new Map<string, EhisIdentityAlias>(
 );
 
 /**
+ * Historical identity rows that still stand against a given LKG, for the
+ * build-time EHIS floor (scripts/catalog-floor.test.mjs). A row whose canonical
+ * id AMOS has MEASURED withdrawn (`retired[]`, already identity-gated against
+ * the committed snapshot) left the catalogue together with its EHIS match —
+ * that is a legitimate withdrawal, not a naming regression, so it must not
+ * keep counting toward the floor. Every other row still does.
+ */
+export function legacyEhisIdentityRows(
+  retiredIds: ReadonlySet<string>
+): Array<{ id: string; entry: CatalogEntry }> {
+  return legacyIdentityEntries
+    .map((entry) => ({ id: legacyIdentityIds.get(entry) as string, entry }))
+    .filter((row) => !retiredIds.has(row.id));
+}
+
+/**
  * Return an EHIS matching input for a canonical AMOS row.
  *
  * Only provider/name may come from the historical identity alias. All other

@@ -38,6 +38,7 @@ import {
   committedRetiredCount,
   declaredContentHashError,
   entryForEhisMatch,
+  legacyEhisIdentityRows,
   matchesJsonContentType,
   recomputeCatalogContentHash,
   retiredEntriesError
@@ -51,9 +52,16 @@ const legacyActive = [...taltech, ...tartuYlikool, ...muudKoolid].filter(
 );
 const canonicalActive = lkgFeed.programs.filter((p) => !p.status || p.status === "active");
 const canonicalCount = canonicalActive.length;
-const legacyEhisFloor = legacyActive.filter(
-  (e) => matchForCatalogEntry(e).confidence !== "none"
-).length;
+const isEhisMatch = (e) => matchForCatalogEntry(e).confidence !== "none";
+// The floor is identity-based, not a bare number: a historical row whose
+// canonical id the committed LKG lists in `retired[]` (a MEASURED withdrawal)
+// took its EHIS match with it. Only those rows leave the floor — a match lost
+// for any other reason (stale names, broken matching) still fails the gate.
+const lkgRetiredIds = new Set(committedRetired.map((r) => r.id));
+const ehisFloorFor = (retiredIds) =>
+  legacyEhisIdentityRows(retiredIds).filter((row) => isEhisMatch(row.entry)).length;
+const legacyEhisFloor = ehisFloorFor(lkgRetiredIds);
+const withdrawnEhisMatches = ehisFloorFor(new Set()) - legacyEhisFloor;
 
 // ── What the site will actually render ──────────────────────────────────────
 const builtCount = catalog.length;
@@ -124,6 +132,30 @@ test("EHIS identity aliases restore the historical floor without becoming catalo
       `legacy EHIS alias must not replace current AMOS ${key}`
     );
   }
+});
+
+test("EHIS floor: a MEASURED withdrawal leaves the floor by identity, nothing else does", () => {
+  // Cross-check: with nothing retired the helper covers exactly the historical
+  // active rows this file loads independently.
+  assert.equal(legacyEhisIdentityRows(new Set()).length, legacyActive.length);
+
+  const fullFloor = ehisFloorFor(new Set());
+  const matched = legacyEhisIdentityRows(new Set()).find((row) => isEhisMatch(row.entry));
+  const unmatched = legacyEhisIdentityRows(new Set()).find((row) => !isEhisMatch(row.entry));
+  assert.ok(matched && unmatched, "fixture needs one EHIS-matched and one unmatched historical row");
+
+  // Retiring an EHIS-matched programme lowers the floor by exactly its one match.
+  assert.equal(ehisFloorFor(new Set([matched.id])), fullFloor - 1);
+  // Retiring an unmatched programme, or an id the crosswalk has never known,
+  // moves nothing: the floor is not a number a feed can talk down.
+  assert.equal(ehisFloorFor(new Set([unmatched.id])), fullFloor);
+  assert.equal(ehisFloorFor(new Set(["never-known-programme-id"])), fullFloor);
+
+  // The committed LKG's own retired[] is the only subtraction the gate applies.
+  const retiredMatched = legacyEhisIdentityRows(new Set()).filter(
+    (row) => lkgRetiredIds.has(row.id) && isEhisMatch(row.entry)
+  ).length;
+  assert.equal(legacyEhisFloor, fullFloor - retiredMatched);
 });
 
 test("a legacy alias never suppresses a valid current-identity EHIS match", () => {
@@ -650,5 +682,5 @@ test("committedKnownIds covers every real committed active + retired id (the ide
 // Visible during the build so the chosen source + counts are auditable in logs.
 console.log(
   `[catalog-floor] source=${catalogSource} | committed LKG: ${canonicalCount} entries` +
-    ` | historical EHIS floor: ${legacyEhisFloor} | built: ${builtCount} entries / ${builtMatches} EHIS matches`
+    ` | historical EHIS floor: ${legacyEhisFloor} (${withdrawnEhisMatches} left with retired[]) | built: ${builtCount} entries / ${builtMatches} EHIS matches`
 );
