@@ -1,5 +1,22 @@
 # Mikrokvalifikatsioon.ee Backlog
 
+## Follow-ups — 2026-09-29 (lkg-refresh red since 2026-09-09)
+
+- **Upstream data (AMOS):** the 2026-09-28 release carries heading-only outcome fragments marked
+  `qualityState: "approved"` — `tartu-ulikool-loovettevotluse-projektijuhtimine` and
+  `tartu-ulikool-loovus-ja-eneseareng` have only `"Mikrokraadi läbinud õppija:"`,
+  `tartu-ulikool-soorituspsuhholoogia-praktikule` has `"Mikrokraadi läbinud õppija"`. The
+  committed snapshot has the full outcome list for the first two; the new release kept only the
+  lead-in, so they lose every real outcome once the refresh merges.
+  The site cannot veto it: for a single-text outcome the feed's own `qualityState` wins over
+  `classifyOutcomeText`, and `HEADING_ONLY_RE` does not know this lead-in anyway. Fix in the AMOS
+  outcome extractor/quality gate, then decide whether the site's classifier may downgrade an
+  upstream "approved".
+- **/oskused/ dedup vs AMOS identity:** /oskused/ and `outcomeRefMap` dedup on trim+lowercase,
+  AMOS identity is `normalizeOutcomeText` (NFKC + edge punctuation). Texts differing only by
+  edge punctuation show twice on /oskused/ while sharing one `outcome_ref`. The uniqueness test
+  now checks the AMOS identity; aligning the page dedup is a separate, visible change.
+
 ## Resume point — 2026-08-18 (current)
 
 **LKG snapshot refresh is now automatic (proposal-only).** The last manual step in the
