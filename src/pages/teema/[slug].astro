@@ -65,7 +65,7 @@ const description = `${entries.length} ${labelLower} mikrokraadi ja mikrokvalifi
 // Extractable intent intro (1–2 lauset) — kuvatud lehel JA WebPage.description'is,
 // nii et AI-assistendid saavad oskuse/teema kokkuvõtte kohe kätte.
 const introText =
-  `${topic.label} (${labelLower}) õppeks on registris ${entries.length} mikrokraadi ja mikrokvalifikatsiooni ${providersInTopic.length} koolist` +
+  `${topic.label} (${labelLower}) õppeks on kataloogis ${entries.length} mikrokraadi ja mikrokvalifikatsiooni ${providersInTopic.length} koolist` +
   `${degreeCount > 0 && qualCount > 0 ? ` — ${degreeCount} ülikooli mikrokraadi ja ${qualCount} koolitusettevõtte mikrokvalifikatsiooni` : ""}` +
   `${ectsRangeText ? `. Maht ${ectsRangeText}` : ""}${priceRangeText ? `, hind ${priceRangeText}` : ""}.`;
 
@@ -283,7 +283,7 @@ const schema = {
           <div class="section-head compact-head">
             <span class="kicker">Püsi kursis</span>
             <h2>Anna teada, kui Eestis lisandub uusi mikrokvalifikatsioone</h2>
-            <p>Jäta oma e-post — saadame kirja, kui registrisse lisandub uus mikrokvalifikatsioon või mikrokraadi õppekava. Ei rämpsposti, saad iga hetk loobuda.</p>
+            <p>Jäta oma e-post — saadame kirja, kui kataloogi lisandub uus mikrokvalifikatsioon või mikrokraadi õppekava. Ei rämpsposti, saad iga hetk loobuda.</p>
           </div>
           <form id="subscribe-form" class="subscribe-form" novalidate>
             <input type="hidden" name="topic" value="mikrokvalifikatsioon" />

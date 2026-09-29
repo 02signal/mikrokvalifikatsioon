@@ -69,27 +69,27 @@ const providersFaq = [
     answer: "5–30 EAP, kus 1 EAP = 26 tundi õppija tööd. Mikrokvalifikatsiooni reguleerib täiskasvanute koolituse seadus."
   },
   {
-    question: "Kuidas lisada oma programm registrisse?",
+    question: "Kuidas lisada oma programm kataloogi?",
     answer: "Täida lehel koolitajale vorm „lisa oma programm“ — programmi nimi, kool, link ja kontakt. Kontrollime info kooli avalikult lehelt ja lisame kirje koos kontrollkuupäevaga. Lisamine ei maksa midagi."
   }
 ];
 
-const register = [
+const kataloog = [
   {
     question: "Kas mikrokvalifikatsioon.ee on ametlik riiklik register?",
-    answer: "Ei. See on sõltumatu register ja teejuht, mis koondab avaliku info ühte kohta. Ametlik info on iga kooli enda lehel ning Eesti Hariduse Infosüsteemis (EHIS) ja Haridus- ja Teadusministeeriumi lehel."
+    answer: "Ei. See on kataloog ja teejuht, mis koondab avaliku info ühte kohta. Ametlik info on iga kooli enda lehel ning Eesti Hariduse Infosüsteemis (EHIS) ja Haridus- ja Teadusministeeriumi lehel."
   },
   {
     question: "Kust andmed pärinevad?",
-    answer: `Iga kirje pärineb kooli või koolitaja avalikult lehelt ja kannab kontrollkuupäeva. Praegu on registris ${catalog.length} programmi ${providers.length} koolist ja koolitajalt. Tundmatut väärtust me ei leiuta — jätame välja.`
+    answer: `Iga kirje pärineb kooli või koolitaja avalikult lehelt ja kannab kontrollkuupäeva. Praegu on kataloogis ${catalog.length} programmi ${providers.length} koolist ja koolitajalt. Tundmatut väärtust me ei leiuta — jätame välja.`
   },
   {
-    question: "Kas registrisse lisamine maksab?",
+    question: "Kas kataloogi lisamine maksab?",
     answer: "Ei. Lisamine ei maksa midagi ega sõltu sellest, kas pakkuja on meiega seotud. Ükski programm ei osta endale paremat kohta — järjestus ja filtrid tulenevad andmetest, mitte tasust."
   }
 ];
 
-const allItems = [...basics, ...money, ...recognition, ...providersFaq, ...register];
+const allItems = [...basics, ...money, ...recognition, ...providersFaq, ...kataloog];
 
 const schema = {
   "@context": "https://schema.org",
@@ -181,7 +181,7 @@ const schema = {
         <div class="section-inner narrow">
           <div class="section-head compact-head">
             <span class="kicker">Koolitajale</span>
-            <h2>Pakkujaks saamine ja registrisse lisamine.</h2>
+            <h2>Pakkujaks saamine ja kataloogi lisamine.</h2>
           </div>
           <Faq items={providersFaq} openFirst={1} />
         </div>
@@ -190,10 +190,10 @@ const schema = {
       <section class="white">
         <div class="section-inner narrow">
           <div class="section-head compact-head">
-            <span class="kicker">Register ja andmed</span>
+            <span class="kicker">Kataloog ja andmed</span>
             <h2>Kust andmed tulevad ja kas oleme ametlik register?</h2>
           </div>
-          <Faq items={register} openFirst={1} />
+          <Faq items={kataloog} openFirst={1} />
           <p class="notice">
             Otsid vastust ühele konkreetsele küsimusele — kui kaua kestab, kui palju maksab, mitu EAP-d,
             kus õppida või kuidas kandideerida? Vaata

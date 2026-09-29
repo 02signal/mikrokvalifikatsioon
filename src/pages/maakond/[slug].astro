@@ -75,7 +75,7 @@ const faq: { q: string; a: string }[] = [
       ? `${region.name}l pakub ${localProviders.length} kooli (${localProviders.join(", ")}) kokku ${local.length} kohapealset mikrokvalifikatsiooni või mikrokraadi`
         + `${online.length > 0 ? `; lisaks saab ${online.length} programmi läbida veebis või hübriidvormis kõikjalt Eestist` : ""}. `
         + `Kõik on allpool koos mahu (EAP) ja õppevormiga.`
-      : `${region.name}l ei ole registris praegu kohapealset mikrokvalifikatsiooni- ega mikrokraadiõpet. `
+      : `${region.name}l ei ole kataloogis praegu kohapealset mikrokvalifikatsiooni- ega mikrokraadiõpet. `
         + `Küll aga saab ${online.length} programmi läbida veebis või hübriidvormis kõikjalt Eestist, sealhulgas ${region.name}l. `
         + `Kõik on allpool koos mahu (EAP) ja õppevormiga.`
   }
@@ -238,7 +238,7 @@ const schema = { "@context": "https://schema.org", "@graph": graph };
             <div class="detail-block">
               <h2>Mida {region.name}l õppida</h2>
               <p class="muted">
-                Registris ei ole praegu ühtegi {region.name}l kohapeal toimuvat mikrokvalifikatsiooni ega mikrokraadi.
+                Kataloogis ei ole praegu ühtegi {region.name}l kohapeal toimuvat mikrokvalifikatsiooni ega mikrokraadi.
                 Vaata <a href="/kataloog/">kogu kataloogi</a> — paljud programmid on veebis kättesaadavad kõikjalt Eestist.
               </p>
             </div>

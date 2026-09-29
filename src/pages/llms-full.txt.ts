@@ -47,9 +47,9 @@ export async function GET() {
     return lines.join("\n");
   };
 
-  const body = `# Mikrokvalifikatsioon.ee — full register export (llms-full.txt)
+  const body = `# Mikrokvalifikatsioon.ee — full catalogue export (llms-full.txt)
 
-Eesti mikrokvalifikatsioonide ja mikrokraadide täielik register. Operated by
+Eesti mikrokvalifikatsioonide ja mikrokraadide täielik kataloog. Operated by
 Ettevõtluskeskus OÜ. Contact: info@mikrokvalifikatsioon.ee, +372 5818 0435.
 Data updated: ${catalogUpdatedAt}. Public source facts checked: ${catalogCheckedAt}.
 Official EHIS facts snapshot: ${ehisFetchedAt}; ${ehisProgrammeCount} registered microcredential curricula from ${ehisProviderCount} providers.

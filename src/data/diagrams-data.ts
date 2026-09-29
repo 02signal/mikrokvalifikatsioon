@@ -52,7 +52,7 @@ function hindDiagram(): Diagram {
     },
     takeaway: "Küsi kõigepealt tööandjalt ja koolilt — sageli ei maksa õppija kogu summat ise.",
     alt:
-      `Registris avaldatud õppetasud ulatuvad ${fmtEur(min)}-st ${fmtEur(max)}-ni. Tüüpiline vahemik ` +
+      `Kataloogis avaldatud õppetasud ulatuvad ${fmtEur(min)}-st ${fmtEur(max)}-ni. Tüüpiline vahemik ` +
       `(25.–75. protsentiil) on ${fmtEur(p25)}–${fmtEur(p75)}, mediaan ${fmtEur(median)}. Hind sõltub mahust ` +
       `(EAP) ja koolist; osa programme on sihtrühmale rahastatud.`,
     caption: "Tüüpiline vahemik on 25.–75. protsentiil kõigist hindadest; punkt on mediaan. Sõltub mahust ja koolist.",
@@ -82,7 +82,7 @@ function eapJaotusDiagram(): Diagram {
     },
     takeaway: `1 EAP ≈ 26 tundi — tüüpiline maht tähendab umbes ${hoursLo}–${hoursHi} tundi õppija tööd kokku.`,
     alt:
-      `Registri mikrokraadid EAP-vahemike kaupa: ${buckets.map((b) => `${b.label} — ${b.count}`).join("; ")}. ` +
+      `Kataloogi mikrokraadid EAP-vahemike kaupa: ${buckets.map((b) => `${b.label} — ${b.count}`).join("; ")}. ` +
       `Kõige sagedasem maht on ${commonLabel}. 1 EAP ≈ 26 tundi õppija tööd.`,
     caption: "Mikrokraadi maht EAP-vahemike kaupa; esile tõstetud on kõige sagedasem vahemik.",
   };
@@ -104,7 +104,7 @@ function valdkonnadDiagram(): Diagram {
     },
     takeaway: `${total} valdkonda kokku — vaata igaüht valdkonnalehel.`,
     alt:
-      `Registri programmid jagunevad ${total} valdkonna vahel. Enim pakutavad on ` +
+      `Kataloogi programmid jagunevad ${total} valdkonna vahel. Enim pakutavad on ` +
       `${rows.map((r) => `${cap(r.field)} (${r.count})`).join(", ")}. Iga valdkonna programme saab vaadata eraldi valdkonnalehel.`,
     caption: "Enim pakutavad valdkonnad programmide arvu järgi. Iga valdkonda saab vaadata eraldi valdkonnalehel.",
   };
@@ -129,7 +129,7 @@ function oppevormDiagram(): Diagram {
     },
     takeaway: "Veebis või hübriidis saab õppida töö kõrvalt.",
     alt:
-      `Registris on ${f.online} täielikult veebipõhist ja ${f.blended} hübriidprogrammi — kokku ` +
+      `Kataloogis on ${f.online} täielikult veebipõhist ja ${f.blended} hübriidprogrammi — kokku ` +
       `${f.onlineOrBlended} programmi saab läbida ilma iga kord kohale tulemata. Kohapeal toimub ${f.onsite}. ` +
       `Õpe käib enamasti töö kõrvalt.`,
     caption: "Mitu programmi igas õppevormis. Veebis või hübriidis saab õppida töö kõrvalt.",
@@ -201,6 +201,6 @@ export function fieldDiagram(field: string): Diagram {
     alt:
       `${fieldCap} valdkonnas on ${entries.length} mikrokraadi ja mikrokvalifikatsiooni ${providersInField} koolist` +
       `${degreeCount > 0 ? `, sh ${degreeCount} ülikooli mikrokraadi` : ""}. Maht ${ectsText}, hind ${priceText}.`,
-    caption: `${fieldCap}: programmide arv, EAP-maht ja hinnavahemik registri andmetel.`,
+    caption: `${fieldCap}: programmide arv, EAP-maht ja hinnavahemik kataloogi andmetel.`,
   };
 }
