@@ -28,11 +28,11 @@ export interface OgPageEntry {
 const contentPages: Record<string, OgPageEntry> = {
   home: {
     title: "Eesti mikrokvalifikatsioonide ja mikrokraadide register",
-    description: "Leia oskus, mida tööandjad tunnustavad — ja keegi, kes selle kinni maksab."
+    description: "Leia sobiv mikrokvalifikatsioon — ja uuri, kes selle kinni võiks maksta."
   },
   en: {
     title: "Microcredentials & microdegrees in Estonia",
-    description: "The independent register: field, ECTS, price and who can fund it. Find a recognised skill."
+    description: "The independent register: field, ECTS, price and who could fund it. Find the right skill."
   },
   kataloog: {
     title: "Kataloog — kõik mikrokvalifikatsioonid ühes kohas",
