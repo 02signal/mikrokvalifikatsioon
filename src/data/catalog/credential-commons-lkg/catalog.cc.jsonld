@@ -7,9 +7,6 @@
       "ectsCredits": 15,
       "field": "IT ja andmed",
       "language": "et",
-      "learningOutcome": [
-        "Kasutajakogemuse tervik (UX) ja teenuseloogika – kuidas kujundada kasutajateekondi ja sujuvat kogemust UX/UI prototüüpimine ja testimine – kuidas visualiseerida ideid ja valideerida lahendusi enne arendust Delivery-protsess ja rollid – kuidas ideest jõutakse töötava tooteni ning kuidas vastutused jagunevad Agiilsed t"
-      ],
       "name": "Digitaalse toote disain ja arendus",
       "provider": {
         "@type": "Organization",
@@ -1949,11 +1946,6 @@
       "ectsCredits": 6,
       "field": "IT ja andmed",
       "language": "et",
-      "learningOutcome": [
-        "Mikrokraadiprogrammi lõpetanud õppija: rakendab andmeteaduse ja statistika põhialuseid ja -meetodeid andmeanalüüsi teostamiseks erinevates valdkondades",
-        "määratleb andmete analüüsiga seotud probleemülesanded ja valib sobivaimad andmeteaduse meetodid püstitatud ülesande lahendamiseks",
-        "tõlgendab ja hindab andmeanalüüsi tu"
-      ],
       "name": "Andmeteadus",
       "provider": {
         "@type": "Organization",
@@ -1967,12 +1959,6 @@
       "ectsCredits": 3,
       "field": "IT ja andmed",
       "language": "et",
-      "learningOutcome": [
-        "Mikrokraadiprogrammi lõpetanud õppija: tuvastab kasutajate vajadused ja tõlgib need praktilisteks tootepõhisteks nõueteks",
-        "rakendab inimkeskse disaini põhimõtteid digitaalsete toodete arendamisel",
-        "kasutab disainmõtlemise (Design Thinking) raamistikku innovaatiliste lahenduste loomiseks",
-        "kasutab kaasaegseid tööriistu ja"
-      ],
       "name": "Digitoote innovatsioon",
       "provider": {
         "@type": "Organization",
@@ -2025,10 +2011,6 @@
       "ectsCredits": 3,
       "field": "haridus",
       "language": "et",
-      "learningOutcome": [
-        "Mikrokraadiprogrammi läbinud õppija: omab põhikooli ja gümnaasiumi informaatikaõpetaja töö jaoks vajalikke ainedidaktilisi teadmisi",
-        "planeerib oma tööd riiklikust õppekavast ja teistest dokumentidest lähtuvalt ja reflekteerib oma tööd. teab informaatika alustõdesid, informaatika oskussõnavara ja oskab neid õpetada erin"
-      ],
       "name": "Informaatika didaktika",
       "provider": {
         "@type": "Organization",
@@ -2042,13 +2024,6 @@
       "ectsCredits": 6,
       "field": "IT ja andmed",
       "language": "et",
-      "learningOutcome": [
-        "Mikrokraadiprogrammi lõpetanud õppija: teab imperatiivse ja objektorienteeritud programmeerimise alustõdesid",
-        "omab ettekujutust operatsioonisüsteemi tööpõhimõtetest",
-        "oskab koostada lihtsaid päringuid andmebaasidele, kasutades SQL keeli",
-        "oskab koostada talle tuntud valdkondade lihtsaid andmemudeleid",
-        "oskab kavandada inf"
-      ],
       "name": "Infotehnoloogia alused",
       "provider": {
         "@type": "Organization",
@@ -2073,7 +2048,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-innovatsiooni-meistriklass/",
       "@type": "MicroCredential",
       "ectsCredits": 18,
-      "field": "muu",
+      "field": "haridus",
       "language": "et",
       "name": "Innovatsiooni meistriklass",
       "provider": {
@@ -2235,10 +2210,6 @@
       "ectsCredits": 6,
       "field": "IT ja andmed",
       "language": "et",
-      "learningOutcome": [
-        "Mikrokraadiprogrammi läbinud õppija: tunneb ja oskab kasutada põhilisi programmeerimiskonstruktsioone: muutuja, avaldis, omistuslause, tingimuslause, tsükkel, alamprogramm, rekursioon, andmevahetus kasutaja ja failidega",
-        "tunneb põhilisi andmetüüpe ja -struktuure (täis- ja ujukomarvud, tõeväärtused, sõned, järjendid jne"
-      ],
       "name": "Programmeerimine",
       "provider": {
         "@type": "Organization",
@@ -2294,18 +2265,7 @@
       "field": "haridus",
       "language": "et",
       "learningOutcome": [
-        "Mikrokraadi läbinud õppija.",
-        "tunneb erialaste oskuste õppimise ja sooritamisega seotud psühholoogilisi protsesse ning mõistab nende eesmärgipärase suunamise või arendamise põhimõtteid",
-        "mõistab ja oskab analüüsida psühholoogiliste oskuste arendamise eesmärke, võimalusi ja tulemusi erialaste oskuste algtasemest kuni tippsoorituseni nii individuaalse kui rühmasoorituse puhul",
-        "oskab psühholoogiliste oskuste treenimise programme planeerida, läbi viia ja hinnata",
-        "selgitab erialaste oskuste arengut ja motivatsiooni toetava juhendamise põhimõtteid ning oskab neid rakendada",
-        "tunneb ja kasutab vaimse tervise toetamise põhimõtteid erialaste oskuste arendamise foonil",
-        "analüüsib soorituspsühholoogia rakendamise eetilisi põhimõtteid ja tunneb oma pädevuse piire",
-        "SVPH.00.073 Spordi- ja soorituspsühholoogia (6 EAP, sügis)",
-        "SVPH.00.074 Oskuste treening soorituspsühholoogias (3 EAP, kevad)",
-        "SVPH.00.076 Tippsoorituse psühholoogilised alused (3 EAP, kevad)",
-        "Aave Hannus, PhD",
-        "Tartu Ülikooli spordi- ja soorituspsühholoogia lektor"
+        "Mikrokraadi läbinud õppija."
       ],
       "name": "Mikrokraad „Soorituspsühholoogia praktikule“",
       "provider": {
@@ -2318,13 +2278,8 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-susteemianaluus/",
       "@type": "MicroCredential",
       "ectsCredits": 6,
-      "field": "majandus ja juhtimine",
+      "field": "muu",
       "language": "et",
-      "learningOutcome": [
-        "Mikrokraadiprogrammi läbinud õppija: analüüsib äri probleeme ja olukordi ning vajadusi uute infotehnoloogiliste süsteemide rakendamiseks või olemasolevate muutmiseks, kasutades laia valikut ärianalüüsitehnikaid",
-        "jälgib, dokumenteerib, analüüsib ja parendab äriprotsesse",
-        "analüüsib IT süsteemide vajadusi konkreetse äripr"
-      ],
       "name": "Süsteemianalüüs",
       "provider": {
         "@type": "Organization",
@@ -2447,9 +2402,9 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-videomangude-narratiivid/"
     }
   ],
-  "checkedAt": "2026-09-28",
-  "generatedAt": "2026-09-28T00:16:29.000Z",
-  "runRef": "mkval_20260928T001629Z",
+  "checkedAt": "2026-10-05",
+  "generatedAt": "2026-10-05T00:15:20.000Z",
+  "runRef": "mkval_20261005T001520Z",
   "schemaVersion": "amos.mkval.catalog_cc_export/v1",
-  "sourceFeedHash": "sha256:ac44f314205643665e3dd2fa31a0e6f30d827e9bb45c1129c27bc709a25ebfca"
+  "sourceFeedHash": "sha256:0cc750827148ec08e6bd7de3c41b4dfed2fbdfffa2be317c1117901d829ac75a"
 }
