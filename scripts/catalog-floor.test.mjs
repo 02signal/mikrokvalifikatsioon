@@ -183,6 +183,9 @@ test("catalog output keeps current AMOS facts; only official EHIS facts may over
     assert.ok(output, `missing canonical AMOS row ${current.id}`);
     for (const [key, value] of Object.entries(current)) {
       if (officialOverrideKeys.has(key)) continue;
+      // EAP valvur (src/data/eapGuard.ts): märgitud "vajab kontrolli" kirjel ei avaldata
+      // ka EAP-d kordavat durationText'i ("3 EAP"); ainus lubatud erand.
+      if (key === "durationText" && output.eapReview && output.durationText === null) continue;
       assert.deepEqual(output[key], value, `catalog must preserve current AMOS ${key} for ${current.id}`);
     }
   }

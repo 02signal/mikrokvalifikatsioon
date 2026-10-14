@@ -48,6 +48,8 @@ export type CatalogEntry = {
   field: CatalogField;
   /** EAP (ECTS). null = page did not state it */
   ects: number | null;
+  /** AMOS credential type ("mikrokraad" | "mikrokvalifikatsioon"); absent on legacy rows. */
+  credentialType?: string | null;
   durationText: string | null;
   priceText: string | null;
   format: "veebis" | "hübriid" | "kohapeal" | null;

@@ -98,6 +98,7 @@ function buildActiveView(entry: CatalogEntryWithSlug) {
 
   const facts = [
     displayEcts != null ? { label: "Maht", value: `${displayEcts} EAP` } : null,
+    entry.eapReview ? { label: "Maht", value: "EAP vajab kontrolli – vaata kooli lehelt" } : null,
     entry.priceText ? { label: "Hind", value: entry.priceText } : null,
     entry.durationText ? { label: "Kestus", value: entry.durationText } : null,
     entry.format ? { label: "Õppevorm", value: entry.format } : null,

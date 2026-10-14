@@ -66,6 +66,7 @@ import {
   committedRetired,
   committedRetiredCount,
   declaredContentHashError,
+  eapReviewOf,
   matchesJsonContentType,
   catalog as committedCatalog
 } from "../src/data/catalog/index.ts";
@@ -184,6 +185,19 @@ async function verify({ feedUrl, ccUrl, receiptUrl }) {
     decision.entries.filter((e) => !committedKnownIds.has(e.id) && !committedActiveIds.has(e.id))
   );
 
+  // EAP guard (HTM 08.10.2026: a module's 3 EAP shipped as the programme's volume).
+  // A candidate row that NEEDS REVIEW and is not already known as such in the
+  // committed snapshot must not ride a "freshness-only" auto-merge. The workflow
+  // decides auto-merge from newlyAdded/newlyWithdrawn, so such rows are listed in
+  // newlyAdded (tagged) -> set_unchanged=false -> PR waits for a human.
+  const committedReviewIds = new Set(committedCatalog.filter((e) => e.eapReview).map((e) => e.id));
+  const newEapReview = decision.entries
+    .filter((e) => eapReviewOf(e) && !committedReviewIds.has(e.id))
+    .map((e) => ({ id: e.id, name: e.name, provider: e.provider, reason: "eap-vajab-kontrolli" }));
+  for (const row of newEapReview) {
+    if (!newlyAdded.some((a) => a.id === row.id)) newlyAdded.push(row);
+  }
+
   return {
     changed,
     files: { feed: feedFetch.text, cc: ccFetch.text, receipt: receiptFetch.text },
@@ -196,6 +210,7 @@ async function verify({ feedUrl, ccUrl, receiptUrl }) {
       candidateRetiredCount: decision.retired.length,
       newlyWithdrawn,
       newlyAdded,
+      newEapReview,
       contentHash: feedData.contentHash,
       generatedAt: feedData.generatedAt,
       checkedAt: decision.checkedAt
@@ -221,9 +236,14 @@ function prBody(summary) {
     lines.push("Uusi mahavõtte ei ole.");
     lines.push("");
   }
-  if (summary.newlyAdded.length) {
-    lines.push(`**Uued programmid (${summary.newlyAdded.length}):**`);
-    for (const e of summary.newlyAdded) lines.push(`- ${e.name} — ${e.provider} (\`${e.id}\`)`);
+  if (summary.newEapReview?.length) {
+    lines.push(`**EAP vajab kontrolli (${summary.newEapReview.length}):** maht on väljaspool 5–30 EAP vahemikku või EHIS-iga vastuolus; saidil EAP-d ei kuvata, kuni keegi on kontrollinud.`);
+    for (const e of summary.newEapReview) lines.push(`- ${e.name} — ${e.provider} (\`${e.id}\`)`);
+    lines.push("");
+  }
+  if (summary.newlyAdded.filter((e) => !e.reason).length) {
+    lines.push(`**Uued programmid (${summary.newlyAdded.filter((e) => !e.reason).length}):**`);
+    for (const e of summary.newlyAdded.filter((e) => !e.reason)) lines.push(`- ${e.name} — ${e.provider} (\`${e.id}\`)`);
     lines.push("");
   } else {
     lines.push("Uusi programme ei lisandunud.");
