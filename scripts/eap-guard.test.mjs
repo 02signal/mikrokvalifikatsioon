@@ -90,3 +90,32 @@ test("invariant: valvur ei peida suurt osa kataloogist", () => {
   const flagged = catalog.filter((e) => e.eapReview).length;
   assert.ok(flagged / catalog.length < 0.1, `${flagged}/${catalog.length} märgitud`);
 });
+
+// ---- Käsitsi kinnitatud EHIS-i konfliktilahendused (omanik 14.10.2026: Muusikapsühholoogia 2026/27 = 15 EAP) ----
+import conflictResolutions from "../src/data/ehisConflictResolutions.json" with { type: "json" };
+
+test("kinnitatud lahendus: iga rida viitab olemasolevale EHIS-i kandidaadile ja annab selle EAP-d ilma 'vajab kontrolli' märketa", () => {
+  const rows = Object.entries(conflictResolutions.resolutions);
+  assert.ok(rows.length >= 1);
+  for (const [id, row] of rows) {
+    const e = catalog.find((x) => x.slug === id);
+    assert.ok(e, `${id}: programmi pole kataloogis (surnud rida)`);
+    const candidate = ehisCurricula.find((c) => c.ehis_kood === row.ehis_kood);
+    assert.ok(candidate, `${id}: EHIS-i koodi ${row.ehis_kood} pole snapshotis`);
+    assert.equal(e.ehis.authoritative, true, id);
+    assert.equal(e.ehis.ehisKood, row.ehis_kood);
+    assert.equal(e.ects, candidate.eap, `${id}: EAP peab tulema kinnitatud EHIS-i kirjest`);
+    assert.equal(e.eapReview, undefined, `${id}: kinnitatud rida ei tohi olla märgitud`);
+    assert.ok(row.evidence && row.decided_by && row.reviewed_at, `${id}: tõend ja otsustaja on kohustuslikud`);
+  }
+});
+
+test("Muusikapsühholoogia 2026/27 näitab 15 EAP-d; kinnitamata konfliktikirjed jäävad märgituks (ei valita vaikselt)", () => {
+  const music = catalog.find((x) => x.slug === "eesti-muusika-ja-teatriakadeemia-muusikapsuhholoogia");
+  assert.equal(music.ects, 15);
+  // Kinnitamata konfliktikirjed (sama nimi, erinev EAP) ei tohi saada EAP-d automaatselt.
+  for (const e of catalog.filter((x) => x.eapReview?.reasons.includes("ehis-konflikt"))) {
+    assert.equal(e.ects, null, `${e.slug}: kinnitamata konflikt ei tohi EAP-d avaldada`);
+    assert.ok(!(e.slug in conflictResolutions.resolutions));
+  }
+});

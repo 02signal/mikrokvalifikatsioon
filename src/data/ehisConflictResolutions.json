@@ -1,0 +1,11 @@
+{
+  "note": "Käsitsi kinnitatud lahendus juhtudele, kus EHIS-is on sama nime ja pakkuja all mitu kirjet (aastaversioonid) erineva EAP-ga. Ilma reata sellist kirjet automaatselt ei valita (vale EAP on avalik faktiviga): ta märgitakse 'vajab kontrolli' ja EAP-d ei näidata. Iga rida vajab omaniku kinnitust ja tõendit.",
+  "resolutions": {
+    "eesti-muusika-ja-teatriakadeemia-muusikapsuhholoogia": {
+      "ehis_kood": "261904",
+      "reviewed_at": "2026-10-14",
+      "decided_by": "omanik (Ettevõtluskeskus OÜ juht), kinnitatud vestluses 14.10.2026",
+      "evidence": "EHIS-i 2026/27 õppekava PDF (registreeritud 2026-06-02): 'Õppe maht 15'; HTM-i kiri 08.10.2026 nimetab 15 EAP-d; teine EHIS-i kirje 259449 (14 EAP) on 2025/26 versioon"
+    }
+  }
+}
