@@ -24,6 +24,8 @@ export type MatchProgram = {
   intakeText: string | null;
   summary: string;
   publicBasis?: string;
+  /** Käsitsi üle vaadatud valdkond (ainult kui EHIS-i rühma pole), vt src/data/suunatestFieldReview.json. */
+  topicField?: string | null;
   ehis?: { fieldCode?: string | null; fieldName?: string | null; authoritative?: boolean } | null;
 };
 
@@ -56,6 +58,17 @@ const codeOf = (p: MatchProgram): string | null => {
 const matchesPrefixes = (code: string, prefixes: readonly string[]): boolean => prefixes.some((prefix) => code.startsWith(prefix));
 
 /**
+ * Kaardil kuvatav valdkonna silt TUNNEB SAMA REEGLIT mis värav: EHIS-i õppekavarühma nimi, kui rühm on olemas;
+ * muidu käsitsi üle vaadatud valdkond; viimasena kureeritud `field`. Nii ei näita kaart "IT ja andmed" õiguse
+ * programmil, mille värav valis EHIS-i õiguse rühma järgi.
+ */
+export function fieldLabel(p: MatchProgram): string {
+  const name = p.ehis?.fieldName;
+  if (codeOf(p) && typeof name === "string" && name.trim()) return name.trim();
+  return p.topicField ?? p.field;
+}
+
+/**
  * Teemaskoor: 5 = EHIS-i õppekavarühm sobib; 2 = EHIS-i rühma pole ja kureeritud valdkond sobib;
  * 0 = ei sobi (programm välistatakse). EHIS-i rühm, mis EI sobi, välistab ka siis, kui kureeritud valdkond
  * kattub (see parandab "haridus" alla sattunud aianduse jms).
@@ -70,22 +83,25 @@ export function topicScore(p: MatchProgram, field: string): number {
     const prefixes = FIELD_ISCED[field];
     return prefixes && matchesPrefixes(code, prefixes) ? 5 : 0;
   }
-  return p.field === field ? 2 : 0;
+  // EHIS-i rühma pole: ainult käsitsi üle vaadatud valdkond (AMOS-i märksõnapõhine `field` eksib; ülevaataja
+  // leid 14.10: Geograafia didaktika oli "IT ja andmed"). Ülevaatamata programm ei sobi ühegi kindla valdkonnaga.
+  return p.topicField === field ? 2 : 0;
 }
 
 /**
- * Hind eurodes hinnatekstist: esimene number ("1 175–1 305 €" -> 1175; "1 200 € (sihtrühmale tasuta)" -> 1200).
- * "Tasuta" = 0 AINULT siis, kui tekst on lihtsalt "tasuta". Number puudub ja "tasuta" esineb osana ("sihtrühmale
- * tasuta (EL-i kaasrahastusel)") = hind teadmata (null): see EI tähenda tasuta kõigile.
+ * Hind eurodes hinnatekstist: esimene number ("1 175–1 305 €" -> 1175; "1.200 €" -> 1200; "1 200,50 €" -> 1200;
+ * "1 200 € (sihtrühmale tasuta)" -> 1200). "Tasuta" = 0 AINULT siis, kui tekst on lihtsalt "tasuta". "Tasuta"
+ * koos numbriga ("tasuta (materjalid 50 €)") ja "sihtrühmale tasuta" ilma numbrita on hind teadmata (null):
+ * see EI tähenda tasuta kõigile ega 50 € programmi hinda.
  */
 export function parsePriceEur(text: string | null | undefined): number | null {
   if (!text) return null;
-  const digits = text.replace(/[\s\u00a0\u202f]/g, "").match(/\d+/);
-  if (digits) return Number(digits[0]);
-  return /^\s*tasuta\s*$/i.test(text) ? 0 : null;
+  if (/^\s*tasuta\b/i.test(text)) return /^\s*tasuta\s*$/i.test(text) ? 0 : null;
+  const m = text.match(/\d{1,3}(?:[.\s\u00a0\u202f]\d{3})+|\d+/);
+  return m ? Number(m[0].replace(/[.\s\u00a0\u202f]/g, "")) : null;
 }
 
-export type Scored = { p: MatchProgram; topic: number; logistics: number; price: number | null };
+export type Scored = { p: MatchProgram; topic: number; logistics: number; price: number | null; formatUnknown: boolean };
 
 export type MatchResult = {
   /** "any" = valdkonda pole valitud; "good" = on sobivaid; "none" = teema ei sobi ühegi programmiga;
@@ -119,7 +135,14 @@ export function matchProgrammes(programs: readonly MatchProgram[], answers: Answ
     .filter(({ p }) => !(answers.format === "veebis" && p.format === "kohapeal"))
     .map(({ p, topic }) => {
       const price = parsePriceEur(p.priceText);
-      return { p, topic, price, logistics: (p.language === "et" ? 1 : 0) + (price !== null ? 1 : 0) + (p.intakeText ? 1 : 0) };
+      // "Ainult veebis" ei saa kinnitada teadmata vormiga programmi: see jääb tulemusse, aga järjestub alla ja
+      // kaart ütleb ausalt "vorm teadmata" (95/163 programmil pole vormi andmetes).
+      const formatUnknown = p.format === null || p.format === undefined;
+      const onlineAsked = answers.format === "veebis";
+      return {
+        p, topic, price, formatUnknown,
+        logistics: (p.language === "et" ? 1 : 0) + (price !== null ? 1 : 0) + (p.intakeText ? 1 : 0) - (onlineAsked && formatUnknown ? 3 : 0)
+      };
     })
     .filter((s) => !(capped && s.price !== null && s.price > capped))
     .sort(byRank);

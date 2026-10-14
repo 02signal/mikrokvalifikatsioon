@@ -503,7 +503,7 @@ const schema = {
     </style>
 
     <script>
-      import { matchProgrammes, type MatchProgram } from "../lib/suunatest-match";
+      import { fieldLabel, matchProgrammes, type MatchProgram } from "../lib/suunatest-match";
 
       // catalog.json rida (avalik, juba EHIS-only piiratud): vt src/lib/suunatest-match.ts.
       type Program = MatchProgram;
@@ -565,7 +565,6 @@ const schema = {
         const outcome = matchProgrammes(all, { field, format, budget: budgetRaw });
         const top = outcome.matches.map((s) => s.p);
         result.hidden = false;
-        if (contactBox) contactBox.hidden = false;
 
         if (!all.length) {
           // Laadimisviga ei ole tulemus: ei saada tool_completed sündmust ega täida kokkuvõtet.
@@ -587,7 +586,7 @@ const schema = {
           matchesBox.innerHTML = outcome.matches.map(({ p }) => `
             <article class="measure-card">
               <div>
-                <span class="status-tag status-blue">${escapeHtml(p.field)}</span>
+                <span class="status-tag status-blue">${escapeHtml(fieldLabel(p))}</span>
                 <h3>${escapeHtml(p.name)}</h3>
                 <p>${escapeHtml(p.summary)}</p>
               </div>
@@ -595,11 +594,14 @@ const schema = {
                 <div><dt>Kool</dt><dd>${escapeHtml(p.provider)}</dd></div>
                 ${p.priceText ? `<div><dt>Hind</dt><dd>${escapeHtml(p.priceText)}</dd></div>` : p.publicBasis === "ehis_only" ? '<div><dt>Hind</dt><dd>Ametlik register, hinda pole. Küsi pakkujalt</dd></div>' : '<div><dt>Hind</dt><dd>Täpsustamisel</dd></div>'}
                 ${p.ects ? `<div><dt>Maht</dt><dd>${escapeHtml(p.ects)} EAP</dd></div>` : ""}
+                ${p.format ? `<div><dt>Vorm</dt><dd>${escapeHtml(p.format)}</dd></div>` : "<div><dt>Vorm</dt><dd>Teadmata, küsi pakkujalt</dd></div>"}
               </dl>
               <a href="${escapeHtml(outbound(p))}" target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label="suunatest_${escapeHtml(p.provider)}">Vaata kooli lehel</a>
             </article>
           `).join("");
         }
+        // Kontaktivorm (nõudlus, "mida otsid?") on kasulik ka tulemuseta; laadimisvea korral ei näita (return ülal).
+        if (contactBox) contactBox.hidden = false;
         fundingEl.textContent = FUNDING_HINTS[status] || FUNDING_HINTS.tootan;
 
         const summary = top.map((p) => `${p.name} (${p.provider}${p.priceText ? ", " + p.priceText : ""})`).join("; ");

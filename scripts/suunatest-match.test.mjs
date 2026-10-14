@@ -4,12 +4,15 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { FIELD_ISCED, FIELD_OTHER, matchProgrammes, parsePriceEur, topicScore } from "../src/lib/suunatest-match.ts";
+import { FIELD_ISCED, FIELD_OTHER, fieldLabel, matchProgrammes, parsePriceEur, topicScore } from "../src/lib/suunatest-match.ts";
+import fieldReview from "../src/data/suunatestFieldReview.json" with { type: "json" };
 import { catalog } from "../src/data/catalog/index.ts";
 
 const prog = (slug, field, code, extra = {}) => ({
   slug, name: slug, provider: "P", url: `https://s.example/${slug}`, field, ects: 6,
   priceText: "900 €", format: "veebis", language: "et", intakeText: "september", summary: "x",
+  // Kood puudub => käsitsi üle vaadatud valdkond (topicField) jäljendab src/data/suunatestFieldReview.json
+  topicField: code ? undefined : field,
   ehis: code ? { fieldCode: code, fieldName: "x", authoritative: true } : null, ...extra
 });
 const ans = (field, format = "", budget = "") => ({ field, format, budget });
@@ -131,6 +134,11 @@ test("'muu' on kõik, mida teised valdkonnad ei kata (EHIS-i alusel)", () => {
   assert.equal(topicScore(history, FIELD_OTHER), 5);
   assert.equal(topicScore(it, FIELD_OTHER), 0);
   assert.equal(topicScore(prog("x", "muu", null), FIELD_OTHER), 2);
+  // Ülevaatamata, EHIS-i rühmata programm ei sobi ühegi kindla valdkonnaga (ainult "ükskõik" näitab seda).
+  const unreviewed = prog("unreviewed", "IT ja andmed", null, { topicField: null });
+  assert.equal(topicScore(unreviewed, "IT ja andmed"), 0);
+  assert.equal(topicScore(unreviewed, FIELD_OTHER), 0);
+  assert.equal(matchProgrammes([unreviewed], ans("")).matches.length, 1);
 });
 
 // ---- Vananemiskindlad invariandid päris kataloogi vastu ----
@@ -170,4 +178,53 @@ test("päris kataloog: tühi tulemus enam ei täida ja 'haridus' ei sisalda põl
   const r = matchProgrammes(real, ans("haridus"), 100);
   assert.ok(r.matches.length > 0, "haridus peab midagi leidma");
   for (const m of r.matches) assert.ok(!/^08|^0713|^0712/.test(m.p.ehis?.fieldCode ?? ""), m.p.slug);
+});
+
+// ---- Ülevaataja HIGH/MEDIUM leiud (#149 värav): kaardisilt, kinnitatud fallback, teadmata vorm, hinnad ----
+test("kaardisilt tuleb SAMAST reeglist mis värav: EHIS-i rühma nimi, mitte kureeritud valdkond", () => {
+  const law = prog("law", "IT ja andmed", "0421", { ehis: { fieldCode: "0421", fieldName: "Õigus", authoritative: true } });
+  assert.equal(fieldLabel(law), "Õigus");
+  const theatre = prog("theatre", "disain ja loovus", "0114", { ehis: { fieldCode: "0114", fieldName: "Aineõpetajate koolitus", authoritative: true } });
+  assert.equal(fieldLabel(theatre), "Aineõpetajate koolitus");
+  // Rühmata, üle vaadatud: ülevaadatud valdkond, mitte toores kureeritud väärtus.
+  const reviewed = prog("geo", "IT ja andmed", null, { topicField: "haridus" });
+  assert.equal(fieldLabel(reviewed), "haridus");
+  assert.equal(fieldLabel(prog("raw", "IT ja andmed", null, { topicField: null })), "IT ja andmed");
+});
+
+test("päris kataloog: igal kaardil on silt, mis ei lähe vastuollu väravaga; rühmata programmid on kõik üle vaadatud", () => {
+  const FIELD_NAMES = new Set(["", ...Object.keys(FIELD_ISCED), FIELD_OTHER]);
+  const unreviewed = [];
+  for (const p of real) {
+    const code = p.ehis?.fieldCode;
+    if (code) assert.equal(fieldLabel(p), p.ehis.fieldName, `${p.slug}: silt peab olema EHIS-i rühm`);
+    else {
+      if (!p.topicField) unreviewed.push(p.slug);
+      else assert.ok(FIELD_NAMES.has(p.topicField), `${p.slug}: tundmatu üle vaadatud valdkond ${p.topicField}`);
+    }
+  }
+  assert.deepEqual(unreviewed, [], "uus EHIS-i rühmata programm vajab rida src/data/suunatestFieldReview.json (värav ei lase seda valdkonda sokutada)");
+  // Ülevaatuse fail ei tohi sisaldada surnud ridu.
+  const slugsReal = new Set(real.map((p) => p.slug));
+  for (const slug of Object.keys(fieldReview.fields)) assert.ok(slugsReal.has(slug), `surnud rida ${slug}`);
+});
+
+test("vorm teadmata: 'ainult veebis' ei kinnita seda, programm jääb, järjestub alla ja märgitakse", () => {
+  const known = prog("known", "haridus", "0111", { format: "veebis", priceText: null, intakeText: null, language: "en" });
+  const unknown = prog("unknown", "haridus", "0111", { format: null });
+  const r = matchProgrammes([unknown, known], ans("haridus", "veebis"));
+  assert.deepEqual(slugs(r), ["known", "unknown"], "teadmata vorm järjestub teadaoleva veebis alla, isegi kui tal on parem logistika");
+  assert.equal(r.matches[1].formatUnknown, true);
+  assert.equal(r.matches[0].formatUnknown, false);
+  // Ilma vormi nõudeta see järjestust ei mõjuta.
+  assert.deepEqual(slugs(matchProgrammes([unknown, known], ans("haridus", ""))), ["unknown", "known"]);
+});
+
+test("hinnaparsimine: tuhandete eraldajad, koma, 'tasuta' koos numbriga on teadmata", () => {
+  assert.equal(parsePriceEur("1.200 €"), 1200);
+  assert.equal(parsePriceEur("1 200,50 €"), 1200);
+  assert.equal(parsePriceEur("1\u00a0200 €"), 1200);
+  assert.equal(parsePriceEur("960 €"), 960);
+  assert.equal(parsePriceEur("tasuta (materjalid 50 €)"), null);
+  assert.equal(parsePriceEur("Tasuta"), 0);
 });

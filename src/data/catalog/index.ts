@@ -11,6 +11,7 @@ import { eapReviewFor, type EapReview } from "../eapGuard.ts";
 import { isEhisOnly } from "../sourceBasis.ts";
 import { ehisOnlyBase } from "../ehisOnly.ts";
 import { ehisFetchedAt } from "../ehisFacts/index.ts";
+import fieldReview from "../suunatestFieldReview.json" with { type: "json" };
 import { sha256hex } from "../../lib/outcome-ref.ts";
 
 /**
@@ -485,6 +486,9 @@ export type CatalogEntryWithSlug = CatalogEntry & {
   /** "ehis_only": allikas keelab automaatse kogumise, avalikus kirjes on ainult EHIS-i väljad
    * (hind, kuupäevad, kirjeldus eemaldatud). Vt sourceBasis.ts / ehisOnly.ts. */
   publicBasis?: "ehis_only";
+  /** Käsitsi üle vaadatud valdkond (src/data/suunatestFieldReview.json) programmile, millel EHIS-i
+   * õppekavarühma EI ole; suunatest kasutab seda ainult siis. Puudub, kui EHIS-i rühm on olemas. */
+  topicField?: string | null;
 };
 
 const sorted: CatalogEntry[] = feed.entries
@@ -543,6 +547,15 @@ export const catalog: CatalogEntryWithSlug[] = sorted.map((feedEntry) => {
       : ehisOverrideFor(legacyMatchEntry, entry);
   // EAP valvur: kahtlane või vastuoluline maht ei avaldu vaikselt (eapGuard.ts).
   const eapReview = eapReviewFromOverride(entry, patch, ehis);
+  // EHIS-i kaks sama nimega kirjet (aastaversioonid) võivad olla EAP-s vastuolus, kuid õppekavarühmas
+  // nõustuvad: siis on rühm usaldusväärne ka ilma autoriteetse vasteta (kasutab suunatest ja silt).
+  const conflictCandidates = ehis.authoritative ? undefined : matchForCatalogEntry(entry).conflict;
+  const sharedGroup = conflictCandidates?.length
+    && conflictCandidates.every((c) => c.field_code && c.field_code === conflictCandidates[0].field_code && c.field_name === conflictCandidates[0].field_name)
+    ? { fieldCode: conflictCandidates[0].field_code, fieldName: conflictCandidates[0].field_name }
+    : null;
+  const ehisPublic = sharedGroup ? { ...ehis, ...sharedGroup } : ehis;
+  const reviewedField = (fieldReview.fields as Record<string, string>)[entry.id as string] ?? null;
   return {
     ...entry,
     ...patch,
@@ -565,7 +578,8 @@ export const catalog: CatalogEntryWithSlug[] = sorted.map((feedEntry) => {
     // `true` — never hides anything the pre-PR-3g site was already showing.
     nextStartKnown: entry.nextStartKnown ?? true,
     lastKnownStart: entry.lastKnownStart ?? null,
-    ehis
+    ...(ehisPublic.fieldCode ? {} : { topicField: reviewedField }),
+    ehis: ehisPublic
   };
 });
 
