@@ -59,11 +59,20 @@ function schoolValues(raw) {
 /**
  * @returns {{problems: string[], checked: number, files: number, skipped: string[]}}
  */
-export function scanDist({ distDir, feed, basis, publicTexts = [] }) {
+export function scanDist({ distDir, feed, basis, publicTexts = [], allowCcMirror = ALLOW_CC_MIRROR, requireRestricted = true }) {
   const restrictedIds = new Set(basis.programmes.filter((p) => p.publicationBasis !== "provider_page_robots_allowed").map((p) => p.id));
   const known = new Set(basis.programmes.map((p) => p.id));
   for (const p of feed.programs) if (!known.has(p.id)) restrictedIds.add(p.id); // fail-closed
   const rawById = new Map(feed.programs.map((p) => [p.id, p]));
+  const problems = [];
+  // Anti-vacuity (review 14.10 r6): an empty feed, empty basis, nothing restricted or an empty dist must be
+  // RED, never "ok". Restricted programmes may legitimately reach zero once schools cooperate; that is a
+  // deliberate edit (requireRestricted: false), not a silent pass.
+  if (!feed.programs.length) problems.push("vacuous: feed has no programmes");
+  if (!basis.programmes.length) problems.push("vacuous: source-basis has no programmes");
+  if (requireRestricted && restrictedIds.size === 0) problems.push("vacuous: no restricted programmes to check");
+  const unmapped = feed.programs.filter((p) => !known.has(p.id)).map((p) => p.id);
+  if (unmapped.length) problems.push(`source-basis is missing ${unmapped.length} feed programme(s), refresh src/data/source-basis.json: ${unmapped.slice(0, 5).join(", ")}`);
   // Prose that an OPEN programme or the official EHIS data legitimately publish too (a generic outcome
   // sentence shared by several schools, EHIS boilerplate) is public already, so it is not evidence of a leak.
   const openProse = norm(feed.programs
@@ -72,17 +81,30 @@ export function scanDist({ distDir, feed, basis, publicTexts = [] }) {
     .concat(publicTexts)
     .filter((t) => typeof t === "string")
     .join(" \n "));
-  const problems = [];
   const skipped = [];
+  let mirror = null;
 
   const files = [];
   for (const full of walk(distDir)) {
     const rel = relative(distDir, full).split(sep).join("/");
-    if (ALLOW_CC_MIRROR && rel === CC_MIRROR) { skipped.push(rel); continue; }
+    if (rel === CC_MIRROR) {
+      // Count the restricted programmes' nodes and school outcomes IN the AMOS-owned mirror: while the
+      // exception is allowed they are reported (not hidden behind "skipped"); once allowCcMirror is false
+      // they fail the build.
+      try {
+        const nodes = JSON.parse(readFileSync(full, "utf8"))["@graph"] ?? [];
+        const restrictedNodes = nodes.filter((n) => [...restrictedIds].some((id) => String(n["@id"] ?? "").endsWith(`/kataloog/${id}/`)));
+        const outcomes = restrictedNodes.reduce((sum, n) => sum + (Array.isArray(n.learningOutcome) ? n.learningOutcome.length : n.learningOutcome ? 1 : 0), 0);
+        mirror = { restrictedNodes: restrictedNodes.length, outcomes };
+      } catch { mirror = { restrictedNodes: -1, outcomes: -1 }; }
+      if (allowCcMirror) { skipped.push(rel); continue; }
+      if (mirror.restrictedNodes !== 0) problems.push(`${rel}: ${mirror.restrictedNodes} restricted programme node(s), ${mirror.outcomes} school outcome(s) in the CC mirror`);
+    }
     // The EHIS layer is official open data by definition (school text can equal an EHIS outcome verbatim).
     if (rel === "ehis-catalog.json") continue;
     files.push({ rel, text: norm(readFileSync(full, "utf8")), raw: readFileSync(full, "utf8") });
   }
+  if (!files.length) problems.push("vacuous: dist has no scannable files");
   const byRel = new Map(files.map((f) => [f.rel, f]));
   // Client bundles and data files have no legitimate reason to carry a restricted programme's facts.
   const isBundleOrData = (rel) => /\.(js|mjs|map|css)$/i.test(rel)
@@ -90,6 +112,7 @@ export function scanDist({ distDir, feed, basis, publicTexts = [] }) {
 
   const catalogFile = byRel.get("catalog.json");
   const catalogPrograms = catalogFile ? JSON.parse(catalogFile.raw).programs : [];
+  if (!catalogFile || !catalogPrograms.length) problems.push("vacuous: catalog.json missing or empty");
 
   for (const id of restrictedIds) {
     const raw = rawById.get(id);
@@ -133,7 +156,7 @@ export function scanDist({ distDir, feed, basis, publicTexts = [] }) {
   for (const f of files) {
     if (/ai_scraper_blocked|robots_blocked|"publicationBasis"|"fetchPolicy"/.test(f.raw)) problems.push(`${f.rel}: source-basis/registry internals shipped`);
   }
-  return { problems, checked: restrictedIds.size, files: files.length, skipped };
+  return { problems, checked: restrictedIds.size, files: files.length, skipped, mirror };
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
@@ -148,12 +171,14 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   // Official EHIS open data (outcomes of every registered curriculum) is public by definition.
   const ehis = JSON.parse(readFileSync(join(ROOT, "src/data/ehisFacts/snapshot.json"), "utf8"));
   const publicTexts = ehis.curricula.flatMap((c) => c.outcomes ?? []);
-  const { problems, checked, files, skipped } = scanDist({ distDir: DIST, feed, basis, publicTexts });
+  const { problems, checked, files, skipped, mirror } = scanDist({ distDir: DIST, feed, basis, publicTexts });
   if (problems.length) {
     console.error(`verify-ehis-only-dist: FAIL (${problems.length})`);
     for (const p of problems.slice(0, 30)) console.error(`  - ${p}`);
     process.exit(1);
   }
   console.log(`verify-ehis-only-dist: ok (${checked} EHIS-only programmes, ${files} files scanned across ALL of dist/` +
-    (skipped.length ? `; KNOWN EXCEPTION: ${skipped.join(", ")} (AMOS-owned CC mirror, see arthunt/02S-AMOS CC export)` : "") + ")");
+    (skipped.length
+      ? `; KNOWN EXCEPTION: ${skipped.join(", ")} (AMOS-owned CC mirror) currently carries ${mirror?.restrictedNodes} restricted node(s) / ${mirror?.outcomes} school outcome(s); set ALLOW_CC_MIRROR=false after the first AMOS cycle with arthunt/02S-AMOS#5727`
+      : "") + ")");
 }

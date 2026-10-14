@@ -118,3 +118,50 @@ test("client outcome-ref lookup is key-compatible with the server map (no data i
   assert.equal(lookup("not in the catalogue"), null);
   assert.equal(lookup(undefined), null);
 });
+
+// ---- Anti-vacuity (review r6): the gate must never say "ok" because there was nothing to check ----
+test("VACUITY: empty feed, empty basis, nothing restricted or an empty dist is RED, never ok", () => {
+  const dir = makeDist();
+  try {
+    assert.ok(scanDist({ distDir: dir, feed: { programs: [] }, basis }).problems.some((p) => /vacuous: feed/.test(p)));
+    assert.ok(scanDist({ distDir: dir, feed, basis: { programmes: [] } }).problems.some((p) => /vacuous: source-basis/.test(p)));
+    const noneRestricted = { programmes: basis.programmes.map((p) => ({ ...p, publicationBasis: "provider_page_robots_allowed" })) };
+    assert.ok(scanDist({ distDir: dir, feed, basis: noneRestricted }).problems.some((p) => /no restricted programmes/.test(p)));
+    // A deliberate, explicit opt-out is the only way to run with zero restricted programmes.
+    assert.ok(!scanDist({ distDir: dir, feed, basis: noneRestricted, requireRestricted: false }).problems.some((p) => /no restricted programmes/.test(p)));
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+  const empty = mkdtempSync(join(tmpdir(), "ehis-gate-empty-"));
+  try {
+    const r = scanDist({ distDir: empty, feed, basis });
+    assert.ok(r.problems.some((p) => /dist has no scannable files/.test(p)));
+    assert.ok(r.problems.some((p) => /catalog\.json missing or empty/.test(p)));
+  } finally { rmSync(empty, { recursive: true, force: true }); }
+});
+
+test("VACUITY: a feed programme without a source-basis row fails the gate with the refresh instruction", () => {
+  const dir = makeDist();
+  try {
+    const r = scanDist({ distDir: dir, feed: { programs: [...feed.programs, { id: "brand-new", provider: "X" }] }, basis });
+    assert.ok(r.problems.some((p) => /source-basis is missing 1 feed programme.*brand-new/.test(p)), r.problems.join("\n"));
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("CC mirror: restricted nodes and school outcomes are COUNTED while allowed, and FAIL the build once the exception is switched off", () => {
+  const mirror = JSON.stringify({ "@graph": [
+    { "@id": "https://mikrokvalifikatsioon.ee/kataloog/blocked-1/", learningOutcome: ["a school outcome", "another one"] },
+    { "@id": "https://mikrokvalifikatsioon.ee/kataloog/open-1/", learningOutcome: ["open outcome"] },
+  ] });
+  const dir = makeDist({ "catalog.cc.jsonld": mirror });
+  try {
+    const allowed = scanDist({ distDir: dir, feed, basis, allowCcMirror: true });
+    assert.deepEqual(allowed.mirror, { restrictedNodes: 1, outcomes: 2 });
+    assert.deepEqual(allowed.skipped, ["catalog.cc.jsonld"]);
+    assert.deepEqual(allowed.problems, []);
+    const strict = scanDist({ distDir: dir, feed, basis, allowCcMirror: false });
+    assert.ok(strict.problems.some((p) => /catalog\.cc\.jsonld: 1 restricted programme node\(s\), 2 school outcome\(s\)/.test(p)), strict.problems.join("\n"));
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+  const clean = makeDist({ "catalog.cc.jsonld": JSON.stringify({ "@graph": [{ "@id": "https://mikrokvalifikatsioon.ee/kataloog/open-1/" }] }) });
+  try {
+    assert.deepEqual(scanDist({ distDir: clean, feed, basis, allowCcMirror: false }).problems, [], "a mirror without restricted nodes passes once the exception is off");
+  } finally { rmSync(clean, { recursive: true, force: true }); }
+});
