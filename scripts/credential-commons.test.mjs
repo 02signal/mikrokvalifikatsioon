@@ -141,6 +141,39 @@ test("CC omission accounting: one omitted row may carry multiple valid reasons",
   assert.equal(result.ok, true, result.ok ? "" : result.reason);
 });
 
+test("CC omission accounting: the optional publication_basis_ehis_only reason is accepted and counted", () => {
+  const withRestricted = {
+    ...receipt,
+    view_count: graph["@graph"].length + 2,
+    emitted_count: graph["@graph"].length,
+    omitted_row_count: 2,
+    omitted_reason_counts: {
+      missing_name: 0,
+      invalid_name_datatype: 0,
+      missing_ects: 0,
+      missing_language: 0,
+      missing_provider: 0,
+      publication_basis_ehis_only: 2
+    }
+  };
+  const ok = validateCredentialCommonsRelease({ graphText, receiptData: withRestricted });
+  assert.equal(ok.ok, true, ok.ok ? "" : ok.reason);
+  // Uncovered rows are still rejected even when the sixth key exists.
+  const uncovered = { ...withRestricted, omitted_reason_counts: { ...withRestricted.omitted_reason_counts, publication_basis_ehis_only: 0 } };
+  const bad = validateCredentialCommonsRelease({ graphText, receiptData: uncovered });
+  assert.equal(bad.ok, false);
+  // The sixth key cannot hide a missing base key, and no other key joins it.
+  const { missing_provider: _removed, ...noProvider } = withRestricted.omitted_reason_counts;
+  for (const counts of [noProvider, { ...withRestricted.omitted_reason_counts, another_future_reason: 0 }]) {
+    const r = validateCredentialCommonsRelease({ graphText, receiptData: { ...withRestricted, omitted_reason_counts: counts } });
+    assert.equal(r.ok, false);
+    if (!r.ok) assert.match(r.reason, /võtmed/);
+  }
+  // The legacy five-key receipt keeps validating (no AMOS release carries the sixth key yet).
+  const legacy = validateCredentialCommonsRelease({ graphText, receiptData: receipt });
+  assert.equal(legacy.ok, true, legacy.ok ? "" : legacy.reason);
+});
+
 test("CC omission accounting: missing and unknown reason keys are rejected", () => {
   const { missing_provider: _removed, ...missingKeyCounts } = receipt.omitted_reason_counts;
   const missingKey = {

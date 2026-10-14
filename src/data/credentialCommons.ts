@@ -25,6 +25,11 @@ const OMISSION_REASON_KEYS = [
   "missing_language",
   "missing_provider"
 ] as const;
+// Owner decision 14.10.2026 (AMOS arthunt/02S-AMOS CC export): a programme whose source forbids
+// automated collection is omitted from the public CC graph with this explicit reason. AMOS emits the
+// key only when it restricts (production always does), so the receipt may carry EITHER exactly the
+// five base keys OR the base keys plus this one. Any other key set is still rejected.
+const OPTIONAL_OMISSION_REASON_KEYS = ["publication_basis_ehis_only"] as const;
 
 type JsonObject = Record<string, unknown>;
 export type CredentialCommonsNode = JsonObject & { "@id": string; "@type": "MicroCredential" };
@@ -63,12 +68,15 @@ function omissionAccountingError(receipt: JsonObject): string | null {
     return "CC-kviitungi omission-arvestus on vigane";
   }
   const actualKeys = Object.keys(reasons).sort();
-  const expectedKeys = [...OMISSION_REASON_KEYS].sort();
-  if (actualKeys.length !== expectedKeys.length || actualKeys.some((key, index) => key !== expectedKeys[index])) {
+  const sameKeys = (expected: readonly string[]) => {
+    const sorted = [...expected].sort();
+    return actualKeys.length === sorted.length && actualKeys.every((key, index) => key === sorted[index]);
+  };
+  if (!sameKeys(OMISSION_REASON_KEYS) && !sameKeys([...OMISSION_REASON_KEYS, ...OPTIONAL_OMISSION_REASON_KEYS])) {
     return "CC-kviitungi omission-põhjuste võtmed ei vasta AMOS lepingule";
   }
   let occurrences = 0;
-  for (const key of OMISSION_REASON_KEYS) {
+  for (const key of actualKeys) {
     const count = reasons[key];
     if (!Number.isInteger(count) || Number(count) < 0 || Number(count) > Number(omitted)) {
       return `CC-kviitungi omission-põhjuse ${key} arv on vigane`;
