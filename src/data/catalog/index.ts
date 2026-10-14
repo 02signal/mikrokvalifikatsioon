@@ -6,7 +6,8 @@ import legacyTartuYlikool from "./tartu-ylikool.json" with { type: "json" };
 import legacyMuudKoolid from "./muud-koolid.json" with { type: "json" };
 import { assignSlugs, slugify } from "../slug.ts";
 import { parseIntakeDates, resolveCatalogStartDate } from "../dates.ts";
-import { ehisOverrideFor, type EhisAuthoritative } from "../ehisFacts/index.ts";
+import { ehisOverrideFor, matchForCatalogEntry, type EhisAuthoritative } from "../ehisFacts/index.ts";
+import { eapReviewFor, type EapReview } from "../eapGuard.ts";
 import { sha256hex } from "../../lib/outcome-ref.ts";
 
 /**
@@ -475,11 +476,40 @@ export const catalogFeedGeneratedAt = feed.generatedAt;
 export type CatalogEntryWithSlug = CatalogEntry & {
   slug: string;
   ehis: EhisAuthoritative;
+  /** Mahuväärtus vajab kontrolli (TäKS 5–30 EAP või EHIS-i vastuolu): `ects` on
+   * siis tahtlikult null, algne väärtus on `eapReview.feedEap`. Vt eapGuard.ts. */
+  eapReview?: EapReview;
 };
 
 const sorted: CatalogEntry[] = feed.entries
   .slice()
   .sort((a, b) => a.provider.localeCompare(b.provider, "et") || a.name.localeCompare(b.name, "et"));
+
+/** EAP-valvuri otsus ühe kirje kohta, antud kirje EHIS-i override'i põhjal. */
+function eapReviewFromOverride(
+  entry: CatalogEntry,
+  patch: { ects?: number | null },
+  ehis: EhisAuthoritative
+): EapReview | null {
+  return eapReviewFor({
+    credentialType: entry.credentialType,
+    ects: patch.ects !== undefined ? patch.ects : entry.ects,
+    feedEap: entry.ects ?? null,
+    conflict: ehis.authoritative ? undefined : matchForCatalogEntry(entry).conflict
+  });
+}
+
+/** Sama otsus ilma kataloogi kokkupanekuta — kandidaatfeedi kontrolliks
+ * (scripts/verify-lkg-refresh.mjs). Kasutab sama identiteedi-fallbacki mis `catalog`. */
+export function eapReviewOf(entry: CatalogEntry): EapReview | null {
+  const currentOverride = ehisOverrideFor(entry);
+  const legacyMatchEntry = entryForEhisMatch(entry);
+  const { patch, ehis } =
+    currentOverride.ehis.authoritative || legacyMatchEntry === entry
+      ? currentOverride
+      : ehisOverrideFor(legacyMatchEntry, entry);
+  return eapReviewFromOverride(entry, patch, ehis);
+}
 
 export const catalog: CatalogEntryWithSlug[] = sorted.map((entry) => {
   const parsed = parseIntakeDates(entry.intakeText);
@@ -502,9 +532,15 @@ export const catalog: CatalogEntryWithSlug[] = sorted.map((entry) => {
     currentOverride.ehis.authoritative || legacyMatchEntry === entry
       ? currentOverride
       : ehisOverrideFor(legacyMatchEntry, entry);
+  // EAP valvur: kahtlane või vastuoluline maht ei avaldu vaikselt (eapGuard.ts).
+  const eapReview = eapReviewFromOverride(entry, patch, ehis);
   return {
     ...entry,
     ...patch,
+    // Feedi durationText kordab sageli sama (vale) mahtu ("3 EAP") — varjame ka selle.
+    ...(eapReview
+      ? { ects: null, eapReview, durationText: /\bEAP\b/i.test(entry.durationText ?? "") ? null : entry.durationText }
+      : {}),
     // Both runtime sources are canonical AMOS feeds and have already passed
     // the required, unique programme-id gate above.
     slug: entry.id as string,

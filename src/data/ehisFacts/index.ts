@@ -134,6 +134,24 @@ export type MatchConfidence = "exact" | "strong" | "none";
 export interface EhisMatch {
   confidence: MatchConfidence;
   curriculum: EhisCurriculum | null;
+  /** Set when several EHIS records share the name AND disagree on EAP. We do not
+   * pick one silently — the entry is flagged "vajab kontrolli" (eapGuard.ts). */
+  conflict?: EhisCurriculum[];
+}
+
+/** Drop listing decoration that is not part of the official curriculum name:
+ * a "Mikrokraadiprogramm:" style prefix and a trailing intake year ("2026/2027",
+ * "2026-2027", "2026"). Used only as an ADDITIONAL exact-match key. */
+export function stripListingDecor(name: string): string {
+  return name
+    .replace(/^\s*(mikrokraadiprogramm|mikrokraadi programm|mikrokraad|mikrokvalifikatsioon(iõppe õppekava)?)\s*[:\-–]\s*/i, "")
+    .replace(/\s*[\(\[]?\s*(20\d{2})\s*[\/\-–]\s*(20\d{2}|\d{2})\s*[\)\]]?\s*$/, "")
+    .replace(/\s*[\(\[]?\s*20\d{2}\s*[\)\]]?\s*$/, "")
+    .trim();
+}
+
+function recency(c: EhisCurriculum): string {
+  return c.updated_at ?? c.registered_at ?? "";
 }
 
 /** Normalize an Estonian string for comparison: lowercase, strip diacritics,
@@ -205,13 +223,25 @@ export function matchForCatalogEntry(entry: CatalogEntry): EhisMatch {
 
   const target = norm(entry.name);
   if (!target) return { confidence: "none", curriculum: null };
+  const stripped = norm(stripListingDecor(entry.name));
+  const targets = new Set([target, ...(stripped ? [stripped] : [])]);
 
-  // 1. exact normalized name match (et or en).
-  const exact = candidates.filter((c) => norm(c.name_et) === target || (c.name_en != null && norm(c.name_en) === target));
+  // 1. exact normalized name match (et or en), with or without listing decoration.
+  const exact = candidates.filter(
+    (c) => targets.has(norm(c.name_et)) || (c.name_en != null && targets.has(norm(c.name_en)))
+  );
   if (exact.length === 1) return { confidence: "exact", curriculum: exact[0] };
   if (exact.length > 1) {
-    // Multiple identical names under one provider — ambiguous, do not merge.
-    return { confidence: "none", curriculum: null };
+    // Multiple identical names under one provider. If they agree on EAP, any of
+    // them gives the same fact: take the most recently updated. If they disagree
+    // we must NOT choose (a wrong EAP is a public factual error): report the
+    // conflict so the entry is flagged for manual review.
+    const eaps = new Set(exact.map((c) => c.eap));
+    if (eaps.size === 1) {
+      const newest = exact.slice().sort((a, b) => recency(b).localeCompare(recency(a)))[0];
+      return { confidence: "exact", curriculum: newest };
+    }
+    return { confidence: "none", curriculum: null, conflict: exact };
   }
 
   // 2. conservative fuzzy: best single candidate within threshold.
