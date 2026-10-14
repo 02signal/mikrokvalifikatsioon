@@ -244,5 +244,10 @@ async function loadReleaseWithCatalogCount(): Promise<CredentialCommonsRelease> 
 export const credentialCommonsRelease = await loadReleaseWithCatalogCount();
 
 export function credentialCommonsNodeFor(entry: CatalogEntryWithSlug): CredentialCommonsNode | null {
+  // EHIS-only kirje (allikas keelab automaatse kogumise): warehouse'i CC-sõlm kannab kooli lehelt
+  // korjatud EAP-d, keelt ja õpiväljundeid, seega saidil EI taasesitata seda ei lehel ega
+  // /kataloog/<slug>/credential.jsonld all. (Baitideni sama /catalog.cc.jsonld peegel vajab AMOS-i
+  // CC-eksporti, vt PR kirjeldus.)
+  if (entry.publicBasis === "ehis_only") return null;
   return credentialCommonsRelease.nodesById.get(`https://mikrokvalifikatsioon.ee/kataloog/${entry.id}/`) ?? null;
 }

@@ -7,6 +7,7 @@ import "../../styles/global.css";
 import "../../styles/pragmatic-momentum.css";
 import { catalog } from "../../data/catalog";
 import { fieldsWithSlug } from "../../data/catalog";
+import { outcomeRefMap } from "../../data/outcomeRefs";
 
 // ============================================================================
 // Minu konto — mkval ET face (account-MVP).
@@ -52,6 +53,10 @@ for (const e of catalog) {
     registrationDeadline: e.registrationDeadline ?? null,
   };
 }
+// Kitsas kaart (tekst -> viide) serveris; klient EI impordi andmemoodulit (vt src/lib/outcome-ref-lookup.ts).
+const outcomeRefJson = JSON.stringify(
+  Object.fromEntries(Object.entries(outcomeRefMap).map(([key, rec]) => [key, { outcome_ref: rec.outcome_ref }]))
+).replace(/</g, "\\u003c");
 const progJson = JSON.stringify(progIndex).replace(/</g, "\\u003c");
 
 // Valdkonna SLUG -> inimkeelne silt. Select saadab slugi (kanooniline target_ref);
@@ -456,6 +461,7 @@ const schema = {
 
     <script type="application/json" id="prog-data" is:inline set:html={progJson} />
     <script type="application/json" id="field-label-data" is:inline set:html={fieldLabelJson} />
+    <script type="application/json" id="outcome-ref-data" is:inline set:html={outcomeRefJson} />
 
     <script>
       import { computeFit, type CoverageRow } from "../../lib/outcome-fit";
@@ -466,11 +472,16 @@ const schema = {
         fetchState, syncPackages, deleteAccount, KONTO_API_BASE,
       } from "../../lib/konto-api";
       import { buildSyncPayload, namesFromSync, packagesUnsyncable } from "../../lib/konto-sync";
-      import { outcomeRefForText } from "../../data/outcomeRefs";
+      import { makeOutcomeRefLookup } from "../../lib/outcome-ref-lookup";
       import {
         migrateLegacy, emptyState,
         type PackagesState, type PkgItem as StatePkgItem,
       } from "../../lib/packages";
+
+      // Server-built outcome-ref map (no catalog import in the client bundle).
+      const outcomeRefForText = makeOutcomeRefLookup(
+        JSON.parse(document.getElementById("outcome-ref-data")?.textContent || "{}")
+      );
 
       // ====================================================================
       // KONTO STATE-MACHINE (kliendipoolne; üks <script>).

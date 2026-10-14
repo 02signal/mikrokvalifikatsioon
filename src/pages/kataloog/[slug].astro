@@ -71,7 +71,8 @@ function buildActiveView(entry: CatalogEntryWithSlug) {
   // kasutaja selge märkega kooli enda lehele (uues aknas). EHIS ametlikud faktid
   // (nimi/EAP/õppekavarühm/õpiväljundid) jäävad alles.
   const robotsBlockedProviders = new Set(["Eesti Ettevõtluskõrgkool Mainor", "Tallinna Ülikool"]);
-  const isRobotsBlocked = robotsBlockedProviders.has(entry.provider);
+  const isEhisOnlyPublic = entry.publicBasis === "ehis_only";
+  const isRobotsBlocked = isEhisOnlyPublic || robotsBlockedProviders.has(entry.provider);
 
   // Värsked vastuvõtu/registreerimise kuupäevad — kogutud kooli ENDA programmilehelt
   // (AMOS robots/ToS-järgiv allika-värskendus). Kuvame ainult AVALIKKE fakte: kuupäev +
@@ -104,7 +105,7 @@ function buildActiveView(entry: CatalogEntryWithSlug) {
     entry.format ? { label: "Õppevorm", value: entry.format } : null,
     languageText ? { label: "Keel", value: languageText } : null,
     entry.intakeText ? { label: "Vastuvõtt", value: entry.intakeText } : null,
-    startEtText ? { label: "Algus", value: startEtText } : null,
+    startEtText && !isEhisOnlyPublic ? { label: "Algus", value: startEtText } : null,
     ehisNameEn ? { label: "Nimi (EN)", value: ehisNameEn } : null,
     ehisFieldName ? { label: "Ametlik õppekavarühm (EHIS)", value: ehisFieldName } : null
   ].filter((fact): fact is { label: string; value: string } => fact !== null);
@@ -163,7 +164,7 @@ function buildActiveView(entry: CatalogEntryWithSlug) {
   return {
     providerSlug, relatedComparisons, ehis, isOfficial, displayEcts, ehisNameEn, ehisFieldName, ehisPdfUrl,
     ehisOutcomes, schoolOutcomeObjects, schoolOutcomes, hasSchoolDescription, canonicalPath, checkedAtText,
-    providerLink, languageText, isRobotsBlocked, fresh, freshDeadline, freshStart, hasFreshDates, freshCheckedAt,
+    providerLink, languageText, isRobotsBlocked, isEhisOnlyPublic, fresh, freshDeadline, freshStart, hasFreshDates, freshCheckedAt,
     fetchedDay, deadlinePast, facts, funding, showFunding, description, title, schema, ccCredential
   };
 }
@@ -221,7 +222,7 @@ const pageOgDescription = entry ? entry.summary : pageDescription;
       const {
         providerSlug, relatedComparisons, ehis, isOfficial, ehisFieldName, ehisPdfUrl,
         ehisOutcomes, schoolOutcomes, hasSchoolDescription, checkedAtText,
-        providerLink, isRobotsBlocked, freshDeadline, freshStart, hasFreshDates, freshCheckedAt,
+        providerLink, isRobotsBlocked, isEhisOnlyPublic, freshDeadline, freshStart, hasFreshDates, freshCheckedAt,
         deadlinePast, facts, funding, showFunding
       } = activeView;
       return (
@@ -252,7 +253,7 @@ const pageOgDescription = entry ? entry.summary : pageDescription;
             </form>
           </div>
 
-          <p class="report-date">Andmed kontrollitud kooli lehelt: {checkedAtText}</p>
+          <p class="report-date">{isEhisOnlyPublic ? "EHIS-i andmed uuendatud" : "Andmed kontrollitud kooli lehelt"}: {checkedAtText}</p>
         </div>
       </section>
 
@@ -263,7 +264,11 @@ const pageOgDescription = entry ? entry.summary : pageDescription;
               <p class="school-check-line">
                 <a href={providerLink} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`detail_school_check_${entry.provider}`}>Ajakohast hinda, vastuvõttu ja kirjeldust vaata kooli lehel ↗</a>
               </p>
-              <p class="school-check-sub">Selle kooli ajakohast infot me automaatselt ei kogu – kindel info on kooli enda lehel. Allpool toodud ametlikud faktid (nimi, EAP, õppekavarühm, õpiväljundid) pärinevad EHIS-est.</p>
+              {isEhisOnlyPublic ? (
+                <p class="school-check-sub">Selle kooli veebileht ei luba andmete automaatset korjet, seetõttu näitame siin ainult ametlikke EHIS-i andmeid (nimi, EAP, õppekavarühm, õpiväljundid). Hind, kuupäevad ja kirjeldus puuduvad – need leiad kooli enda lehelt.</p>
+              ) : (
+                <p class="school-check-sub">Selle kooli ajakohast infot me automaatselt ei kogu – kindel info on kooli enda lehel. Allpool toodud ametlikud faktid (nimi, EAP, õppekavarühm, õpiväljundid) pärinevad EHIS-est.</p>
+              )}
             </div>
           )}
 

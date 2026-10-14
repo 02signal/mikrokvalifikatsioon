@@ -8,6 +8,9 @@ import { assignSlugs, slugify } from "../slug.ts";
 import { parseIntakeDates, resolveCatalogStartDate } from "../dates.ts";
 import { ehisOverrideFor, matchForCatalogEntry, type EhisAuthoritative } from "../ehisFacts/index.ts";
 import { eapReviewFor, type EapReview } from "../eapGuard.ts";
+import { isEhisOnly } from "../sourceBasis.ts";
+import { ehisOnlyBase } from "../ehisOnly.ts";
+import { ehisFetchedAt } from "../ehisFacts/index.ts";
 import { sha256hex } from "../../lib/outcome-ref.ts";
 
 /**
@@ -479,6 +482,9 @@ export type CatalogEntryWithSlug = CatalogEntry & {
   /** Mahuväärtus vajab kontrolli (TäKS 5–30 EAP või EHIS-i vastuolu): `ects` on
    * siis tahtlikult null, algne väärtus on `eapReview.feedEap`. Vt eapGuard.ts. */
   eapReview?: EapReview;
+  /** "ehis_only": allikas keelab automaatse kogumise, avalikus kirjes on ainult EHIS-i väljad
+   * (hind, kuupäevad, kirjeldus eemaldatud). Vt sourceBasis.ts / ehisOnly.ts. */
+  publicBasis?: "ehis_only";
 };
 
 const sorted: CatalogEntry[] = feed.entries
@@ -511,7 +517,10 @@ export function eapReviewOf(entry: CatalogEntry): EapReview | null {
   return eapReviewFromOverride(entry, patch, ehis);
 }
 
-export const catalog: CatalogEntryWithSlug[] = sorted.map((entry) => {
+export const catalog: CatalogEntryWithSlug[] = sorted.map((feedEntry) => {
+  // Allikas keelab automaatse kogumise => avalik kirje on valge nimekirja põhine EHIS-only versioon.
+  const ehisOnly = isEhisOnly(feedEntry.id);
+  const entry: CatalogEntry = ehisOnly ? ehisOnlyBase(feedEntry, ehisFetchedAt) : feedEntry;
   const parsed = parseIntakeDates(entry.intakeText);
   // Ametlik allikas: EHIS (avaandmed). Sobitatud kirjel kirjutame EHIS-ist üle
   // ainult FAKTID (name/EAP/keel). Kirjeldav kiht (summary/goalText/outcomes)
@@ -538,6 +547,7 @@ export const catalog: CatalogEntryWithSlug[] = sorted.map((entry) => {
     ...entry,
     ...patch,
     // Feedi durationText kordab sageli sama (vale) mahtu ("3 EAP") — varjame ka selle.
+    ...(ehisOnly ? { publicBasis: "ehis_only" as const } : {}),
     ...(eapReview
       ? { ects: null, eapReview, durationText: /\bEAP\b/i.test(entry.durationText ?? "") ? null : entry.durationText }
       : {}),

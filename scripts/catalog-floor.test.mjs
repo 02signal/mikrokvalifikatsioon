@@ -181,6 +181,9 @@ test("catalog output keeps current AMOS facts; only official EHIS facts may over
   for (const current of canonicalActive) {
     const output = outputById.get(current.id);
     assert.ok(output, `missing canonical AMOS row ${current.id}`);
+    // Allikas keelab automaatse kogumise: avalik kirje on tahtlikult ainult-EHIS (src/data/ehisOnly.ts);
+    // selle sisu piiri valvab scripts/ehis-only-restriction.test.mjs.
+    if (output.publicBasis === "ehis_only") continue;
     for (const [key, value] of Object.entries(current)) {
       if (officialOverrideKeys.has(key)) continue;
       // EAP valvur (src/data/eapGuard.ts): märgitud "vajab kontrolli" kirjel ei avaldata

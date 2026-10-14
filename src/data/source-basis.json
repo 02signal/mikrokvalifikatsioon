@@ -1,0 +1,1318 @@
+{
+  "version": "amos.mkval.source_basis/v1",
+  "generatedAt": "2026-10-14T14:45:23.620Z",
+  "feedContentHash": "sha256:dec2621beb6a39c6fcbd2ecad20c80229baa62331fc643616b930ec1aec97510",
+  "consumerRule": "publish page-derived text only where publicationBasis is provider_page_robots_allowed; for any other value restrict to EHIS facts and their update dates",
+  "counts": {
+    "programmes": 163,
+    "provider_page_robots_allowed": 127,
+    "ehis_open_data_and_manual_review": 36,
+    "unverified": 0
+  },
+  "programmes": [
+    {
+      "id": "ebs-digitaalse-toote-disain-ja-arendus",
+      "provider": "EBS",
+      "sourceUrl": "https://www.ebs.ee/taiendusope/mikrokraadid/digitaalse-toote-disain-ja-arendus",
+      "sourceCheckedAt": "2026-10-05",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "ebs-digitaalsete-toodete-protsesside-ja-operatsioonide-juhtimine",
+      "provider": "EBS",
+      "sourceUrl": "https://www.ebs.ee/taiendusope/mikrokraadid/digitaalsete-toodete-protsesside-ja-operatsioonide-juhtimine",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "ebs-digitoodete-eestvedamine-ja-muudatuste-juhtimine",
+      "provider": "EBS",
+      "sourceUrl": "https://www.ebs.ee/taiendusope/mikrokraadid/digitoodete-eestvedamine-ja-muudatuste-juhtimine",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "ebs-digitoodete-uurimine-analuusimine-ja-strateegia",
+      "provider": "EBS",
+      "sourceUrl": "https://www.ebs.ee/taiendusope/mikrokraadid/digitaalse-tootejuhtimise-strateegia-ja-valideerimine",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "ebs-digiturundus-tehisintellekti-ajastul",
+      "provider": "EBS",
+      "sourceUrl": "https://www.ebs.ee/taiendusope/mikrokraadid/digiturundus-tehisintellekti-ajastul",
+      "sourceCheckedAt": "2026-09-21",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "ebs-finantsaruandlus-ja-finantsalane-kommunikatsioon",
+      "provider": "EBS",
+      "sourceUrl": "https://www.ebs.ee/taiendusope/mikrokraadid/finantsaruandlus-ja-finantsalane-kommunikatsioon",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "ebs-investeeringud-ja-ettevotte-rahandus",
+      "provider": "EBS",
+      "sourceUrl": "https://www.ebs.ee/taiendusope/mikrokraadid/investeeringud-ja-ettevotte-rahandus",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "ebs-juhtimine-ja-turundus-rahvusvahelises-arikeskkonnas",
+      "provider": "EBS",
+      "sourceUrl": "https://www.ebs.ee/taiendusope/mikrokraadid/juhtimine-ja-turundus-rahvusvahelises-arikeskkonnas",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "ebs-juhtimise-ja-eestvedamise-abc",
+      "provider": "EBS",
+      "sourceUrl": "https://www.ebs.ee/taiendusope/mikrokraadid/juhtimise-ja-eestvedamise-abc",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "ebs-teenusedisain-turunduses",
+      "provider": "EBS",
+      "sourceUrl": "https://www.ebs.ee/taiendusope/mikrokraadid/teenusedisain-turunduses",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "ebs-www-ebs-ee-taiendusope-mikrokraadid-juht-organisatsioon-ja-meeskond",
+      "provider": "EBS",
+      "sourceUrl": "https://www.ebs.ee/taiendusope/mikrokraadid/juht-organisatsioon-ja-meeskond",
+      "sourceCheckedAt": "2026-09-10",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-ettevotluskorgkool-mainor-ettevotluse-mikrokraad-tallinnas",
+      "provider": "Eesti Ettevõtluskõrgkool Mainor",
+      "sourceUrl": "https://www.eek.ee/mikrokraad/ettevotluse_mikrokraad2026S_Tallinn/",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "ai_scraper_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "eesti-ettevotluskorgkool-mainor-ettevotluse-mikrokraad-tartus",
+      "provider": "Eesti Ettevõtluskõrgkool Mainor",
+      "sourceUrl": "https://www.eek.ee/mikrokraad/ettevotluse_mikrokraad2026S_Tartu/",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "ai_scraper_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "eesti-ettevotluskorgkool-mainor-tarneahelajuhi-arenguprogramm",
+      "provider": "Eesti Ettevõtluskõrgkool Mainor",
+      "sourceUrl": "https://www.eek.ee/mikrokraad/tarneahelajuhi_arenguprogramm/",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "ai_scraper_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "eesti-ettevotluskorgkool-mainor-tervishoiuorganisatsiooni-juhtimine-ja-arendamine",
+      "provider": "Eesti Ettevõtluskõrgkool Mainor",
+      "sourceUrl": "https://www.eek.ee/mikrokraad/tervishoiujuhtimine2027K/",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "ai_scraper_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "eesti-kunstiakadeemia-arhitektuuri-konserveerimine-ja-restaureerimine",
+      "provider": "Eesti Kunstiakadeemia",
+      "sourceUrl": "https://www.artun.ee/avatud-akadeemia/arhitektuuri-konserveerimine-ja-restaureerimine-2/",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-kunstiakadeemia-baltisaksa-kultuuriparand",
+      "provider": "Eesti Kunstiakadeemia",
+      "sourceUrl": "https://www.artun.ee/avatud-akadeemia/baltisaksa-kultuuriparand-2/",
+      "sourceCheckedAt": "2026-09-21",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-kunstiakadeemia-disain-hariduses-ja-haridusdisain",
+      "provider": "Eesti Kunstiakadeemia",
+      "sourceUrl": "https://www.artun.ee/avatud-akadeemia/disain-hariduses-ja-haridusdisain/",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-kunstiakadeemia-museoloogia-mikrokraad",
+      "provider": "Eesti Kunstiakadeemia",
+      "sourceUrl": "https://www.artun.ee/avatud-akadeemia/museoloogia-mikrokraad/",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-maaulikool-aiandus-iluaiandus",
+      "provider": "Eesti Maaülikool",
+      "sourceUrl": "https://www.emu.ee/sundmused/mikrokraad-aiandus-iluaiandus",
+      "sourceCheckedAt": "2026-09-21",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-maaulikool-baasteadmisi-raamatupidamisest-ja-rahandusest",
+      "provider": "Eesti Maaülikool",
+      "sourceUrl": "https://www.emu.ee/sundmused/mikrokraad-baasteadmisi-raamatupidamisest-ja-rahandusest-0",
+      "sourceCheckedAt": "2026-09-21",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-maaulikool-ergonoomikaline-hindamine-ja-sekkumine-tookohtadel",
+      "provider": "Eesti Maaülikool",
+      "sourceUrl": "https://www.emu.ee/sundmused/mikrokraad-ergonoomikaline-hindamine-ja-sekkumine-tookohtadel-0",
+      "sourceCheckedAt": "2026-09-14",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-maaulikool-keskkonnakorraldus-ja-kliimapoliitika",
+      "provider": "Eesti Maaülikool",
+      "sourceUrl": "https://www.emu.ee/sundmused/mikrokraad-keskkonnakorraldus-ja-kliimapoliitika-0",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-maaulikool-keskkonnakorralduse-meetmed",
+      "provider": "Eesti Maaülikool",
+      "sourceUrl": "https://www.emu.ee/sundmused/mikrokraad-keskkonnakorralduse-meetmed-0",
+      "sourceCheckedAt": "2026-09-14",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-maaulikool-keskkonnasaastlik-taimekasvatus-ja-mahetootmine",
+      "provider": "Eesti Maaülikool",
+      "sourceUrl": "https://www.emu.ee/sundmused/mikrokraad-keskkonnasaastlik-taimekasvatus-ja-mahetootmine-0",
+      "sourceCheckedAt": "2026-09-14",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-maaulikool-maastiku-kujundus-ehitus-ja-esitlus",
+      "provider": "Eesti Maaülikool",
+      "sourceUrl": "https://www.emu.ee/sundmused/mikrokraad-maastiku-kujundus-ehitus-ja-esitlus-0",
+      "sourceCheckedAt": "2026-09-21",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-maaulikool-maastiku-planeerimine-hindamine-ja-kaitse",
+      "provider": "Eesti Maaülikool",
+      "sourceUrl": "https://www.emu.ee/sundmused/mikrokraad-maastiku-planeerimine-hindamine-ja-kaitse-0",
+      "sourceCheckedAt": "2026-09-21",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-maaulikool-taimekahjustajad-ja-nende-torje",
+      "provider": "Eesti Maaülikool",
+      "sourceUrl": "https://www.emu.ee/sundmused/mikrokraad-taimekahjustajad-ja-nende-torje-0",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-maaulikool-taimsete-toiduainete-tehnoloogia-pohialused",
+      "provider": "Eesti Maaülikool",
+      "sourceUrl": "https://www.emu.ee/sundmused/mikrokraad-taimsete-toiduainete-tehnoloogia-pohialused-0",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-maaulikool-toiduainete-vaikekaitlemise-pohialused",
+      "provider": "Eesti Maaülikool",
+      "sourceUrl": "https://www.emu.ee/sundmused/mikrokraad-toiduainete-vaikekaitlemise-pohialused-0",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-muusika-ja-teatriakadeemia-muusikaproduktsioon-ja-laulukirjutamine",
+      "provider": "Eesti Muusika- ja Teatriakadeemia",
+      "sourceUrl": "https://eamt.ee/erialad/helilooming-ja-improvisatsiooniline-muusika/muusikaproduktsioon-laulukirjutamine/",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "eesti-muusika-ja-teatriakadeemia-muusikapsuhholoogia",
+      "provider": "Eesti Muusika- ja Teatriakadeemia",
+      "sourceUrl": "https://eamt.ee/taiendusope/mikrokraadiprogramm/muusikapsuhholoogia/",
+      "sourceCheckedAt": "2026-09-14",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tallinna-tehnikakorgkool-aja-ja-rahajuhtimine-mudelprojekteerimises",
+      "provider": "Tallinna Tehnikakõrgkool",
+      "sourceUrl": "https://koolitus.edu.ee/training/14015",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tallinna-tehnikakorgkool-finantsaruandlus-ja-juhtimine-ettevottes",
+      "provider": "Tallinna Tehnikakõrgkool",
+      "sourceUrl": "https://www.tktk.ee/taiendusoppijale/mikrokraadid/",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tallinna-tehnikakorgkool-finantsarvestuse-ja-maksunduse-abc",
+      "provider": "Tallinna Tehnikakõrgkool",
+      "sourceUrl": "https://koolitus.edu.ee/training/16732",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tallinna-tehnikakorgkool-logistikavaldkonna-finantsjuhtimine",
+      "provider": "Tallinna Tehnikakõrgkool",
+      "sourceUrl": "https://koolitus.edu.ee/training/16733",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tallinna-tehnikakorgkool-meeskondade-juhtimine",
+      "provider": "Tallinna Tehnikakõrgkool",
+      "sourceUrl": "https://koolitus.edu.ee/training/16680",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tallinna-tehnikakorgkool-riskide-ja-kuberturvalisuse-juhtimine-logistikas",
+      "provider": "Tallinna Tehnikakõrgkool",
+      "sourceUrl": "https://haridusportaal.edu.ee/koolitused-juhan/riskide-ja-k%C3%BCberturvalisuse-juhtimine-logistikas/37470291",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tallinna-tehnikakorgkool-teabehalduse-alused",
+      "provider": "Tallinna Tehnikakõrgkool",
+      "sourceUrl": "https://koolitus.edu.ee/training/16738",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tallinna-tehnikakorgkool-toote-disain-ja-turundus",
+      "provider": "Tallinna Tehnikakõrgkool",
+      "sourceUrl": "https://www.tktk.ee/taiendusoppijale/mikrokraadid/",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tallinna-tehnikakorgkool-vastutustundlik-innovatsioon-inseneerias",
+      "provider": "Tallinna Tehnikakõrgkool",
+      "sourceUrl": "https://koolitus.edu.ee/training/16740",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tallinna-tehnikakorgkool-voorkeeled-inseneerias",
+      "provider": "Tallinna Tehnikakõrgkool",
+      "sourceUrl": "https://www.tktk.ee/taiendusoppijale/mikrokraadid/",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tallinna-ulikool-adult-education-and-adult-educator-in-transition",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/en/tuitions/adult-education-and-adult-educators-transition",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-andmepohine-projektijuhtimine",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/andmepohine-projektijuhtimine",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-andragoogika-alused",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/andragoogika-alused-2026-2027",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-arikorraldus",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/arikorraldus-2",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-digivahendid-oppeprotsessis",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/digivahendid-oppeprotsessis",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-educational-innovation-and-leadership",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/en/tuitions/educational-innovation-and-leadership-microdegree-programme-2026",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-eesti-uhiskond-poliitika-ja-sotsiaalne-kihistumine",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/eesti-uhiskond-poliitika-ja-sotsiaalne-kihistumine",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-hariduspsuhholoogia-klassiruumis",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/hariduspsuhholoogia-klassiruumis-0",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-heaolu-kujundamine-ja-ennetav-psuhhosotsiaalne-praktika",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/heaolu-kujundamine-ja-ennetav-psuhhosotsiaalne-praktika",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-huvikaitse-ja-poliitkonkurents",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/huvikaitse-ja-poliitkonkurents-1",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-infotehnoloogia-haldamine",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/infotehnoloogia-haldamine",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-inimesekeskne-sekkumispraktika-trauma-ja-kiindumusteooria-ning-usaldussuhted",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/inimesekeskne-sekkumispraktika-trauma-ja-kiindumusteooria-ning-usaldussuhted",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-kodanikuharidus",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/kodanikuharidus-2",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-kohalik-valitsemine",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/kohalik-valitsemine-3",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-lastekaitse-pohialused",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/lastekaitse-pohialused-2",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-lepingu-ja-haldusoigus",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/lepingu-ja-haldusoigus-2",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-motivatsiooni-olemus-hindamine-ja-toetamine-hariduspsuhholoogia-vaatest",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/motivatsiooni-olemus-hindamine-ja-toetamine-hariduspsuhholoogia-vaatest",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-muuseumiharidus",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/muuseumihariduse-mikrokraad",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-oppimine-ja-opetamine-tervishoiuasutuses",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/oppimine-ja-opetamine-tervishoiuasutuses",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-poliitika-kujundamine-ja-kommunikatsioon",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/poliitika-kujundamine-ja-kommunikatsioon-1",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-riigikaitseopetus",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/riigikaitseopetuse-mikrokraad",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-sissejuhatus-sotsiaalpedagoogikasse",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/sissejuhatus-sotsiaalpedagoogikasse-1",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-sooritus-ja-spordipsuhholoogia",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/sooritus-ja-spordipsuhholoogia",
+      "sourceCheckedAt": "2026-07-31",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-sotsiaaltoo-ja-sotsiaalpoliitika",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/sotsiaaltoo-ja-sotsiaalpoliitika-1",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-taiskasvanute-koolitamine",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/taiskasvanute-koolitamine-2026",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-taiskasvanute-koolituste-korraldus",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/taiskasvanute-koolituste-korraldus",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-tehisintellekt-taienduskoolituse-arendamisel-ja-karjaarinoustamises",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/mikrokvalifikatsioon-tehisintellekt-taienduskoolituse-arendamisel-ja-karjaarinoustamises",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-tervisenoustamine",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/tervisenoustamine",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-tooelu-kvaliteedi-votmetegurid-organisatsioonis",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/tooelu-kvaliteedi-votmetegurid-organisatsioonis",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-tuge-vajav-laps-koolieelses-eas",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/tuge-vajav-laps-koolieelses-eas-0",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-vaimne-ja-fuusiline-tervis-ning-tervisesonumite-disain",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/vaimne-ja-fuusiline-tervis-ning-tervisesonumite-disain",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "tallinna-ulikool-visuaalkunstiteraapia-alused",
+      "provider": "Tallinna Ülikool",
+      "sourceUrl": "https://www.tlu.ee/koolitused/visuaalkunstiteraapia-alused-2026-sugis-0",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_blocked",
+      "publicationBasis": "ehis_open_data_and_manual_review"
+    },
+    {
+      "id": "taltech-arijuhtimine-digitaalse-ja-kestliku-tuleviku-jaoks",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55646",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-arilogistika",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55627",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-ariprotsessid-digiuhiskonnas",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55644",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-ariprotsesside-juhtimine-tehisintellekti-abil",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56384",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-aritegevuse-jarjepidevus-hubriidsojas",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56404",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-ariuhingu-omaniku-meistriklass",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56564",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-auditeerimise-baasteadmised",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55424",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-avalik-haldus-ja-kaasaegne-andmepohine-valitsemine",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55444",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-energeetika-arikeskkond-ja-ettevotlus",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56133",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-energiastrateegia",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55688",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-ettevotlus",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55464",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-finants-ja-investeeringute-analuus",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55484",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-hooneautomaatika-ja-tehnosusteemid",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55686",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-hoonete-elektri-ja-automaatikatehnika",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55687",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-hoonete-energiatohususe-modelleerimine",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55685",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-inimeste-ja-vorgustike-juhtimine-avalikus-sektoris",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55524",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-intellektuaalomandioigus-euroopa-liidu-digitaalsel-uhtsel-turul",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55664",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-it-juhtimine-ja-ariarhitektuur",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55884",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-juhtimine-juhendamine-coaching-ja-mentorlus",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56104",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-kestlik-maavarade-uurimine-kaevandamine-ja-ringmajandus",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56107",
+      "sourceCheckedAt": "2026-09-14",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-kiibidisain",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56025",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-kosmoseoperatsioonid",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56044",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-kuberohud-tehisintellekt-ja-pahavara",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56285",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-materjalide-taaskasutus-ja-okodisain",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56144",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-mehitamata-susteemid",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56127",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-personali-varbamine",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55544",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-piirdetarindite-projekteerimine",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56130",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-programmeerimine-i",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56004",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-raamatupidamise-ja-rahanduse-kaasaegsed-teemad-labi-esg-ja-finantsinnovatsiooni-prisma",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55645",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-rahatarkus-ja-investeerimine",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55584",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-ringmajandus-ja-materjalitehnoloogia",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56064",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-rohelised-energiatehnoloogiad",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56066",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-rohelised-energiatehnoloogiad-ja-soojusmajandus",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56005",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-soojusenergeetika-ja-energiaprotsesside-tehnoloogiad",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56024",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-strateegiline-juhtimine-ja-poliitikaanaluus-avalikus-sektoris",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55586",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-strateegiline-juhtimisarvestus-ja-finantsjuhtimine",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55626",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-teenusedisain",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55624",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-tehisintellekt-andmekaeve-ja-masinope",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55944",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-tehnoloogiaoigus",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55564",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-toit-ja-toitumine",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/56106",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-toitlustuskorralduse-akadeemia",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55284",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-tookeskkonna-kvaliteedi-juhtimine",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55604",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "taltech-turundus",
+      "provider": "TalTech",
+      "sourceUrl": "https://taltech.ee/kursus/55625",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-andmeanaluus",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://math.ut.ee/et/sisu/mikrokraadiprogramm-andmeanaluus",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-andmepohine-riskijuhtimine",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://majandus.ut.ee/et/sisu/andmepohine-riskijuhtimine",
+      "sourceCheckedAt": "2026-09-14",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-andmeteadus",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://cs.ut.ee/et/sisu/andmeteaduse-mikrokraad",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-bioloogia-opetamine-gumnaasiumis",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://pedagogicum.ut.ee/et/op-akadeemia-mikrokraadid",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-bioloogia-opetamine-iii-kooliastmes",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://pedagogicum.ut.ee/et/op-akadeemia-mikrokraadid",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-digitoote-innovatsioon",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://cs.ut.ee/et/digitoote-innovatsioon",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-disainiuuringud-teenuste-disainis",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://parnu.ut.ee/et/sisu/disainiuuringud-teenuste-disainis",
+      "sourceCheckedAt": "2026-09-28",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-fuusika-opetamine-pohikoolis-8-klassi-kursused-parnus",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://pedagogicum.ut.ee/et/op-akadeemia-mikrokraadid",
+      "sourceCheckedAt": "2026-06-24",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-fuusika-opetamine-pohikoolis-9-klassi-kursused",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://pedagogicum.ut.ee/et/op-akadeemia-mikrokraadid",
+      "sourceCheckedAt": "2026-06-24",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-geograafia-didaktika",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://pedagogicum.ut.ee/et/op-akadeemia-mikrokraadid",
+      "sourceCheckedAt": "2026-06-24",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-geograafia-opetamine-gumnaasiumis",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://pedagogicum.ut.ee/et/op-akadeemia-mikrokraadid",
+      "sourceCheckedAt": "2026-06-24",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-heaolu-mootmine-ja-mojutamine",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://uhiskond.ut.ee/et/sisu/mikrokraad-heaolu-mootmine-ja-mojutamine",
+      "sourceCheckedAt": "2026-09-14",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-histoloogia-histoloogilise-tehnika-alustega",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://meditsiiniteadused.ut.ee/et/sisu/histoloogia-histoloogilise-tehnika-alustega",
+      "sourceCheckedAt": "2026-09-14",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-informaatika-didaktika",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://cs.ut.ee/et/sisu/informaatika-didaktika",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-infotehnoloogia-alused",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://cs.ut.ee/et/sisu/infotehnoloogia-alused",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-infovastupidavus",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://uhiskond.ut.ee/et/sisu/infovastupidavuse-mikrokraad",
+      "sourceCheckedAt": "2026-09-28",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-innovatsiooni-meistriklass",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://majandus.ut.ee/et/sisu/innovatsiooni-mikrokraad",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-islam-tana-kultuurist-konfliktideni",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://usuteaduskond.ut.ee/et/sisu/islam-tana-kultuurist-konfliktideni",
+      "sourceCheckedAt": "2026-09-28",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-kaasaegne-teatriopetus",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://viljandi.ut.ee/et/kaasaegse-teatriopetuse-mikrokraadiprogramm",
+      "sourceCheckedAt": "2026-06-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-keemia-opetamine-gumnaasiumis",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://pedagogicum.ut.ee/et/op-akadeemia-mikrokraadid",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-keemia-opetamine-pohikoolis",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://pedagogicum.ut.ee/et/op-akadeemia-mikrokraadid",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-kestliku-ja-sidusa-tulevikulinna-kujundamine",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://uhiskond.ut.ee/et/sisu/mikrokraadiprogramm-kestliku-ja-sidusa-tulevikulinna-kujundamine",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-kinnisvaraturg-ja-ari",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://majandus.ut.ee/et/sisu/kinnisvaraturg-ja-ari",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-kogukondade-arendamine",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://uhiskond.ut.ee/et/sisu/mikrokraad-kogukonna-arendamine",
+      "sourceCheckedAt": "2026-09-14",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-loodusteaduste-didaktika-bioloogia-eriala",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://pedagogicum.ut.ee/et/op-akadeemia-mikrokraadid",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-loovettevotja",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://viljandi.ut.ee/et/loovettevotja-mikrokraad",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-loovettevotluse-projektijuhtimine",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://viljandi.ut.ee/et/loovettevotluse-projektijuhtimine",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-loovus-ja-eneseareng",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://viljandi.ut.ee/et/loovus-ja-eneseareng",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-majanduspoliitika-kujundamine-digiajastul",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://majandus.ut.ee/et/sisu/majanduspoliitika-kujundamine-digiajastul",
+      "sourceCheckedAt": "2026-09-28",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-matemaatika-didaktika-ja-koolimatemaatika",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://pedagogicum.ut.ee/et/op-akadeemia-mikrokraadid",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-matemaatikaopetaja-erialaained",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://pedagogicum.ut.ee/et/op-akadeemia-mikrokraadid",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-matemaatikaopetaja-erialaained-ida-virumaa-opetajatele-narvas",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://pedagogicum.ut.ee/et/op-akadeemia-mikrokraadid",
+      "sourceCheckedAt": "2026-06-29",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-okoloogia-ja-looduskaitse-globaalmuutuste-tingimustes",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://omi.ut.ee/et/uudis/mikrokraadiprogramm-okoloogia-ja-looduskaitse-globaalmuutuste-tingimustes",
+      "sourceCheckedAt": "2026-09-14",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-programmeerimine",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://cs.ut.ee/et/sisu/programmeerimine",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-riigihangete-korraldamine",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://skytte.ut.ee/et/sisu/mikrokraadiprogramm-riigihangete-korraldamine",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-ruumiline-planeerimine-ja-keskkond",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://geograafia.ut.ee/et/sisu/mikrokraadiprogramm-ruumiline-planeerimine-ja-keskkond",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-soorituspsuhholoogia-praktikule",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://psuhholoogia.ut.ee/et/sisu/mikrokraad-soorituspsuhholoogias",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-susteemianaluus",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://cs.ut.ee/et/sisu/susteemianaluus",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-teabehaldus-teoorias-ja-praktikas",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://uhiskond.ut.ee/et/sisu/mikrokraadiprogramm-teabehaldus-teoorias-ja-praktikas",
+      "sourceCheckedAt": "2026-09-14",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-teenuste-arendamine-ja-turundus",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://parnu.ut.ee/et/sisu/mikrokraadiprogramm-teenuste-arendamine-ja-turundus",
+      "sourceCheckedAt": "2026-09-14",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-tehisaru-meetodid",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://cs.ut.ee/et/tehisaru-meetodid",
+      "sourceCheckedAt": "2026-09-10",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-tehnoloogia-transformatiivne-kasutamine-haridustuleviku-kujundamiseks",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://haridus.ut.ee/et/sisu/mikrokraadiprogramm-tehnoloogia-transformatiivne-kasutamine-haridustuleviku-kujundamiseks",
+      "sourceCheckedAt": "2026-09-14",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-terviseteaduste-alused",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://meditsiiniteadused.ut.ee/et/terviseteaduste-alused",
+      "sourceCheckedAt": "2026-10-12",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-turundus-sotsiaalmeedias-ja-brandijuhtimine-mikroettevotetele",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://parnu.ut.ee/et/uudis/mikrokraadiprogramm-turundus-sotsiaalmeedias-ja-brandijuhtimine-mikroettevotetele",
+      "sourceCheckedAt": "2026-09-14",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-usundid-kultuuri-ja-motteloos",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://usuteaduskond.ut.ee/et/sisu/mikrokraadiprogramm-usundid-kultuuri-ja-motteloos",
+      "sourceCheckedAt": "2026-09-14",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    },
+    {
+      "id": "tartu-ulikool-videomangude-narratiivid",
+      "provider": "Tartu Ülikool",
+      "sourceUrl": "https://ut.ee/et/koolitused/videomangude-narratiivid",
+      "sourceCheckedAt": "2026-09-10",
+      "fetchPolicy": "robots_allowed",
+      "publicationBasis": "provider_page_robots_allowed"
+    }
+  ]
+}
