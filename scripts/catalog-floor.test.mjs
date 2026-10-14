@@ -16,6 +16,7 @@
 // them. Runs as the first step of `npm run build` — the pre-commit/pre-deploy gate.
 import test from "node:test";
 import assert from "node:assert/strict";
+import { reconcileDurationEap } from "../src/data/eapGuard.ts";
 
 // The committed snapshot — the AUTHORITATIVE source of truth.
 import taltech from "../src/data/catalog/taltech.json" with { type: "json" };
@@ -188,7 +189,12 @@ test("catalog output keeps current AMOS facts; only official EHIS facts may over
       if (officialOverrideKeys.has(key)) continue;
       // EAP valvur (src/data/eapGuard.ts): märgitud "vajab kontrolli" kirjel ei avaldata
       // ka EAP-d kordavat durationText'i ("3 EAP"); ainus lubatud erand.
-      if (key === "durationText" && output.eapReview && output.durationText === null) continue;
+      // Kestuse tekst joondatakse avaldatava EAP-ga (reconcileDurationEap): ainus lubatud erinevus.
+      if (key === "durationText") {
+        assert.equal(output.durationText, reconcileDurationEap(value, output.ects), `durationText ${current.id}`);
+        continue;
+      }
+      if (key === "instances") continue; // kestuse joondus; sisu kontrollitakse eap-guard.test.mjs-is
       assert.deepEqual(output[key], value, `catalog must preserve current AMOS ${key} for ${current.id}`);
     }
   }

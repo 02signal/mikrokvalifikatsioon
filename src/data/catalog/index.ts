@@ -7,7 +7,7 @@ import legacyMuudKoolid from "./muud-koolid.json" with { type: "json" };
 import { assignSlugs, slugify } from "../slug.ts";
 import { parseIntakeDates, resolveCatalogStartDate } from "../dates.ts";
 import { ehisOverrideFor, matchForCatalogEntry, type EhisAuthoritative } from "../ehisFacts/index.ts";
-import { eapReviewFor, type EapReview } from "../eapGuard.ts";
+import { eapReviewFor, reconcileDurationEap, type EapReview } from "../eapGuard.ts";
 import { isEhisOnly } from "../sourceBasis.ts";
 import { ehisOnlyBase } from "../ehisOnly.ts";
 import { ehisFetchedAt } from "../ehisFacts/index.ts";
@@ -556,14 +556,21 @@ export const catalog: CatalogEntryWithSlug[] = sorted.map((feedEntry) => {
     : null;
   const ehisPublic = sharedGroup ? { ...ehis, ...sharedGroup } : ehis;
   const reviewedField = (fieldReview.fields as Record<string, string>)[entry.id as string] ?? null;
+  const finalEcts: number | null = eapReview ? null : (patch.ects !== undefined ? patch.ects : entry.ects) ?? null;
   return {
     ...entry,
     ...patch,
-    // Feedi durationText kordab sageli sama (vale) mahtu ("3 EAP") — varjame ka selle.
-    ...(ehisOnly ? { publicBasis: "ehis_only" as const } : {}),
-    ...(eapReview
-      ? { ects: null, eapReview, durationText: /\bEAP\b/i.test(entry.durationText ?? "") ? null : entry.durationText }
+    // Kestuse tekst ei tohi väita teist EAP-d kui avaldatav `ects` (märgitud kirjel ects=null: EAP-märk eemaldatakse;
+    // EHIS-iga üle kirjutatud kirjel asendatakse avaldatava väärtusega). Ka instances[] (#150 värav).
+    durationText: reconcileDurationEap(entry.durationText, finalEcts),
+    ...(Array.isArray((entry as unknown as { instances?: unknown }).instances)
+      ? {
+        instances: ((entry as unknown as { instances: Array<{ durationText?: string | null }> }).instances)
+          .map((i) => ({ ...i, durationText: reconcileDurationEap(i.durationText, finalEcts) }))
+      }
       : {}),
+    ...(ehisOnly ? { publicBasis: "ehis_only" as const } : {}),
+    ...(eapReview ? { ects: null, eapReview } : {}),
     // Both runtime sources are canonical AMOS feeds and have already passed
     // the required, unique programme-id gate above.
     slug: entry.id as string,

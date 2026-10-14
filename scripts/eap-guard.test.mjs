@@ -7,7 +7,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { eapReviewFor, MICRODEGREE_MIN_EAP, MICRODEGREE_MAX_EAP } from "../src/data/eapGuard.ts";
+import { eapReviewFor, reconcileDurationEap, MICRODEGREE_MIN_EAP, MICRODEGREE_MAX_EAP } from "../src/data/eapGuard.ts";
 import { matchForCatalogEntry, stripListingDecor, ehisCurricula } from "../src/data/ehisFacts/index.ts";
 import { catalog } from "../src/data/catalog/index.ts";
 
@@ -117,5 +117,37 @@ test("Muusikapsühholoogia 2026/27 näitab 15 EAP-d; kinnitamata konfliktikirjed
   for (const e of catalog.filter((x) => x.eapReview?.reasons.includes("ehis-konflikt"))) {
     assert.equal(e.ects, null, `${e.slug}: kinnitamata konflikt ei tohi EAP-d avaldada`);
     assert.ok(!(e.slug in conflictResolutions.resolutions));
+  }
+});
+
+// ---- durationText ei tohi väita teist EAP-d kui ects (#150 värav) ----
+const eapNumbers = (text) => [...String(text ?? "").matchAll(/(\d{1,3})\s*(?:EAP|ECTS)\b/gi)].map((m) => Number(m[1]));
+
+test("reconcileDurationEap: asendab vale EAP-märgi, jätab ülejäänud, eemaldab märgi kui ects teadmata", () => {
+  assert.equal(reconcileDurationEap("3 EAP", 15), "15 EAP");
+  assert.equal(reconcileDurationEap("3 EAP, 312 tundi", 12), "12 EAP, 312 tundi");
+  assert.equal(reconcileDurationEap("15 EAP", 15), "15 EAP", "õige väärtus jääb puutumata");
+  assert.equal(reconcileDurationEap("2 semestrit (september 2026 – mai 2027)", 15), "2 semestrit (september 2026 – mai 2027)");
+  assert.equal(reconcileDurationEap("3 EAP", null), null, "ects teadmata: ainult EAP-märgiga tekst kaob");
+  assert.equal(reconcileDurationEap("3 EAP, 312 tundi", null), "312 tundi");
+  assert.equal(reconcileDurationEap(null, 15), null);
+});
+
+test("päris kataloog: durationText (kirje ja instances[]) ei sisalda EAP-arvu, mis erineb avaldatavast ects-ist", () => {
+  for (const e of catalog) {
+    for (const text of [e.durationText, ...(e.instances ?? []).map((i) => i.durationText)]) {
+      for (const n of eapNumbers(text)) assert.equal(n, e.ects, `${e.slug}: durationText ${JSON.stringify(text)} vs ects ${e.ects}`);
+      if (e.ects == null) assert.deepEqual(eapNumbers(text), [], `${e.slug}: ects teadmata, aga durationText kannab EAP-d`);
+    }
+  }
+});
+
+test("kinnitatud lahenduse read: reviewed_at on ISO-kuupäev, tõend on sisuline, otsustaja on nimetatud", () => {
+  for (const [id, row] of Object.entries(conflictResolutions.resolutions)) {
+    assert.match(row.reviewed_at, /^\d{4}-\d{2}-\d{2}$/, `${id}: reviewed_at`);
+    assert.ok(!Number.isNaN(Date.parse(row.reviewed_at)), `${id}: reviewed_at ei ole kehtiv kuupäev`);
+    assert.ok(row.evidence.length >= 40, `${id}: tõend on liiga lühike`);
+    assert.ok(row.decided_by.length >= 5, `${id}: otsustaja puudub`);
+    assert.match(row.ehis_kood, /^\d+$/, `${id}: ehis_kood`);
   }
 });
