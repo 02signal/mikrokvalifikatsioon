@@ -503,20 +503,13 @@ const schema = {
     </style>
 
     <script>
-      type Program = {
-        name: string;
-        provider: string;
-        url: string;
-        field: string;
-        ects: number | null;
-        priceText: string | null;
-        durationText: string | null;
-        format: string | null;
-        language: string | null;
-        intakeText: string | null;
-        summary: string;
-        slug?: string;
-      };
+      import { matchProgrammes, type MatchProgram } from "../lib/suunatest-match";
+
+      // catalog.json rida (avalik, juba EHIS-only piiratud): vt src/lib/suunatest-match.ts.
+      type Program = MatchProgram;
+
+      const escapeHtml = (value: unknown): string =>
+        String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c] as string));
 
       // Väljaminev link kooli lehele koos UTM-iga (lead-gen tõend freemium-mudelile).
       const outbound = (p: Program): string => {
@@ -552,13 +545,6 @@ const schema = {
         input.addEventListener("focus", () => { void loadPrograms(); }, { once: true });
       });
 
-      const parsePrice = (text: string | null): number | null => {
-        if (!text) return null;
-        if (/tasuta/i.test(text)) return 0;
-        const digits = text.replace(/\s/g, "").match(/\d+/);
-        return digits ? Number(digits[0]) : null;
-      };
-
       const FUNDING_HINTS: Record<string, string> = {
         tootan: "Kõige kiirem rada on tööandja koolituseelarve: vii talle konkreetne programm, hind ja arvutus, mida ettevõte võidab. Küsi ka koolilt, kas sellel õppekaval on sihtrühmale suunatud rahastust.",
         tootu: "Vali kataloogist konkreetne programm ja võta nimi, maht ja hind kaasa. Küsi koolilt, kas õppekaval on sihtrühmale suunatud rahastust, ja uuri eraldi, mida sinu olukorras üldse toetatakse – konkreetse plaaniga saad kiirema vastuse.",
@@ -571,59 +557,58 @@ const schema = {
         const field = String(data.get("field") || "");
         const status = String(data.get("status") || "tootan");
         const format = String(data.get("format") || "");
-        const budget = Number(data.get("budget") || 0);
+        const budgetRaw = String(data.get("budget") || "");
         const all = await loadPrograms();
 
-        let pool = field ? all.filter((p) => p.field === field) : all;
-        if (!pool.length) pool = all;
-        const scored = pool.map((p) => {
-          let score = 0;
-          const price = parsePrice(p.priceText);
-          if (field && p.field === field) score += 3;
-          if (format === "veebis" && (p.format === "veebis" || p.format === "hübriid")) score += 2;
-          if (budget > 0 && price !== null && price <= budget) score += 2;
-          if (budget === 0 && price === 0) score += 2;
-          if (p.language === "et") score += 1;
-          if (price !== null) score += 1;
-          if (p.intakeText) score += 1;
-          return { p, score };
-        }).sort((a, b) => b.score - a.score);
-
-        const top = scored.slice(0, 3).map((s) => s.p);
+        // Teema on värav (EHIS-i õppekavarühm), vorm ja eelarve filtreerivad ausalt, logistika on ainult
+        // järjestus; kui ei sobi, ütleme seda (HTM 08.10.2026). Vt src/lib/suunatest-match.ts.
+        const outcome = matchProgrammes(all, { field, format, budget: budgetRaw });
+        const top = outcome.matches.map((s) => s.p);
         result.hidden = false;
         if (contactBox) contactBox.hidden = false;
 
-        if (!top.length) {
-          titleEl.textContent = "Kataloog ei laadinud või valikuga ei sobinud ükski programm.";
-          matchesBox.innerHTML = "";
+        if (!all.length) {
+          // Laadimisviga ei ole tulemus: ei saada tool_completed sündmust ega täida kokkuvõtet.
+          titleEl.textContent = "Kataloog ei laadinud. Proovi leht uuesti avada või vaata kogu kataloogi.";
+          matchesBox.innerHTML = '<p><a href="/kataloog/">Ava kogu kataloog</a></p>';
+          return;
+        } else if (outcome.kind === "none") {
+          titleEl.textContent = `Valdkonnas „${field}" ei leidnud me praegu sobivat programmi.`;
+          matchesBox.innerHTML = '<p>Kataloogis pole selles valdkonnas sulle sobivat mikrokraadi või mikrokvalifikatsiooni. Vaata <a href="/kataloog/">kogu kataloogi</a> või <a href="/oskused/">otsi oskuse järgi</a>.</p>';
+        } else if (outcome.kind === "none-filtered") {
+          titleEl.textContent = field
+            ? `Valdkonnas „${field}" on ${outcome.topicalCount} programmi, aga ükski ei sobi su vormi või eelarvega.`
+            : "Ükski programm ei sobi su vormi ja eelarve kombinatsiooniga.";
+          matchesBox.innerHTML = '<p>Proovi eelarvet või õppevormi lõdvendada või vaata <a href="/kataloog/">kogu kataloogi</a>.</p>';
         } else {
           titleEl.textContent = field
-            ? `Sinu valdkonnas (${field}) paistavad kõige loogilisemad need:`
-            : "Ilma valdkonda valimata pakume laia valiku tugevaimad:";
-          matchesBox.innerHTML = top.map((p) => `
+            ? `Sinu valdkonnas (${field}) sobivad kõige paremini need:`
+            : "Ilma valdkonda valimata on tugevaimad need:";
+          matchesBox.innerHTML = outcome.matches.map(({ p }) => `
             <article class="measure-card">
               <div>
-                <span class="status-tag status-blue">${p.field}</span>
-                <h3>${p.name}</h3>
-                <p>${p.summary}</p>
+                <span class="status-tag status-blue">${escapeHtml(p.field)}</span>
+                <h3>${escapeHtml(p.name)}</h3>
+                <p>${escapeHtml(p.summary)}</p>
               </div>
               <dl>
-                <div><dt>Kool</dt><dd>${p.provider}</dd></div>
-                ${p.priceText ? `<div><dt>Hind</dt><dd>${p.priceText}</dd></div>` : ""}
-                ${p.ects ? `<div><dt>Maht</dt><dd>${p.ects} EAP</dd></div>` : ""}
+                <div><dt>Kool</dt><dd>${escapeHtml(p.provider)}</dd></div>
+                ${p.priceText ? `<div><dt>Hind</dt><dd>${escapeHtml(p.priceText)}</dd></div>` : p.publicBasis === "ehis_only" ? '<div><dt>Hind</dt><dd>Ametlik register, hinda pole. Küsi pakkujalt</dd></div>' : '<div><dt>Hind</dt><dd>Täpsustamisel</dd></div>'}
+                ${p.ects ? `<div><dt>Maht</dt><dd>${escapeHtml(p.ects)} EAP</dd></div>` : ""}
               </dl>
-              <a href="${outbound(p)}" target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label="suunatest_${p.provider}">Vaata kooli lehel</a>
+              <a href="${escapeHtml(outbound(p))}" target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label="suunatest_${escapeHtml(p.provider)}">Vaata kooli lehel</a>
             </article>
           `).join("");
         }
         fundingEl.textContent = FUNDING_HINTS[status] || FUNDING_HINTS.tootan;
 
         const summary = top.map((p) => `${p.name} (${p.provider}${p.priceText ? ", " + p.priceText : ""})`).join("; ");
-        if (summaryField) summaryField.value = `Olukord: ${status}; valdkond: ${field || "-"}; eelarve: ${budget || "-"}; valik: ${summary}`;
+        const budgetLabel = (form.querySelector("#stBudget") as HTMLSelectElement | null)?.selectedOptions[0]?.text || "-";
+        if (summaryField) summaryField.value = `Olukord: ${status}; valdkond: ${field || "-"}; eelarve: ${budgetLabel}; valik: ${summary}`;
 
         track("tool_completed", {
           tool_name: "suunatest",
-          result_tier: top.length ? "leitud" : "tühi",
+          result_tier: top.length ? "leitud" : outcome.kind === "none" ? "ei_sobi" : outcome.kind === "none-filtered" ? "filtreeritud_tühi" : "tühi",
           result_route: field || "valdkond_valimata",
           status_segment: status
         });
