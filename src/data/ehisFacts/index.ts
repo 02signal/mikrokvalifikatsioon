@@ -63,16 +63,44 @@ function sanitize(s: EhisFactsSnapshot): EhisFactsSnapshot {
 
 const local = sanitize(snapshot as unknown as EhisFactsSnapshot);
 
+let loadedFrom = "snapshot" as "feed" | "snapshot";
+
+const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
+/** A feed must not shrink the universe by more than this share versus the committed snapshot. */
+export const EHIS_FEED_MIN_SHARE_OF_SNAPSHOT = 0.9;
+
+/** Pure gate for a remote feed. Returns null when acceptable, else a short reason.
+ * Never downgrades: same envelope version, strict ISO day, not in the future, not older than the
+ * committed snapshot, and not a partial feed (record_count/curricula must agree and keep >=90%). */
+export function ehisFeedRejection(
+  feed: EhisFactsSnapshot | null | undefined,
+  committed: Pick<EhisFactsSnapshot, "snapshot_version" | "fetched_at" | "curricula">,
+  today: string = new Date().toISOString().slice(0, 10)
+): string | null {
+  if (!feed || !Array.isArray(feed.curricula) || !feed.curricula.length) return "empty";
+  if (feed.snapshot_version !== committed.snapshot_version) return "version";
+  if (typeof feed.fetched_at !== "string" || !ISO_DAY.test(feed.fetched_at)) return "fetched_at_format";
+  if (feed.fetched_at > today) return "fetched_at_future";
+  if (feed.fetched_at < committed.fetched_at) return "older_than_snapshot";
+  if (feed.record_count !== feed.curricula.length) return "record_count_mismatch";
+  if (feed.curricula.length < committed.curricula.length * EHIS_FEED_MIN_SHARE_OF_SNAPSHOT) return "partial";
+  return null;
+}
+
 async function load(): Promise<EhisFactsSnapshot> {
   if (FEED_URL) {
     try {
       const res = await fetch(FEED_URL);
       if (res.ok) {
         const data = (await res.json()) as EhisFactsSnapshot;
-        if (data?.curricula?.length && data.snapshot_version === local.snapshot_version) {
+        const rejection = ehisFeedRejection(data, local);
+        if (!rejection) {
           console.log(`[ehis] AMOS feed: ${data.curricula.length} õppekava (${FEED_URL})`);
+          loadedFrom = "feed";
           return sanitize(data);
         }
+        console.warn(`[ehis] feed lükati tagasi (${rejection}); kasutan kohalikku snapshotti`);
+        return local;
       }
       console.warn(`[ehis] feed ei vasta (HTTP ${res.status}); kasutan kohalikku snapshotti`);
     } catch (e) {
@@ -83,6 +111,25 @@ async function load(): Promise<EhisFactsSnapshot> {
 }
 
 const data = await load();
+
+/** "feed" = refreshed automatically from the AMOS host job; "snapshot" = the committed file. */
+export const ehisLoadedFrom: "feed" | "snapshot" = loadedFrom;
+
+/** Public wording of the refresh promise (HTM 08.10.2026: state last update and frequency).
+ * The site is static, so the sentence describes the BUILD: it is shown only when the data really
+ * came from the automatic AMOS feed AND is fresh enough (<= 45 days at build) for the promise to hold. */
+export const EHIS_UPDATE_CADENCE_TEXT = "Uuendatakse automaatselt vähemalt kord kuus.";
+export const EHIS_CADENCE_MAX_AGE_DAYS = 45;
+export function ehisCadenceNoteFor(
+  loadedFromFeed: boolean,
+  fetchedAt: string,
+  today: string = new Date().toISOString().slice(0, 10)
+): string | null {
+  if (!loadedFromFeed || !ISO_DAY.test(fetchedAt)) return null;
+  const ageDays = (Date.parse(today) - Date.parse(fetchedAt)) / 86_400_000;
+  return ageDays <= EHIS_CADENCE_MAX_AGE_DAYS ? EHIS_UPDATE_CADENCE_TEXT : null;
+}
+export const ehisCadenceNote: string | null = ehisCadenceNoteFor(ehisLoadedFrom === "feed", data.fetched_at);
 
 export const ehisAttribution: string = data.attribution_text;
 export const ehisPublisher: string = data.publisher;

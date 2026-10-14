@@ -6,7 +6,7 @@ import Figure from "../../components/Figure.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
 import { catalog, providersWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
-import { ehisFetchedAt, ehisProgrammeCount, ehisProviderCount } from "../../data/ehisFacts";
+import { ehisCadenceNote, ehisFetchedAt, ehisProgrammeCount, ehisProviderCount } from "../../data/ehisFacts";
 
 const providerSlug = new Map(providersWithSlug.map((p) => [p.provider, p.slug]));
 const universityEntries = catalog.filter((entry) => entry.providerType !== "erakool");
@@ -77,7 +77,7 @@ const schema = {
             <a class="btn btn-primary" href="/kataloog/" data-track-event="cta_click" data-track-label="mikrokraadid_hero_kataloog">Ava filtreeritav kataloog</a>
             <a class="btn btn-secondary" href="/andmed/" data-track-event="cta_click" data-track-label="mikrokraadid_hero_andmed">Vaata EHIS andmekaarti</a>
           </div>
-          <p class="report-date">Võrreldav kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud koolide lehtedelt: {checkedAtText}. EHIS faktikiht uuendatud: {ehisFetchedAtText}.</p>
+          <p class="report-date">Võrreldav kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud koolide lehtedelt: {checkedAtText}. EHIS faktikiht uuendatud: {ehisFetchedAtText}.{ehisCadenceNote ? ` ${ehisCadenceNote}` : ""}</p>
         </div>
       </section>
 
