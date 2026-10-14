@@ -8,6 +8,7 @@ import { parsePriceEur } from "../../data/courseSchema";
 import { credentialCommonsRelease } from "../../data/credentialCommons";
 import {
   ehisAttribution,
+  ehisCadenceNote,
   ehisFetchedAt,
   ehisFieldCount,
   ehisFieldStats,
@@ -133,7 +134,7 @@ const schema = {
             <a class="btn btn-secondary" href="/kuidas-koostame/" data-track-event="cta_click" data-track-label="andmed_metoodika">Kuidas andmed kogume</a>
           </div>
           <p class="report-date">
-            EHIS snapshot: {ehisFetchedAtText}. Võrreldav kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}
+            EHIS snapshot: {ehisFetchedAtText}.{ehisCadenceNote ? ` ${ehisCadenceNote}` : ""} Võrreldav kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}
           </p>
           <p class="report-date">
             Masinloetav <strong>Linked Data</strong> järgib avatud <a href="https://credentialcommons.org/" rel="noopener">Credential Commons</a> profiili

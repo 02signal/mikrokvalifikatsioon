@@ -5,7 +5,7 @@ import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
 import { catalog, providers, fields, fieldsWithSlug, providersWithSlug, catalogCheckedAt, catalogUpdatedAt } from "../../data/catalog";
 import { outboundUrl } from "../../data/courseSchema";
-import { ehisFetchedAt, ehisProgrammeCount, ehisProviderCount } from "../../data/ehisFacts";
+import { ehisCadenceNote, ehisFetchedAt, ehisProgrammeCount, ehisProviderCount } from "../../data/ehisFacts";
 
 const checkedAtText = catalogCheckedAt.split("-").reverse().join(".");
 const updatedAtText = catalogUpdatedAt.split("-").reverse().join(".");
@@ -92,7 +92,7 @@ const schema = {
             <div><strong>{providers.length}</strong><span>kooli kataloogis</span></div>
           </div>
           <p class="report-date">
-            Võrreldav kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}. EHIS faktikiht uuendatud: {ehisFetchedAtText}.
+            Võrreldav kataloog uuendatud: {updatedAtText}. Avalikud allikafaktid kontrollitud: {checkedAtText}. EHIS faktikiht uuendatud: {ehisFetchedAtText}.{ehisCadenceNote ? ` ${ehisCadenceNote}` : ""}
             <a href="/andmed/" data-track-event="cta_click" data-track-label="catalog_to_data">Vaata kogu andmekaarti →</a>
           </p>
         </div>
