@@ -9,6 +9,7 @@
 // interchangeable.
 
 import snapshot from "./snapshot.json" with { type: "json" };
+import conflictResolutions from "../ehisConflictResolutions.json" with { type: "json" };
 import type { CatalogEntry } from "../catalogSchema";
 
 export interface EhisCurriculum {
@@ -288,6 +289,11 @@ export function matchForCatalogEntry(entry: CatalogEntry): EhisMatch {
       const newest = exact.slice().sort((a, b) => recency(b).localeCompare(recency(a)))[0];
       return { confidence: "exact", curriculum: newest };
     }
+    // Omaniku poolt käsitsi kinnitatud lahendus (src/data/ehisConflictResolutions.json): sama programmi id,
+    // konkreetne EHIS-i kood. Kood peab ikka olema nende kandidaatide seas (muidu ei rakendu).
+    const resolved = entry.id ? (conflictResolutions.resolutions as Record<string, { ehis_kood: string }>)[entry.id] : undefined;
+    const chosen = resolved ? exact.find((c) => c.ehis_kood === resolved.ehis_kood) : undefined;
+    if (chosen) return { confidence: "exact", curriculum: chosen };
     return { confidence: "none", curriculum: null, conflict: exact };
   }
 

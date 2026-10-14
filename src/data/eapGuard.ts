@@ -58,3 +58,18 @@ export function eapReviewFor(input: {
     }))
   };
 }
+
+/**
+ * Kestuse tekst ei tohi väita teist EAP-d kui avaldatav `ects` (#150 värav: Muusikapsühholoogia näitas
+ * ects=15 ja durationText="3 EAP"). Iga "N EAP" märk, mis erineb lõplikust `ects`-ist, asendatakse selle
+ * väärtusega; kui `ects` on teadmata (null), eemaldatakse EAP-märk, ja tühjaks jäänud tekst on null.
+ * Muu osa ("312 tundi", "2 semestrit") jääb puutumata.
+ */
+export function reconcileDurationEap(text: string | null | undefined, ects: number | null): string | null {
+  if (text == null) return null;
+  const pattern = /(\d{1,3})\s*(?:EAP|ECTS)\b/gi;
+  let result = text.replace(pattern, (token, n) => (Number(n) === ects ? token : ects == null ? "" : `${ects} EAP`));
+  if (ects == null) result = result.replace(/^[\s,;·–-]+|[\s,;·–-]+$/g, "").replace(/\s*[,;]\s*[,;]\s*/g, ", ");
+  result = result.trim();
+  return result ? result : null;
+}
