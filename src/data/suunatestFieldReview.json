@@ -1,0 +1,23 @@
+{
+  "note": "Käsitsi üle vaadatud valdkond programmidele, millel EHIS-i õppekavarühma EI ole (kureeritud 'field' on AMOS-i märksõnapõhine ja eksib: nt Geograafia didaktika oli 'IT ja andmed'). Suunatest kasutab seda ainult siis, kui EHIS-i rühma pole. Uus rühmata programm ilma reata siin EI ilmu ühegi kindla valdkonna tulemusse ja teeb testi punaseks (scripts/suunatest-match.test.mjs). Toimetuslik otsus: omanik võib muuta.",
+  "reviewed_at": "2026-10-14",
+  "fields": {
+    "ebs-digitaalsete-toodete-protsesside-ja-operatsioonide-juhtimine": "majandus ja juhtimine",
+    "ebs-digitoodete-eestvedamine-ja-muudatuste-juhtimine": "majandus ja juhtimine",
+    "eesti-ettevotluskorgkool-mainor-ettevotluse-mikrokraad-tallinnas": "majandus ja juhtimine",
+    "eesti-ettevotluskorgkool-mainor-ettevotluse-mikrokraad-tartus": "majandus ja juhtimine",
+    "eesti-kunstiakadeemia-arhitektuuri-konserveerimine-ja-restaureerimine": "disain ja loovus",
+    "eesti-kunstiakadeemia-baltisaksa-kultuuriparand": "muu",
+    "eesti-maaulikool-aiandus-iluaiandus": "muu",
+    "eesti-muusika-ja-teatriakadeemia-muusikapsuhholoogia": "disain ja loovus",
+    "eesti-muusika-ja-teatriakadeemia-muusikaproduktsioon-ja-laulukirjutamine": "disain ja loovus",
+    "tallinna-tehnikakorgkool-riskide-ja-kuberturvalisuse-juhtimine-logistikas": "IT ja andmed",
+    "tallinna-tehnikakorgkool-voorkeeled-inseneerias": "muu",
+    "tallinna-ulikool-adult-education-and-adult-educator-in-transition": "haridus",
+    "tallinna-ulikool-hariduspsuhholoogia-klassiruumis": "terviseteadus",
+    "tallinna-ulikool-tooelu-kvaliteedi-votmetegurid-organisatsioonis": "majandus ja juhtimine",
+    "taltech-juhtimine-juhendamine-coaching-ja-mentorlus": "majandus ja juhtimine",
+    "taltech-kestlik-maavarade-uurimine-kaevandamine-ja-ringmajandus": "tehnika ja tootmine",
+    "tartu-ulikool-geograafia-didaktika": "haridus"
+  }
+}

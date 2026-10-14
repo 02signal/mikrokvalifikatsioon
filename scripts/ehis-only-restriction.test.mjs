@@ -19,7 +19,7 @@ const restricted = catalog.filter((e) => e.publicBasis === "ehis_only");
 const ALLOWED_PUBLIC_KEYS = new Set([
   ...EHIS_ONLY_KEPT_KEYS,
   // EHIS-i override ja alati-olemas olevad tuletised
-  "ects", "language", "slug", "ehis", "eapReview", "publicBasis",
+  "ects", "language", "slug", "ehis", "eapReview", "publicBasis", "topicField",
   // tüübi nõutavad, ent tühjaks/nulliks seatud väljad
   "durationText", "priceText", "format", "intakeText", "summary", "sourceCheckedAt", "goalText", "outcomes",
   "outcomeObjects", "assessmentText", "registrationDeadline", "startDate", "startMonth", "startDatePrecision",
