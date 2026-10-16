@@ -61,12 +61,24 @@ export function eapReviewFor(input: {
 
 /**
  * Kestuse tekst ei tohi väita teist EAP-d kui avaldatav `ects` (#150 värav: Muusikapsühholoogia näitas
- * ects=15 ja durationText="3 EAP"). Iga "N EAP" märk, mis erineb lõplikust `ects`-ist, asendatakse selle
- * väärtusega; kui `ects` on teadmata (null), eemaldatakse EAP-märk, ja tühjaks jäänud tekst on null.
- * Muu osa ("312 tundi", "2 semestrit") jääb puutumata.
+ * ects=15 ja durationText="3 EAP"). Lihtne kuju — ainult täisarvulised "N EAP" märgid, kõik sama väärtusega —
+ * parandatakse: vale märk asendatakse `ects`-iga, õige jääb; kui `ects` on teadmata (null), eemaldatakse EAP-märk
+ * ja tühjaks jäänud tekst on null. Muu osa ("312 tundi", "2 semestrit") jääb puutumata.
+ *
+ * Fail-closed: kui EAP-väljend pole üheselt loetav (kümnendmurd "7,5 EAP", vahemik "5–10 EAP", mitu erinevat
+ * väärtust "3 EAP + 12 EAP", number sildi järel "EAP: 15"), ei arvata ega asendata, vaid tekst, mis `ects`-ist
+ * erineb või mida ei saa kontrollida, kaob (null); avaldatav maht tuleb `ects`-ist. Täpselt `ects`-iga ühtiv
+ * üheselt loetav tekst jääb samuti puutumata.
  */
 export function reconcileDurationEap(text: string | null | undefined, ects: number | null): string | null {
   if (text == null) return null;
+  const simple = [...text.matchAll(/(?<!\d|\d[.,]|[–—-]\s?)(\d{1,3})\s*(?:EAP|ECTS)\b(?!\s*[–—-]\s*\d)/gi)];
+  const labels = [...text.matchAll(/\b(?:EAP|ECTS)\b/gi)];
+  if (labels.length > 0) {
+    const values = new Set(simple.map((m) => Number(m[1])));
+    const unambiguous = simple.length === labels.length && values.size === 1;
+    if (!unambiguous) return null;
+  }
   const pattern = /(\d{1,3})\s*(?:EAP|ECTS)\b/gi;
   let result = text.replace(pattern, (token, n) => (Number(n) === ects ? token : ects == null ? "" : `${ects} EAP`));
   if (ects == null) result = result.replace(/^[\s,;·–-]+|[\s,;·–-]+$/g, "").replace(/\s*[,;]\s*[,;]\s*/g, ", ");

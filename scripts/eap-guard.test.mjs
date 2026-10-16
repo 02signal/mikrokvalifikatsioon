@@ -129,6 +129,14 @@ test("reconcileDurationEap: asendab vale EAP-märgi, jätab ülejäänud, eemald
   assert.equal(reconcileDurationEap("15 EAP", 15), "15 EAP", "õige väärtus jääb puutumata");
   assert.equal(reconcileDurationEap("2 semestrit (september 2026 – mai 2027)", 15), "2 semestrit (september 2026 – mai 2027)");
   assert.equal(reconcileDurationEap("3 EAP", null), null, "ects teadmata: ainult EAP-märgiga tekst kaob");
+  // fail-closed: ebaselge EAP-väljend ei saa arvatud väärtust
+  assert.equal(reconcileDurationEap("7,5 EAP", 15), null, "kümnendmurd");
+  assert.equal(reconcileDurationEap("5–10 EAP", 15), null, "vahemik");
+  assert.equal(reconcileDurationEap("5-10 EAP", 15), null, "vahemik sidekriipsuga");
+  assert.equal(reconcileDurationEap("3 EAP + 12 EAP", 15), null, "mitu erinevat väärtust");
+  assert.equal(reconcileDurationEap("EAP: 15", 15), null, "number sildi järel ei ole kontrollitav");
+  assert.equal(reconcileDurationEap("15 EAP, 15 EAP", 15), "15 EAP, 15 EAP", "mitu ühesugust ja õiget jääb");
+  assert.equal(reconcileDurationEap("3 EAP", 15), "15 EAP", "lihtne vale asendub endiselt");
   assert.equal(reconcileDurationEap("3 EAP, 312 tundi", null), "312 tundi");
   assert.equal(reconcileDurationEap(null, 15), null);
 });
