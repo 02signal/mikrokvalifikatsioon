@@ -1,4 +1,15 @@
 {
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy-Report-Only",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://stats.amos.02signal.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://stats.amos.02signal.com https://www.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://lxp.ettevotluskeskus.ee https://liitu.ettevotluskeskus.ee; object-src 'none'; base-uri 'self'; report-uri /api/csp-report"
+        }
+      ]
+    }
+  ],
   "redirects": [
     {
       "source": "/kataloog/tartu-ulikool-otilde-petajate-akadeemia-mikrokraadi-ja-mikrokvalifikatsiooniprogrammid/",
