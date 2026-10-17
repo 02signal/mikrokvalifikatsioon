@@ -407,14 +407,6 @@ const schema = {
                   </select>
                 </div>
                 <div class="field">
-                  <label for="stLevel">Mis tüüpi õpe sind huvitab?</label>
-                  <select id="stLevel" name="level" data-suunatest-input>
-                    <option value="">Ükskõik</option>
-                    <option value="mikrokraad">Ülikooli mikrokraad (EAP-d)</option>
-                    <option value="mikrokvalifikatsioon">Koolitusettevõtte või kutsekooli mikrokvalifikatsioon</option>
-                  </select>
-                </div>
-                <div class="field">
                   <label for="stSize">Kui mahukas õpe sobib?</label>
                   <select id="stSize" name="maxEap" data-suunatest-input>
                     <option value="">Ükskõik</option>
@@ -591,7 +583,6 @@ const schema = {
         const outcome = matchProgrammes(all, {
           field, format, budget: budgetRaw,
           language: String(data.get("language") || ""),
-          level: String(data.get("level") || ""),
           maxEap: String(data.get("maxEap") || "")
         });
         const top = outcome.matches.map((s) => s.p);
@@ -646,7 +637,6 @@ const schema = {
           status_segment: status,
           answer_format: format || "-",
           answer_language: String(data.get("language") || "-"),
-          answer_level: String(data.get("level") || "-"),
           answer_max_eap: String(data.get("maxEap") || "-"),
           result_count: top.length
         });
