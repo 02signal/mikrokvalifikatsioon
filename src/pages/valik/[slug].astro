@@ -1,0 +1,102 @@
+---
+import Seo from "../../components/Seo.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+import { catalog, catalogCheckedAt } from "../../data/catalog";
+import { fieldLabel, matchProgrammes } from "../../lib/suunatest-match";
+import { VALIK_FIELDS } from "../../lib/valik-fields";
+
+export function getStaticPaths() {
+  return VALIK_FIELDS.map((f) => ({ params: { slug: f.slug }, props: { field: f.field } }));
+}
+
+const { field } = Astro.props as { field: string };
+const SITE = "https://mikrokvalifikatsioon.ee";
+const canonicalPath = `/valik/${VALIK_FIELDS.find((f) => f.field === field)?.slug}/`;
+// Sama värav mis suunatestil: teema on EHIS-i õppekavarühm; vormi ja eelarvet siin ei filtreerita.
+const result = matchProgrammes(catalog as any, { field, format: "", budget: "" }, catalog.length);
+const rows = result.matches.map((s) => s.p as (typeof catalog)[number]);
+const providers = [...new Set(rows.map((p) => p.provider))];
+const cap = field.charAt(0).toUpperCase() + field.slice(1);
+const checked = catalogCheckedAt.split("-").reverse().join(".");
+const title = `${cap}: sobivad mikrokvalifikatsioonid ja mikrokraadid`;
+const description = rows.length
+  ? `${rows.length} programmi ${providers.length} koolist valdkonnas „${field}" (EHIS-i õppekavarühma järgi). Maht, hind ja õppevorm iga programmi juures.`
+  : `Valdkonnas „${field}" ei ole kataloogis praegu sobivat programmi.`;
+const outbound = (p: { url: string; slug?: string }) =>
+  `${p.url}${p.url.includes("?") ? "&" : "?"}utm_source=mikrokvalifikatsioon.ee&utm_medium=valik&utm_campaign=mikrokvalifikatsioon${p.slug ? `&utm_content=${encodeURIComponent(p.slug)}` : ""}`;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "WebPage", "@id": `${SITE}${canonicalPath}#webpage`, url: `${SITE}${canonicalPath}`, name: title, description, inLanguage: "et", isPartOf: { "@id": `${SITE}/#organization` } },
+    {
+      "@type": "ItemList",
+      name: title,
+      numberOfItems: rows.length,
+      itemListElement: rows.map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p.name, url: `${SITE}/kataloog/${p.slug}/` }))
+    }
+  ]
+};
+---
+<!doctype html>
+<html lang="et">
+  <head>
+    <Seo title={title} description={description} canonicalPath={canonicalPath} jsonLd={jsonLd} />
+  </head>
+  <body>
+    <Nav />
+    <main class="report-page simple-report">
+      <section class="report-hero simple-report-hero">
+        <div class="section-inner">
+          <nav class="crumbs" aria-label="Asukoht"><a href="/">Avaleht</a> › <a href="/valik/">Valik</a> › <span>{cap}</span></nav>
+          <h1>{title}</h1>
+          <p>{rows.length
+            ? `Valdkonnas „${field}" on kataloogis ${rows.length} programmi ${providers.length} koolist. Valdkond tuleb ametlikust EHIS-i õppekavarühmast, mitte märksõnadest, seega siin ei ole ebaseotud programme.`
+            : `Valdkonnas „${field}" ei ole kataloogis praegu ühtegi sobivat programmi. Vaata kogu kataloogi või tee suunatest.`}</p>
+          <p class="report-date">Andmed kontrollitud: {checked}. Täpne hind ja vastuvõtt on alati kooli enda lehel.</p>
+        </div>
+      </section>
+      <section class="white">
+        <div class="section-inner">
+          {rows.length > 0 && (
+            <div class="valik-list">
+              {rows.map((p) => (
+                <article class="valik-card">
+                  <span class="status-tag status-blue">{fieldLabel(p as any)}</span>
+                  <h2><a href={`/kataloog/${p.slug}/`}>{p.name}</a></h2>
+                  <p>{p.summary}</p>
+                  <dl>
+                    <div><dt>Kool</dt><dd>{p.provider}</dd></div>
+                    <div><dt>Hind</dt><dd>{p.priceText || "Küsi pakkujalt"}</dd></div>
+                    {p.ects ? <div><dt>Maht</dt><dd>{p.ects} EAP</dd></div> : null}
+                    <div><dt>Vorm</dt><dd>{p.format || "Teadmata, küsi pakkujalt"}</dd></div>
+                  </dl>
+                  <p class="valik-links">
+                    <a href={`/kataloog/${p.slug}/`} data-track-event="cta_click" data-track-label="valik_programm">Vaata detaile</a>
+                    <a href={outbound(p)} target="_blank" rel="noreferrer" data-track-event="partner_site_click" data-track-label={`valik_${p.provider}`}>Kooli leht</a>
+                  </p>
+                </article>
+              ))}
+            </div>
+          )}
+          <p class="valik-more">
+            <a class="btn btn-primary" href="/#suunatest" data-track-event="cta_click" data-track-label="valik_suunatest">Täpsusta vormi ja eelarvega (suunatest)</a>
+            <a class="btn btn-secondary" href="/kataloog/" data-track-event="cta_click" data-track-label="valik_kataloog">Kogu kataloog</a>
+          </p>
+        </div>
+      </section>
+    </main>
+    <Footer />
+    <style>
+      .valik-list { display: grid; gap: 16px; }
+      .valik-card { border: 1px solid #d9e3ea; border-radius: 12px; padding: 18px 20px; background: #fff; }
+      .valik-card h2 { margin: 8px 0 6px; font-size: 1.15rem; }
+      .valik-card dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px 16px; margin: 10px 0; }
+      .valik-card dt { font-size: 0.8rem; color: #44546a; }
+      .valik-card dd { margin: 0; font-weight: 600; }
+      .valik-links { display: flex; gap: 16px; flex-wrap: wrap; }
+      .valik-more { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; }
+    </style>
+  </body>
+</html>
