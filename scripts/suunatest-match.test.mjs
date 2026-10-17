@@ -228,3 +228,15 @@ test("hinnaparsimine: tuhandete eraldajad, koma, 'tasuta' koos numbriga on teadm
   assert.equal(parsePriceEur("tasuta (materjalid 50 €)"), null);
   assert.equal(parsePriceEur("Tasuta"), 0);
 });
+
+test("lisaküsimused (keel, maht) välistavad ainult teadaolevalt mittesobiva; teadmata jääb; pakkujatüüp ei filtreeri", () => {
+  const a = prog("a", "IT ja andmed", "0613", { language: "en", providerType: "ülikool", ects: 6 });
+  const b = prog("b", "IT ja andmed", "0613", { language: "et", providerType: "rakenduskõrgkool", ects: 30 });
+  const c = prog("c", "IT ja andmed", "0613", { language: null, providerType: null, ects: null });
+  const pool = [a, b, c];
+  assert.deepEqual(slugs(matchProgrammes(pool, { ...ans("IT ja andmed"), language: "et" }, 9)).sort(), ["b", "c"]);
+  assert.deepEqual(slugs(matchProgrammes(pool, { ...ans("IT ja andmed"), maxEap: "10" }, 9)).sort(), ["a", "c"]);
+  assert.deepEqual(slugs(matchProgrammes(pool, { ...ans("IT ja andmed"), language: "et", maxEap: "30" }, 9)).sort(), ["b", "c"]);
+  // Rakenduskõrgkooli programm (nt Mainori ettevõtluse mikrokraad) ei kao ühegi vastusega: tasemefiltrit pole.
+  assert.ok(slugs(matchProgrammes(pool, { ...ans("IT ja andmed"), level: "mikrokraad" }, 9)).includes("b"));
+});

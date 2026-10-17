@@ -43,6 +43,7 @@ const jsonLd = {
 <html lang="et">
   <head>
     <Seo title={title} description={description} canonicalPath={canonicalPath} jsonLd={jsonLd} />
+    {rows.length === 0 && <meta name="robots" content="noindex,follow" />}
   </head>
   <body>
     <Nav />
