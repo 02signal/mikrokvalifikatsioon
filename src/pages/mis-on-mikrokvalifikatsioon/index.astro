@@ -10,11 +10,11 @@ import { catalog, providers } from "../../data/catalog";
 const faqItems = [
   {
     question: "Mis on mikrokvalifikatsioon?",
-    answer: "Mikrokvalifikatsioon on lühike tunnustatud õpe, mille lõpus saad tunnistuse ühe konkreetse oskuse kohta – mitte terve eriala diplomi. Tüüpiline maht on mõni kuu kuni kaks semestrit töö kõrvalt."
+    answer: "Täiskasvanute koolituse seaduse (TäKS) järgi on mikrokvalifikatsioon täienduskoolitusel omandatud teadmiste ja oskuste kogum, mis on tõendatud ja tunnustatud ning vastab tööturu või ühiskonna vajadusele. Mikrokvalifikatsiooniõppe maht on 5–30 ainepunkti (EAP), kus 1 ainepunkt vastab 26 tunnile õppija tööd. Lõpetaja saab tunnistuse, mis kantakse Eesti Hariduse Infosüsteemi (EHIS). Tüüpiline kestus on mõni kuu kuni kaks semestrit töö kõrvalt."
   },
   {
     question: "Mis vahe on mikrokvalifikatsioonil ja mikrokraadil?",
-    answer: "Mikrokvalifikatsioon on katusmõiste. Mikrokraad on ülikooli pakutav mikrokvalifikatsioon, mis annab tavaliselt EAP-sid (ainepunkte), mida saab hiljem kraadiõppes arvestada."
+    answer: "Mikrokvalifikatsioon on katusmõiste. Kõrgkool võib oma mikrokvalifikatsiooni nimetada mikrokraadiks, kui vähemalt pool õppekava mahust moodustavad kõrgharidustaseme õppeained. Ka ülikoolidel on mikrokvalifikatsioone, mis pole mikrokraadid."
   },
   {
     question: "Kui palju mikrokraad maksab?",
@@ -23,6 +23,10 @@ const faqItems = [
   {
     question: "Kui kaua õpe kestab?",
     answer: "Tavaliselt üks kuni kaks semestrit töö kõrvalt. Lühemad programmid kestavad paar kuud, pikemad kuni aasta."
+  },
+  {
+    question: "Kas mikrokvalifikatsiooni EAP-sid saab kraadiõppes arvestada?",
+    answer: "Saab kasutada VÕTA (varasemate õpingute ja töökogemuse arvestamise) raames tasemeõppes, kuid lõpliku otsuse teeb õppeasutus kaalutlusõigusega. Arvestamist ei saa lubada ette; küsi seda oma õppeasutuselt enne registreerumist."
   },
   {
     question: "Kas mikrokvalifikatsiooni tunnustatakse ka välismaal?",
@@ -60,7 +64,7 @@ const schema = {
       description: "Mikrokvalifikatsioon, mikrokraad, kutsetunnistus ja sertifikaat – mis vahe neil on ja millal millist valida.",
       inLanguage: "et",
       datePublished: "2026-06-12",
-      dateModified: "2026-06-12",
+      dateModified: "2026-10-16",
       author: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
       publisher: { "@id": "https://mikrokvalifikatsioon.ee/#organization" },
       mainEntityOfPage: "https://mikrokvalifikatsioon.ee/mis-on-mikrokvalifikatsioon/"
@@ -123,14 +127,14 @@ const schema = {
               <div>
                 <span class="status-tag status-green">Katusmõiste</span>
                 <h3>Mikrokvalifikatsioon</h3>
-                <p>Lühike tunnustatud õpe ühe konkreetse oskuse kohta. Pakkuja võib olla ülikool, rakenduskõrgkool või koolitusettevõte. Sisaldab alati õpet ja lõpeb tunnistusega.</p>
+                <p>Lühike tunnustatud õpe ühe konkreetse oskuse kohta. Pakkuja võib olla ülikool, rakenduskõrgkool, kutseõppeasutus või täienduskoolitusasutus. Sisaldab alati õpet ja lõpeb tunnistusega.</p>
               </div>
             </article>
             <article class="measure-card">
               <div>
                 <span class="status-tag status-blue">Ülikooli versioon</span>
                 <h3>Mikrokraad</h3>
-                <p>Ülikooli pakutav mikrokvalifikatsioon. Annab tavaliselt EAP-sid (Euroopa ainepunkte), mida saab hiljem kraadiõppes arvestada. Eestis on neid juba sadu – vaata <a href="/mikrokraadid/">mikrokraadide ülevaadet</a>.</p>
+                <p>Kõrgkooli mikrokvalifikatsioon, mille õppekavast vähemalt pool moodustavad kõrgharidustaseme õppeained. EAP-sid (ainepunkte) võib kraadiõppes arvestada VÕTA kaudu – otsustab õppeasutus. Eestis on neid juba sadu – vaata <a href="/mikrokraadid/">mikrokraadide ülevaadet</a>.</p>
               </div>
             </article>
             <article class="measure-card">
@@ -151,7 +155,26 @@ const schema = {
         </div>
       </section>
 
-      <section class="ice">
+      <section class="ice" id="seaduses">
+        <div class="section-inner narrow">
+          <div class="section-head compact-head">
+            <span class="kicker">Seaduses</span>
+            <h2>Mida täiskasvanute koolituse seadus ütleb.</h2>
+          </div>
+          <ul class="law-list">
+            <li><strong>Mõiste.</strong> Mikrokvalifikatsioon on täienduskoolitusel omandatud teadmiste ja oskuste kogum, mis on tõendatud ja tunnustatud ning vastab tööturu või ühiskonna vajadusele.</li>
+            <li><strong>Maht.</strong> 5–30 ainepunkti (EAP, kutseõppes EKAP); 1 ainepunkt vastab 26 tunnile õppija tööd. Me ei teisenda mahtu akadeemilisteks tundideks ega arvuta seda tundidest ümber: kui kool pole EAP-mahtu avaldanud, jääb see kinnitamata.</li>
+            <li><strong>Tunnistus.</strong> Lõpetaja saab mikrokvalifikatsioonitunnistuse, mis kantakse Eesti Hariduse Infosüsteemi (EHIS).</li>
+            <li><strong>Pakkujad.</strong> Mikrokvalifikatsiooniõpet võivad pakkuda nii ülikoolid ja kutseõppeasutused (oma õppekavagrupis õppeõiguse alusel) kui täienduskoolitusasutused (tegevusloa ja kvaliteedihindamise alusel). Õpe toimub EHIS-i kantud õppekava alusel.</li>
+            <li><strong>Mikrokraad.</strong> Kõrgkool võib oma mikrokvalifikatsiooni nimetada mikrokraadiks, kui vähemalt pool õppekava mahust moodustavad kõrgharidustaseme õppeained.</li>
+            <li><strong>VÕTA.</strong> Mikrokvalifikatsiooni ainepunkte saab kasutada VÕTA raames tasemeõppes; lõpliku arvestuse otsustab õppeasutus.</li>
+            <li><strong>Jõustumine.</strong> Sätted jõustusid 1. aprillil 2025; kõik pakkujad pidid nõuetele vastama 1. septembriks 2025.</li>
+          </ul>
+          <p class="law-source">Allikad: <a href="https://www.riigiteataja.ee/akt/130012025002" rel="noopener" target="_blank">Täiskasvanute koolituse seadus (Riigi Teataja)</a> ja <a href="https://hm.ee/mikrokvalifikatsioonid" rel="noopener" target="_blank">Haridus- ja Teadusministeeriumi ülevaade</a>. Õiguslikult siduv on Riigi Teataja tekst.</p>
+        </div>
+      </section>
+
+      <section class="white">
         <div class="section-inner">
           <div class="section-head compact-head">
             <span class="kicker">Numbrites</span>
@@ -230,6 +253,9 @@ const schema = {
         margin: 10px 0 4px;
         color: #44546a;
       }
-    </style>
+      .law-list { display: grid; gap: 10px; padding-left: 18px; }
+  .law-source { margin-top: 14px; color: var(--muted); font-size: 0.9rem; }
+  .law-source a { color: var(--teal); }
+</style>
   </body>
 </html>

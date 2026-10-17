@@ -85,7 +85,7 @@ const faqItems = [
   {
     question: "Mille järgi mikrokvalifikatsiooni valida?",
     answer:
-      "Viie tunnuse järgi: hind, maht (EAP või akadeemilised tunnid), kestus, õppevorm (veebis, hübriid või kohapeal) ja kes kulu katab. Esimese sõela teeb aga eesmärk – milline oskus su tööd või karjääri kõige rohkem aitab. Alles siis tasub hindu ja mahte kõrvutada."
+      "Viie tunnuse järgi: hind, maht (EAP), kestus, õppevorm (veebis, hübriid või kohapeal) ja kes kulu katab. Esimese sõela teeb aga eesmärk – milline oskus su tööd või karjääri kõige rohkem aitab. Alles siis tasub hindu ja mahte kõrvutada."
   },
   {
     question: "Mikrokvalifikatsioon vs mikrokraad – kumba valida?",
@@ -94,7 +94,7 @@ const faqItems = [
   },
   {
     question: "Kui suur on tüüpiline maht (EAP)?",
-    answer: `Maht antakse Euroopa ainepunktides (EAP); 1 EAP vastab umbes 26 tunnile õppija tööd. Selle lehe valimis jäävad avaldatud mahud vahemikku ${ectsTypicalText} – väiksem maht tähendab kiiremat lühiõpet, suurem maht põhjalikumat programmi. Osa koolitusettevõtteid annab mahu hoopis akadeemilistes tundides; täpne maht on iga programmi juures kataloogis.`
+    answer: `Maht antakse Euroopa ainepunktides (EAP); 1 EAP vastab umbes 26 tunnile õppija tööd. Selle lehe valimis jäävad avaldatud mahud vahemikku ${ectsTypicalText} – väiksem maht tähendab kiiremat lühiõpet, suurem maht põhjalikumat programmi. Seaduse järgi on mikrokvalifikatsiooni maht 5–30 EAP; kui kool pole mahtu EAP-des avaldanud, jätame selle kinnitamata, mitte ei arvuta ümber. Täpne maht on iga programmi juures kataloogis.`
   },
   {
     question: "Kes mikrokvalifikatsiooni kinni maksab?",
@@ -351,7 +351,7 @@ const schema = {
           <p class="notice">
             Hinnavahemik on tuletatud koolide avaldatud hindadest (kontrollitud {checkedAtText}); kui
             valdkonnas pole ühtki avalikku hinda, on märge „vaata kataloogist“. Maht „kooli lehel“
-            tähendab, et osa pakkujaid kasutab EAP asemel akadeemilisi tunde. Metoodika on lehel
+            tähendab, et pakkuja pole EAP-mahtu avaldanud; me ei arvuta seda tundidest ümber. Metoodika on lehel
             <a href="/andmed/">Andmed</a>.
           </p>
           <p>

@@ -69,7 +69,7 @@ const faqItems = [
   {
     question: "Kuidas mikrokvalifikatsioone võrrelda?",
     answer:
-      "Vaata viit asja kõrvuti: hind, maht (EAP või akadeemilised tunnid), kestus, õppevorm (veebis, hübriid või kohapeal) ja kes selle kinni maksab. Märgi kataloogis kuni kolm sind huvitavat programmi ja võrdle neid ühes tabelis. Lõplik info on alati kooli enda lehel."
+      "Vaata viit asja kõrvuti: hind, maht (EAP), kestus, õppevorm (veebis, hübriid või kohapeal) ja kes selle kinni maksab. Märgi kataloogis kuni kolm sind huvitavat programmi ja võrdle neid ühes tabelis. Lõplik info on alati kooli enda lehel."
   },
   {
     question: "Kes mikrokvalifikatsiooni kinni maksab?",
@@ -84,7 +84,7 @@ const faqItems = [
   },
   {
     question: "Kui suur on tüüpiline maht (EAP)?",
-    answer: `Maht antakse Euroopa ainepunktides (EAP); 1 EAP vastab umbes 26 tunnile õppija tööd. Selle lehe valimis jäävad avaldatud mahud vahemikku ${ectsTypicalText} – väiksem maht tähendab kiiremat lühiõpet, suurem maht põhjalikumat programmi. Osa koolitusettevõtteid annab mahu hoopis akadeemilistes tundides; täpne maht on iga programmi juures kataloogis.`
+    answer: `Maht antakse Euroopa ainepunktides (EAP); 1 EAP vastab umbes 26 tunnile õppija tööd. Selle lehe valimis jäävad avaldatud mahud vahemikku ${ectsTypicalText} – väiksem maht tähendab kiiremat lühiõpet, suurem maht põhjalikumat programmi. Seaduse järgi on mikrokvalifikatsiooni maht 5–30 EAP; kui kool pole mahtu EAP-des avaldanud, jätame selle kinnitamata, mitte ei arvuta ümber. Täpne maht on iga programmi juures kataloogis.`
   },
   {
     question: "Kui kaua õpe tüüpiliselt kestab?",
@@ -250,7 +250,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
             <article class="card">
               <span class="stat">2 · Maht (EAP)</span>
               <h3>Kui suur on õpe?</h3>
-              <p>EAP on Euroopa ainepunkt (1 EAP ≈ 26 tundi tööd). Mõni kool annab mahu hoopis akadeemilistes tundides.</p>
+              <p>EAP on Euroopa ainepunkt (1 EAP ≈ 26 tundi tööd). Kui kool pole EAP-mahtu avaldanud, jääb see kinnitamata – me ei arvuta seda tundidest ümber.</p>
             </article>
             <article class="card">
               <span class="stat">3 · Kestus</span>
@@ -369,7 +369,7 @@ const fmtFormat = (e: (typeof catalog)[number]): string =>
           <p class="notice">
             Hinnavahemik on tuletatud koolide avaldatud hindadest (kontrollitud {checkedAtText}); kui
             valdkonnas pole ühtki avalikku hinda, on märge „vaata kataloogist". Maht „kooli lehel"
-            tähendab, et osa pakkujaid kasutab EAP asemel akadeemilisi tunde. Metoodika on lehel
+            tähendab, et pakkuja pole EAP-mahtu avaldanud; me ei arvuta seda tundidest ümber. Metoodika on lehel
             <a href="/andmed/">Andmed</a>.
           </p>
           <p>
