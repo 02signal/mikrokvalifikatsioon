@@ -398,6 +398,31 @@ const schema = {
                     <option value="0">Loodan toetusele või tööandjale</option>
                   </select>
                 </div>
+                <div class="field">
+                  <label for="stLanguage">Mis keeles tahad õppida?</label>
+                  <select id="stLanguage" name="language" data-suunatest-input>
+                    <option value="">Ükskõik</option>
+                    <option value="et">Eesti keeles</option>
+                    <option value="en">Inglise keeles</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="stLevel">Mis tüüpi õpe sind huvitab?</label>
+                  <select id="stLevel" name="level" data-suunatest-input>
+                    <option value="">Ükskõik</option>
+                    <option value="mikrokraad">Ülikooli mikrokraad (EAP-d)</option>
+                    <option value="mikrokvalifikatsioon">Koolitusettevõtte või kutsekooli mikrokvalifikatsioon</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="stSize">Kui mahukas õpe sobib?</label>
+                  <select id="stSize" name="maxEap" data-suunatest-input>
+                    <option value="">Ükskõik</option>
+                    <option value="10">kuni 10 EAP</option>
+                    <option value="20">kuni 20 EAP</option>
+                    <option value="30">kuni 30 EAP</option>
+                  </select>
+                </div>
               </div>
               <button class="btn btn-primary assessment-button" type="button" data-suunatest-button>Näita sobivaid programme</button>
               <p class="field-help">Eelistad ilma skriptita? <a href="/valik/" data-track-event="cta_click" data-track-label="suunatest_valik">Vali valdkond ja vaata kõiki sinna kuuluvaid programme.</a></p>
@@ -563,7 +588,12 @@ const schema = {
 
         // Teema on värav (EHIS-i õppekavarühm), vorm ja eelarve filtreerivad ausalt, logistika on ainult
         // järjestus; kui ei sobi, ütleme seda (HTM 08.10.2026). Vt src/lib/suunatest-match.ts.
-        const outcome = matchProgrammes(all, { field, format, budget: budgetRaw });
+        const outcome = matchProgrammes(all, {
+          field, format, budget: budgetRaw,
+          language: String(data.get("language") || ""),
+          level: String(data.get("level") || ""),
+          maxEap: String(data.get("maxEap") || "")
+        });
         const top = outcome.matches.map((s) => s.p);
         result.hidden = false;
 
@@ -613,7 +643,12 @@ const schema = {
           tool_name: "suunatest",
           result_tier: top.length ? "leitud" : outcome.kind === "none" ? "ei_sobi" : outcome.kind === "none-filtered" ? "filtreeritud_tühi" : "tühi",
           result_route: field || "valdkond_valimata",
-          status_segment: status
+          status_segment: status,
+          answer_format: format || "-",
+          answer_language: String(data.get("language") || "-"),
+          answer_level: String(data.get("level") || "-"),
+          answer_max_eap: String(data.get("maxEap") || "-"),
+          result_count: top.length
         });
         if (top.length && status === "tootu") {
           track("result_high_intent", { tool_name: "suunatest", result_route: field || "valdkond_valimata" });

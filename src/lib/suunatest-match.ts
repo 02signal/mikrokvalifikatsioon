@@ -21,6 +21,8 @@ export type MatchProgram = {
   priceText: string | null;
   format: string | null;
   language: string | null;
+  /** "ülikool" = mikrokraad; muu pakkuja = mikrokvalifikatsioon. Puudub = tase teadmata. */
+  providerType?: string | null;
   intakeText: string | null;
   summary: string;
   publicBasis?: string;
@@ -29,7 +31,8 @@ export type MatchProgram = {
   ehis?: { fieldCode?: string | null; fieldName?: string | null; authoritative?: boolean } | null;
 };
 
-export type Answers = { field: string; format: string; budget: string };
+/** language: "et" | "en" | ""; level: "mikrokraad" | "mikrokvalifikatsioon" | ""; maxEap: suurim sobiv maht EAP-des ("" = piiranguta). */
+export type Answers = { field: string; format: string; budget: string; language?: string; level?: string; maxEap?: string };
 
 /**
  * Vormi valdkond -> EHIS-i õppekavarühma (ISCED-F 2013) koodiprefiksid. EHIS `fieldCode` on 4-kohaline
@@ -145,6 +148,16 @@ export function matchProgrammes(programs: readonly MatchProgram[], answers: Answ
       };
     })
     .filter((s) => !(capped && s.price !== null && s.price > capped))
+    // Lisaküsimused filtreerivad ausalt: välistavad ainult teadaolevalt mittesobiva; teadmata väärtus jääb (kaart ütleb seda).
+    .filter(({ p }) => !(answers.language && p.language && p.language !== answers.language))
+    .filter(({ p }) => {
+      if (!answers.level || !p.providerType) return true;
+      return (p.providerType === "ülikool") === (answers.level === "mikrokraad");
+    })
+    .filter(({ p }) => {
+      const max = Number(answers.maxEap || 0);
+      return !(max > 0 && typeof p.ects === "number" && p.ects > max);
+    })
     .sort(byRank);
 
   if (!scored.length) {
