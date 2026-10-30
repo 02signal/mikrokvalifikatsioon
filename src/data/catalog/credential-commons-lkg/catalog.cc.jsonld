@@ -173,7 +173,7 @@
     {
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/ebs-www-ebs-ee-taiendusope-mikrokraadid-juht-organisatsioon-ja-meeskond/",
       "@type": "MicroCredential",
-      "ectsCredits": 3,
+      "ectsCredits": 12,
       "field": "haridus",
       "language": "et",
       "learningOutcome": [
@@ -1870,9 +1870,9 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-videomangude-narratiivid/"
     }
   ],
-  "checkedAt": "2026-10-19",
-  "generatedAt": "2026-10-19T00:15:47.000Z",
-  "runRef": "mkval_20261019T001547Z",
+  "checkedAt": "2026-10-29",
+  "generatedAt": "2026-10-29T13:38:47.000Z",
+  "runRef": "mkval_20261029T133847Z",
   "schemaVersion": "amos.mkval.catalog_cc_export/v1",
-  "sourceFeedHash": "sha256:8ff08824c26220df1f18298caf5931413a9c88da929703fc58843be03cf3fbf1"
+  "sourceFeedHash": "sha256:a00f7cd83a0eeab5544295cfe1541de6000d8b11b5f5dd84ecfac688bece21f0"
 }
