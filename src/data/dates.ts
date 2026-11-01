@@ -165,3 +165,17 @@ export function groupByStartMonth<T extends EntryWithStart>(entries: T[]): { key
   }
   return groups;
 }
+
+/** Allika kontrolli vanuse lävi (omanik 01.11.2026, amos-ops#737): kirje, mille
+ * allikat pole kontrollitud rohkem kui nii mitu päeva enne kataloogi
+ * kontrollipäeva, saab märke "Andmed võivad olla vananenud". Peab ühtima AMOS-i
+ * feedi `staleAfterDays` väljaga (MKVAL_STALE_AFTER_DAYS). */
+export const STALE_AFTER_DAYS = 7;
+
+/** Kuupäev puudub või on vigane -> vananenud (nähtav, mitte vaikne). */
+export function isStaleSource(sourceCheckedAt: string | null | undefined, catalogCheckedAt: string): boolean {
+  const reference = Date.parse(catalogCheckedAt);
+  const checked = sourceCheckedAt && /^\d{4}-\d{2}-\d{2}$/.test(sourceCheckedAt) ? Date.parse(sourceCheckedAt) : NaN;
+  if (!Number.isFinite(reference) || !Number.isFinite(checked)) return true;
+  return (reference - checked) / 86400000 > STALE_AFTER_DAYS;
+}
