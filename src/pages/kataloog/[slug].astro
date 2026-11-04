@@ -256,7 +256,7 @@ const pageOgDescription = entry ? entry.summary : pageDescription;
 
           <p class="report-date">{isEhisOnlyPublic ? "EHIS-i andmed uuendatud" : "Andmed kontrollitud kooli lehelt"}: {checkedAtText}</p>
           {sourceIsStale && !isEhisOnlyPublic && (
-            <p class="report-date" data-stale-source>Andmed võivad olla vananenud: kooli lehte pole viimasel ajal õnnestunud kontrollida. Kontrolli hinda ja vastuvõttu kooli lehelt.</p>
+            <p class="report-date" data-stale-source>Andmed võivad olla vananenud: viimasest kontrollist on möödas üle 7 päeva. Kontrolli hinda ja vastuvõttu kooli lehelt.</p>
           )}
         </div>
       </section>
