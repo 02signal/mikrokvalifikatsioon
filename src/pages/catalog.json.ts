@@ -1,6 +1,11 @@
 import { catalog, catalogCheckedAt, catalogUpdatedAt, catalogContentHash } from "../data/catalog";
 import { detailUrl } from "../data/courseSchema";
 import { entryOutcomeObjects } from "../data/outcomes";
+import { STALE_AFTER_DAYS, isStaleSource } from "../data/dates";
+
+// Kooli lehelt kontrollimata kirjed (sama reegel mis programmi lehe märkel).
+const checkedDates = catalog.map((entry) => entry.sourceCheckedAt).filter((d): d is string => Boolean(d)).sort();
+const staleCount = catalog.filter((entry) => isStaleSource(entry.sourceCheckedAt, catalogCheckedAt)).length;
 
 export async function GET() {
   return new Response(
@@ -15,6 +20,9 @@ export async function GET() {
         importantCaveat:
           "See kataloog on info koondamiseks. Hinnad, mahud ja vastuvõtud muutuvad — ametlik info on iga kooli enda lehel (iga kirje url-väli).",
         count: catalog.length,
+        staleAfterDays: STALE_AFTER_DAYS,
+        staleCount,
+        oldestVerifiedAt: checkedDates[0] ?? null,
         // pageUrl = programmi siseleht; url = kooli ametlik leht.
         programs: catalog.map((entry) => {
           const outcomeObjects = entryOutcomeObjects(entry);
