@@ -4,14 +4,14 @@ import CategoryMark from "../../components/CategoryMark.astro";
 import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 import Nav from "../../components/Nav.astro";
-import { catalog, catalogRetired, providersWithSlug, fieldsWithSlug, type CatalogEntryWithSlug, type RetiredCatalogEntryWithSlug } from "../../data/catalog";
+import { catalog, catalogCheckedAt, catalogRetired, providersWithSlug, fieldsWithSlug, type CatalogEntryWithSlug, type RetiredCatalogEntryWithSlug } from "../../data/catalog";
 import { toCourse, outboundUrl } from "../../data/courseSchema";
 import { plausiblePriceEur } from "../../data/priceGuard";
 import { credentialCommonsNodeFor, CC_CONTEXT } from "../../data/credentialCommons";
 import { comparisonsFor } from "../../data/comparisons";
 import { ehisAttribution } from "../../data/ehisFacts";
 import { intakeDatesFor, intakeDatesFetchedAt } from "../../data/intakeDates";
-import { formatEt, formatStartEt } from "../../data/dates";
+import { formatEt, formatStartEt, isStaleSource } from "../../data/dates";
 import { fundingInfoFor, hasFundingInfo } from "../../data/funding";
 import { entryOutcomeObjects, languageLabel } from "../../data/outcomes";
 
@@ -63,6 +63,7 @@ function buildActiveView(entry: CatalogEntryWithSlug) {
 
   const canonicalPath = `/kataloog/${entry.slug}/`;
   const checkedAtText = entry.sourceCheckedAt.split("-").reverse().join(".");
+  const sourceIsStale = isStaleSource(entry.sourceCheckedAt, catalogCheckedAt);
   const providerLink = outboundUrl(entry, "programmileht");
   const languageText = entry.language === "en" ? "inglise" : entry.language === "et" ? "eesti" : null;
 
@@ -163,7 +164,7 @@ function buildActiveView(entry: CatalogEntryWithSlug) {
 
   return {
     providerSlug, relatedComparisons, ehis, isOfficial, displayEcts, ehisNameEn, ehisFieldName, ehisPdfUrl,
-    ehisOutcomes, schoolOutcomeObjects, schoolOutcomes, hasSchoolDescription, canonicalPath, checkedAtText,
+    ehisOutcomes, schoolOutcomeObjects, schoolOutcomes, hasSchoolDescription, canonicalPath, checkedAtText, sourceIsStale,
     providerLink, languageText, isRobotsBlocked, isEhisOnlyPublic, fresh, freshDeadline, freshStart, hasFreshDates, freshCheckedAt,
     fetchedDay, deadlinePast, facts, funding, showFunding, description, title, schema, ccCredential
   };
@@ -221,7 +222,7 @@ const pageOgDescription = entry ? entry.summary : pageDescription;
     {entry && activeView && (() => {
       const {
         providerSlug, relatedComparisons, ehis, isOfficial, ehisFieldName, ehisPdfUrl,
-        ehisOutcomes, schoolOutcomes, hasSchoolDescription, checkedAtText,
+        ehisOutcomes, schoolOutcomes, hasSchoolDescription, checkedAtText, sourceIsStale,
         providerLink, isRobotsBlocked, isEhisOnlyPublic, freshDeadline, freshStart, hasFreshDates, freshCheckedAt,
         deadlinePast, facts, funding, showFunding
       } = activeView;
@@ -254,6 +255,9 @@ const pageOgDescription = entry ? entry.summary : pageDescription;
           </div>
 
           <p class="report-date">{isEhisOnlyPublic ? "EHIS-i andmed uuendatud" : "Andmed kontrollitud kooli lehelt"}: {checkedAtText}</p>
+          {sourceIsStale && !isEhisOnlyPublic && (
+            <p class="report-date" data-stale-source>Andmed võivad olla vananenud: viimasest kontrollist on möödas üle 7 päeva. Kontrolli hinda ja vastuvõttu kooli lehelt.</p>
+          )}
         </div>
       </section>
 
