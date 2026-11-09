@@ -26,7 +26,7 @@
         "mõistab agiilsete arendusmetoodikate põhimõtteid, oskab valida neist sobivaid ja neid vajadusel rakendada",
         "jälgib regulaarselt digitootega seotud andmeid, analüüsib kasutajate tagasisidet toote parendamiseks ja teeb nendel tuginevaid juhtimisotsuseid"
       ],
-      "name": "Digitaalsete toodete protsesside ja operatsioonide juhtimine",
+      "name": "Digitoodete protsesside ja operatsioonide juhtimine",
       "provider": {
         "@type": "Organization",
         "name": "EBS"
@@ -1842,7 +1842,7 @@
       "@id": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-usundid-kultuuri-ja-motteloos/",
       "@type": "MicroCredential",
       "ectsCredits": 12,
-      "field": "haridus",
+      "field": "muu",
       "language": "et",
       "name": "Mikrokraadiprogramm „Usundid kultuuri- ja mõtteloos“",
       "provider": {
@@ -1870,9 +1870,9 @@
       "url": "https://mikrokvalifikatsioon.ee/kataloog/tartu-ulikool-videomangude-narratiivid/"
     }
   ],
-  "checkedAt": "2026-11-05",
-  "generatedAt": "2026-11-05T06:02:27.000Z",
-  "runRef": "mkval_20261105T060227Z",
+  "checkedAt": "2026-11-09",
+  "generatedAt": "2026-11-09T01:15:03.000Z",
+  "runRef": "mkval_20261109T011503Z",
   "schemaVersion": "amos.mkval.catalog_cc_export/v1",
-  "sourceFeedHash": "sha256:87d07406fbb683a1d79061508977512410f6b62ba42e7cd5bcca64424846fc17"
+  "sourceFeedHash": "sha256:3c9a294e19582d15439057808933f5df373e0cdc75d91d6c4bb9753af01678c5"
 }
