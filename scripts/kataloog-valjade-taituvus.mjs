@@ -30,7 +30,9 @@ export function eurPerEap(program) {
   const m = /(\d[\d\s.,]*)\s*(€|eur)/i.exec(program.priceText ?? "");
   const ects = Number(program.ects);
   if (!m || !Number.isFinite(ects) || ects <= 0) return null;
-  const eur = Number(m[1].replace(/\s/g, "").replace(",", "."));
+  // "1.200 €" on tuhandeline punkt (1200), "1 200,50 €" ja "99.5 €" on kümnendmärgiga.
+  const raw = m[1].trim().replace(/\s/g, "");
+  const eur = Number(/^\d{1,3}(\.\d{3})+$/.test(raw) ? raw.replace(/\./g, "") : raw.replace(",", "."));
   return Number.isFinite(eur) ? eur / ects : null;
 }
 
