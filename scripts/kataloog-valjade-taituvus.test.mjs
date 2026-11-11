@@ -8,6 +8,9 @@ test("eurPerEap: summa eurodes jagatud mahuga, muidu null", () => {
   assert.equal(eurPerEap({ priceText: "600 €", ects: 6 }), 100);
   assert.equal(eurPerEap({ priceText: "tasuta", ects: 6 }), null);
   assert.equal(eurPerEap({ priceText: "600 €", ects: null }), null);
+  assert.equal(eurPerEap({ priceText: "1.200 €", ects: 6 }), 200);
+  assert.equal(eurPerEap({ priceText: "1 200,50 €", ects: 10 }), 120.05);
+  assert.equal(eurPerEap({ priceText: "99.5 €", ects: 5 }), 19.9);
 });
 
 test("buildReport: tühjad väärtused ei lähe täituvusse, pakkujad järjestatud suuruse järgi", () => {
