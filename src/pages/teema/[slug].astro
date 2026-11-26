@@ -396,8 +396,10 @@ const schema = {
             ? 'Aitäh! Saatsime sulle kinnituskirja – palun kinnita tellimus.'
             : 'Avasime e-kirja varuvariandi – vajuta saatmiseks Saada.';
           f.reset();
-          const dl = (window as unknown as { dataLayer?: unknown[] }).dataLayer;
-          if (dl) dl.push({ event: 'lead_form_submit', form_name: 'topic_subscribe', field, delivery: sent ? 'webhook' : 'mailto' });
+          if (sent) {
+            const analytics = window as unknown as { digiteekaartTrack?: (name: string, params: Record<string, unknown>) => void };
+            analytics.digiteekaartTrack?.('lead_form_submit', { form_name: 'topic_subscribe', field, delivery: 'webhook' });
+          }
         });
       }
     </script>
