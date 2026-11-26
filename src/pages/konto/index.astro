@@ -929,18 +929,15 @@ const schema = {
         // Paketi outcome'id ratsutavad outcome_package'iga (OLEMAS lepingus).
         // account_create on lepingus VEEL defineerimata → "parima püüdega".
         const pkg = readPkg();
-        const delivery = await Promise.resolve().then(async () => {
-          // 1) account_create signaal (bridged — AMOS-i leping ootab uut kindi)
-          await postSubscribe({ kind: "account_create", email, consent_purpose: "course_offers", outcomes: pkg.map((i) => i.text) });
-          // 2) Paketi outcome'id LIVE kindiga (jõuab AMOS-i juba täna)
-          if (pkg.length) {
-            const ok = await postSubscribe({ kind: "outcome_package", email, outcomes: pkg.map((i) => i.text) });
-            return ok ? "webhook" : "mailto";
-          }
-          return "webhook";
-        });
+        // 1) account_create signaal (bridged — AMOS-i leping ootab uut kindi)
+        const accountCaptured = await postSubscribe({ kind: "account_create", email, consent_purpose: "course_offers", outcomes: pkg.map((i) => i.text) });
+        // 2) Paketi outcome'id LIVE kindiga (jõuab AMOS-i juba täna)
+        const packageCaptured = pkg.length === 0 || await postSubscribe({ kind: "outcome_package", email, outcomes: pkg.map((i) => i.text) });
+        const delivery = packageCaptured ? "webhook" : "mailto";
 
-        track("lead_form_submit", { form_name: "account", delivery, package_size: pkg.length, interests: readInterestSlugs().length });
+        if (accountCaptured && packageCaptured) {
+          track("lead_form_submit", { form_name: "account", delivery, package_size: pkg.length, interests: readInterestSlugs().length });
+        }
         track("account_created", { delivery, package_size: pkg.length });
 
         // BRIDGE: hoia soovitud e-post + nõusolek alles, et demo-login saaks

@@ -424,7 +424,9 @@ const schema = { "@context": "https://schema.org", "@graph": wantedSchema };
             const body = encodeURIComponent("Valdkond: " + field + "\nE-mail: " + email);
             window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Teavitus valdkonnast: " + field)}&body=${body}`;
           }
-          track("lead_form_submit", { form_name: "field_subscribe", field, delivery: sent ? "amos" : "mailto" });
+          if (sent) {
+            track("lead_form_submit", { form_name: "field_subscribe", field, delivery: "amos" });
+          }
           if (note) note.textContent = sent ? "Aitäh! Teavitame sind selle valdkonna uudistest." : "Avasime e-kirja varuvariandi – vajuta saatmiseks Saada.";
           form.reset();
         });

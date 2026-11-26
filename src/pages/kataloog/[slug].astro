@@ -624,7 +624,9 @@ const pageOgDescription = entry ? entry.summary : pageDescription;
               const body = encodeURIComponent("E-mail: " + email + "\nProgramm: " + slug + " (" + provider + ")");
               window.location.href = `mailto:info@mikrokvalifikatsioon.ee?subject=${encodeURIComponent("Huvi programmi vastu: " + slug)}&body=${body}`;
             }
-            track("lead_form_submit", { form_name: "interest_waitlist", programme_slug: slug, delivery: sent ? "amos" : "mailto" });
+            if (sent) {
+              track("lead_form_submit", { form_name: "interest_waitlist", programme_slug: slug, delivery: "amos" });
+            }
             const msg = box.querySelector("[data-interest-msg]");
             if (msg) msg.innerHTML = sent ? "<strong>Aitäh!</strong> Teavitame sind, kui midagi muutub." : "Avasime e-kirja varuvariandi – vajuta saatmiseks Saada.";
           });
